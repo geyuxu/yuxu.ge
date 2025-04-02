@@ -1,0 +1,179 @@
+<!DOCTYPE html><html lang="en"> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><meta name="generator" content="Astro v5.5.2"><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/202504/%E4%BD%BF%E7%94%A8astro%E6%9E%84%E5%BB%BA%E5%B9%B6%E9%83%A8%E7%BD%B2%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E5%88%B0githubpages%E5%85%A8%E6%B5%81%E7%A8%8B%E6%8C%87%E5%8D%97"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu" href="/rss.xml"><!-- Primary Meta Tags --><meta name="title" content="使用 Astro 构建并部署个人博客到 GitHub Pages全流程指南 - Ge Yuxu"><meta name="description" content><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/202504/%E4%BD%BF%E7%94%A8astro%E6%9E%84%E5%BB%BA%E5%B9%B6%E9%83%A8%E7%BD%B2%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E5%88%B0githubpages%E5%85%A8%E6%B5%81%E7%A8%8B%E6%8C%87%E5%8D%97"><meta property="og:title" content="使用 Astro 构建并部署个人博客到 GitHub Pages全流程指南 - Ge Yuxu"><meta property="og:description" content><meta property="og:image" content="https://geyuxu.com/blog/202504/%E4%BD%BF%E7%94%A8astro%E6%9E%84%E5%BB%BA%E5%B9%B6%E9%83%A8%E7%BD%B2%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E5%88%B0githubpages%E5%85%A8%E6%B5%81%E7%A8%8B%E6%8C%87%E5%8D%97"><!-- <meta property="og:image:alt" content={site.description}/> --><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/202504/%E4%BD%BF%E7%94%A8astro%E6%9E%84%E5%BB%BA%E5%B9%B6%E9%83%A8%E7%BD%B2%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E5%88%B0githubpages%E5%85%A8%E6%B5%81%E7%A8%8B%E6%8C%87%E5%8D%97"><meta property="twitter:title" content="使用 Astro 构建并部署个人博客到 GitHub Pages全流程指南 - Ge Yuxu"><meta property="twitter:description" content><meta property="twitter:image" content="https://geyuxu.com/blog/202504/%E4%BD%BF%E7%94%A8astro%E6%9E%84%E5%BB%BA%E5%B9%B6%E9%83%A8%E7%BD%B2%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E5%88%B0githubpages%E5%85%A8%E6%B5%81%E7%A8%8B%E6%8C%87%E5%8D%97"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="msapplication-TileColor" content="#da532c"><meta name="msapplication-config" content="/browserconfig.xml"><meta name="theme-color" content="#ffffff"><link rel="sitemap" href="/sitemap-0.xml"><title>使用 Astro 构建并部署个人博客到 GitHub Pages全流程指南 - Ge Yuxu</title><script src="/toggle-theme.js"></script><link rel="stylesheet" href="/_astro/BlogPost.BUYUBhIy.css">
+<link rel="stylesheet" href="/_astro/WalineComment.XaQ6XQsx.css">
+<link rel="stylesheet" href="/_astro/about.C6QWbnpY.css">
+<link rel="stylesheet" href="/_astro/_slug_.BP7I8xk5.css">
+<style>#donate-item-img{filter:grayscale(1)}#donate-item-img:hover{filter:blur(0px);cursor:pointer}.esa-sponsor{position:relative;width:100%;margin:40px 0}.esa-sponsor .qrshow{position:absolute;width:200px;height:200px;cursor:pointer;left:calc(50% - 100px);top:-170px;z-index:999;display:none;box-shadow:0 1px 15px #1b1f2326,0 0 1px #6a737d59}
+.post-title[data-astro-cid-6t6zfk7k]:hover{outline:0;color:#cc7a00;text-shadow:1px 1px 1px #ffd147}.toc_container[data-astro-cid-6t6zfk7k]{overflow-y:scroll;scrollbar-width:none;-ms-overflow-style:none}.toc_container[data-astro-cid-6t6zfk7k]::-webkit-scrollbar{width:0;height:0}.toc_container[data-astro-cid-6t6zfk7k] a[data-astro-cid-6t6zfk7k]{text-overflow:ellipsis;white-space:nowrap;overflow:hidden}
+</style></head><body class="bg-skin-secondary"> <header class="fixed top-0 w-full bg-skin-fill text-skin-base z-10"> <div class="flex items-center justify-between container"> <div class="block xl:hidden"> <button type="button" id="menu-icon" class="header-btn" title="Menu"> <i class="ri-menu-fill"></i> </button> <button type="button" id="menu-icon-close" class="header-btn hidden" title="Menu"> <i class="ri-close-fill"></i> </button> <script type="module">let n=document.getElementById("menu-icon"),t=document.getElementById("menu-icon-close"),l=document.getElementById("mobile-menu"),e=document.getElementById("aside-btn"),i=document.getElementById("aside-close-btn"),s=document.getElementById("personal-info");n.addEventListener("click",()=>{e&&e.classList.contains("hidden")&&d([e,i,s]),d([n,t,l])});t.addEventListener("click",()=>{d([n,t,l])});function d(o){o.forEach(c=>{c.classList.toggle("hidden")})}</script> </div> <a class="text-2xl p-4" href="/">Ge Yuxu</a> <div class="flex items-center"> <div class="hidden xl:block"> <div class="flex items-center space-x-5 pr-4"> <div class="box relative h-10 w-auto flex items-center" data-astro-cid-eimmu3lg> <a href="/blog/1" target="_self" class="header-link-active hover:header-link-hover" data-astro-cid-eimmu3lg> <i class="ri-draft-line" data-astro-cid-eimmu3lg></i> Blog  </a>  </div> <div class="box relative h-10 w-auto flex items-center" data-astro-cid-eimmu3lg> <a href="/feed/1" target="_self" class="hover:header-link-hover" data-astro-cid-eimmu3lg> <i class="ri-lightbulb-flash-line" data-astro-cid-eimmu3lg></i> Feed  </a>  </div> <div class="box relative h-10 w-auto flex items-center" data-astro-cid-eimmu3lg> <a href="/archive/1" target="_self" class="hover:header-link-hover" data-astro-cid-eimmu3lg> <i class="ri-archive-line" data-astro-cid-eimmu3lg></i> Archive  </a>  </div> <div class="box relative h-10 w-auto flex items-center" data-astro-cid-eimmu3lg> <a href="/message" target="_self" class="hover:header-link-hover" data-astro-cid-eimmu3lg> <i class="ri-chat-1-line" data-astro-cid-eimmu3lg></i> Message  </a>  </div> <div class="box relative h-10 w-auto flex items-center" data-astro-cid-eimmu3lg> <a href="/search" target="_self" class="hover:header-link-hover" data-astro-cid-eimmu3lg> <i class="ri-search-line" data-astro-cid-eimmu3lg></i> Search  </a>  </div> <div class="box relative h-10 w-auto flex items-center" data-astro-cid-eimmu3lg> <a href="javascript:void(0);" target="_self" class="hover:header-link-hover" data-astro-cid-eimmu3lg> <i class="ri-more-fill" data-astro-cid-eimmu3lg></i> More <i class="ri-arrow-down-s-line" data-astro-cid-eimmu3lg></i> </a> <div class="dropdown cursor-pointer border rounded bg-skin-fill p-4" data-astro-cid-eimmu3lg> <ul class="space-y-4 w-28" data-astro-cid-eimmu3lg> <li class="text-center hover:text-skin-active select-none" data-astro-cid-eimmu3lg> <i class="ri-information-line" data-astro-cid-eimmu3lg></i> <a target="_self" href="/about" data-astro-cid-eimmu3lg>About</a> </li><li class="text-center hover:text-skin-active select-none" data-astro-cid-eimmu3lg> <i class="ri-user-5-line" data-astro-cid-eimmu3lg></i> <a target="_self" href="/friends" data-astro-cid-eimmu3lg>Friends</a> </li> </ul> </div> </div>  </div> </div> <button type="button" id="theme-btn" class="header-btn" title="Toggles light & dark" aria-label="auto" aria-live="polite"> <i id="moon-icon" class="ri-sun-line"></i> <i id="sun-icon" class="ri-moon-line"></i> </button> <div class="block xl:hidden"> <button type="button" id="aside-btn" class="header-btn" title="Open Aside Bar" aria-label="auto" aria-live="polite"> <i class="ri-user-line"></i> </button> <button type="button" id="aside-close-btn" class="header-btn hidden" title="Close Aside Bar" aria-label="auto" aria-live="polite"> <i class="ri-close-fill"></i> </button> <div id="blog-aside" class="absolute top-16 bg-skin-fill right-0 blog-aside hidden"></div> <script type="module">let n=document.getElementById("aside-btn"),t=document.getElementById("aside-close-btn"),e=document.getElementById("menu-icon"),i=document.getElementById("menu-icon-close"),s=document.getElementById("mobile-menu"),l=document.getElementById("personal-info");n.addEventListener("click",()=>{e&&e.classList.contains("hidden")&&d([e,i,s]),d([n,t,l])});t.addEventListener("click",()=>{d([t,l,n])});function d(o){o.forEach(c=>{c.classList.toggle("hidden")})}</script> </div> </div> </div> <div id="mobile-menu" class="hidden text-center overflow-y-auto pb-8" style="height: calc(100vh - 64px)"> <div class="py-2"> <a class=" hover:text-skin-active" href="/blog/1"> <i class="ri-draft-line"></i> <span>Blog</span> </a>  <div class="space-y-4 text-sm">  </div> </div><div class="py-2"> <a class=" hover:text-skin-active" href="/feed/1"> <i class="ri-lightbulb-flash-line"></i> <span>Feed</span> </a>  <div class="space-y-4 text-sm">  </div> </div><div class="py-2"> <a class=" hover:text-skin-active" href="/archive/1"> <i class="ri-archive-line"></i> <span>Archive</span> </a>  <div class="space-y-4 text-sm">  </div> </div><div class="py-2"> <a class=" hover:text-skin-active" href="/message"> <i class="ri-chat-1-line"></i> <span>Message</span> </a>  <div class="space-y-4 text-sm">  </div> </div><div class="py-2"> <a class=" hover:text-skin-active" href="/search"> <i class="ri-search-line"></i> <span>Search</span> </a>  <div class="space-y-4 text-sm">  </div> </div><div class="py-2"> <a class=" hover:text-skin-active" href="javascript:void(0);"> <i class="ri-more-fill"></i> <span>More</span> </a> <div class="divider-horizontal"></div> <div class="space-y-4 text-sm"> <a class="block hover:text-skin-active" href="/about"> <i class="ri-information-line"></i> <span>About</span> </a><a class="block hover:text-skin-active" href="/friends"> <i class="ri-user-5-line"></i> <span>Friends</span> </a> </div> </div> </div> <div id="personal-info" class="hidden break-all overflow-y-auto pb-8" style="height: calc(100vh - 64px)"> <img class="avatar my-4 mx-auto" src="/avatar.png" alt="avatar"> <div class="mb-2 text-center">Actions speak louder than words.</div> <div class="flex items-center justify-center flex-wrap"> <a title="telegram" href target="_blank"> <i class="ri-telegram-fill text-2xl mr-2 cursor-pointer"></i> </a><a title="twitter" href target="_blank"> <i class="ri-twitter-fill text-2xl mr-2 cursor-pointer"></i> </a><a title="instagram" href target="_blank"> <i class="ri-instagram-fill text-2xl mr-2 cursor-pointer"></i> </a><a title="github" href="https://github.com/cirry/astro-yi" target="_blank"> <i class="ri-github-fill text-2xl mr-2 cursor-pointer"></i> </a><a title="rss" href target="_blank"> <i class="ri-rss-fill text-2xl mr-2 cursor-pointer"></i> </a> </div> <div class="divider-horizontal-mini"></div> <div class="text-center"> <div> <i class="ri-folder-3-line menu-icon"></i>Categories </div> <div class="my-2 break-all truncate"> <a class="hover:text-skin-active" title="astro (1)" href="/category/astro"> astro (1) </a> </div><div class="my-2 break-all truncate"> <a class="hover:text-skin-active" title="feature (1)" href="/category/feature"> feature (1) </a> </div><div class="my-2 break-all truncate"> <a class="hover:text-skin-active" title="uncategorized (4)" href="/category/uncategorized"> uncategorized (4) </a> </div> <div class="divider-horizontal-mini"></div>
+          <div class="text-center"> <i class="ri-price-tag-3-line menu-icon"></i> Tags </div> <div class="my-2 break-all truncate"> <a class="hover:text-skin-active my-2" title="test" href="/tags/test">test (1)</a> </div><div class="my-2 break-all truncate"> <a class="hover:text-skin-active my-2" title="markdown" href="/tags/markdown">markdown (1)</a> </div><div class="my-2 break-all truncate"> <a class="hover:text-skin-active my-2" title="astro" href="/tags/astro">astro (1)</a> </div><div class="my-2 break-all truncate"> <a class="hover:text-skin-active my-2" title="feature" href="/tags/feature">feature (1)</a> </div> </div> </div> </header> <main class="container p-4  pt-20 text-skin-base min-h-full pb-32 relative" id="app"> <div class="grid grid-cols-4 gap-8"> <div class="col-span-4 xl:col-span-3 space-y-4 first:space-y-2"> <button class="flex items-center text-md cursor-pointer hover:text-skin-active outline-none" style="background-color: inherit;" onclick="history.back()"> <i class="ri-arrow-left-line mr-2"></i> <span>Go back</span> </button>  <div> <div> <!-- title --> <h1 class="break-all text-2xl font-bold">使用 Astro 构建并部署个人博客到 GitHub Pages全流程指南</h1> <div class="flex flex-wrap items-center my-2 text-skin-dodge"> <!-- date --> <div class="mr-2"><i class="ri-calendar-2-fill mr-1"></i>Apr 2, 2025</div> <!-- draft -->  <!-- category -->  <!-- tag -->  <!-- update --> <!--{--> <!--  lastModified && (--> <!--    <div class="mr-2"><i class="ri-calendar-check-fill "></i>{t('post.lastUpdated')}:{lastModified}</div>--> <!--  )--> <!--}--> <!-- minutes --> <div class="mr-2 flex items-center"><i class="ri-hourglass-fill mr-1"></i>6 Minutes</div>
+        <div class="mr-2 flex items-center"><i class="ri-quill-pen-line mr-1"></i>1069 Words</div> </div>  </div> <div class="divider-horizontal"></div> <article class="markdown-body"> <p><strong>前言</strong></p>
+<p>作为一名开发者或学习者，拥有一个属于自己的博客不仅可以记录成长、展示作品，还能积累知识。在这篇文章中，我将基于和 ChatGPT 的一次完整对话，总结如何使用 <strong>Astro</strong> 构建静态博客，并将其成功部署到 <strong>GitHub Pages</strong>，包括路径配置、图片处理、分支推送、Token 设置等实战细节。</p>
+<hr>
+<p><strong>1. 为什么选择 Astro？</strong></p>
+<p>在众多静态网站生成器中，Astro 是近年来最受欢迎的之一，原因如下：</p>
+<p>• 默认使用静态渲染，加载极快</p>
+<p>• 支持多种框架组件（React/Vue/Svelte等）</p>
+<p>• 支持 Markdown 和 MDX</p>
+<p>• 易部署，生态活跃</p>
+<p>相比 Hexo、Hugo、11ty，Astro 更现代、更易用，也更符合前端趋势。</p>
+<hr>
+<p><strong>2. 创建 Astro 博客项目</strong></p>
+<div class="expressive-code"><link rel="stylesheet" href="/_astro/ec.r9qfg.css"><script type="module" src="/_astro/ec.dy9ns.js"></script><figure class="frame is-terminal"><figcaption class="header"><span class="title"></span><span class="sr-only">Terminal window</span></figcaption><pre tabindex="0"><code><div class="ec-line"><div class="gutter"><div class="ln">1</div></div><div class="code"><span style="--0:#B392F0;--1:#6F42C1">npm</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">create</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">astro@latest</span></div></div></code></pre><div class="copy"><button title="Copy to clipboard" data-copied="Copied!" data-code="npm create astro@latest"><div></div></button></div></figure></div>
+<p>• 选择博客模板（Blog）</p>
+<p>• 安装依赖后运行开发：</p>
+<div class="expressive-code"><figure class="frame is-terminal"><figcaption class="header"><span class="title"></span><span class="sr-only">Terminal window</span></figcaption><pre tabindex="0"><code><div class="ec-line"><div class="gutter"><div class="ln">1</div></div><div class="code"><span style="--0:#B392F0;--1:#6F42C1">npm</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">run</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">dev</span></div></div></code></pre><div class="copy"><button title="Copy to clipboard" data-copied="Copied!" data-code="npm run dev"><div></div></button></div></figure></div>
+<p>打开 <a href="http://localhost:4321">http://localhost:4321</a> 查看效果。</p>
+<hr>
+<p><strong>3. 自定义页面内容</strong></p>
+<p>你可以修改：</p>
+<p>• 首页内容：src/pages/index.astro</p>
+<p>• 关于我页面：src/pages/about.astro 或 about.html.astro</p>
+<p>• 博文：src/content/blog/</p>
+<p><strong>3.1 关于我页面示例（Markdown）</strong></p>
+<div class="expressive-code"><figure class="frame"><figcaption class="header"></figcaption><pre tabindex="0"><code><div class="ec-line"><div class="gutter"><div class="ln">1</div></div><div class="code"><span style="--0:#E1E4E8;--1:#24292E">&#x3C;</span><span style="--0:#85E89D;--1:#1E7734">Layout</span></div></div><div class="ec-line"><div class="gutter"><div class="ln">2</div></div><div class="code"><span class="indent">  </span><span style="--0:#B392F0;--1:#6F42C1">title</span><span style="--0:#E1E4E8;--1:#24292E">=</span><span style="--0:#9ECBFF;--1:#032F62">"About Me"</span></div></div><div class="ec-line"><div class="gutter"><div class="ln">3</div></div><div class="code"><span class="indent">  </span><span style="--0:#B392F0;--1:#6F42C1">description</span><span style="--0:#E1E4E8;--1:#24292E">=</span><span style="--0:#9ECBFF;--1:#032F62">"Software Engineer </span><span style="--0:#FDAEB7;--0fs:italic;--1:#B31D28;--1fs:italic">&#x26;</span><span style="--0:#9ECBFF;--1:#032F62"> AI Explorer"</span></div></div><div class="ec-line"><div class="gutter"><div class="ln">4</div></div><div class="code"><span class="indent">  </span><span style="--0:#B392F0;--1:#6F42C1">pubDate</span><span style="--0:#E1E4E8;--1:#24292E">=</span><span style="--0:#9ECBFF;--1:#032F62">"2025-04-02"</span></div></div><div class="ec-line"><div class="gutter"><div class="ln">5</div></div><div class="code"><span class="indent">  </span><span style="--0:#B392F0;--1:#6F42C1">heroImage</span><span style="--0:#E1E4E8;--1:#24292E">=</span><span style="--0:#9ECBFF;--1:#032F62">"/blog-placeholder-about.jpg"</span></div></div><div class="ec-line"><div class="gutter"><div class="ln">6</div></div><div class="code"><span style="--0:#E1E4E8;--1:#24292E">></span></div></div><div class="ec-line"><div class="gutter"><div class="ln">7</div></div><div class="code"><span class="indent"><span style="--0:#E1E4E8;--1:#24292E">  </span></span><span style="--0:#E1E4E8;--1:#24292E">&#x3C;</span><span style="--0:#85E89D;--1:#1E7734">p</span><span style="--0:#E1E4E8;--1:#24292E">></span></div></div><div class="ec-line"><div class="gutter"><div class="ln">8</div></div><div class="code"><span class="indent"><span style="--0:#E1E4E8;--1:#24292E">    </span></span><span style="--0:#E1E4E8;--1:#24292E">Hi! I’m Yuxu Ge, a software engineer and AI enthusiast with 10+ years of backend experience.</span></div></div><div class="ec-line"><div class="gutter"><div class="ln">9</div></div><div class="code"><span class="indent"><span style="--0:#E1E4E8;--1:#24292E">    </span></span><span style="--0:#E1E4E8;--1:#24292E">I'm currently pursuing an MSc in AI, exploring LLMs, RAG, agents and virtual intelligence.</span></div></div><div class="ec-line"><div class="gutter"><div class="ln">10</div></div><div class="code"><span class="indent"><span style="--0:#E1E4E8;--1:#24292E">  </span></span><span style="--0:#E1E4E8;--1:#24292E">&#x3C;/</span><span style="--0:#85E89D;--1:#1E7734">p</span><span style="--0:#E1E4E8;--1:#24292E">></span></div></div><div class="ec-line"><div class="gutter"><div class="ln">11</div></div><div class="code"><span style="--0:#E1E4E8;--1:#24292E">&#x3C;/</span><span style="--0:#85E89D;--1:#1E7734">Layout</span><span style="--0:#E1E4E8;--1:#24292E">></span></div></div></code></pre><div class="copy"><button title="Copy to clipboard" data-copied="Copied!" data-code="<Layout  title=&#x22;About Me&#x22;  description=&#x22;Software Engineer &#x26; AI Explorer&#x22;  pubDate=&#x22;2025-04-02&#x22;  heroImage=&#x22;/blog-placeholder-about.jpg&#x22;>  <p>    Hi! I’m Yuxu Ge, a software engineer and AI enthusiast with 10+ years of backend experience.    I&#x27;m currently pursuing an MSc in AI, exploring LLMs, RAG, agents and virtual intelligence.  </p></Layout>"><div></div></button></div></figure></div>
+<p><strong>3.2 如果你想生成 /about.html 而不是 /about/index.html：</strong></p>
+<p>重命名页面为：</p>
+<div class="expressive-code"><figure class="frame"><figcaption class="header"></figcaption><pre tabindex="0"><code><div class="ec-line"><div class="gutter"><div class="ln">1</div></div><div class="code"><span style="--0:#e1e4e8;--1:#24292e">src/pages/about.html.astro</span></div></div></code></pre><div class="copy"><button title="Copy to clipboard" data-copied="Copied!" data-code="src/pages/about.html.astro"><div></div></button></div></figure></div>
+<p>即可生成 dist/about.html</p>
+<p><strong>4. 正确处理 Markdown 中的图片</strong></p>
+<p><strong>官方推荐方案 ✅：</strong></p>
+<p>将图片放在 /public/ 目录中，例如：</p>
+<div class="expressive-code"><figure class="frame"><figcaption class="header"></figcaption><pre tabindex="0"><code><div class="ec-line"><div class="gutter"><div class="ln">1</div></div><div class="code"><span style="--0:#e1e4e8;--1:#24292e">public/images/blog/my-post/image.jpg</span></div></div></code></pre><div class="copy"><button title="Copy to clipboard" data-copied="Copied!" data-code="public/images/blog/my-post/image.jpg"><div></div></button></div></figure></div>
+<p>Markdown 中引用：</p>
+<div class="expressive-code"><figure class="frame"><figcaption class="header"></figcaption><pre tabindex="0"><code><div class="ec-line"><div class="gutter"><div class="ln">1</div></div><div class="code"><span style="--0:#E1E4E8;--1:#24292E">![</span><span style="--0:#DBEDFF;--0td:underline;--1:#032F62;--1td:underline">图</span><span style="--0:#E1E4E8;--1:#24292E">](</span><span style="--0:#E1E4E8;--0td:underline;--1:#24292E;--1td:underline">/images/blog/my-post/image.jpg</span><span style="--0:#E1E4E8;--1:#24292E">)</span></div></div></code></pre><div class="copy"><button title="Copy to clipboard" data-copied="Copied!" data-code="![图](/images/blog/my-post/image.jpg)"><div></div></button></div></figure></div>
+<p>✅ 编辑器和 Astro 都能正常识别</p>
+<p>❌ 不推荐将图片与 .md 同级放在 src/content 中，因为 Astro 不会打包这些图片。</p>
+<hr>
+<p><strong>5. 使用 gh-pages 部署到 GitHub Pages</strong></p>
+<p><strong>安装工具：</strong></p>
+<div class="expressive-code"><figure class="frame is-terminal"><figcaption class="header"><span class="title"></span><span class="sr-only">Terminal window</span></figcaption><pre tabindex="0"><code><div class="ec-line"><div class="gutter"><div class="ln">1</div></div><div class="code"><span style="--0:#B392F0;--1:#6F42C1">npm</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">install</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#79B8FF;--1:#005CC5">--save-dev</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">gh-pages</span></div></div></code></pre><div class="copy"><button title="Copy to clipboard" data-copied="Copied!" data-code="npm install --save-dev gh-pages"><div></div></button></div></figure></div>
+<p><strong>设置 astro.config.mjs：</strong></p>
+<p>如果仓库名是 virtual-velocity，则设置：</p>
+<div class="expressive-code"><figure class="frame"><figcaption class="header"></figcaption><pre tabindex="0"><code><div class="ec-line"><div class="gutter"><div class="ln">1</div></div><div class="code"><span style="--0:#F97583;--1:#BF3441">export</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#F97583;--1:#BF3441">default</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#B392F0;--1:#6F42C1">defineConfig</span><span style="--0:#E1E4E8;--1:#24292E">({</span></div></div><div class="ec-line"><div class="gutter"><div class="ln">2</div></div><div class="code"><span class="indent"><span style="--0:#E1E4E8;--1:#24292E">  </span></span><span style="--0:#E1E4E8;--1:#24292E">base: </span><span style="--0:#9ECBFF;--1:#032F62">'/virtual-velocity/'</span><span style="--0:#E1E4E8;--1:#24292E">,</span></div></div><div class="ec-line"><div class="gutter"><div class="ln">3</div></div><div class="code"><span style="--0:#E1E4E8;--1:#24292E">});</span></div></div></code></pre><div class="copy"><button title="Copy to clipboard" data-copied="Copied!" data-code="export default defineConfig({  base: &#x27;/virtual-velocity/&#x27;,});"><div></div></button></div></figure></div>
+<p><strong>添加部署脚本：</strong></p>
+<div class="expressive-code"><figure class="frame"><figcaption class="header"></figcaption><pre tabindex="0"><code><div class="ec-line"><div class="gutter"><div class="ln">1</div></div><div class="code"><span style="--0:#9ECBFF;--1:#032F62">"scripts"</span><span style="--0:#E1E4E8;--1:#24292E">: {</span></div></div><div class="ec-line"><div class="gutter"><div class="ln">2</div></div><div class="code"><span class="indent">  </span><span style="--0:#79B8FF;--1:#005CC5">"deploy"</span><span style="--0:#E1E4E8;--1:#24292E">: </span><span style="--0:#9ECBFF;--1:#032F62">"astro build &#x26;&#x26; gh-pages -d dist --branch gh-pages "</span></div></div><div class="ec-line"><div class="gutter"><div class="ln">3</div></div><div class="code"><span style="--0:#E1E4E8;--1:#24292E">}</span></div></div></code></pre><div class="copy"><button title="Copy to clipboard" data-copied="Copied!" data-code="&#x22;scripts&#x22;: {  &#x22;deploy&#x22;: &#x22;astro build &#x26;&#x26; gh-pages -d dist --branch gh-pages &#x22;}"><div></div></button></div></figure></div>
+<p><strong>执行部署：</strong></p>
+<div class="expressive-code"><figure class="frame is-terminal"><figcaption class="header"><span class="title"></span><span class="sr-only">Terminal window</span></figcaption><pre tabindex="0"><code><div class="ec-line"><div class="gutter"><div class="ln">1</div></div><div class="code"><span style="--0:#B392F0;--1:#6F42C1">npm</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">run</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">deploy</span></div></div></code></pre><div class="copy"><button title="Copy to clipboard" data-copied="Copied!" data-code="npm run deploy"><div></div></button></div></figure></div>
+<hr>
+<p><strong>6. 遇到问题的解决方案汇总</strong></p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th><strong>问题</strong></th><th><strong>解决方案</strong></th></tr></thead><tbody><tr><td>sharp 模块缺失</td><td>npm install sharp 或改用 squoosh 图像服务</td></tr><tr><td>图片路径在编辑器能看但浏览器 404</td><td>图片放到 /public/ 并使用绝对路径</td></tr><tr><td>构建输出为 /about/index.html 而不是 /about.html</td><td>页面命名为 about.html.astro</td></tr><tr><td>gh-pages 报“分支已存在”</td><td>加 —force</td></tr><tr><td>报错连接不上 GitHub 22 端口</td><td>改用 HTTPS 远程地址</td></tr><tr><td>GitHub 不接受密码推送</td><td>使用 <a href="https://github.com/settings/tokens">Personal Access Token</a></td></tr></tbody></table>
+<hr>
+<p><strong>7. GitHub Token 鉴权配置（重要）</strong></p>
+<p>GitHub 已禁用密码推送。你需要：</p>
+<ol>
+<li>
+<p>生成 Personal Access Token（classic）</p>
+</li>
+<li>
+<p>使用 Token 替代密码进行登录推送</p>
+</li>
+</ol>
+<p>或者改用 SSH：</p>
+<div class="expressive-code"><figure class="frame is-terminal"><figcaption class="header"><span class="title"></span><span class="sr-only">Terminal window</span></figcaption><pre tabindex="0"><code><div class="ec-line"><div class="gutter"><div class="ln">1</div></div><div class="code"><span style="--0:#B392F0;--1:#6F42C1">git</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">remote</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">set-url</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">origin</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">git@github.com:yourname/yourrepo.git</span></div></div></code></pre><div class="copy"><button title="Copy to clipboard" data-copied="Copied!" data-code="git remote set-url origin git@github.com:yourname/yourrepo.git"><div></div></button></div></figure></div>
+<hr>
+<p><strong>总结</strong></p>
+<p>通过 Astro + GitHub Pages，你可以快速搭建一个现代化、极致简洁又易于维护的个人博客。整合配置后，只需：</p>
+<div class="expressive-code"><figure class="frame is-terminal"><figcaption class="header"><span class="title"></span><span class="sr-only">Terminal window</span></figcaption><pre tabindex="0"><code><div class="ec-line"><div class="gutter"><div class="ln">1</div></div><div class="code"><span style="--0:#B392F0;--1:#6F42C1">npm</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">run</span><span style="--0:#E1E4E8;--1:#24292E"> </span><span style="--0:#9ECBFF;--1:#032F62">deploy</span></div></div></code></pre><div class="copy"><button title="Copy to clipboard" data-copied="Copied!" data-code="npm run deploy"><div></div></button></div></figure></div>
+<p>博客就能自动部署上线，真正做到<strong>所写即所得</strong>。</p>
+<p><strong>🌐 示例地址（替换为你自己的）</strong></p>
+<div class="expressive-code"><figure class="frame"><figcaption class="header"></figcaption><pre tabindex="0"><code><div class="ec-line"><div class="gutter"><div class="ln">1</div></div><div class="code"><span style="--0:#e1e4e8;--1:#24292e">https://yourname.github.io/your-repo/</span></div></div></code></pre><div class="copy"><button title="Copy to clipboard" data-copied="Copied!" data-code="https://yourname.github.io/your-repo/"><div></div></button></div></figure></div>
+<hr>
+<h2 id="-配置自定义域名如-bloggeyuxucom">🔧 配置自定义域名（如 <code>blog.geyuxu.com</code>）</h2>
+<p>如果你希望用自己的域名（如 <code>blog.geyuxu.com</code>）来访问博客，而不是默认的 GitHub Pages 地址（如 <code>https://yourname.github.io/yourrepo/</code>），可以按照以下步骤进行配置：</p>
+<hr>
+<h3 id="-1-在-github-仓库中设置自定义域名">✅ 1. 在 GitHub 仓库中设置自定义域名</h3>
+<ol>
+<li>
+<p>打开你的博客仓库</p>
+</li>
+<li>
+<p>点击 <code>Settings</code> → <code>Pages</code></p>
+</li>
+<li>
+<p>找到 <strong>“Custom domain”</strong> 输入框</p>
+</li>
+<li>
+<p>填入你绑定的域名，例如：blog.geyuxu.com</p>
+<p>勾选 <strong>“Enforce HTTPS”</strong>（建议开启）</p>
+</li>
+</ol>
+<hr>
+<h3 id="-2-在项目的-public-目录中添加-cname-文件">✅ 2. 在项目的 <code>public/</code> 目录中添加 <code>CNAME</code> 文件</h3>
+<p>创建一个名为 <code>CNAME</code> 的文件（没有扩展名），放在 <code>public/</code> 目录下，内容仅包含你要绑定的域名，例如：blog.geyuxu.com</p>
+<blockquote>
+<p>⚠️ 注意：</p>
+<ul>
+<li>不要添加 <code>http://</code> 或 <code>https://</code></li>
+<li>文件中不要有空行或空格</li>
+</ul>
+</blockquote>
+<hr>
+<h3 id="-3-配置域名-dns在你的域名服务商后台">✅ 3. 配置域名 DNS（在你的域名服务商后台）</h3>
+<p>登录你的域名服务商（如 Cloudflare、阿里云、Namecheap 等），添加以下 DNS 记录：</p>
+<ul>
+<li><strong>类型</strong>：CNAME</li>
+<li><strong>主机记录</strong>：<code>blog</code>（或你自定义的子域名）</li>
+<li><strong>指向</strong>：<code>yourname.github.io</code>（替换为你的 GitHub 用户名）</li>
+<li><strong>TTL</strong>：默认或自动</li>
+</ul>
+<h4 id="示例">示例：</h4>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>类型</th><th>主机记录</th><th>值（指向）</th></tr></thead><tbody><tr><td>CNAME</td><td>blog</td><td><code>geyuxu.github.io</code></td></tr></tbody></table>
+<hr>
+<h3 id="-4-测试并访问">✅ 4. 测试并访问</h3>
+<p>等待几分钟（DNS 生效时间视服务商而定），然后访问：<a href="https://blog.geyuxu.com">https://blog.geyuxu.com</a></p>
+<p>你应该可以看到部署成功的博客页面。</p>
+<hr>
+<h3 id="-小贴士">🎯 小贴士</h3>
+<ul>
+<li>每次部署时，<code>gh-pages</code> 会自动携带 <code>public/CNAME</code> 文件，无需手动设置。</li>
+<li>如果你绑定的是顶级域名（如 <code>geyuxu.com</code>），可能还需添加 A 记录，指向 GitHub Pages 的 IP，详见 <a href="https://docs.github.com/pages/configuring-a-custom-domain-for-your-github-pages-site">GitHub 官方文档</a>。</li>
+</ul>
+<hr> </article> <div class="divider-horizontal"></div> <div class="h-8 text-skin-base"> <div></div> <div class="flex item-center float-right w-auto max-w-[40%] text-right"> <a class="truncate " href="/blog/202504/从传统图像处理到深度学习车牌识别系统演进实践" title="从传统图像处理到深度学习：车牌识别系统演进实践"> 从传统图像处理到深度学习：车牌识别系统演进实践 </a> <i class="ri-arrow-right-s-fill float-right"></i> </div> </div> <div class="border-l-4 my-4 p-4 border-l-skin-base bg-skin-card break-all"> <div>Article title：使用 Astro 构建并部署个人博客到 GitHub Pages全流程指南</div> <div>Article author：Ge Yuxu</div> <div>Release time：Apr 2, 2025</div> <div> Original link：<a href="https://geyuxu.com/blog/202504/使用astro构建并部署个人博客到githubpages全流程指南" class="hover:text-skin-active">https://geyuxu.com/blog/202504/使用astro构建并部署个人博客到githubpages全流程指南</a> </div> </div>  </div>   </div> <div class="hidden xl:block col-span-1 relative"> <div class="shadow-lg rounded-lg h-64 w-auto flex flex-col items-center justify-center bg-skin-card p-2"> <img class="avatar mb-4" src="/avatar.png" alt="avatar"> <div class="mb-2 text-center">Actions speak louder than words.</div> <div class="flex items-center justify-center flex-wrap"> <a title="telegram" href target="_blank"> <i class="ri-telegram-fill text-2xl mr-2 cursor-pointer"></i> </a><a title="twitter" href target="_blank"> <i class="ri-twitter-fill text-2xl mr-2 cursor-pointer"></i> </a><a title="instagram" href target="_blank"> <i class="ri-instagram-fill text-2xl mr-2 cursor-pointer"></i> </a><a title="github" href="https://github.com/cirry/astro-yi" target="_blank"> <i class="ri-github-fill text-2xl mr-2 cursor-pointer"></i> </a><a title="rss" href target="_blank"> <i class="ri-rss-fill text-2xl mr-2 cursor-pointer"></i> </a> </div> </div> <div id="toc" class="shadow-lg rounded-lg my-4 py-2 px-2 bg-skin-card sticky top-20" data-astro-cid-6t6zfk7k> <div class="aside-widget" data-astro-cid-6t6zfk7k> <i class="ri-list-check menu-icon" data-astro-cid-6t6zfk7k></i> Table of Contents </div> <div class="overflow-auto" data-astro-cid-6t6zfk7k> <div class="toc-container" data-astro-cid-6t6zfk7k></div> </div> </div>  <script type="module" src="/_astro/Toc.astro_astro_type_script_index_0_lang.D6a8Z31M.js"></script> </div> <button type="button" id="scrollToTopBtn" class="header-btn fixed bottom-4 right-2 hidden" title="scroll to top"> <i class="ri-arrow-up-line"></i> </button> <script type="module">let o=document.getElementById("scrollToTopBtn");window.addEventListener("scroll",function(){window.scrollY>200?o.style.display="block":o.style.display="none"});o.addEventListener("click",function(){window.scrollTo({top:0,behavior:"smooth"})});</script> </div> <div class="h-10 container p-1 absolute left-0 bottom-0">  <div class="flex items-center flex-col flex-wrap justify-center mb-4 text-skin-base first:mb-0 sm:flex-row"> <div> <span class="cursor-default">Copyright</span> <i class="ri-copyright-line align-middle"></i> <span class="align-middle">2025</span> </div>  <div class="divider-vertical"></div> <a href="/sitemap-0.xml">Sitemap</a> </div> </div> </main> <script type="module" src="/_astro/BlogPost.astro_astro_type_script_index_0_lang.C_bBgou1.js"></script></body></html>

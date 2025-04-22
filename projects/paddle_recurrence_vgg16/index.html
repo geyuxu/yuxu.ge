@@ -1,0 +1,79 @@
+<!DOCTYPE html><html lang="zh"> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu Blog" href="https://example.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://example.com/projects/paddle_recurrence_vgg16/"><!-- Primary Meta Tags --><title>VGG16 复现 - PaddlePaddle 实现</title><meta name="title" content="VGG16 复现 - PaddlePaddle 实现"><meta name="description"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://example.com/projects/paddle_recurrence_vgg16/"><meta property="og:title" content="VGG16 复现 - PaddlePaddle 实现"><meta property="og:description"><meta property="og:image" content="https://example.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://example.com/projects/paddle_recurrence_vgg16/"><meta property="twitter:title" content="VGG16 复现 - PaddlePaddle 实现"><meta property="twitter:description"><meta property="twitter:image" content="https://example.com/blog-placeholder-1.jpg"><style>a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astro-cid-eimmu3lg].active{font-weight:bolder;text-decoration:underline}header[data-astro-cid-3ef6ksr2]{margin:0;padding:0 1em;background:#fff;box-shadow:0 2px 8px rgba(var(--black),5%)}h2[data-astro-cid-3ef6ksr2]{margin:0;font-size:1em}h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2],h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none}nav[data-astro-cid-3ef6ksr2]{display:flex;align-items:center;justify-content:space-between}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{padding:1em .5em;color:var(--black);border-bottom:4px solid transparent;text-decoration:none}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none;border-bottom-color:var(--accent)}.social-links[data-astro-cid-3ef6ksr2],.social-links[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{display:flex}@media (max-width: 720px){.social-links[data-astro-cid-3ef6ksr2]{display:none}}footer[data-astro-cid-sz7xmlte]{padding:2em 1em 6em;background:linear-gradient(var(--gray-gradient)) no-repeat;color:rgb(var(--gray));text-align:center}.social-links[data-astro-cid-sz7xmlte]{display:flex;justify-content:center;gap:1em;margin-top:1em}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]{text-decoration:none;color:rgb(var(--gray))}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]:hover{color:rgb(var(--gray-dark))}
+:root{--accent: #2337ff;--accent-dark: #000d8a;--black: 15, 18, 25;--gray: 96, 115, 159;--gray-light: 229, 233, 240;--gray-dark: 34, 41, 57;--gray-gradient: rgba(var(--gray-light), 50%), #fff;--box-shadow: 0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%), 0 16px 32px rgba(var(--gray), 33%)}@font-face{font-family:Atkinson;src:url(/fonts/atkinson-regular.woff) format("woff");font-weight:400;font-style:normal;font-display:swap}@font-face{font-family:Atkinson;src:url(/fonts/atkinson-bold.woff) format("woff");font-weight:700;font-style:normal;font-display:swap}body{font-family:Atkinson,sans-serif;margin:0;padding:0;text-align:left;background:linear-gradient(var(--gray-gradient)) no-repeat;background-size:100% 600px;word-wrap:break-word;overflow-wrap:break-word;color:rgb(var(--gray-dark));font-size:20px;line-height:1.7}main{width:720px;max-width:calc(100% - 2em);margin:auto;padding:3em 1em}h1,h2,h3,h4,h5,h6{margin:0 0 .5rem;color:rgb(var(--black));line-height:1.2}h1{font-size:3.052em}h2{font-size:2.441em}h3{font-size:1.953em}h4{font-size:1.563em}h5{font-size:1.25em}strong,b{font-weight:700}a,a:hover{color:var(--accent)}p{margin-bottom:1em}.prose p{margin-bottom:2em}textarea{width:100%;font-size:16px}input{font-size:16px}table{width:100%}img{max-width:100%;height:auto;border-radius:8px}code{padding:2px 5px;background-color:rgb(var(--gray-light));border-radius:2px}pre{padding:1.5em;border-radius:8px}pre>code{all:unset}blockquote{border-left:4px solid var(--accent);padding:0 0 0 20px;margin:0;font-size:1.333em}hr{border:none;border-top:1px solid rgb(var(--gray-light))}@media (max-width: 720px){body{font-size:18px}main{padding:1em}}.sr-only{border:0;padding:0;margin:0;position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);clip:rect(1px,1px,1px,1px);clip-path:inset(50%);white-space:nowrap}
+</style></head> <body> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <h2 data-astro-cid-3ef6ksr2><a href="/" data-astro-cid-3ef6ksr2>Ge Yuxu Blog</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blog" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/series" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Series </a>  <a href="/projects" class="active" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Projects </a>  <a href="/about" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> About </a>  </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://github.com/geyuxu" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://www.linkedin.com/in/geyuxu/" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's LinkedIn profile</span> <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" data-astro-cid-3ef6ksr2> <path fill="currentColor" d="M20.447 20.452H17.2v-5.569c0-1.328-.025-3.039-1.852-3.039-1.853 0-2.136 1.447-2.136 2.942v5.666h-3.248V9h3.122v1.561h.045c.435-.823 1.498-1.688 3.083-1.688 3.295 0 3.903 2.17 3.903 4.989v6.59zM5.337 7.433a1.882 1.882 0 110-3.764 1.882 1.882 0 010 3.764zm1.626 13.019H3.708V9h3.255v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.222 0z" data-astro-cid-3ef6ksr2></path> </svg> </a> </div> </nav> </header>  <main class="prose mx-auto px-4">  <h1 id="vgg16-复现---paddlepaddle-实现">VGG16 复现 - PaddlePaddle 实现</h1>
+<p>GitHub: <a href="https://github.com/geyuxu/paddle_recurrence_vgg16">https://github.com/geyuxu/paddle_recurrence_vgg16</a></p>
+<p>本项目使用 <strong>PaddlePaddle</strong> 深度学习框架，<strong>完整复现经典卷积神经网络 VGG16</strong> 架构，支持在 CIFAR10、ImageNet 以及自定义数据集上进行训练与评估。</p>
+<p>项目结构清晰，模块解耦，具备以下特性：</p>
+<ul>
+<li>✅ 纯手写实现 VGG16 网络结构（非调用预训练模型）</li>
+<li>✅ 支持多种图像分类数据集（通过命令行参数指定）</li>
+<li>✅ 支持断点保存与加载</li>
+<li>✅ 结构可扩展，可集成更复杂训练流程</li>
+</ul>
+<hr>
+<h2 id="-项目结构">📦 项目结构</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>vgg16_cifar10_flexible/</span></span>
+<span class="line"><span>├── model.py          # VGG16 模型定义</span></span>
+<span class="line"><span>├── dataset.py        # 数据加载与 transform 定义</span></span>
+<span class="line"><span>├── train.py          # 通用训练脚本（支持 CLI 参数）</span></span>
+<span class="line"><span>├── evaluate.py       # 模型验证脚本</span></span>
+<span class="line"><span>├── utils.py          # 保存/加载模型工具函数</span></span>
+<span class="line"><span>├── config.py         # 训练默认配置项（可选）</span></span>
+<span class="line"><span>└── README.md</span></span></code></pre>
+<hr>
+<h2 id="-快速开始">🚀 快速开始</h2>
+<h3 id="1-安装-paddlepaddle">1. 安装 PaddlePaddle</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">pip</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> paddlepaddle</span><span style="color:#79B8FF"> -i</span><span style="color:#9ECBFF"> https://mirror.baidu.com/pypi/simple</span></span></code></pre>
+<h3 id="2-训练模型默认使用-cifar10">2. 训练模型（默认使用 CIFAR10）</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">python</span><span style="color:#9ECBFF"> train.py</span></span></code></pre>
+<p>或者使用命令行参数控制：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">python</span><span style="color:#9ECBFF"> train.py</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --dataset</span><span style="color:#9ECBFF"> cifar10</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --input_size</span><span style="color:#79B8FF"> 32</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --num_classes</span><span style="color:#79B8FF"> 10</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --epochs</span><span style="color:#79B8FF"> 20</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --lr</span><span style="color:#79B8FF"> 0.001</span><span style="color:#79B8FF"> \</span></span>
+<span class="line"><span style="color:#79B8FF">    --batch_size</span><span style="color:#79B8FF"> 64</span></span></code></pre>
+<h3 id="3-自定义数据集使用方式建议自行扩展-datasetpy">3. 自定义数据集使用方式（建议自行扩展 <code>dataset.py</code>）：</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D"># dataset.py 中添加自定义数据集逻辑</span></span>
+<span class="line"><span style="color:#F97583">if</span><span style="color:#E1E4E8"> name </span><span style="color:#F97583">==</span><span style="color:#9ECBFF"> 'custom'</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> CustomDataset(</span><span style="color:#79B8FF">...</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<hr>
+<h2 id="-模型验证">📊 模型验证</h2>
+<p>训练过程中会自动在验证集上进行评估，查看准确率。</p>
+<hr>
+<h2 id="-模型保存">💾 模型保存</h2>
+<p>训练每个 epoch 后，会自动将模型参数保存至 <code>./checkpoints/</code> 目录下：</p>
+<ul>
+<li><code>vgg16_epochX.pdparams</code>: 模型参数</li>
+<li><code>vgg16_epochX.pdopt</code>: 优化器状态</li>
+</ul>
+<hr>
+<h2 id="-单图预测可选">🔍 单图预测（可选）</h2>
+<p>你可以在 <code>predict.py</code> 中加载模型并进行图像预测，具体见脚本说明。</p>
+<hr>
+<h2 id="-关于-vgg16">📚 关于 VGG16</h2>
+<p>VGG16 是由 Oxford VGG 团队提出的经典 CNN 架构，特点是使用多个 3x3 卷积堆叠代替大卷积核，结构简单但效果出色，广泛应用于图像分类、目标检测等任务。</p>
+<p>本项目复现版本遵循原始结构（13个卷积层 + 3个全连接层），使用全局平均池化简化模型计算。</p>
+<hr>
+<h2 id="-示例截图cifar-10">✅ 示例截图（CIFAR-10）</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>[Epoch 3] Batch 100, Loss: 1.4253</span></span>
+<span class="line"><span>Validation Accuracy: 0.6324</span></span></code></pre>
+<hr>
+<h2 id="-todo可选扩展">📌 TODO（可选扩展）</h2>
+<ul class="contains-task-list">
+<li class="task-list-item"><input type="checkbox" disabled> 加入 TensorBoard 可视化</li>
+<li class="task-list-item"><input type="checkbox" disabled> 加入 EarlyStopping / 学习率调度器</li>
+<li class="task-list-item"><input type="checkbox" disabled> 支持多GPU训练（DataParallel）</li>
+<li class="task-list-item"><input type="checkbox" disabled> 更丰富的数据增强</li>
+</ul>
+<hr>
+<h2 id="-作者">🧠 作者</h2>
+<p>作者：Yuxu Ge（葛于旭）<br>
+框架：基于 PaddlePaddle 2.x<br>
+数据集：CIFAR10</p>
+<hr>
+<h2 id="-license">📝 License</h2>
+<p>MIT</p>  </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2025 All rights reserved.
+</footer>  </body></html>

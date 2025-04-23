@@ -76,7 +76,7 @@ main[data-astro-cid-bvzihdzo]{width:calc(100% - 2em);max-width:100%;margin:0}.he
 <p>这种结构特别适合处理「一整行字符」的图像，也就是那种你不需要逐个分割字符，而是直接把一张字符区域图喂进去，它就能一口气输出整个字符串的方案。非常适合车牌识别场景。</p>
 <p><strong>4.2 为什么要用 CTC？</strong></p>
 <p>CTC（Connectionist Temporal Classification）最牛的地方就是<strong>不要求字符和位置一一对齐</strong>。也就是说，我们训练的时候只需要提供整张图片对应的文字标签，比如：</p>
-<img src="http://img.geyuxu.com/image-2025040201.png" title="" alt="" width="296">
+<img src="https://img.geyuxu.com/image-2025040201.png" title="" alt="" width="296">
 <p>标签：鲁N Y97L0</p>
 <p>CTC 会自己在训练中学会怎么对齐字符和图像上的位置，不需要你提前标出每个字符在哪儿。对我们这种实际数据标注难度高的项目太友好了。</p>
 <p><strong>4.3 模型训练的一些事</strong></p>

@@ -1,0 +1,140 @@
+<!DOCTYPE html><html lang="en" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="icon" type="image/svg+xml" href="/favicon.svg"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu Blog" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/math/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/01_%E8%A1%8C%E5%88%97%E5%BC%8F%E5%92%8C%E4%B8%83%E4%B8%AA%E6%80%A7%E8%B4%A8/"><!-- Primary Meta Tags --><title>线性代数学习笔记1：行列式和七个性质</title><meta name="title" content="线性代数学习笔记1：行列式和七个性质"><meta name="description"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/math/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/01_%E8%A1%8C%E5%88%97%E5%BC%8F%E5%92%8C%E4%B8%83%E4%B8%AA%E6%80%A7%E8%B4%A8/"><meta property="og:title" content="线性代数学习笔记1：行列式和七个性质"><meta property="og:description"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/math/%E7%BA%BF%E6%80%A7%E4%BB%A3%E6%95%B0/01_%E8%A1%8C%E5%88%97%E5%BC%8F%E5%92%8C%E4%B8%83%E4%B8%AA%E6%80%A7%E8%B4%A8/"><meta property="twitter:title" content="线性代数学习笔记1：行列式和七个性质"><meta property="twitter:description"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><style>.content[data-astro-cid-7jjqptxk]{max-width:720px;margin:0 auto;padding:2rem 1rem;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:1.05rem;line-height:1.75;color:#333}.content[data-astro-cid-7jjqptxk] h1[data-astro-cid-7jjqptxk],.content[data-astro-cid-7jjqptxk] h2[data-astro-cid-7jjqptxk],.content[data-astro-cid-7jjqptxk] h3[data-astro-cid-7jjqptxk]{font-weight:600;margin-top:2rem;margin-bottom:1rem;line-height:1.3}.content[data-astro-cid-7jjqptxk] p[data-astro-cid-7jjqptxk]{margin-bottom:1.25rem}.content[data-astro-cid-7jjqptxk] a[data-astro-cid-7jjqptxk]{color:var(--accent, #0070f3);text-decoration:underline}.content[data-astro-cid-7jjqptxk] img[data-astro-cid-7jjqptxk]{max-width:100%;border-radius:6px;margin:1.5rem 0}.content[data-astro-cid-7jjqptxk] pre[data-astro-cid-7jjqptxk],.content[data-astro-cid-7jjqptxk] code[data-astro-cid-7jjqptxk]{font-family:Menlo,Monaco,Consolas,Courier New,monospace;background:#f4f4f4;padding:.2em .4em;border-radius:4px}.content[data-astro-cid-7jjqptxk] pre[data-astro-cid-7jjqptxk]{padding:1em;overflow-x:auto}
+:root{--accent: #2337ff;--accent-dark: #000d8a;--black: 15, 18, 25;--gray: 96, 115, 159;--gray-light: 229, 233, 240;--gray-dark: 34, 41, 57;--gray-gradient: rgba(var(--gray-light), 50%), #fff;--box-shadow: 0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%), 0 16px 32px rgba(var(--gray), 33%)}@font-face{font-family:Atkinson;src:url(/fonts/atkinson-regular.woff) format("woff");font-weight:400;font-style:normal;font-display:swap}@font-face{font-family:Atkinson;src:url(/fonts/atkinson-bold.woff) format("woff");font-weight:700;font-style:normal;font-display:swap}body{font-family:Atkinson,sans-serif;margin:0;padding:0;text-align:left;background:linear-gradient(var(--gray-gradient)) no-repeat;background-size:100% 600px;word-wrap:break-word;overflow-wrap:break-word;color:rgb(var(--gray-dark));font-size:20px;line-height:1.7}main{width:720px;max-width:calc(100% - 2em);margin:auto;padding:3em 1em}h1,h2,h3,h4,h5,h6{margin:0 0 .5rem;color:rgb(var(--black));line-height:1.2}h1{font-size:3.052em}h2{font-size:2.441em}h3{font-size:1.953em}h4{font-size:1.563em}h5{font-size:1.25em}strong,b{font-weight:700}a,a:hover{color:var(--accent)}p{margin-bottom:1em}.prose p{margin-bottom:2em}textarea{width:100%;font-size:16px}input{font-size:16px}table{width:100%}img{max-width:100%;height:auto;border-radius:8px}code{padding:2px 5px;background-color:rgb(var(--gray-light));border-radius:2px}pre{padding:1.5em;border-radius:8px}pre>code{all:unset}blockquote{border-left:4px solid var(--accent);padding:0 0 0 20px;margin:0;font-size:1.333em}hr{border:none;border-top:1px solid rgb(var(--gray-light))}@media (max-width: 720px){body{font-size:18px}main{padding:1em}}.sr-only{border:0;padding:0;margin:0;position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);clip:rect(1px,1px,1px,1px);clip-path:inset(50%);white-space:nowrap}
+a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astro-cid-eimmu3lg].active{font-weight:bolder;text-decoration:underline}header[data-astro-cid-3ef6ksr2]{margin:0;padding:0 1em;background:#fff;box-shadow:0 2px 8px rgba(var(--black),5%)}h2[data-astro-cid-3ef6ksr2]{margin:0;font-size:1em}h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2],h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none}nav[data-astro-cid-3ef6ksr2]{display:flex;align-items:center;justify-content:space-between}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{padding:1em .5em;color:var(--black);border-bottom:4px solid transparent;text-decoration:none}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none;border-bottom-color:var(--accent)}.social-links[data-astro-cid-3ef6ksr2],.social-links[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{display:flex}@media (max-width: 720px){.social-links[data-astro-cid-3ef6ksr2]{display:none}}footer[data-astro-cid-sz7xmlte]{padding:2em 1em 6em;background:linear-gradient(var(--gray-gradient)) no-repeat;color:rgb(var(--gray));text-align:center}.social-links[data-astro-cid-sz7xmlte]{display:flex;justify-content:center;gap:1em;margin-top:1em}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]{text-decoration:none;color:rgb(var(--gray))}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]:hover{color:rgb(var(--gray-dark))}
+main[data-astro-cid-bvzihdzo]{width:calc(100% - 2em);max-width:100%;margin:0}.hero-image[data-astro-cid-bvzihdzo]{width:100%}.hero-image[data-astro-cid-bvzihdzo] img[data-astro-cid-bvzihdzo]{display:block;margin:0 auto;border-radius:12px;box-shadow:var(--box-shadow)}.prose[data-astro-cid-bvzihdzo]{width:720px;max-width:calc(100% - 2em);margin:auto;padding:1em;color:rgb(var(--gray-dark))}.title[data-astro-cid-bvzihdzo]{margin-bottom:1em;padding:1em 0;text-align:center;line-height:1}.title[data-astro-cid-bvzihdzo] h1[data-astro-cid-bvzihdzo]{margin:0 0 .5em}.date[data-astro-cid-bvzihdzo]{margin-bottom:.5em;color:rgb(var(--gray))}.last-updated-on[data-astro-cid-bvzihdzo]{font-style:italic}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <h2 data-astro-cid-3ef6ksr2><a href="/" data-astro-cid-3ef6ksr2>Ge Yuxu Blog</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blog" class="active" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/series" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Series </a>  <a href="/projects" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Projects </a>  <!-- <HeaderLink href="/about">About</HeaderLink> --> </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://github.com/geyuxu" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://www.linkedin.com/in/geyuxu/" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's LinkedIn profile</span> <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" data-astro-cid-3ef6ksr2> <path fill="currentColor" d="M20.447 20.452H17.2v-5.569c0-1.328-.025-3.039-1.852-3.039-1.853 0-2.136 1.447-2.136 2.942v5.666h-3.248V9h3.122v1.561h.045c.435-.823 1.498-1.688 3.083-1.688 3.295 0 3.903 2.17 3.903 4.989v6.59zM5.337 7.433a1.882 1.882 0 110-3.764 1.882 1.882 0 010 3.764zm1.626 13.019H3.708V9h3.255v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.222 0z" data-astro-cid-3ef6ksr2></path> </svg> </a> </div> </nav> </header>  <main data-astro-cid-bvzihdzo> <article data-astro-cid-bvzihdzo> <div class="prose" data-astro-cid-bvzihdzo> <!--
+					<div class="title">
+						<div class="date">
+							<FormattedDate date={pubDate} />
+							{
+								updatedDate && (
+									<div class="last-updated-on">
+										Last updated on <FormattedDate date={updatedDate} />
+									</div>
+								)
+							}
+						</div>
+						<h1>{title}</h1>
+						<hr /> 
+					</div>
+					-->  <article class="content" data-astro-cid-7jjqptxk> <h1 id="线性代数学习笔记1行列式和七个性质">线性代数学习笔记1：行列式和七个性质</h1>
+<p>行列式，简单来说，就是从一个方阵（n×n矩阵）计算出来的一个特殊数字。它可以看作是有向面积或体积在更高维空间的推广 。<strong>如果把矩阵看成一个对空间进行拉伸/压缩/翻转的操作，行列式就是这个操作对体积的影响因子</strong> 。行列式只对方阵定义，我们常用 det(A) 或 |A| 来表示矩阵 A 的行列式。</p>
+<p>行列式在工程和编程中有不少用武之地：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>•	线性方程组求解：判断方程组是否有唯一解。一个n元线性方程组有唯一解当且仅当对应系数矩阵的行列式不为0。这也是行列式概念最初出现的原因。如果行列式为0，说明方程组要么无解要么有无穷多解（矩阵不可逆）。反过来行列式非零表示矩阵可逆，能用例如克拉默法则直接解方程组。</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>•	图形变换与计算机图形学：在2D/3D图形变换中，变换矩阵的行列式告诉我们缩放比例和镜像翻转。行列式的绝对值表示面积或体积缩放倍数，符号表示是否发生了镜像（例如左右手坐标系切换） 。比如，在游戏引擎中判断一个变换是否保持朝向，可以看行列式是正是负；计算多边形面积、三角形面积也常用行列式公式。</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>•	线性无关性判断：矩阵的列（或行）向量组行列式不为0，意味着这些向量线性独立，不在同一个平面或更低维空间内。这等价于那个由向量构成的平行多面体体积不为0。行列式为0则说明这些向量有依赖关系，某几个维度塌陷到了低维，体积为0。</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>•	其他应用：比如在积分变换中的雅可比行列式（Jacobian determinant）用于坐标变换的体积元素缩放；在机器学习中判断矩阵条件数（行列式接近0表示矩阵病态）；图像处理中的畸变校正等，都可能遇到行列式的身影。</span></span></code></pre>
+<p>下面我们通过行列式的性质，理解行列式是怎么一回事。</p>
+<h2 id="性质1行或列交换行列式变号">性质1：行（或列）交换，行列式变号</h2>
+<p>打个比方，行列式就好比一个有方向的体积（面积）测量。交换矩阵的两行，相当于把构成这个体积的两个“轴”对调了位置。<strong>想象一下</strong>：原本你用右手系比划三个轴，结果交换了其中两个轴，就变成左手系了——坐标系的朝向翻转，导致体积测量的符号反了过来 。这就是行列式变号的由来：<strong>交换一次行（或列）会让行列式的值乘以 -1</strong>。</p>
+<p>用数学形式表达：如果矩阵B是由矩阵A交换两行得到的，那么</p>
+<p>$$
+\det(B) = -,\det(A)
+$$</p>
+<p>比如，对于一个简单的2x2矩阵：
+$$
+\begin{vmatrix}a &#x26; b \ c &#x26; d\end{vmatrix} = ad - bc
+$$
+交换两行后变为
+$$
+\begin{vmatrix}c &#x26; d \ a &#x26; b\end{vmatrix} = cb - da = -(ad - bc)
+= -\begin{vmatrix}a &#x26; b \ c &#x26; d\end{vmatrix}
+$$</p>
+<h2 id="性质2某一行或列全为-0则行列式为-0">性质2：某一行（或列）全为 0，则行列式为 0</h2>
+<p><strong>一组向量如果其中有一个完全是零向量，那拼不出任何体积来</strong>。想想看，如果一个盒子的长宽高其中有一项为0，那盒子的体积必然是0。同理，矩阵有一行全是0，就等于构成“体积”的一个维度长度为0，行列式当然为0。
+$$
+\begin{vmatrix}
+a &#x26; b &#x26; c\
+d &#x26; e &#x26; f\
+0 &#x26; 0 &#x26; 0
+\end{vmatrix} = 0
+,
+\begin{vmatrix}<br>
+a &#x26; 0 &#x26; c\
+d &#x26; 0 &#x26; f\
+g &#x26; 0 &#x26; h
+\end{vmatrix} = 0
+$$</p>
+<h2 id="性质3某一行或列乘以常数-k行列式也乘以-k">性质3：某一行（或列）乘以常数 k，行列式也乘以 k</h2>
+<p>矩阵某一行伸长或缩短倍数，行列式作为体积也会相应放大或缩小同样的倍数 ￼。生活中不妨想象一个可伸缩的盒子：如果你把盒子的长边拉长两倍，那盒子体积也就跟着变两倍；如果把高缩短成原来一半，体积就变成一半。注意：行列式乘以数值，只需要在1个向量上乘以数值即可，这和矩阵不一样。</p>
+<p>$$
+k\begin{vmatrix}<br>
+3 &#x26; 2 \
+3 &#x26; 3
+\end{vmatrix}
+=\begin{vmatrix}<br>
+3k &#x26; 2k \
+3 &#x26; 3
+\end{vmatrix}
+=\begin{vmatrix}<br>
+3k &#x26; 2 \
+3k &#x26; 3
+\end{vmatrix}
+$$</p>
+<h2 id="性质4某一行或列是两行之和行列式可拆成两个行列式之和">性质4：某一行（或列）是两行之和，行列式可拆成两个行列式之和</h2>
+<p>这条性质体现了行列式关于每一行的线性可加性。通俗地讲，如果矩阵的某一行可以拆成两个部分相加，那么行列式的值也可以拆成两部分分别计算再相加。这有点类似于分摊工作：一行的贡献可以分成两份，各算各的行列式，最后把结果加起来。
+$$
+A = \begin{pmatrix}
+a_1+a_2 &#x26; b_1+b_2\
+c &#x26; d
+\end{pmatrix}
+$$</p>
+<p>$$
+A = \begin{pmatrix}a_1 &#x26; b_1\ c &#x26; d\end{pmatrix} + \begin{pmatrix}a_2 &#x26; b_2\ c &#x26; d\end{pmatrix}
+$$</p>
+<h2 id="性质5两行或两列相同行列式为-0">性质5：两行（或两列）相同，行列式为 0</h2>
+<p>两行相同意味着这两个向量方向相同、完全重合，矩阵的行向量（或列向量）集合丢失了一个独立方向，相当于本应是立体的平行多面体塌扁在一个平面里，没有体积了。
+$$
+\begin{vmatrix}
+1 &#x26; 2 &#x26; 3\
+1 &#x26; 2 &#x26; 3\
+4 &#x26; 5 &#x26; 6
+\end{vmatrix} = 0
+$$</p>
+<p>性质6：两行（或两列）成比例，行列式为 0</p>
+<p>这一条和性质5类似，也是说如果矩阵的两行在方向上完全相同（即其中一行是另一行的数倍），那行列式照样为0。因为成比例其实意味着这两行是平行或共线的向量，没有新增的维度信息。本质上还是线性相关导致“体积”坍塌：两行成比例，相当于其中一行可以由另一行伸缩得到，和它重合在一条线上或一个平面上，行列式必为零。
+$$
+\begin{vmatrix}
+1 &#x26; 2\
+2 &#x26; 4
+\end{vmatrix} = 0
+$$</p>
+<h2 id="性质7把一行或列的-k-倍加到另一行或列行列式不变">性质7：把一行（或列）的 k 倍加到另一行（或列），行列式不变</h2>
+<p>这条性质是前几个性质的组合</p>
+<h1 id="beginvmatrixa--b--cd3a--e3b--f3fg--h--iendvmatrix">$$
+\begin{vmatrix}
+a &#x26; b &#x26; c\
+d+3a &#x26; e+3b &#x26; f+3f\
+g &#x26; h &#x26; i
+\end{vmatrix}</h1>
+<h1 id="beginvmatrixa--b--cd--e--fg--h--iendvmatrix--beginvmatrixa--b--c3a--3b--3fg--h--iendvmatrix">\begin{vmatrix}
+a &#x26; b &#x26; c\
+d &#x26; e &#x26; f\
+g &#x26; h &#x26; i
+\end{vmatrix} + \begin{vmatrix}
+a &#x26; b &#x26; c\
+3a &#x26; 3b &#x26; 3f\
+g &#x26; h &#x26; i
+\end{vmatrix}</h1>
+<p>\begin{vmatrix}
+a &#x26; b &#x26; c\
+d &#x26; e &#x26; f\
+g &#x26; h &#x26; i
+\end{vmatrix} + 0
+$$</p>
+<h2 id="总结">总结</h2>
+<p>行列式是一种定义在方阵上的特殊数值，体现了矩阵变换对空间体积（面积）的影响程度。在工程应用中，行列式广泛用于判断线性方程组解的唯一性、衡量图形变换的缩放与镜像效果，以及检测向量组的线性相关性。</p>
+<p>笔记分别讲解了行列式的七个性质：
+•	性质1：交换矩阵任意两行（列），行列式符号改变。
+•	性质2：矩阵中某一行（列）全为零，行列式必为零。
+•	性质3：矩阵某一行（列）乘以常数，行列式也同时乘以该常数。
+•	性质4：矩阵某行（列）为两行（列）相加，可将行列式拆分为两个子行列式相加。
+•	性质5：矩阵中存在两行（列）相同时，行列式为零。
+•	性质6：矩阵两行（列）成比例时，行列式也为零。
+•	性质7：将一行（列）的若干倍加到另一行（列），行列式值不变。</p>
+<p>通过以上性质的说明和实例展示，进一步明确了行列式的计算特性和几何含义，有助于在实际编程和工程实践中高效利用这些性质，简化矩阵和向量计算的复杂度，提高数值计算的效率和准确性。</p> </article>   </div> </article> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2025 All rights reserved.
+</footer>  </body></html>

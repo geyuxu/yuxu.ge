@@ -106,6 +106,18 @@ main[data-astro-cid-bvzihdzo]{width:calc(100% - 2em);max-width:100%;margin:0}.he
 <p><img src="https://img.geyuxu.com/2025-04-23-214946wVzij4.png" alt="image-20250423210450895"></p>
 <p>运行上述代码，Matplotlib 将会弹出两个窗口A和B，分别显示不同的曲线图。窗口 A 上有标题和两条折线，其中一条呈下降趋势，另一条上升趋势交叉形成一个 “X” 形状；窗口 B 则只有一条从左下到右上升的直线。灰色背景让窗口略有区分度，而网格线和大字号标题则提升了可读性。由于我们调用了一次 plt.show()，所以所有尚未显示的图形窗口都会同时显示出来。</p>
 <p>需要注意，plt.figure() 如果不指定名称，Matplotlib 会使用默认编号 (如 Figure 1, Figure 2 …) 来标识不同窗口。我们在这里用字母 ‘A’ 和 ‘B’ 来命名窗口，直观且便于在代码中引用特定窗口。实际应用中，如果要同时比较几张图，可以开多个窗口分别显示；而在写脚本批量生成图表时，通常是循环内每次创建新 figure，绘图并保存然后关闭，而不会像这里一样同时弹出多个窗口。</p>
-<p>当图表元素较多时，善用网格线 (plt.grid) 有助于读者对齐数值，但要注意线型应当柔和（如细虚线）以免喧宾夺主。使用 plt.tight_layout() 可以省去手动调整布局的麻烦，强烈建议在添加了标题、标签或多个子图后调用一下，这对保存图片尤为重要，避免轴标签被截掉。如果需要在一张窗口里绘制多张子图，可以使用 plt.subplots() 或 plt.subplot() 创建网格布局的子图，然后分别绘制；每个子图也能用 set_title 设置标题。无论是多窗口还是多子图，合理安排布局和标题都能让读者更容易比较和理解图中的信息。</p> </article>   </div> </article> </main> <footer data-astro-cid-sz7xmlte>
+<p>当图表元素较多时，善用网格线 (plt.grid) 有助于读者对齐数值，但要注意线型应当柔和（如细虚线）以免喧宾夺主。使用 plt.tight_layout() 可以省去手动调整布局的麻烦，强烈建议在添加了标题、标签或多个子图后调用一下，这对保存图片尤为重要，避免轴标签被截掉。如果需要在一张窗口里绘制多张子图，可以使用 plt.subplots() 或 plt.subplot() 创建网格布局的子图，然后分别绘制；每个子图也能用 set_title 设置标题。无论是多窗口还是多子图，合理安排布局和标题都能让读者更容易比较和理解图中的信息。</p>
+<hr>
+<h3 id="matplotlib-中文字符乱码问题">matplotlib 中文字符乱码问题</h3>
+<p><img src="https://img.geyuxu.com/2025-04-24-142402dnitbV.png" alt="image-20250424142400653"></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D"># 打印系统可用的字体</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> matplotlib.font_manager </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> FontManager</span></span>
+<span class="line"><span style="color:#E1E4E8">fm </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> FontManager()</span></span>
+<span class="line"><span style="color:#E1E4E8">mat_fonts </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> set</span><span style="color:#E1E4E8">(f.name </span><span style="color:#F97583">for</span><span style="color:#E1E4E8"> f </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> fm.ttflist)</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(mat_fonts)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 设置一个中文字体</span></span>
+<span class="line"><span style="color:#E1E4E8">plt.rcParams[</span><span style="color:#9ECBFF">'font.sans-serif'</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [</span><span style="color:#9ECBFF">'Arial Unicode MS'</span><span style="color:#E1E4E8">]</span></span></code></pre>
+<p><img src="https://img.geyuxu.com/2025-04-24-142428g0ApEt.png" alt="image-20250424142426927"></p> </article>   </div> </article> </main> <footer data-astro-cid-sz7xmlte>
 &copy; 2025 All rights reserved.
 </footer>  </body></html>

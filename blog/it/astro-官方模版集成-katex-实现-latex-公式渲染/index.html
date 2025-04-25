@@ -70,6 +70,6 @@ a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astr
 •	公式渲染样式异常：若公式渲染出来但样式不对，比如字体、对齐或颜色异常，大概率是 KaTeX CSS 没有加载。我一开始忘记引入 CSS，结果公式内容只是简单的数学文本且没有正确的排版格式。解决办法是确保在布局文件的  中引入了 katex.min.css，可以打开浏览器开发者工具检查网络面板或元素面板，确认 CSS 文件成功加载、生效。
 •	深色模式下公式不可见：正如前文提到的，如果启用了深色模式，务必调整 KaTeX 公式的文字颜色以适配深色背景。我当时在暗色模式下发现公式“消失”了，实际上是颜色与背景融为一体。通过在 CSS 中设置 .katex-display { color: inherit; }，问题迎刃而解。
 •	构建时报错：在编写复杂公式时，若不小心拼写错误或遗漏符号，Astro 构建阶段可能会抛出错误（因为 remark-math 在解析无效的 LaTeX 时会出错）。遇到这种情况，检查 Markdown 文件中的公式语法是否正确（括号是否闭合，命令拼写是否准确）。修正公式语法错误即可解决构建失败的问题。</p>
-<p>经过以上配置和调整，我顺利地在 Astro 博客中集成了 KaTeX，并成功渲染出所需的数学公式。在实际写作时，感觉就像在 LaTeX 文档中编写数学公式一样自然流畅。总结一下，Astro 本身作为静态站点生成器，并未开箱即用地支持 LaTeX 渲染，但通过 remark/rehype 插件与 KaTeX，我们可以较为轻松地扩展 Astro 的 Markdown 功能。希望这篇开发日志式的记录能为你提供参考，让你的 Astro 博客也能优雅地呈现数学之美。祝各位在技术创作中畅通无阻！</p> </article>   </div> </article> </main> <footer data-astro-cid-sz7xmlte>
+<p>经过以上配置和调整，我顺利地在 Astro 博客中集成了 KaTeX，并成功渲染出所需的数学公式。在实际写作时，感觉就像在 LaTeX 文档中编写数学公式一样自然流畅。总结一下，Astro 本身作为静态站点生成器，并未开箱即用地支持 LaTeX 渲染，但通过 remark/rehype 插件与 KaTeX，我们可以较为轻松地扩展 Astro 的 Markdown 功能。希望这篇开发日志式的记录能为你提供参考，让你的 Astro 博客也能优雅地呈现数学之美。祝各位在技术创作中畅通无阻！</p> </article>   <hr data-astro-cid-bvzihdzo>  </div> </article> </main> <footer data-astro-cid-sz7xmlte>
 &copy; 2025 All rights reserved.
 </footer>  </body></html>

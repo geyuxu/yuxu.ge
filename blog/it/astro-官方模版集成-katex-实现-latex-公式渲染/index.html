@@ -57,7 +57,7 @@ a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astr
 <span class="line"><span style="color:#E1E4E8">    &#x3C;</span><span style="color:#85E89D">slot</span><span style="color:#FDAEB7;font-style:italic"> /</span><span style="color:#E1E4E8">>  </span><span style="color:#6A737D">&#x3C;!-- 页面主要内容 --></span></span>
 <span class="line"><span style="color:#E1E4E8">  &#x3C;/</span><span style="color:#85E89D">body</span><span style="color:#E1E4E8">></span></span>
 <span class="line"><span style="color:#E1E4E8">&#x3C;/</span><span style="color:#85E89D">html</span><span style="color:#E1E4E8">></span></span></code></pre>
-<p>**注意：**如果不方便使用 CDN，你也可以安装 katex 包后，通过在布局组件的 frontmatter 中直接引入 import ‘katex/dist/katex.min.css’; 来加载本地的 KaTeX CSS。无论采用哪种方式，确保构建后页面的  确实加载了 katex.min.css。</p>
+<p><strong>注意：</strong> 如果不方便使用 CDN，你也可以安装 katex 包后，通过在布局组件的 frontmatter 中直接引入 import ‘katex/dist/katex.min.css’; 来加载本地的 KaTeX CSS。无论采用哪种方式，确保构建后页面的  确实加载了 katex.min.css。</p>
 <h3 id="4可选调整暗色模式样式"><a aria-hidden="true" tabindex="-1" href="#4可选调整暗色模式样式"><span class="icon icon-link"></span></a>4.	（可选）调整暗色模式样式：</h3>
 <p>如果你的博客支持深色模式或使用了诸如 Tailwind CSS 的排版插件，你可能需要针对 KaTeX 渲染的公式调整颜色样式。例如，在使用 Tailwind CSS 的站点中，KaTeX 渲染的块级公式元素默认为 .katex-display 类。如果不手动设置颜色，在暗色模式下公式可能仍是黑色文字，从而与深色背景冲突。为了解决这个问题，可以在全局样式文件（例如 src/styles/typography.css 或 Tailwind 全局样式）中添加一条规则：</p>
 <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="css"><code><span class="line"><span style="color:#B392F0">.prose</span><span style="color:#B392F0"> .katex-display</span><span style="color:#E1E4E8"> {</span></span>

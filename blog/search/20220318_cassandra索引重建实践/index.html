@@ -33,7 +33,7 @@ main[data-astro-cid-bvzihdzo].page{display:grid;grid-template-columns:260px minm
 <h2 id="索引重建的实践步骤"><a aria-hidden="true" tabindex="-1" href="#索引重建的实践步骤"><span class="icon icon-link"></span></a>索引重建的实践步骤</h2>
 <p>下面以实际案例为背景，介绍 Cassandra 二级索引重建的一般步骤和实践方法。假设我们在 Keyspace keyspace_xxx 的表 table_xxx 上有一个索引 index_xxx，索引目标列为 field_xxx。近期监控发现，针对该索引列的查询出现异常（查询不到应有的数据），同时写入延迟升高，怀疑索引出现问题。我们计划在维护时间窗对其进行重建。大体步骤如下：</p>
 <h3 id="确认索引状况"><a aria-hidden="true" tabindex="-1" href="#确认索引状况"><span class="icon icon-link"></span></a>确认索引状况</h3>
-<p>在动手之前，先评估索引的当前状态。例如，可以登录节点服务器检查索引文件占用的磁盘大小，以评估索引规模。Cassandra 的数据目录通常位于 …/data/data/<keyspace>/</keyspace></p> 下，其中二级索引数据会存储在类似 <table></table>.&#x3C;index_name> 的子目录中。通过如下一条命令可以查看索引相关目录大小：<p></p>
+<p>在动手之前，先评估索引的当前状态。例如，可以登录节点服务器检查索引文件占用的磁盘大小，以评估索引规模。Cassandra 的数据目录通常位于 <code>.../data/data/&#x3C;keyspace>/&#x3C;table> </code>下，其中二级索引数据会存储在类似 <code>&#x3C;table>.&#x3C;index_name></code> 的子目录中。通过如下一条命令可以查看索引相关目录大小：</p>
 <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> /path/to/cassandra-data/data/data/keyspace_xxx</span></span>
 <span class="line"><span style="color:#B392F0">du</span><span style="color:#79B8FF"> -h</span><span style="color:#79B8FF"> --max-depth=1</span><span style="color:#F97583"> |</span><span style="color:#B392F0"> grep</span><span style="color:#9ECBFF"> index_xxx</span></span></code></pre>
 <p>如果发现索引数据文件异常庞大（例如数十GB），或与预期不符，说明索引可能累积了大量历史数据。这进一步佐证了需要重建索引的判断。</p>
@@ -164,6 +164,6 @@ main[data-astro-cid-bvzihdzo].page{display:grid;grid-template-columns:260px minm
 <p>从输出可以看到索引已成功重建，并且能够通过索引查询到测试值。此时，我们还需要留意实际集群中索引重建的完成情况。如果数据量很大，脚本可能在索引完全建好之前就返回了“查询成功”（因为刚好测试值所在的部分已经建索引完成）。对于生产环境中的大型索引，建议在脚本执行后，通过监控或日志进一步确认索引重建的完成，然后再恢复业务流量。</p>
 <h2 id="结论"><a aria-hidden="true" tabindex="-1" href="#结论"><span class="icon icon-link"></span></a>结论</h2>
 <p>在 Cassandra 集群中，二级索引的异常修复与重建是一项需要谨慎对待的维护操作。本文通过介绍 Cassandra 和二级索引的原理，阐述了手动重建索引的原因和重要性，并给出了实际操作步骤和自动化脚本示例。在实际应用中，我们应尽量避免二级索引失效或性能问题的发生，例如合理评估索引列的基数和查询模式，定期关注索引相关的监控指标。一旦索引出现问题，按照上述流程重建索引能够有效恢复集群的查询能力。但需要注意的是，重建索引对集群有一定性能影响，应在业务低谷期进行，并做好应用停机或流量切换的准备。</p>
-<p>通过对 Cassandra 索引重建实践 的深入了解，我们可以更从容地应对分布式数据库运维中的索引挑战，保障数据库服务的稳定可靠运行。</p><table></table> </article>   </article> </div> </main> <footer data-astro-cid-sz7xmlte>
+<p>通过对 Cassandra 索引重建实践 的深入了解，我们可以更从容地应对分布式数据库运维中的索引挑战，保障数据库服务的稳定可靠运行。</p> </article>   </article> </div> </main> <footer data-astro-cid-sz7xmlte>
 &copy; 2025 All rights reserved.
 </footer>  </body></html>

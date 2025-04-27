@@ -43,11 +43,19 @@ main[data-astro-cid-bvzihdzo].page{display:grid;grid-template-columns:260px minm
 </ul>
 <h2 id="执行前校验"><a aria-hidden="true" tabindex="-1" href="#执行前校验"><span class="icon icon-link"></span></a>执行前校验</h2>
 <ul>
-<li>备份：</li>
+<li>
+<p>备份：</p>
+<ul>
 <li>利用 <code>CREATE TABLE site_store_bak AS SELECT * FROM site_store WHERE store_code IN (...)</code> 备份受影响行。</li>
-<li>常量检查：</li>
+</ul>
+</li>
+<li>
+<p>常量检查：</p>
+<ul>
 <li><code>SELECT COUNT(1) FROM site_store_bak</code> 与脚本行数一致。</li>
 <li>编码有效性：通过 <code>sys_area</code> 字典表校验 <code>new_area</code> 均存在。</li>
+</ul>
+</li>
 </ul>
 <h2 id="最佳执行姿势"><a aria-hidden="true" tabindex="-1" href="#最佳执行姿势"><span class="icon icon-link"></span></a>最佳执行姿势</h2>
 <ul>
@@ -57,15 +65,26 @@ main[data-astro-cid-bvzihdzo].page{display:grid;grid-template-columns:260px minm
 <span class="line"><span style="color:#E1E4E8">WHENEVER SQLERROR EXIT </span><span style="color:#79B8FF">SQL</span><span style="color:#E1E4E8">.</span><span style="color:#79B8FF">SQLCODE</span></span></code></pre>
 <ul>
 <li>使用 <code>@update.sql</code> 执行，遇错即停。</li>
-<li>分批提交：</li>
+<li>分批提交：
+<ul>
 <li>每 500 条 COMMIT 一次，减少回滚体积。</li>
+</ul>
+</li>
 </ul>
 <h2 id="校验与回滚"><a aria-hidden="true" tabindex="-1" href="#校验与回滚"><span class="icon icon-link"></span></a>校验与回滚</h2>
 <ul>
-<li>快速校验：</li>
+<li>
+<p>快速校验：</p>
+<ul>
 <li><code>SELECT COUNT(*) WHERE area = new_area</code> 验证成功率。</li>
-<li>聚合对比：<code>SUM(old_area)</code> vs <code>SUM(new_area)</code>。</li>
-<li>回滚方案：若发现误更新，使用 <code>MERGE</code> 将备份表写回原表。</li>
+</ul>
+</li>
+<li>
+<p>聚合对比：<code>SUM(old_area)</code> vs <code>SUM(new_area)</code>。</p>
+</li>
+<li>
+<p>回滚方案：若发现误更新，使用 <code>MERGE</code> 将备份表写回原表。</p>
+</li>
 </ul>
 <h2 id="常见坑"><a aria-hidden="true" tabindex="-1" href="#常见坑"><span class="icon icon-link"></span></a>常见坑</h2>
 <ul>

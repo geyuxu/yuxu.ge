@@ -60,7 +60,7 @@ main[data-astro-cid-bvzihdzo].page{display:grid;grid-template-columns:260px minm
 <span class="line"><span style="color:#6A737D">    // 记录映射关系，后续用于生成SQL，例如保存在列表或写入文件</span></span>
 <span class="line"><span style="color:#B392F0">    recordMapping</span><span style="color:#E1E4E8">(file.</span><span style="color:#B392F0">getName</span><span style="color:#E1E4E8">(), url);</span></span>
 <span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
-<p>实际实现中，objectStorageClient.upload封装了对象存储服务的HTTP上传过程，并返回文件的公网访问URL。为简化流程，我们直接用文件名作为存储键，这样URL往往可以由固定的域名加上文件名拼接得到。例如，如果对象存储的访问域名为<code>https://files.example.com/</code>, 某张图片文件store001_license.jpg上传后的访问路径可能为<code>https://files.example.com/store001_license.jpg</code>。这种命名策略使我们在生成SQL时无需额外查询映射，减少了工作量。</p>
+<p>实际实现中，objectStorageClient.upload封装了对象存储服务的HTTP上传过程，并返回文件的公网访问URL。为简化流程，我们直接用文件名作为存储键，这样URL往往可以由固定的域名加上文件名拼接得到。例如，如果对象存储的访问域名为<code>https://files.example.com/</code>, 某张图片文件<code>store001_license.jpg</code>上传后的访问路径可能为<code>https://files.example.com/store001_license.jpg</code>。这种命名策略使我们在生成SQL时无需额外查询映射，减少了工作量。</p>
 <p>批量上传时要考虑失败重试机制。例如可以对每个文件上传设置重试次数，或将失败的文件记录下来以便稍后手工或脚本重新上传，确保所有文件最终都成功进入对象存储。</p>
 <h2 id="批量生成sql脚本"><a aria-hidden="true" tabindex="-1" href="#批量生成sql脚本"><span class="icon icon-link"></span></a>批量生成SQL脚本</h2>
 <p>最后一项任务是根据上传后的图片信息生成对应的SQL插入语句，以将图片关联数据写入数据库中。我们需要针对每张证照图片生成一条INSERT语句，包含诸如门店ID、证照类型、图片URL等字段。由于图片数量多，手工编写SQL既繁琐又容易出错，因此再度借助脚本来批量生成。</p>

@@ -1,0 +1,396 @@
+<!DOCTYPE html><html lang="zh" data-astro-cid-bvzihdzo> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/search/spring_ai_rag/1_%E4%BD%BF%E7%94%A8-spring-ai-%E6%9E%84%E5%BB%BA-rag-%E6%90%9C%E7%B4%A2%E6%9C%8D%E5%8A%A1%E8%AE%BE%E8%AE%A1/"><!-- Primary Meta Tags --><title>使用 Spring AI 构建 RAG 搜索服务设计</title><meta name="title" content="使用 Spring AI 构建 RAG 搜索服务设计"><meta name="description"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/search/spring_ai_rag/1_%E4%BD%BF%E7%94%A8-spring-ai-%E6%9E%84%E5%BB%BA-rag-%E6%90%9C%E7%B4%A2%E6%9C%8D%E5%8A%A1%E8%AE%BE%E8%AE%A1/"><meta property="og:title" content="使用 Spring AI 构建 RAG 搜索服务设计"><meta property="og:description"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/search/spring_ai_rag/1_%E4%BD%BF%E7%94%A8-spring-ai-%E6%9E%84%E5%BB%BA-rag-%E6%90%9C%E7%B4%A2%E6%9C%8D%E5%8A%A1%E8%AE%BE%E8%AE%A1/"><meta property="twitter:title" content="使用 Spring AI 构建 RAG 搜索服务设计"><meta property="twitter:description"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script><script is:global>
+	window.addEventListener('DOMContentLoaded', () => {
+		$('.toc ol').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'margin': 0,
+		'padding-left': 0,       // 可按需调整
+		});
+		$('.toc ol > li').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'padding-left': 10  
+		});
+        $('.sidebar').append($('.toc'));
+      });
+	</script><style>:root{--accent: #2337ff;--accent-dark: #000d8a;--black: 15, 18, 25;--gray: 96, 115, 159;--gray-light: 229, 233, 240;--gray-dark: 34, 41, 57;--gray-gradient: rgba(var(--gray-light), 50%), #fff;--box-shadow: 0 2px 6px rgba(var(--gray), 25%), 0 8px 24px rgba(var(--gray), 33%), 0 16px 32px rgba(var(--gray), 33%)}@font-face{font-family:Atkinson;src:url(/fonts/atkinson-regular.woff) format("woff");font-weight:400;font-style:normal;font-display:swap}@font-face{font-family:Atkinson;src:url(/fonts/atkinson-bold.woff) format("woff");font-weight:700;font-style:normal;font-display:swap}body{font-family:Atkinson,sans-serif;margin:0;padding:0;text-align:left;background:linear-gradient(var(--gray-gradient)) no-repeat;background-size:100% 600px;word-wrap:break-word;overflow-wrap:break-word;color:rgb(var(--gray-dark));font-size:20px;line-height:1.7}main{width:720px;max-width:calc(100% - 2em);margin:auto;padding:3em 1em}h1,h2,h3,h4,h5,h6{margin:0 0 .5rem;color:rgb(var(--black));line-height:1.2}h1{font-size:3.052em}h2{font-size:2.441em}h3{font-size:1.953em}h4{font-size:1.563em}h5{font-size:1.25em}strong,b{font-weight:700}a,a:hover{color:var(--accent)}p{margin-bottom:1em}.prose p{margin-bottom:2em}textarea{width:100%;font-size:16px}input{font-size:16px}table{width:100%}img{max-width:100%;height:auto;border-radius:8px}code{padding:2px 5px;background-color:rgb(var(--gray-light));border-radius:2px}pre{padding:1.5em;border-radius:8px}pre>code{all:unset}blockquote{border-left:4px solid var(--accent);padding:0 0 0 20px;margin:0;font-size:1.333em}hr{border:none;border-top:1px solid rgb(var(--gray-light))}@media (max-width: 720px){body{font-size:18px}main{padding:1em}}.sr-only{border:0;padding:0;margin:0;position:absolute!important;height:1px;width:1px;overflow:hidden;clip:rect(1px 1px 1px 1px);clip:rect(1px,1px,1px,1px);clip-path:inset(50%);white-space:nowrap}.title_li{list-style:none}.title_li>a,.title_li_num>a,.toc-link,.series-list>li>a,.series_title>a{color:#7a888e}.content{max-width:720px;margin:0 auto;padding:2rem 1rem;font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,sans-serif;font-size:1.05rem;line-height:1.75;color:#333}.content h1,.content h2,.content h3{font-weight:600;margin-top:2rem;margin-bottom:1rem;line-height:1.3}.content p{margin-bottom:1.25rem}.content a{color:var(--accent, #0070f3);text-decoration:underline}.content img{max-width:100%;border-radius:6px;margin:1.5rem 0}.content pre,.content code{font-family:Menlo,Monaco,Consolas,Courier New,monospace;font-size:.9em;border-radius:4px}.content pre{padding:1em;overflow-x:auto}article.prose{font-size:var(--fs-base);line-height:1.7}@media (max-width: 640px){nav>div,nav>h2{font-size:.6em}ul,ol{padding-left:20px}main,.content-wrapper{padding-left:0;width:350px;max-width:60350px0px;margin:0 auto}img,table,pre{max-width:100%}table,pre{overflow-x:auto}.content{margin:0;padding:0;border:0;max-width:3350px00px;font-size:11px}h1{font-size:1.3rem}h2{font-size:1.2rem}h3{font-size:1.1rem}h4{font-size:1rem}h5{font-size:.9rem}}
+a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astro-cid-eimmu3lg].active{font-weight:bolder;text-decoration:underline}header[data-astro-cid-3ef6ksr2]{margin:0;padding:0 1em;background:#fff;box-shadow:0 2px 8px rgba(var(--black),5%)}h2[data-astro-cid-3ef6ksr2]{margin:0;font-size:1em}h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2],h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none}nav[data-astro-cid-3ef6ksr2]{display:flex;align-items:center;justify-content:space-between}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{padding:1em .5em;color:var(--black);border-bottom:4px solid transparent;text-decoration:none}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none;border-bottom-color:var(--accent)}.social-links[data-astro-cid-3ef6ksr2],.social-links[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{display:flex}@media (max-width: 720px){.social-links[data-astro-cid-3ef6ksr2]{display:none}}footer[data-astro-cid-sz7xmlte]{padding:2em 1em 6em;background:linear-gradient(var(--gray-gradient)) no-repeat;color:rgb(var(--gray));text-align:center}.social-links[data-astro-cid-sz7xmlte]{display:flex;justify-content:center;gap:1em;margin-top:1em}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]{text-decoration:none;color:rgb(var(--gray))}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]:hover{color:rgb(var(--gray-dark))}
+.statement[data-astro-cid-uffxixac]{font-size:10px;color:gray}@media (max-width: 640px){.statement[data-astro-cid-uffxixac]{font-size:6px;color:gray}}
+main[data-astro-cid-bvzihdzo].page{display:grid;grid-template-columns:260px minmax(0,1fr);width:100%;margin:0}aside[data-astro-cid-bvzihdzo].sidebar{box-sizing:border-box;width:260px;padding:2rem 1rem;font-size:.95rem;position:sticky;top:4rem;align-self:start}.sidebar[data-astro-cid-bvzihdzo] .meta[data-astro-cid-bvzihdzo] p[data-astro-cid-bvzihdzo]{margin:.25rem 0}nav[data-astro-cid-bvzihdzo].toc li[data-astro-cid-bvzihdzo]{margin:.35rem 0 .35rem 1rem}nav[data-astro-cid-bvzihdzo].toc a[data-astro-cid-bvzihdzo]{color:var(--gray-dark,#444);text-decoration:none}nav[data-astro-cid-bvzihdzo].toc a[data-astro-cid-bvzihdzo]:hover{text-decoration:underline}.content-wrapper[data-astro-cid-bvzihdzo]{display:flex;justify-content:center;padding:2rem 1rem}article[data-astro-cid-bvzihdzo].prose{max-width:740px;width:100%}@media (max-width: 768px){main[data-astro-cid-bvzihdzo].page{grid-template-columns:1fr}aside[data-astro-cid-bvzihdzo].sidebar{position:static;width:100%;padding:1rem}.content-wrapper[data-astro-cid-bvzihdzo]{justify-content:flex-start}article[data-astro-cid-bvzihdzo].prose{max-width:100%}}.series-list[data-astro-cid-bvzihdzo]{list-style:none;margin:0;padding-left:10px}.series-list[data-astro-cid-bvzihdzo]{list-style:none;margin:0;padding-left:10px;max-height:calc(16em + .5rem);overflow-y:auto}.series-list[data-astro-cid-bvzihdzo]::-webkit-scrollbar{width:6px}.series-list[data-astro-cid-bvzihdzo]::-webkit-scrollbar-thumb{background:#0003;border-radius:3px}
+</style></head> <body data-astro-cid-bvzihdzo> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <!--<h2><a href="/">{SITE_TITLE}</a></h2>--> <h2 data-astro-cid-3ef6ksr2><a style="padding-left:0;color:blue;" href="/" data-astro-cid-3ef6ksr2>Ge Yuxu<br data-astro-cid-3ef6ksr2>AI & Engineering</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blog/1" class="active" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/series" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Series </a>  <a href="/projects" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Projects </a>  </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://github.com/geyuxu" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://www.linkedin.com/in/geyuxu/" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's LinkedIn profile</span> <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" data-astro-cid-3ef6ksr2> <path fill="currentColor" d="M20.447 20.452H17.2v-5.569c0-1.328-.025-3.039-1.852-3.039-1.853 0-2.136 1.447-2.136 2.942v5.666h-3.248V9h3.122v1.561h.045c.435-.823 1.498-1.688 3.083-1.688 3.295 0 3.903 2.17 3.903 4.989v6.59zM5.337 7.433a1.882 1.882 0 110-3.764 1.882 1.882 0 010 3.764zm1.626 13.019H3.708V9h3.255v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.222 0z" data-astro-cid-3ef6ksr2></path> </svg> </a> </div> </nav> </header>  <main class="page" data-astro-cid-bvzihdzo> <!-- 左侧栏 --> <aside class="sidebar" data-astro-cid-bvzihdzo> <div class="meta" data-astro-cid-bvzihdzo> <b data-astro-cid-bvzihdzo>使用 Spring AI 构建 RAG 搜索服务设计</b> <p data-astro-cid-bvzihdzo><time datetime="2025-04-28T16:00:00.000Z"> Apr 29, 2025 </time></p>   <p class="series_title" style="margin-top:1rem;font-weight:bold;" data-astro-cid-bvzihdzo>系列：<a href="/series/基于-spring-ai-qdrant-elisticsearch-的-rag-搜索服务/" data-astro-cid-bvzihdzo>基于 Spring AI + Qdrant + Elisticsearch 的 RAG 搜索服务</a></p> <ul class="series-list" data-astro-cid-bvzihdzo> <li data-astro-cid-bvzihdzo><a href="/blog/search/spring_ai_rag/1_使用-spring-ai-构建-rag-搜索服务设计/" data-astro-cid-bvzihdzo>使用 Spring AI 构建 RAG 搜索服务设计</a></li> </ul>  </div> <hr data-astro-cid-bvzihdzo> <br data-astro-cid-bvzihdzo> </aside> <!-- 右侧正文区域（flex 居中） --> <div class="content-wrapper" data-astro-cid-bvzihdzo> <article class="prose" data-astro-cid-bvzihdzo>  <article class="content"> <nav class="toc"><ol class="toc-level toc-level-1"><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#项目概述">项目概述</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#整体架构">整体架构</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#核心模块设计">核心模块设计</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#向量存储与混合检索模块">向量存储与混合检索模块</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#llm-推理与切换模块">LLM 推理与切换模块</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#文本嵌入生成模块">文本嵌入生成模块</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#数据流程说明">数据流程说明</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#文档索引流程-etl离线入库">文档索引流程 (ETL离线入库)</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#在线检索问答流程">在线检索问答流程</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#关键组件与接口定义">关键组件与接口定义</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#配置与组件摘要">配置与组件摘要</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#ragservice-接口定义">RagService 接口定义</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#示例-controller">示例 Controller</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#docker-compose-环境部署方案">Docker Compose 环境部署方案</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#结论">结论</a></li></ol></nav><h2 id="项目概述"><a aria-hidden="true" tabindex="-1" href="#项目概述"><span class="icon icon-link"></span></a>项目概述</h2>
+<p>本文档设计了一套基于Spring Boot和Spring AI框架的检索增强生成（Retrieval-Augmented Generation, RAG）搜索服务。该服务通过融合Elasticsearch关键词检索和Qdrant向量检索，实现对文档知识库的高相关性查询，并结合大语言模型(LLM)生成最终回答。系统支持在本地模型（通过Ollama运行开源模型）与OpenAI云接口之间灵活切换推理方式，并支持使用本地 HuggingFace 嵌入模型或OpenAI Embedding API生成文本向量。设计涵盖总体架构、核心模块、接口定义、数据流程、关键类配置和示例控制层，并提供完整的Docker Compose环境配置，确保方案可复现且结构清晰。</p>
+<h2 id="整体架构"><a aria-hidden="true" tabindex="-1" href="#整体架构"><span class="icon icon-link"></span></a>整体架构</h2>
+<p><img src="https://img.geyuxu.com/2025-04-29-120648mNImZC.png" alt="image-20250429120643387"></p>
+<p>系统整体架构采用分层模块化设计，核心包括以下部分：</p>
+<ul>
+<li>文档向量存储（Vector Store）：使用 Qdrant 作为向量数据库存储文档的语义向量表示，用于语义相似度检索。Spring AI 提供了抽象的 VectorStore 接口来封装向量数据库操作 。通过引入 Spring AI 的 Qdrant 集成模块，可以将 Qdrant 用作 VectorStore，在应用中执行高效的相似度查询。</li>
+<li>全文检索引擎：使用 Elasticsearch 存储文档的原始文本或关键词索引，用于基于关键词的布尔/全文检索。Elasticsearch 提供倒排索引能够有效匹配用户查询中的关键词。</li>
+<li>混合检索器（Hybrid Retriever）：RAG服务的检索层组件，负责将关键词检索与向量语义检索结果结合。查询时同时对ES执行关键词匹配检索，对Qdrant执行向量相似度检索，获取两方面的文档列表，并进行结果融合。通过混合检索，既能利用关键词精确匹配，又能利用向量检索捕获语义相关内容，提升召回率和准确性。Spring AI 提供了 DocumentRetriever 接口表示抽象的文档检索器，以及向量检索实现 VectorStoreDocumentRetriever  ；本方案可自定义实现一个HybridRetriever，内部组合调用 ES 和 Qdrant 的检索接口，然后用 文档合并器将结果合并（可简单去重拼接，或按分数融合）。例如，可使用 Spring AI 的 ConcatenationDocumentJoiner 将多数据源的结果集合并为一个文档列表 。</li>
+<li>RAG服务层：封装整个“检索-生成”流程的核心服务（可称为 RagService）。它负责接收用户查询，调用Hybrid Retriever检索相关文档，将检索到的文档作为上下文提交给LLM，并返回生成的答案。RAG服务通过 Spring AI 提供的 ChatClient 与底层LLM模型交互 。ChatClient抽象出与AI模型交互的通用接口，支持同步或流式地发送提示并获得回复 。借助Spring AI的模块化设计，可以方便地更换底层使用的LLM或向量库，而无需大改业务代码 。</li>
+<li>LLM推理层：大语言模型用于根据用户查询和检索到的文档上下文生成回答。通过Spring AI的ChatModel与ChatClient抽象，我们可以无缝切换不同的模型和提供商。例如，当使用OpenAI时，可配置ChatClient调用OpenAI的GPT模型；当使用本地模型时，利用Ollama提供本地LLM推理服务。ChatClient屏蔽了底层差异，以统一的API发送Prompt并获取模型响应 。</li>
+<li>嵌入模型：将文本转换为向量表示的嵌入模型组件。系统支持两种方案：
+<ol>
+<li>本地 HuggingFace 模型：通过Spring AI的Transformers ONNX支持，加载本地预训练的Transformer模型（例如all-MiniLM-L6-v2）以生成文本嵌入 。此方式保证数据不出本地，响应速度快且无需调用外部API。</li>
+<li>OpenAI Embedding API：利用OpenAI的embedding接口（如text-embedding-ada-002）获取文本的向量表示，需要网络调用和API密钥。Spring AI 提供了开箱即用的 OpenAiEmbeddingModel 实现，我们只需提供 OpenAI API key 即可使用 。</li>
+</ol>
+</li>
+</ul>
+<p>上述组件通过Spring Boot进行配置和组织，最终以RESTful API形式提供服务，包括文档入库接口和问答查询接口。下图展示了系统各组件的交互关系：</p>
+<p>(架构说明：用户通过Controller发出请求，RAG Service调用Hybrid Retriever分别与ES和Qdrant交互检索文档；嵌入模型用于向量生成供Qdrant存储与检索；ChatClient封装LLM模型调用（本地或云）；最终将检索到的相关文档作为提示上下文，交由LLM生成答案并返回给用户。)</p>
+<h2 id="核心模块设计"><a aria-hidden="true" tabindex="-1" href="#核心模块设计"><span class="icon icon-link"></span></a>核心模块设计</h2>
+<h3 id="向量存储与混合检索模块"><a aria-hidden="true" tabindex="-1" href="#向量存储与混合检索模块"><span class="icon icon-link"></span></a>向量存储与混合检索模块</h3>
+<ol>
+<li>Qdrant 向量存储配置：系统使用Qdrant来持久化文档向量及元数据。通过引入依赖 spring-ai-qdrant-store，Spring AI能够自动配置Qdrant相关的Bean  。我们需要提供Qdrant客户端以及VectorStore Bean，例如：</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#E1E4E8">@</span><span style="color:#F97583">Bean</span></span>
+<span class="line"><span style="color:#F97583">public</span><span style="color:#E1E4E8"> QdrantClient </span><span style="color:#B392F0">qdrantClient</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#6A737D">    // 构建连接到 Qdrant 的 gRPC 客户端</span></span>
+<span class="line"><span style="color:#E1E4E8">    QdrantGrpcClient.Builder grpcClientBuilder </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> </span></span>
+<span class="line"><span style="color:#E1E4E8">        QdrantGrpcClient.</span><span style="color:#B392F0">newBuilder</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"qdrant-host"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">6334</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">false</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    grpcClientBuilder.</span><span style="color:#B392F0">withApiKey</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"&#x3C;QDRANT_API_KEY>"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> QdrantClient</span><span style="color:#E1E4E8">(grpcClientBuilder.</span><span style="color:#B392F0">build</span><span style="color:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">@</span><span style="color:#F97583">Bean</span></span>
+<span class="line"><span style="color:#F97583">public</span><span style="color:#E1E4E8"> VectorStore </span><span style="color:#B392F0">vectorStore</span><span style="color:#E1E4E8">(QdrantClient client, EmbeddingModel embeddingModel) {</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> QdrantVectorStore.</span><span style="color:#B392F0">builder</span><span style="color:#E1E4E8">(client, embeddingModel)</span></span>
+<span class="line"><span style="color:#E1E4E8">            .</span><span style="color:#B392F0">collectionName</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"documents"</span><span style="color:#E1E4E8">)       </span><span style="color:#6A737D">// 指定集合名称</span></span>
+<span class="line"><span style="color:#E1E4E8">            .</span><span style="color:#B392F0">initializeSchema</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">)            </span><span style="color:#6A737D">// 若未预建集合则自动创建</span></span>
+<span class="line"><span style="color:#E1E4E8">            .</span><span style="color:#B392F0">build</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>上述配置创建了VectorStore接口的Qdrant实现，用于存储向量及执行相似度搜索。  其中注入的 EmbeddingModel 用于在存储文档时生成其向量表示。注意：可以提前在Qdrant中创建集合并指定向量维度和相似度度量方式，或通过 initializeSchema(true) 由程序自动创建(默认使用 Cosine 距离，维度取决于所用嵌入模型)  。确保Qdrant实例已启动并可访问，比如通过Docker启动 Qdrant 容器。
+2. Elasticsearch 全文检索配置：Elasticsearch用于存储文档文本索引，实现关键词匹配检索。可采用Spring Data Elasticsearch或Rest API进行集成。配置上，需要提供ES的地址（例如localhost:9200）、索引名称（如documents）以及索引mapping（包含文档ID、内容等字段）。为了简化，实现上可以利用Spring Data Elasticsearch定义一个文档实体及对应的Repository。例如定义DocumentEntity(id, content, metadata)并建立全文索引。</p>
+<ol start="3">
+<li>
+<p>文档索引结构：为了方便混合检索结果的合并，我们为每个文档片段分配唯一ID，并在Qdrant和Elasticsearch中共享该ID作为主键。每份文档在入库时通常会被拆分成若干片段 (chunks)，每个片段是一段适合检索和上下文长度的文本。我们将每个片段作为独立的Document进行索引和向量存储。这样在检索阶段，无论通过向量还是关键词找到某片段，都可以根据ID确定对应的内容。可以将文档内容存储在ES索引中，而在Qdrant中主要存储向量和必要的元信息(如文档ID、来源等)作为 payload。</p>
+</li>
+<li>
+<p>Hybrid Retriever 实现：创建一个混合检索器，例如 HybridRetriever implements DocumentRetriever。其retrieve(Query query)方法内部执行以下步骤：</p>
+<ul>
+<li>使用ES执行关键词查询：如构造一个match或bool查询，匹配content字段包含查询文本，取Top K结果。可借助ES的REST客户端或Repository方法实现，得到一组Document片段列表（含ID和内容）。</li>
+<li>使用Qdrant执行相似度查询：调用上面配置的vectorStore.similaritySearch()方法，对用户查询文本进行向量查询，获取Top K相似文档片段 。Spring AI 提供了 SearchRequest 可指定相似度阈值和topK等参数  。例如：</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#E1E4E8">List&#x3C;</span><span style="color:#F97583">Document</span><span style="color:#E1E4E8">> vectorDocs </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> vectorStore.</span><span style="color:#B392F0">similaritySearch</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">      SearchRequest.</span><span style="color:#B392F0">builder</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">          .</span><span style="color:#B392F0">query</span><span style="color:#E1E4E8">(userQuery)</span></span>
+<span class="line"><span style="color:#E1E4E8">          .</span><span style="color:#B392F0">topK</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">5</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">          .</span><span style="color:#B392F0">build</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">);</span></span></code></pre>
+<p>这将返回与查询最相似的5个文档片段。</p>
+<ul>
+<li>合并结果：将关键词结果与向量结果合并。可以用文档ID去重，避免同一片段重复。简单策略是直接合并列表；如需更精细的融合，可根据ES相关度分值和向量相似度分值对结果重新排序或加权。由于不同检索的分数不直接可比，一个实际工程策略是保留各自Top K的结果，然后让上层LLM基于这些候选片段自行判断相关性。这里我们采取简单去重合并策略，并限制总片段数（如取不超过6-10个片段）以控制提示长度。</li>
+<li>输出：返回合并后的Document列表。每个Document包含内容文本，以及可能的元数据（例如来源标识用于输出引用）。
+通过HybridRetriever，我们将语义匹配和精确匹配结合，最大程度找到相关内容。例如，当用户查询中包含与文档不同的措辞时，向量检索可找到语义相似的内容，而关键词检索可保证若有精确匹配的术语不会被遗漏。</li>
+</ul>
+</li>
+</ol>
+<h3 id="llm-推理与切换模块"><a aria-hidden="true" tabindex="-1" href="#llm-推理与切换模块"><span class="icon icon-link"></span></a>LLM 推理与切换模块</h3>
+<p>ChatClient与ChatModel抽象：Spring AI 提供了 ChatModel 接口表示具体的大语言模型（如OpenAI ChatGPT、Anthropic Claude、本地Llama等），ChatClient 则封装了与这些模型交互的通用客户端 。本服务通过注入一个ChatClient实例来调用LLM进行回答生成。得益于ChatClient的抽象设计，我们可以灵活地更换背后的ChatModel，而业务代码保持不变。例如，可以在配置中切换使用OpenAI的GPT-4模型或本地的Llama2模型 。</p>
+<ol>
+<li>OpenAI 模型集成：若使用OpenAI云服务，添加依赖spring-ai-openai，并在应用配置中提供OpenAI的API密钥和所选模型名称。例如在application.yml中配置:</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">spring</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  ai</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    openai</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      api-key</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">YOUR_OPENAI_API_KEY</span></span>
+<span class="line"><span style="color:#85E89D">      chat</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">        model</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">gpt-4</span></span></code></pre>
+<p>这将启用Spring AI对OpenAI Chat API的自动配置。注入的ChatClient将默认使用OpenAI指定的模型。通过ChatClient的fluent API，可以很方便地发送对话消息并获取回复。例如：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#E1E4E8">ChatResponse response </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> chatClient.</span><span style="color:#B392F0">prompt</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">user</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"请解释RAG的作用"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">call</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">chatResponse</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">String answer </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> response.</span><span style="color:#B392F0">content</span><span style="color:#E1E4E8">();</span></span></code></pre>
+<p>上述调用会将用户消息发送到配置的OpenAI模型并获得回答 。</p>
+<ol start="2">
+<li>本地Ollama模型集成：若采用本地LLM模型，需安装并运行 Ollama 服务。Ollama可以管理和提供本地模型的推理服务，并通过REST接口与应用交互  。引入依赖spring-ai-ollama后，Spring AI提供了 OllamaChatModel 和 OllamaApi 来对接本地Ollama实例 。配置上，可在application.yml中指定Ollama服务地址及所用模型，例如:</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">spring</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  ai</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    ollama</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      base-url</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">http://localhost:11434</span></span>
+<span class="line"><span style="color:#85E89D">      default-model</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">llama2</span></span></code></pre>
+<p>假设已通过“Ollama pull”命令下载了名称为“llama2”的模型，Ollama将以该模型提供推理。应用启动时，会自动创建连接到Ollama的API客户端 (OllamaApi) 和对应的 ChatModel 实现。ChatClient随即可使用本地模型进行对话。</p>
+<p>使用Ollama时，调用方式与OpenAI类似，只是由本地服务产生结果。例如：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#E1E4E8">ChatResponse response </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> chatClient.</span><span style="color:#B392F0">prompt</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">system</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"你是资深Java助理"</span><span style="color:#E1E4E8">)   </span><span style="color:#6A737D">// 可以设定初始系统提示</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">user</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"给出RAG搜索服务的优势"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">call</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">    .</span><span style="color:#B392F0">chatResponse</span><span style="color:#E1E4E8">();</span></span></code></pre>
+<p>ChatClient将向本地Ollama发送请求并获取模型回复。</p>
+<ol start="3">
+<li>推理方式切换：为了在本地模型和云API之间切换，设计上可以使用Spring Profiles或配置开关。例如定义llm.mode配置项，可取值local或openai。通过条件配置，在local模式下注入Ollama的ChatClient Bean，在openai模式下注入OpenAI的ChatClient Bean。借助Spring AI，对不同ChatModel的支持是开箱即用的，开发者只需更改配置即可无缝切换LLM提供方，大大减少切换带来的代码改动 。</li>
+</ol>
+<h3 id="文本嵌入生成模块"><a aria-hidden="true" tabindex="-1" href="#文本嵌入生成模块"><span class="icon icon-link"></span></a>文本嵌入生成模块</h3>
+<ol>
+<li>HuggingFace 本地嵌入：为了确保数据安全和降低依赖，本方案支持使用本地Embedding模型。利用Spring AI的Transformer ONNX支持，我们可以在Java中直接加载HuggingFace提供的embedding模型（转换为ONNX格式）并生成向量。 例如选择sentence-transformers/all-MiniLM-L6-v2模型，该模型输出768维句向量。首先将ONNX模型文件和tokenizer文件准备好（可通过Spring AI自动下载缓存）。然后配置EmbeddingModel Bean：</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#E1E4E8">@</span><span style="color:#F97583">Bean</span></span>
+<span class="line"><span style="color:#F97583">public</span><span style="color:#E1E4E8"> EmbeddingModel </span><span style="color:#B392F0">embeddingModel</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#E1E4E8">    TransformersEmbeddingModel model </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> TransformersEmbeddingModel</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#6A737D">    // 可选：指定模型和分词器资源路径或URL（否则使用默认的all-MiniLM-L6-v2）</span></span>
+<span class="line"><span style="color:#E1E4E8">    model.</span><span style="color:#B392F0">setModelResource</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"classpath:/onnx/all-MiniLM-L6-v2/model.onnx"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    model.</span><span style="color:#B392F0">setTokenizerResource</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"classpath:/onnx/all-MiniLM-L6-v2/tokenizer.json"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> model;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>上述 TransformersEmbeddingModel 会加载本地ONNX模型，在调用embed()时对输入文本列表输出对应的向量表示  。作为Spring Bean时，Spring AI会自动调用其afterPropertiesSet()完成初始化 。第一次使用时模型文件可能从指定位置加载或下载并缓存。 之后即可通过 embeddingModel.embed(List<string> texts) 获取嵌入向量。</string></p>
+<p>如果使用Ollama作为本地引擎，另一种方法是利用Ollama的Embedding API。Spring AI提供了OllamaEmbeddingModel封装Ollama的向量生成接口 。通过pull相应的嵌入模型（Ollama支持直接pull HuggingFace上的embedding模型，如ollama pull hf.co/intfloat/e5-small-v2），然后：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#E1E4E8">@</span><span style="color:#F97583">Bean</span></span>
+<span class="line"><span style="color:#F97583">public</span><span style="color:#E1E4E8"> EmbeddingModel </span><span style="color:#B392F0">embeddingModel</span><span style="color:#E1E4E8">(OllamaApi ollamaApi) {</span></span>
+<span class="line"><span style="color:#6A737D">    // 假设使用一个名为'e5-small-v2'的embedding模型</span></span>
+<span class="line"><span style="color:#F97583">    var</span><span style="color:#E1E4E8"> options </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> OllamaOptions.</span><span style="color:#B392F0">builder</span><span style="color:#E1E4E8">().</span><span style="color:#B392F0">model</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"e5-small-v2"</span><span style="color:#E1E4E8">).</span><span style="color:#B392F0">build</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> OllamaEmbeddingModel</span><span style="color:#E1E4E8">(ollamaApi, options);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>此方式下，所有文本向量将由Ollama本地服务生成，效果等同于直接使用HuggingFace模型。</p>
+<ol start="2">
+<li>OpenAI Embedding API：如需借助OpenAI的预训练模型快速获取嵌入，可以使用OpenAI提供的Embedding接口（例如text-embedding-ada-002模型）。Spring AI的OpenAiEmbeddingModel封装了调用逻辑，只需提供API密钥和可选的模型名称即可使用。例如：</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#E1E4E8">@</span><span style="color:#F97583">Bean</span></span>
+<span class="line"><span style="color:#F97583">public</span><span style="color:#E1E4E8"> EmbeddingModel </span><span style="color:#B392F0">embeddingModel</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> OpenAiEmbeddingModel</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> OpenAiApi</span><span style="color:#E1E4E8">(System.</span><span style="color:#B392F0">getenv</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"OPENAI_API_KEY"</span><span style="color:#E1E4E8">)));</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>默认情况下，将使用Ada模型生成1536维的嵌入向量 。这种方式适合对接OpenAI强大的向量质量，但需考虑网络延迟和调用成本。</p>
+<ol start="3">
+<li>嵌入模式切换：和LLM类似，可通过配置切换嵌入模型来源。比如配置embedding.mode为local或openai。当为local时，启用TransformersEmbeddingModel或OllamaEmbeddingModel；为openai时，则使用OpenAiEmbeddingModel。开发时可以提供默认实现，并允许通过配置文件修改。例如默认采用本地模型，若用户提供了OpenAI的apiKey则自动改用OpenAI嵌入服务。</li>
+</ol>
+<p>无论哪种实现，我们的VectorStore在初始化时都会绑定一个EmbeddingModel，用于在向量数据库中存储和检索时转换文本 。例如，上述配置的embeddingModel将被注入到QdrantVectorStore中，当调用vectorStore.add(documents)时，每个Document的文本内容会经由EmbeddingModel转为向量并存入Qdrant 。</p>
+<h2 id="数据流程说明"><a aria-hidden="true" tabindex="-1" href="#数据流程说明"><span class="icon icon-link"></span></a>数据流程说明</h2>
+<h3 id="文档索引流程-etl离线入库"><a aria-hidden="true" tabindex="-1" href="#文档索引流程-etl离线入库"><span class="icon icon-link"></span></a>文档索引流程 (ETL离线入库)</h3>
+<ol>
+<li>文档获取与预处理：通过管理后台或批处理任务，获取需要纳入知识库的原始文档。文档格式可以是纯文本、PDF、Markdown等。使用Spring AI的文档读取器将文档转换为文本内容，并按段落或固定长度对文本进行分块，生成文档片段列表。每个片段可以封装为Spring AI的 Document 对象，其中包含内容文本和元数据（如文档ID、标题、来源等）。</li>
+<li>嵌入向量生成：针对每个文档片段，调用EmbeddingModel生成其语义向量表示。例如利用本地模型将每个片段转换为768维向量。向量通常存于Document对象的embedding字段，或直接在插入向量数据库时计算。 展示了从文档到向量的转换过程：首先将文档分割为小块，然后使用嵌入模型将每个块映射为高维向量表示，捕捉语义信息。</li>
+<li>向量存储入库：调用vectorStore.add(documents)方法，将文档片段批量插入Qdrant向量数据库 。Spring AI 的 VectorStore 接口对底层数据库执行插入操作，并自动处理向量数据和元信息存储。例如对于Qdrant，每个Document的embedding向量和附加payload会存入指定collection中。如果collection尚不存在且initializeSchema=true，VectorStore实现会自动创建集合（相应的维度和索引参数）  。插入成功后，文档的语义表示就持久化在Qdrant中了，可用于相似检索。</li>
+<li>全文索引入库：将文档片段索引到Elasticsearch。对于每个Document对象，从中提取必要字段（如id、content、metadata），调用ES的索引API存储。若使用Spring Data Elasticsearch，可以调用Repository的save()方法批量保存片段实体。如果直接使用ES REST API，则构造批量索引请求。每个片段将成为ES中一条文档记录，内容字段做全文检索索引处理。可以考虑在content字段上应用ES自带的中文分词（如果内容为中文）以提高检索效果。</li>
+<li>索引完成：经过以上过程，知识库文档被有效地存储为向量库+全文索引的混合形式：Qdrant持有每个片段的向量及元数据，Elasticsearch持有片段的可检索文本。后续查询即可利用这两种存储提供的能力。</li>
+</ol>
+<p>注意： 文档入库流程可以离线批处理，也可以通过提供API让用户动态上传文档。在本设计中，可以实现一个/documents/load接口（或使用Stackademic博文中的/load概念 ），接受文件上传请求，服务接收文件后执行上述步骤完成索引。同时返回状态或结果给客户端。为简化，此接口细节在此不展开。</p>
+<h3 id="在线检索问答流程"><a aria-hidden="true" tabindex="-1" href="#在线检索问答流程"><span class="icon icon-link"></span></a>在线检索问答流程</h3>
+<ol>
+<li>用户查询输入：用户通过前端或API调用发送查询请求给RAG服务（例如HTTP GET/POST /ask?question=…）。查询内容为自然语言问题，例如：“这个系统如何支持本地模型？”。Controller层接收请求后，将查询字符串封装为Query对象或直接传给服务层。</li>
+<li>混合检索：RAG服务调用 HybridRetriever 来从知识库中检索相关信息：</li>
+</ol>
+<ul>
+<li>ES关键词检索：对Elasticsearch执行查询，可使用match或multi_match在content字段搜索用户问题中的关键词。如果有匹配，返回相关度最高的前N个片段，例如N=5。</li>
+<li>Qdrant向量检索：将用户问题字符串通过EmbeddingModel编码为向量查询，调用vectorStore.similaritySearch()获取相似度最高的前M个片段，例如M=5 。可以设置一定的相似度阈值，忽略低于阈值的结果 。</li>
+<li>结果融合：将上两步获得的片段集合并集成。假定我们获取了最多10个相关片段。可对这些片段按重要性简单排序（比如根据是否包含关键词将ES结果靠前），或不排序直接传递给LLM。在本设计中，我们将片段文本直接作为上下文传递，因此顺序影响不大，但可以将更相关的放在前面以提高回答质量。</li>
+</ul>
+<ol start="3">
+<li>构造提示 (Prompt)：将用户问题和检索到的文档片段组装成提示内容传给LLM。通常采用一个预定义的Prompt模板，例如：</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>请根据以下文档内容回答问题。如果无法从中找到答案，请回复“未找到相关信息”。</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>文档内容:</span></span>
+<span class="line"><span>{{{context}}}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>问题: {{{question}}}</span></span>
+<span class="line"><span></span></span>
+<span class="line"><span>答案:</span></span></code></pre>
+<p>其中{{{context}}}占位符由检索到的多个文档片段文本拼接填充，{{{question}}}为用户原始问题。这样生成的完整提示提供了问题所需的参考信息。此步骤可以使用Spring AI的PromptTemplate辅助完成，也可手动拼接字符串。 提到在查询阶段可使用PromptTemplate插入检索到的内容并渲染最终提示，然后发送给模型。
+Spring AI 也支持直接使用 QuestionAnswerAdvisor 简化这一过程。如果使用ChatClient.prompt().advisors(new QuestionAnswerAdvisor(vectorStore))，它会自动在调用模型前查询向量库并附加结果 。但由于我们实现了自定义的HybridRetriever（包含ES），我们将自行构造prompt，以便加入两种检索结果。</p>
+<ol start="4">
+<li>LLM生成回答：调用LLM模型生成答案。通过前述配置好的ChatClient来执行：</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#E1E4E8">String promptText </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> promptTemplate.</span><span style="color:#B392F0">render</span><span style="color:#E1E4E8">(Map.</span><span style="color:#B392F0">of</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"context"</span><span style="color:#E1E4E8">, combinedDocsText, </span><span style="color:#9ECBFF">"question"</span><span style="color:#E1E4E8">, userQuestion));</span></span>
+<span class="line"><span style="color:#E1E4E8">ChatResponse response </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> chatClient.</span><span style="color:#B392F0">prompt</span><span style="color:#E1E4E8">(promptText).</span><span style="color:#B392F0">call</span><span style="color:#E1E4E8">().</span><span style="color:#B392F0">chatResponse</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">String answer </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> response.</span><span style="color:#B392F0">content</span><span style="color:#E1E4E8">();</span></span></code></pre>
+<p>ChatClient会将我们提供的完整提示发送给底层ChatModel（OpenAI或Ollama）。模型接收到含有参考内容的提问后，基于提供的上下文进行作答，从而减小幻觉和出错的概率  。生成的答案通过ChatResponse返回，提取其内容字符串，即为最终解答。</p>
+<ol start="5">
+<li>结果返回：将LLM的回答字符串封装为响应，通过Controller返回给调用方。可以只返回答案文本，或者包含一些元信息（如引用的文档来源列表等）。本设计聚焦核心功能，假定仅返回答案文本。在前端界面上，用户即可看到根据其提问生成的回答。</li>
+<li>对话记忆（可选）：如果需要多轮对话支持，可结合Spring AI的ChatMemory功能，将之前的问题和答案作为对话历史提供给ChatClient，以实现上下文记忆。但基本的RAG问答场景可不考虑对话历史，每次独立进行。</li>
+</ol>
+<p>整个查询流程在用户看来只是提供问题、获得答案，但背后经过了关键词和语义双通道检索，再由大模型综合分析文档给出结果，从而实现“以知识库为基础的问答”。这种RAG技术有效缓解了LLM上下文长度限制、知识截止和幻觉问题  。</p>
+<h2 id="关键组件与接口定义"><a aria-hidden="true" tabindex="-1" href="#关键组件与接口定义"><span class="icon icon-link"></span></a>关键组件与接口定义</h2>
+<h3 id="配置与组件摘要"><a aria-hidden="true" tabindex="-1" href="#配置与组件摘要"><span class="icon icon-link"></span></a>配置与组件摘要</h3>
+<p>主要依赖：项目引入以下关键依赖：</p>
+<ul>
+<li>Spring Boot 3.x（基础框架）</li>
+<li>Spring AI 核心 (spring-ai-bom BOM 和所需starter)</li>
+<li>Spring AI OpenAI Starter （如使用OpenAI API）</li>
+<li>Spring AI Ollama Starter （如使用本地Ollama）</li>
+<li>Spring AI Qdrant Vector Store Starter (spring-ai-qdrant-store-spring-boot-starter)</li>
+<li>Spring AI ONNX Embedding (如使用本地Transformer模型，可选 spring-ai-embeddings-transformer-onnx)</li>
+<li>Spring Data Elasticsearch 或 Elasticsearch Java客户端</li>
+<li>Qdrant Java SDK 或通过Spring AI的 QdrantClient 支持</li>
+<li>其他：如需要文档解析，可选 Spring AI 提供的 PDF/Text 文档读取组件。</li>
+</ul>
+<p>应用配置：通过application.yml管理上述模式切换参数，例如：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">app</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  llm</span><span style="color:#E1E4E8">: </span><span style="color:#85E89D">mode</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">local</span><span style="color:#6A737D">        # 本地(local)或openai</span></span>
+<span class="line"><span style="color:#85E89D">  embedding</span><span style="color:#E1E4E8">: </span><span style="color:#85E89D">mode</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">local</span><span style="color:#6A737D">  # 本地(local)或openai</span></span>
+<span class="line"><span style="color:#85E89D">spring</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  ai</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#6A737D">    # OpenAI 配置（仅当使用openai模式）</span></span>
+<span class="line"><span style="color:#85E89D">    openai</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      api-key</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">xxxx</span></span>
+<span class="line"><span style="color:#85E89D">      chat.model</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">gpt-4</span></span>
+<span class="line"><span style="color:#6A737D">    # Ollama 配置（仅当使用local模式）</span></span>
+<span class="line"><span style="color:#85E89D">    ollama</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      base-url</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">http://ollama:11434</span><span style="color:#6A737D">   # 假设Docker容器内服务名</span></span>
+<span class="line"><span style="color:#85E89D">      default-model</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">llama2-7b</span></span>
+<span class="line"><span style="color:#6A737D">    # Qdrant 向量库配置</span></span>
+<span class="line"><span style="color:#85E89D">    vectorstore</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      qdrant</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">        collection-name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">documents</span></span>
+<span class="line"><span style="color:#85E89D">        initialize-schema</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span></code></pre>
+<p>上例展示了自定义的app配置段用于控制模式，以及Spring AI自带的一些配置项。通过profiles或条件注入，可以根据app.llm.mode选择不同的ChatModel配置。</p>
+<p>关键Bean：汇总本设计涉及的重要Spring Bean及其配置方式：</p>
+<ul>
+<li>EmbeddingModel Bean：如上所述，可以是OpenAiEmbeddingModel或TransformersEmbeddingModel，负责文本嵌入。</li>
+<li>QdrantClient Bean：封装与Qdrant服务的连接，使用gRPC或REST客户端。</li>
+<li>VectorStore Bean：比如QdrantVectorStore，构造时需注入QdrantClient和EmbeddingModel。</li>
+<li>ChatClient Bean：通常通过Spring AI自动配置的ChatClient.Builder生成。可直接注入ChatClient或其Builder。在使用多个ChatModel时，也可以注入多个命名的ChatClient。例如：</li>
+</ul>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#E1E4E8">@</span><span style="color:#F97583">Bean</span></span>
+<span class="line"><span style="color:#E1E4E8">@</span><span style="color:#F97583">ConditionalOnProperty</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">name</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"app.llm.mode"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">havingValue</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"openai"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">ChatClient </span><span style="color:#B392F0">chatClientOpenAI</span><span style="color:#E1E4E8">(OpenAiChatModel model) {</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> ChatClient.</span><span style="color:#B392F0">builder</span><span style="color:#E1E4E8">(model).</span><span style="color:#B392F0">build</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">@</span><span style="color:#F97583">Bean</span></span>
+<span class="line"><span style="color:#E1E4E8">@</span><span style="color:#F97583">ConditionalOnProperty</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">name</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"app.llm.mode"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">havingValue</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"local"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">ChatClient </span><span style="color:#B392F0">chatClientOllama</span><span style="color:#E1E4E8">(OllamaChatModel model) {</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> ChatClient.</span><span style="color:#B392F0">builder</span><span style="color:#E1E4E8">(model).</span><span style="color:#B392F0">build</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>上述伪代码表明根据配置选择不同的ChatModel创建ChatClient。实际上若使用Spring Boot Starter和配置文件，大部分情况直接@Autowired ChatClient即可（底层已根据配置选好了模型）。</p>
+<ul>
+<li>HybridRetriever Bean：如果实现了HybridRetriever类，可将其声明为Bean，内部@Autowired所需的ES客户端和VectorStore，用于执行检索逻辑。</li>
+<li>RagService Bean：封装RAG流程的服务类。它会@Autowired HybridRetriever和ChatClient，用来实现answerQuestion(String question)方法。</li>
+</ul>
+<h3 id="ragservice-接口定义"><a aria-hidden="true" tabindex="-1" href="#ragservice-接口定义"><span class="icon icon-link"></span></a>RagService 接口定义</h3>
+<p>RagService可以定义如下接口以供Controller调用：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#F97583">public</span><span style="color:#F97583"> interface</span><span style="color:#B392F0"> RagService</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#6A737D">    /** 根据用户问题返回答案 */</span></span>
+<span class="line"><span style="color:#E1E4E8">    String </span><span style="color:#B392F0">getAnswer</span><span style="color:#E1E4E8">(String </span><span style="color:#FFAB70">question</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>其实现类 RagServiceImpl 负责按照在线检索问答流程的步骤完成工作：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#E1E4E8">@</span><span style="color:#F97583">Service</span></span>
+<span class="line"><span style="color:#F97583">public</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> RagServiceImpl</span><span style="color:#F97583"> implements</span><span style="color:#B392F0"> RagService</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">    @</span><span style="color:#F97583">Autowired</span><span style="color:#F97583"> private</span><span style="color:#E1E4E8"> HybridRetriever retriever;</span></span>
+<span class="line"><span style="color:#E1E4E8">    @</span><span style="color:#F97583">Autowired</span><span style="color:#F97583"> private</span><span style="color:#E1E4E8"> ChatClient chatClient;</span></span>
+<span class="line"><span style="color:#E1E4E8">    @</span><span style="color:#F97583">Value</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"${app.maxDocs:6}"</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">private</span><span style="color:#F97583"> int</span><span style="color:#E1E4E8"> maxDocs;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">    @</span><span style="color:#F97583">Override</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#E1E4E8"> String </span><span style="color:#B392F0">getAnswer</span><span style="color:#E1E4E8">(String </span><span style="color:#FFAB70">question</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#6A737D">        // 1. 调用混合检索获取相关文档片段列表</span></span>
+<span class="line"><span style="color:#E1E4E8">        List&#x3C;</span><span style="color:#F97583">Document</span><span style="color:#E1E4E8">> docs </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> retriever.</span><span style="color:#B392F0">retrieve</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">new</span><span style="color:#B392F0"> Query</span><span style="color:#E1E4E8">(question));</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (docs.</span><span style="color:#B392F0">isEmpty</span><span style="color:#E1E4E8">()) {</span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#9ECBFF"> "抱歉，未能找到相关信息。"</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#6A737D">        // 截取最多maxDocs篇，以防过长</span></span>
+<span class="line"><span style="color:#E1E4E8">        List&#x3C;</span><span style="color:#F97583">Document</span><span style="color:#E1E4E8">> topDocs </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> docs.</span><span style="color:#B392F0">size</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">></span><span style="color:#E1E4E8"> maxDocs </span><span style="color:#F97583">?</span><span style="color:#E1E4E8"> docs.</span><span style="color:#B392F0">subList</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">, maxDocs) </span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> docs;</span></span>
+<span class="line"><span style="color:#6A737D">        // 2. 构造提示上下文文本</span></span>
+<span class="line"><span style="color:#E1E4E8">        StringBuilder context </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> StringBuilder</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">        for</span><span style="color:#E1E4E8"> (Document doc </span><span style="color:#F97583">:</span><span style="color:#E1E4E8"> topDocs) {</span></span>
+<span class="line"><span style="color:#E1E4E8">            context.</span><span style="color:#B392F0">append</span><span style="color:#E1E4E8">(doc.</span><span style="color:#B392F0">getContent</span><span style="color:#E1E4E8">()).</span><span style="color:#B392F0">append</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">        String prompt </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> String.</span><span style="color:#B392F0">format</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"基于以下内容回答问题：</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">%s</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">问题：%s</span><span style="color:#79B8FF">\n</span><span style="color:#9ECBFF">回答："</span><span style="color:#E1E4E8">, context, question);</span></span>
+<span class="line"><span style="color:#6A737D">        // 3. 调用LLM生成回答</span></span>
+<span class="line"><span style="color:#E1E4E8">        ChatResponse response </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> chatClient.</span><span style="color:#B392F0">prompt</span><span style="color:#E1E4E8">(prompt).</span><span style="color:#B392F0">call</span><span style="color:#E1E4E8">().</span><span style="color:#B392F0">chatResponse</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> response.</span><span style="color:#B392F0">content</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<p>上述代码中：</p>
+<ul>
+<li>retriever.retrieve返回Document列表，每个Document包含content文本等信息。</li>
+<li>将片段内容简单拼接为上下文（真实应用可加入分隔符并注明来源）。</li>
+<li>用ChatClient.prompt()发送组装的prompt获取响应。若无相关片段则直接返回无法找到信息的答复。</li>
+</ul>
+<p>通过这种实现，RagService对外提供了一个高层接口，隐藏了内部复杂性，Controller只需传入问题字符串即可获得答案。</p>
+<h3 id="示例-controller"><a aria-hidden="true" tabindex="-1" href="#示例-controller"><span class="icon icon-link"></span></a>示例 Controller</h3>
+<p>最后，提供一个示例控制器来演示接口定义和调用流程：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#E1E4E8">@</span><span style="color:#F97583">RestController</span></span>
+<span class="line"><span style="color:#E1E4E8">@</span><span style="color:#F97583">RequestMapping</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"/api"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">public</span><span style="color:#F97583"> class</span><span style="color:#B392F0"> QaController</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">    @</span><span style="color:#F97583">Autowired</span></span>
+<span class="line"><span style="color:#F97583">    private</span><span style="color:#E1E4E8"> RagService ragService;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // 提问接口</span></span>
+<span class="line"><span style="color:#E1E4E8">    @</span><span style="color:#F97583">GetMapping</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"/ask"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#E1E4E8"> ResponseEntity&#x3C;</span><span style="color:#F97583">String</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">askQuestion</span><span style="color:#E1E4E8">(@</span><span style="color:#F97583">RequestParam</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"q"</span><span style="color:#E1E4E8">) String </span><span style="color:#FFAB70">question</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#E1E4E8">        String answer </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> ragService.</span><span style="color:#B392F0">getAnswer</span><span style="color:#E1E4E8">(question);</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> ResponseEntity.</span><span style="color:#B392F0">ok</span><span style="color:#E1E4E8">(answer);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // 文档上传接口（可选，实现文档入库）</span></span>
+<span class="line"><span style="color:#E1E4E8">    @</span><span style="color:#F97583">PostMapping</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">value</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"/documents"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">consumes</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">MediaType.MULTIPART_FORM_DATA_VALUE)</span></span>
+<span class="line"><span style="color:#F97583">    public</span><span style="color:#E1E4E8"> ResponseEntity&#x3C;</span><span style="color:#F97583">String</span><span style="color:#E1E4E8">> </span><span style="color:#B392F0">uploadDocument</span><span style="color:#E1E4E8">(@</span><span style="color:#F97583">RequestPart</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"file"</span><span style="color:#E1E4E8">) MultipartFile </span><span style="color:#FFAB70">file</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#6A737D">        // 调用文档处理服务将文件内容存入ES和Qdrant</span></span>
+<span class="line"><span style="color:#6A737D">        // DocumentLoader.load(file);</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> ResponseEntity.</span><span style="color:#B392F0">ok</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"文档已上传并索引完成"</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<ul>
+<li>/api/ask 接口接受查询参数q为用户问题，调用RagService获取答案并直接返回。HTTP方法用GET简单起见，也可用POST提交复杂查询。</li>
+<li>/api/documents 接口示例展示了如何接收文件并调用文档加载流程，将内容索引到系统中。文档处理可以参考前述文档索引流程实现。</li>
+</ul>
+<p>通过上述Controller，前端或用户可以通过HTTP请求与RAG服务交互，实现动态问答。</p>
+<h2 id="docker-compose-环境部署方案"><a aria-hidden="true" tabindex="-1" href="#docker-compose-环境部署方案"><span class="icon icon-link"></span></a>Docker Compose 环境部署方案</h2>
+<p>为方便开发和部署，提供Docker Compose配置同时启动所需的外部服务（Qdrant、Elasticsearch、Ollama）和本Spring Boot应用。本项目的docker-compose.yml示例如下：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">version</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">'3.9'</span></span>
+<span class="line"><span style="color:#85E89D">services</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  elasticsearch</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    image</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">docker.elastic.co/elasticsearch/elasticsearch:8.9.0</span></span>
+<span class="line"><span style="color:#85E89D">    container_name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">elasticsearch</span></span>
+<span class="line"><span style="color:#85E89D">    environment</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#9ECBFF">discovery.type=single-node</span></span>
+<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#9ECBFF">xpack.security.enabled=false</span><span style="color:#6A737D">       # 禁用安全认证</span></span>
+<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#9ECBFF">ES_JAVA_OPTS=-Xms1g -Xmx1g</span><span style="color:#6A737D">         # 内存配置，可根据需要调整</span></span>
+<span class="line"><span style="color:#85E89D">    ports</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#9ECBFF">"9200:9200"</span></span>
+<span class="line"><span style="color:#85E89D">    healthcheck</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      test</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">"CMD"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"curl"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"-f"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"http://localhost:9200"</span><span style="color:#E1E4E8">] </span></span>
+<span class="line"><span style="color:#85E89D">      interval</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">30s</span></span>
+<span class="line"><span style="color:#85E89D">      retries</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">3</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#85E89D">  qdrant</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    image</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">qdrant/qdrant:v1.3.5</span></span>
+<span class="line"><span style="color:#85E89D">    container_name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">qdrant</span></span>
+<span class="line"><span style="color:#85E89D">    ports</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#9ECBFF">"6333:6333"</span><span style="color:#6A737D">   # HTTP API</span></span>
+<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#9ECBFF">"6334:6334"</span><span style="color:#6A737D">   # gRPC API</span></span>
+<span class="line"><span style="color:#85E89D">    volumes</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#9ECBFF">qdrant_data:/qdrant/storage</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#85E89D">  ollama</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    image</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ollama/ollama:0.1.9</span></span>
+<span class="line"><span style="color:#85E89D">    container_name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">ollama</span></span>
+<span class="line"><span style="color:#85E89D">    ports</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#9ECBFF">"11434:11434"</span><span style="color:#6A737D">  # Ollama REST API 默认端口</span></span>
+<span class="line"><span style="color:#85E89D">    volumes</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#9ECBFF">ollama_data:/root/.ollama</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#85E89D">  rag-service</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">    build</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">.</span></span>
+<span class="line"><span style="color:#85E89D">    container_name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">rag-service</span></span>
+<span class="line"><span style="color:#85E89D">    environment</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      SPRING_PROFILES_ACTIVE</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"local"</span><span style="color:#6A737D">          # 激活本地LLM配置。如切换OpenAI则设为cloud等。</span></span>
+<span class="line"><span style="color:#85E89D">      OPENAI_API_KEY</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"${OPENAI_API_KEY:-}"</span><span style="color:#6A737D">    # 可选，提供OpenAI密钥</span></span>
+<span class="line"><span style="color:#85E89D">      QDRANT_GRPC_HOST</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"qdrant"</span><span style="color:#6A737D">               # 若应用读取环境配置连接Qdrant</span></span>
+<span class="line"><span style="color:#85E89D">      QDRANT_GRPC_PORT</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">6334</span></span>
+<span class="line"><span style="color:#85E89D">    depends_on</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#9ECBFF">elasticsearch</span></span>
+<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#9ECBFF">qdrant</span></span>
+<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#9ECBFF">ollama</span></span>
+<span class="line"><span style="color:#85E89D">    ports</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#9ECBFF">"8080:8080"</span></span></code></pre>
+<p>说明：</p>
+<ul>
+<li>Elasticsearch：使用官方ES 8.9镜像，配置为单节点模式并关闭安全，以便简化开发测试。映射端口9200用于REST访问。</li>
+<li>Qdrant：使用官方Qdrant镜像，开放6333端口供HTTP API（若使用）和6334端口供gRPC客户端。挂载卷qdrant_data持久化向量数据。</li>
+<li>Ollama：使用Ollama官方Docker镜像。映射11434端口用于与Spring应用通信（Ollama提供REST API），挂载卷ollama_data保存已下载的模型数据，以避免容器重启后需要重新pull模型  。在启动前可以先运行类似docker exec -it ollama ollama pull llama2的命令下载所需模型，或在应用初始化时通过Ollama API触发模型下载。</li>
+<li>RAG服务：假设Spring Boot应用已打包为镜像（Compose中通过build构建）。通过环境变量配置应用Profile和所需参数：例如激活local Profile表示使用本地Ollama；如需OpenAI则对应Profile下提供OPENAI_API_KEY等。depends_on确保其他服务先行启动。端口8080用于对外提供HTTP接口。</li>
+</ul>
+<p>网络配置：Compose默认会将这些服务置于同一网络下，容器名称就是主机名。因此应用在连接Qdrant和ES时，可以使用qdrant:6334、elasticsearch:9200作为地址。Spring AI Docker Compose集成模块甚至可以根据容器名自动发现服务并配置连接，例如名字包含“ollama/ollama”的容器会被识别为Ollama服务  。</p>
+<p>启动：运行docker-compose up -d将后台启动所有容器。待Elasticsearch和Qdrant完成启动（可通过健康检查日志或API验证），Spring Boot应用会自动连接它们。此时：</p>
+<ul>
+<li>可以调用POST /api/documents上传文档（或通过其他方式预先索引文档）；</li>
+<li>然后调用GET /api/ask?q=你的问题获取答案。</li>
+</ul>
+<p>通过Docker Compose，一键部署整个RAG系统的依赖，方便在本地或服务器上运行测试。</p>
+<h2 id="结论"><a aria-hidden="true" tabindex="-1" href="#结论"><span class="icon icon-link"></span></a>结论</h2>
+<p>本设计文档详细描述了一个基于Java Spring生态的RAG搜索服务方案。通过Spring AI框架提供的抽象和集成能力，我们实现了Retriever-VectorStore-RAG Service的模块化架构，支持混合检索、灵活的LLM/Embedding切换以及容器化部署。核心技术选型包括Spring Boot、Spring AI、Elasticsearch、Qdrant和Ollama等，均为当下流行且有良好支持的组件。文档提供了整体架构和数据流程解析，给出了关键配置和代码示例，确保实现细节清晰可行。开发者可以据此搭建起一个可复现的RAG问答系统，在保证回答准确性的同时兼顾部署灵活性和数据私有性，为企业知识库问答、智能搜索等应用场景提供有力支持。</p> </article> <html lang="en" data-astro-cid-uffxixac> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/search/spring_ai_rag/1_%E4%BD%BF%E7%94%A8-spring-ai-%E6%9E%84%E5%BB%BA-rag-%E6%90%9C%E7%B4%A2%E6%9C%8D%E5%8A%A1%E8%AE%BE%E8%AE%A1/"><!-- Primary Meta Tags --><title>Ge Yuxu • AI &amp; Engineering</title><meta name="title" content="Ge Yuxu • AI &#38; Engineering"><meta name="description" content="Welcome to my blog!"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/search/spring_ai_rag/1_%E4%BD%BF%E7%94%A8-spring-ai-%E6%9E%84%E5%BB%BA-rag-%E6%90%9C%E7%B4%A2%E6%9C%8D%E5%8A%A1%E8%AE%BE%E8%AE%A1/"><meta property="og:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="og:description" content="Welcome to my blog!"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/search/spring_ai_rag/1_%E4%BD%BF%E7%94%A8-spring-ai-%E6%9E%84%E5%BB%BA-rag-%E6%90%9C%E7%B4%A2%E6%9C%8D%E5%8A%A1%E8%AE%BE%E8%AE%A1/"><meta property="twitter:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="twitter:description" content="Welcome to my blog!"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script></head> <body data-astro-cid-uffxixac>  <div class="statement" data-astro-cid-uffxixac> <blockquote data-astro-cid-uffxixac> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>脱敏说明</strong>：本文所有出现的表名、字段名、接口地址、变量名、IP&nbsp;地址及示例数据等均已进行脱敏或虚拟化处理，仅用于阐述技术思路与实现步骤，示例代码亦非公司真实代码。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;文中所示任何标识符并不对应实际生产环境中的名称或编号。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;示例&nbsp;SQL、脚本、代码及数据均为演示用途，不含真实业务数据，也不具备直接运行或复现的完整上下文。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;读者若需在实际项目中参考本文方案，请结合自身业务场景及数据安全规范，使用符合内部命名和权限控制的配置。</p> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>版权声明</strong>：本文版权归原作者所有，未经作者事先书面许可，任何单位或个人不得以任何方式复制、转载、摘编或用于商业用途。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;若需非商业性引用或转载本文内容，请务必注明出处并保持内容完整。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;对因商业使用、篡改或不当引用本文内容所产生的法律纠纷，作者保留追究法律责任的权利。<br data-astro-cid-uffxixac><br data-astro-cid-uffxixac> <em data-astro-cid-uffxixac>Copyright&nbsp;©&nbsp;1989–Present&nbsp;Ge&nbsp;Yuxu.&nbsp;All&nbsp;Rights&nbsp;Reserved.</em></p> </blockquote> </div></body></html>  </article> </div> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2025 All rights reserved.
+</footer>  </body></html>

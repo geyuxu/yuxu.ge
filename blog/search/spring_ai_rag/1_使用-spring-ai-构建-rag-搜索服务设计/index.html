@@ -37,9 +37,7 @@ main[data-astro-cid-bvzihdzo].page{display:grid;grid-template-columns:260px minm
 <p>(架构说明：用户通过Controller发出请求，RAG Service调用Hybrid Retriever分别与ES和Qdrant交互检索文档；嵌入模型用于向量生成供Qdrant存储与检索；ChatClient封装LLM模型调用（本地或云）；最终将检索到的相关文档作为提示上下文，交由LLM生成答案并返回给用户。)</p>
 <h2 id="核心模块设计"><a aria-hidden="true" tabindex="-1" href="#核心模块设计"><span class="icon icon-link"></span></a>核心模块设计</h2>
 <h3 id="向量存储与混合检索模块"><a aria-hidden="true" tabindex="-1" href="#向量存储与混合检索模块"><span class="icon icon-link"></span></a>向量存储与混合检索模块</h3>
-<ol>
-<li>Qdrant 向量存储配置：系统使用Qdrant来持久化文档向量及元数据。通过引入依赖 spring-ai-qdrant-store，Spring AI能够自动配置Qdrant相关的Bean  。我们需要提供Qdrant客户端以及VectorStore Bean，例如：</li>
-</ol>
+<p>Qdrant 向量存储配置：系统使用Qdrant来持久化文档向量及元数据。通过引入依赖 spring-ai-qdrant-store，Spring AI能够自动配置Qdrant相关的Bean  。我们需要提供Qdrant客户端以及VectorStore Bean，例如：</p>
 <pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#E1E4E8">@</span><span style="color:#F97583">Bean</span></span>
 <span class="line"><span style="color:#F97583">public</span><span style="color:#E1E4E8"> QdrantClient </span><span style="color:#B392F0">qdrantClient</span><span style="color:#E1E4E8">() {</span></span>
 <span class="line"><span style="color:#6A737D">    // 构建连接到 Qdrant 的 gRPC 客户端</span></span>
@@ -56,32 +54,26 @@ main[data-astro-cid-bvzihdzo].page{display:grid;grid-template-columns:260px minm
 <span class="line"><span style="color:#E1E4E8">            .</span><span style="color:#B392F0">initializeSchema</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">true</span><span style="color:#E1E4E8">)            </span><span style="color:#6A737D">// 若未预建集合则自动创建</span></span>
 <span class="line"><span style="color:#E1E4E8">            .</span><span style="color:#B392F0">build</span><span style="color:#E1E4E8">();</span></span>
 <span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
-<p>上述配置创建了VectorStore接口的Qdrant实现，用于存储向量及执行相似度搜索。  其中注入的 EmbeddingModel 用于在存储文档时生成其向量表示。注意：可以提前在Qdrant中创建集合并指定向量维度和相似度度量方式，或通过 initializeSchema(true) 由程序自动创建(默认使用 Cosine 距离，维度取决于所用嵌入模型)  。确保Qdrant实例已启动并可访问，比如通过Docker启动 Qdrant 容器。
-2. Elasticsearch 全文检索配置：Elasticsearch用于存储文档文本索引，实现关键词匹配检索。可采用Spring Data Elasticsearch或Rest API进行集成。配置上，需要提供ES的地址（例如localhost:9200）、索引名称（如documents）以及索引mapping（包含文档ID、内容等字段）。为了简化，实现上可以利用Spring Data Elasticsearch定义一个文档实体及对应的Repository。例如定义DocumentEntity(id, content, metadata)并建立全文索引。</p>
-<ol start="3">
-<li>
+<p>上述配置创建了VectorStore接口的Qdrant实现，用于存储向量及执行相似度搜索。  其中注入的 EmbeddingModel 用于在存储文档时生成其向量表示。注意：可以提前在Qdrant中创建集合并指定向量维度和相似度度量方式，或通过 initializeSchema(true) 由程序自动创建(默认使用 Cosine 距离，维度取决于所用嵌入模型)  。确保Qdrant实例已启动并可访问，比如通过Docker启动 Qdrant 容器。</p>
+<p>Elasticsearch 全文检索配置：Elasticsearch用于存储文档文本索引，实现关键词匹配检索。可采用Spring Data Elasticsearch或Rest API进行集成。配置上，需要提供ES的地址（例如localhost:9200）、索引名称（如documents）以及索引mapping（包含文档ID、内容等字段）。为了简化，实现上可以利用Spring Data Elasticsearch定义一个文档实体及对应的Repository。例如定义DocumentEntity(id, content, metadata)并建立全文索引。</p>
 <p>文档索引结构：为了方便混合检索结果的合并，我们为每个文档片段分配唯一ID，并在Qdrant和Elasticsearch中共享该ID作为主键。每份文档在入库时通常会被拆分成若干片段 (chunks)，每个片段是一段适合检索和上下文长度的文本。我们将每个片段作为独立的Document进行索引和向量存储。这样在检索阶段，无论通过向量还是关键词找到某片段，都可以根据ID确定对应的内容。可以将文档内容存储在ES索引中，而在Qdrant中主要存储向量和必要的元信息(如文档ID、来源等)作为 payload。</p>
-</li>
-<li>
 <p>Hybrid Retriever 实现：创建一个混合检索器，例如 HybridRetriever implements DocumentRetriever。其retrieve(Query query)方法内部执行以下步骤：</p>
 <ul>
 <li>使用ES执行关键词查询：如构造一个match或bool查询，匹配content字段包含查询文本，取Top K结果。可借助ES的REST客户端或Repository方法实现，得到一组Document片段列表（含ID和内容）。</li>
 <li>使用Qdrant执行相似度查询：调用上面配置的vectorStore.similaritySearch()方法，对用户查询文本进行向量查询，获取Top K相似文档片段 。Spring AI 提供了 SearchRequest 可指定相似度阈值和topK等参数  。例如：</li>
 </ul>
-<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#E1E4E8">List&#x3C;</span><span style="color:#F97583">Document</span><span style="color:#E1E4E8">> vectorDocs </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> vectorStore.</span><span style="color:#B392F0">similaritySearch</span><span style="color:#E1E4E8">(</span></span>
-<span class="line"><span style="color:#E1E4E8">      SearchRequest.</span><span style="color:#B392F0">builder</span><span style="color:#E1E4E8">()</span></span>
-<span class="line"><span style="color:#E1E4E8">          .</span><span style="color:#B392F0">query</span><span style="color:#E1E4E8">(userQuery)</span></span>
-<span class="line"><span style="color:#E1E4E8">          .</span><span style="color:#B392F0">topK</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">5</span><span style="color:#E1E4E8">)</span></span>
-<span class="line"><span style="color:#E1E4E8">          .</span><span style="color:#B392F0">build</span><span style="color:#E1E4E8">()</span></span>
-<span class="line"><span style="color:#E1E4E8">);</span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#E1E4E8"> List&#x3C;</span><span style="color:#F97583">Document</span><span style="color:#E1E4E8">> vectorDocs </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> vectorStore.</span><span style="color:#B392F0">similaritySearch</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#E1E4E8">       SearchRequest.</span><span style="color:#B392F0">builder</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8">           .</span><span style="color:#B392F0">query</span><span style="color:#E1E4E8">(userQuery)</span></span>
+<span class="line"><span style="color:#E1E4E8">           .</span><span style="color:#B392F0">topK</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">5</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">           .</span><span style="color:#B392F0">build</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#E1E4E8"> );</span></span></code></pre>
 <p>这将返回与查询最相似的5个文档片段。</p>
 <ul>
 <li>合并结果：将关键词结果与向量结果合并。可以用文档ID去重，避免同一片段重复。简单策略是直接合并列表；如需更精细的融合，可根据ES相关度分值和向量相似度分值对结果重新排序或加权。由于不同检索的分数不直接可比，一个实际工程策略是保留各自Top K的结果，然后让上层LLM基于这些候选片段自行判断相关性。这里我们采取简单去重合并策略，并限制总片段数（如取不超过6-10个片段）以控制提示长度。</li>
 <li>输出：返回合并后的Document列表。每个Document包含内容文本，以及可能的元数据（例如来源标识用于输出引用）。
 通过HybridRetriever，我们将语义匹配和精确匹配结合，最大程度找到相关内容。例如，当用户查询中包含与文档不同的措辞时，向量检索可找到语义相似的内容，而关键词检索可保证若有精确匹配的术语不会被遗漏。</li>
 </ul>
-</li>
-</ol>
 <h3 id="llm-推理与切换模块"><a aria-hidden="true" tabindex="-1" href="#llm-推理与切换模块"><span class="icon icon-link"></span></a>LLM 推理与切换模块</h3>
 <p>ChatClient与ChatModel抽象：Spring AI 提供了 ChatModel 接口表示具体的大语言模型（如OpenAI ChatGPT、Anthropic Claude、本地Llama等），ChatClient 则封装了与这些模型交互的通用客户端 。本服务通过注入一个ChatClient实例来调用LLM进行回答生成。得益于ChatClient的抽象设计，我们可以灵活地更换背后的ChatModel，而业务代码保持不变。例如，可以在配置中切换使用OpenAI的GPT-4模型或本地的Llama2模型 。</p>
 <ol>

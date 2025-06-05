@@ -18,11 +18,16 @@
     input[type="number"] {
       width: 100%;
     }
+    /* 预览容器：只做边框，不开启横向滚动 */
+    .preview-container {
+      border: 1px solid #ccc;
+      margin-top: 16px;
+      padding: 4px;
+    }
     #preview {
       display: block;
-      margin-top: 16px;
-      max-width: 100%;
-      border: 1px solid #ccc;
+      max-width: 100%;   /* 根据父元素自动缩放 */
+      height: auto;
     }
     button,
     a {
@@ -70,14 +75,19 @@
 
   <button id="generateBtn">生成拼图</button>
   <a id="downloadBtn" style="display:none;" download="mosaic.png">下载 PNG</a>
-  <img id="preview" src="" alt="生成预览">
 
+  <div class="preview-container">
+    <img id="preview" src="" alt="生成预览">
+  </div>
+
+  <!-- 加载 Pica 的 UMD 版：实现高质量缩放 -->
   <script src="./pica.js"></script>
-  <!-- 使用 unpkg 提供的 pica ES Module -->
+
   <script type="module">
+    // 使用全局 pica() 创建实例
+    const picaInst = window.pica();
 
-
-    // 获取页面元素
+    // 获取 DOM 元素
     const fileInput    = document.getElementById('fileInput');
     const tileSizeRng  = document.getElementById('tileSize');
     const tileSizeNum  = document.getElementById('tileNumber');
@@ -89,7 +99,7 @@
     const downloadBtn  = document.getElementById('downloadBtn');
     const previewImg   = document.getElementById('preview');
 
-    // 同步滑块和数字输入框
+    // 同步滑块与数字框
     tileSizeRng.oninput = e => tileSizeNum.value = e.target.value;
     tileSizeNum.oninput = e => tileSizeRng.value = e.target.value;
     gapSizeRng.oninput  = e => gapSizeNum.value = e.target.value;
@@ -100,36 +110,44 @@
       return createImageBitmap(file);
     }
 
-    // 将 ImageBitmap 裁剪为中心正方形并缩放到 size×size，返回 OffscreenCanvas
+    // 裁剪为正方形再缩放到 size×size：返回 OffscreenCanvas
     async function cropAndResize(bmp, size) {
-      const s = Math.min(bmp.width, bmp.height);
-      const sx = Math.floor((bmp.width - s) / 2);
-      const sy = Math.floor((bmp.height - s) / 2);
+      const w = bmp.width, h = bmp.height;
+      const s = Math.min(w, h);
+      const sx = Math.floor((w - s) / 2);
+      const sy = Math.floor((h - s) / 2);
 
-      // 在离屏 Canvas 上先裁剪
+      // 离屏 Canvas 裁剪
       const off = new OffscreenCanvas(s, s);
       const ctxOff = off.getContext('2d');
       ctxOff.drawImage(bmp, sx, sy, s, s, 0, 0, s, s);
 
-      // 再缩放到 size×size
+      // 离屏 Canvas 高质量缩放到 size×size
       const target = new OffscreenCanvas(size, size);
-      await pica().resize(off, target, { unsharpAmount: 80, transferable: true });
+      await picaInst.resize(off, target, {
+        unsharpAmount: 80,
+        transferable: true
+      });
       return target;
     }
 
-    // 主流程：根据参数生成拼图，返回一个 OffscreenCanvas
+    /**
+     * 根据 bitmaps（ImageBitmap 数组）、tile/gap/outW/outH，
+     * 生成最终拼图，返回 OffscreenCanvas。
+     */
     async function buildMosaic(bitmaps, tile, gap, outW, outH) {
       const N = bitmaps.length;
-      // 1. 搜索合适的行数 rows，使 cols = ceil(N/rows)，并且比例接近 16:9
+      // 1. 搜索行数 rows，使 cols = ceil(N/rows)，并且比例接近 16:9
       let best = null;
       const targetRatio = 16 / 9;
-      const tol = 0.5;  // 比例容差
+      const tol = 0.5;  
       const maxRows = Math.min(Math.ceil(Math.sqrt(N)) * 2, 200);
 
       for (let rows = 1; rows <= maxRows; rows++) {
         const cols = Math.ceil(N / rows);
-        const clusterW = cols * tile + (cols + 1) * gap;
-        const clusterH = rows * tile + (rows + 1) * gap;
+        // 只在列之间留 gap，不在左右两侧留：
+        const clusterW = cols * tile + (cols - 1) * gap;  
+        const clusterH = rows * tile + (rows - 1) * gap;  
         const ratio = clusterW / clusterH;
         const diff = Math.abs(ratio - targetRatio);
         if (diff > tol) continue;
@@ -139,24 +157,23 @@
       }
 
       if (!best) {
-        throw new Error('未找到满足比例约束的布局，请调整瓦片大小或间距');
+        throw new Error('无法找到满足比例的布局，请调整瓦片大小或间距');
       }
 
       const { rows, cols, clusterW, clusterH } = best;
-      console.log(`最佳布局：rows=${rows}, cols=${cols}, tile=${tile}, gap=${gap}, cluster=${clusterW}×${clusterH}`);
+      console.log(`最佳布局 → rows=${rows}, cols=${cols}, tile=${tile}, gap=${gap}, cluster=${clusterW}×${clusterH}`);
 
-      // 2. 如果格子数 > N，则需要补足头像
+      // 2. 计算需要补充的头像数量，并均匀打散
       const totalSlots = rows * cols;
       const extra = totalSlots - N;
       const fullList = bitmaps.slice();
       if (extra > 0) {
-        // 随机均匀补充
         let pool = [];
         const times = Math.ceil(extra / N);
         for (let i = 0; i < times; i++) {
           pool = pool.concat(bitmaps);
         }
-        // 随机打乱 pool
+        // 使用 Fisher-Yates 随机打乱
         for (let i = pool.length - 1; i > 0; i--) {
           const j = Math.floor(Math.random() * (i + 1));
           [pool[i], pool[j]] = [pool[j], pool[i]];
@@ -171,79 +188,71 @@
 
       for (let idx = 0; idx < totalSlots; idx++) {
         const bmp = fullList[idx];
+        // 裁剪 & 缩放
         const smallOff = await cropAndResize(bmp, tile);
         const r = Math.floor(idx / cols);
         const c = idx % cols;
-        const dx = gap + c * (tile + gap);
-        const dy = gap + r * (tile + gap);
+        // dx, dy 不再加额外 gap，只在每个 tile 间留 gap：
+        const dx = c * (tile + gap);
+        const dy = r * (tile + gap);
         mctx.drawImage(smallOff, dx, dy);
       }
 
-      // 4. 将 mosaicOff 按比例缩放至 outW×outH，并居中绘制到 finalOff
+      /* ---------- 4. 先缩放到同尺寸临时画布，再一次性贴到最终画布 ---------- */
+      const scale = Math.min(outW / clusterW, outH / clusterH);
+      const newW  = Math.floor(clusterW * scale);
+      const newH  = Math.floor(clusterH * scale);
+      const offsetX = Math.floor((outW - newW) / 2);
+      const offsetY = Math.floor((outH - newH) / 2);
+      
+      // 4-a：临时画布，尺寸正好 = newW × newH
+      const scaledOff = new OffscreenCanvas(newW, newH);
+      await picaInst.resize(mosaicOff, scaledOff);   // 填满整个 scaledOff
+      
+      // 4-b：把 scaledOff 居中绘制到最终输出画布
       const finalOff = new OffscreenCanvas(outW, outH);
       const fctx = finalOff.getContext('2d');
       fctx.clearRect(0, 0, outW, outH);
-
-      const scale = Math.min(outW / clusterW, outH / clusterH);
-      const newW = Math.floor(clusterW * scale);
-      const newH = Math.floor(clusterH * scale);
-      const offsetX = Math.floor((outW - newW) / 2);
-      const offsetY = Math.floor((outH - newH) / 2);
-
-      // 使用 pica 保持高质量缩放
-      await pica().resize(mosaicOff, finalOff, {
-        unsharpAmount: 80,
-        transferable: true,
-        width: newW,
-        height: newH
-      });
-
-      // pica 会将内容放在 (0,0)，我们需要将它搬到居中位置
-      if (offsetX !== 0 || offsetY !== 0) {
-        const temp = new OffscreenCanvas(newW, newH);
-        const tctx = temp.getContext('2d');
-        tctx.drawImage(finalOff, 0, 0, newW, newH, 0, 0, newW, newH);
-        fctx.clearRect(0, 0, outW, outH);
-        fctx.drawImage(temp, offsetX, offsetY);
-      }
+      fctx.drawImage(scaledOff, offsetX, offsetY);
 
       return finalOff;
     }
 
-    // 点击“生成拼图”按钮时执行
+    // 点击“生成拼图”按钮时触发
     generateBtn.addEventListener('click', async () => {
-      const files = [...fileInput.files];
+      // 先按文件名做“自然顺序”排序
+      const files = [...fileInput.files].sort((a, b) =>
+        a.name.localeCompare(b.name, undefined, { numeric: true, sensitivity: 'base' })
+      );
       if (files.length === 0) {
-        alert('请先选择至少一张头像图片');
+        alert('请先选择至少一张图片');
         return;
       }
 
-      // 显示“生成中”状态
       generateBtn.textContent = '生成中…';
       generateBtn.disabled = true;
       downloadBtn.style.display = 'none';
       previewImg.src = '';
 
       try {
-        // 读取所有文件为 ImageBitmap
+        // 1. 将所有选中文件转换为 ImageBitmap
         const bitmaps = await Promise.all(files.map(f => fileToBitmap(f)));
-        // 获取参数值
+
+        // 2. 从表单获取参数
         const tile = parseInt(tileSizeNum.value, 10);
         const gap  = parseInt(gapSizeNum.value, 10);
         const outW = parseInt(outputWNum.value, 10);
         const outH = parseInt(outputHNum.value, 10);
 
-        // 生成拼图
+        // 3. 调用 buildMosaic 生成拼图 OffscreenCanvas
         const finalCanvas = await buildMosaic(bitmaps, tile, gap, outW, outH);
 
-        // 导出为 Blob 并生成可下载链接
+        // 4. 导出 PNG Blob，预览并生成下载链接
         const blob = await finalCanvas.convertToBlob({ type: 'image/png' });
         const url = URL.createObjectURL(blob);
-
         previewImg.src = url;
         downloadBtn.href = url;
         downloadBtn.style.display = 'inline-block';
-
       } catch (err) {
         alert('生成失败：' + err);
         console.error(err);

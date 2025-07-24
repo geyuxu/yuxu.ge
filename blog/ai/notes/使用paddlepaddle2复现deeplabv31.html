@@ -1,0 +1,90 @@
+<!DOCTYPE html><html lang="zh"> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/ai/notes/%E4%BD%BF%E7%94%A8paddlepaddle2%E5%A4%8D%E7%8E%B0deeplabv31.html"><!-- Primary Meta Tags --><title>使用 PaddlePaddle 2.x 复现 DeepLabV3+（1）：从构建到训练</title><meta name="title" content="使用 PaddlePaddle 2.x 复现 DeepLabV3+（1）：从构建到训练"><meta name="description"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/ai/notes/%E4%BD%BF%E7%94%A8paddlepaddle2%E5%A4%8D%E7%8E%B0deeplabv31.html"><meta property="og:title" content="使用 PaddlePaddle 2.x 复现 DeepLabV3+（1）：从构建到训练"><meta property="og:description"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/ai/notes/%E4%BD%BF%E7%94%A8paddlepaddle2%E5%A4%8D%E7%8E%B0deeplabv31.html"><meta property="twitter:title" content="使用 PaddlePaddle 2.x 复现 DeepLabV3+（1）：从构建到训练"><meta property="twitter:description"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script><script is:global>
+	window.addEventListener('DOMContentLoaded', () => {
+		$('.toc ol').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'margin': 0,
+		'padding-left': 0,       // 可按需调整
+		});
+		$('.toc ol > li').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'padding-left': 10
+		});
+        $('.sidebar').append($('.toc'));
+      });
+	</script><link rel="stylesheet" href="/_astro/_slug_.BvCO7WHQ.css">
+<style>a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astro-cid-eimmu3lg].active{font-weight:bolder;text-decoration:underline}header[data-astro-cid-3ef6ksr2]{margin:0;padding:0 1em;background:#fff;box-shadow:0 2px 8px rgba(var(--black),5%)}h2[data-astro-cid-3ef6ksr2]{margin:0;font-size:1em}h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2],h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none}nav[data-astro-cid-3ef6ksr2]{display:flex;align-items:center;justify-content:space-between}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{padding:1em .5em;color:var(--black);border-bottom:4px solid transparent;text-decoration:none}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none;border-bottom-color:var(--accent)}.social-links[data-astro-cid-3ef6ksr2],.social-links[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{display:flex}@media (max-width: 720px){.social-links[data-astro-cid-3ef6ksr2]{display:none}}footer[data-astro-cid-sz7xmlte]{padding:2em 1em 6em;background:linear-gradient(var(--gray-gradient)) no-repeat;color:rgb(var(--gray));text-align:center}.social-links[data-astro-cid-sz7xmlte]{display:flex;justify-content:center;gap:1em;margin-top:1em}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]{text-decoration:none;color:rgb(var(--gray))}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]:hover{color:rgb(var(--gray-dark))}
+.statement[data-astro-cid-uffxixac]{font-size:10px;color:gray}@media (max-width: 640px){.statement[data-astro-cid-uffxixac]{font-size:6px;color:gray}}
+</style></head> <body> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <!--<h2><a href="/">{SITE_TITLE}</a></h2>--> <h2 data-astro-cid-3ef6ksr2><a style="padding-left:0;color:blue;" href="/" data-astro-cid-3ef6ksr2>Ge Yuxu<br data-astro-cid-3ef6ksr2>AI & Engineering</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blog/1" class="active" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/series" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Series </a>  <a href="/projects" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Projects </a>  </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://github.com/geyuxu" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://www.linkedin.com/in/geyuxu/" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's LinkedIn profile</span> <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" data-astro-cid-3ef6ksr2> <path fill="currentColor" d="M20.447 20.452H17.2v-5.569c0-1.328-.025-3.039-1.852-3.039-1.853 0-2.136 1.447-2.136 2.942v5.666h-3.248V9h3.122v1.561h.045c.435-.823 1.498-1.688 3.083-1.688 3.295 0 3.903 2.17 3.903 4.989v6.59zM5.337 7.433a1.882 1.882 0 110-3.764 1.882 1.882 0 010 3.764zm1.626 13.019H3.708V9h3.255v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.222 0z" data-astro-cid-3ef6ksr2></path> </svg> </a> </div> </nav> <!-- Microsoft Clarity --> <script type="text/javascript">
+		(function(c,l,a,r,i,t,y){
+			c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+			t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+			y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+		})(window, document, "clarity", "script", "rc2w96osp6");
+	</script> </header>  <main class="page"> <!-- 左侧栏 --> <aside class="sidebar"> <div class="meta"> <b>使用 PaddlePaddle 2.x 复现 DeepLabV3+（1）：从构建到训练</b> <p><time datetime="2025-04-03T00:00:00.000Z"> 2025/04/03 08:00:00 </time></p>   </div> <hr> <br> </aside> <!-- 右侧正文区域（flex 居中） --> <div class="content-wrapper"> <article class="prose">  <nav class="toc"><ol class="toc-level toc-level-1"><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#1-项目背景">1. 项目背景</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#2-模型构建面向对象实现-deeplabv3">2. 模型构建：面向对象实现 DeepLabV3+</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#3-训练脚本高效训练--模型保存">3. 训练脚本：高效训练 + 模型保存</a></li></ol></nav><h1 id="使用-paddlepaddle-2x-复现-deeplabv31从构建到训练"><a aria-hidden="true" tabindex="-1" href="#使用-paddlepaddle-2x-复现-deeplabv31从构建到训练"><span class="icon icon-link"></span></a>使用 PaddlePaddle 2.x 复现 DeepLabV3+（1）：从构建到训练</h1>
+<p>在语义分割领域，DeepLabV3+ 是一款非常强大的模型，结合了 Atrous Spatial Pyramid Pooling (ASPP) 和 encoder-decoder 结构，广泛应用于图像理解任务。本文将基于 PaddlePaddle 2.x 从零实现 DeepLabV3+，并完成一次完整的训练流程。</p>
+<hr>
+<h2 id="1-项目背景"><a aria-hidden="true" tabindex="-1" href="#1-项目背景"><span class="icon icon-link"></span></a>1. 项目背景</h2>
+<p>PaddlePaddle 是百度自研的深度学习框架，2.x 版本全面支持动态图、面向对象开发范式以及灵活的模型部署方式，非常适合 AI 项目工程落地。</p>
+<p>本文将实现：</p>
+<ul>
+<li>✅ 模块化重构 DeepLabV3+，包含 SeparableConv、ASPP、XceptionBlock</li>
+<li>✅ 兼容动态图与标准 Layer 接口</li>
+<li>✅ 编写训练脚本，可扩展至真实数据集</li>
+</ul>
+<hr>
+<h2 id="2-模型构建面向对象实现-deeplabv3"><a aria-hidden="true" tabindex="-1" href="#2-模型构建面向对象实现-deeplabv3"><span class="icon icon-link"></span></a>2. 模型构建：面向对象实现 DeepLabV3+</h2>
+<p>我们从头构建了一个名为 <code>DeepLabV3Plus</code> 的模型类，遵循 <code>paddle.nn.Layer</code> 设计接口。</p>
+<p><strong>核心模块包括：</strong></p>
+<ul>
+<li><code>SeparableConv2D</code>: 模拟深度可分离卷积（depthwise + pointwise）</li>
+<li><code>XceptionBlock</code>: 3 层堆叠的可分离卷积单元，可选残差连接</li>
+<li><code>ASPP</code>: 多尺度特征融合结构，膨胀卷积率为 6、12、18</li>
+<li><code>Decoder</code>: 结合浅层与深层特征，提升边界感知能力</li>
+</ul>
+<p>最终模型为典型的 encoder-decoder 结构，可直接输出等大小的分割图。</p>
+<p><strong>代码结构示例：</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> DeepLabV3Plus</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">nn</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">Layer</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#79B8FF"> __init__</span><span style="color:#E1E4E8">(self, num_classes):</span></span>
+<span class="line"><span style="color:#79B8FF">        super</span><span style="color:#E1E4E8">().</span><span style="color:#79B8FF">__init__</span><span style="color:#E1E4E8">()</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.entry </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> ...</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.block1 </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> XceptionBlock(</span><span style="color:#79B8FF">...</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#79B8FF">        ...</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.aspp </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> ASPP(</span><span style="color:#79B8FF">...</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.decoder </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> ...</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.final </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> ...</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> forward</span><span style="color:#E1E4E8">(self, x):</span></span>
+<span class="line"><span style="color:#79B8FF">        ...</span><span style="color:#6A737D"> # 完整结构见文末源码</span></span></code></pre>
+<hr>
+<h2 id="3-训练脚本高效训练--模型保存"><a aria-hidden="true" tabindex="-1" href="#3-训练脚本高效训练--模型保存"><span class="icon icon-link"></span></a>3. 训练脚本：高效训练 + 模型保存</h2>
+<p>训练脚本使用 <code>paddle.io.DataLoader</code> 与标准 <code>nn.Layer</code> 接口完成：</p>
+<p><strong>特点：</strong></p>
+<ul>
+<li>动态创建模型实例与优化器</li>
+<li>支持 ignore_index 的自定义交叉熵损失函数</li>
+<li>自动保存模型参数（<code>.pdparams</code>）</li>
+</ul>
+<p><strong>示例结构：</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">model </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> DeepLabV3Plus(</span><span style="color:#FFAB70">num_classes</span><span style="color:#F97583">=</span><span style="color:#79B8FF">21</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">optimizer </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> paddle.optimizer.Adam(</span><span style="color:#79B8FF">...</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">criterion </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> CrossEntropyLossWithMask(</span><span style="color:#FFAB70">ignore_index</span><span style="color:#F97583">=</span><span style="color:#79B8FF">255</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">for</span><span style="color:#E1E4E8"> epoch </span><span style="color:#F97583">in</span><span style="color:#79B8FF"> range</span><span style="color:#E1E4E8">(num_epochs):</span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> imgs, labels </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> dataloader:</span></span>
+<span class="line"><span style="color:#E1E4E8">        preds </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> model(imgs)</span></span>
+<span class="line"><span style="color:#E1E4E8">        loss </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> criterion(preds, labels)</span></span>
+<span class="line"><span style="color:#E1E4E8">        loss.backward()</span></span>
+<span class="line"><span style="color:#E1E4E8">        optimizer.step()</span></span>
+<span class="line"><span style="color:#E1E4E8">        optimizer.clear_grad()</span></span></code></pre>
+<p>目前使用的是伪造数据集 <code>DummySegDataset</code>，可很方便地替换为 VOC、ADE20K 等真实数据集。</p>
+<hr>
+<p><em>未完待续：本文后续将补充验证阶段、评价指标与部署流程。</em></p> <html lang="en" data-astro-cid-uffxixac> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/ai/notes/%E4%BD%BF%E7%94%A8paddlepaddle2%E5%A4%8D%E7%8E%B0deeplabv31.html"><!-- Primary Meta Tags --><title>Ge Yuxu • AI &amp; Engineering</title><meta name="title" content="Ge Yuxu • AI &#38; Engineering"><meta name="description" content="Welcome to my blog!"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/ai/notes/%E4%BD%BF%E7%94%A8paddlepaddle2%E5%A4%8D%E7%8E%B0deeplabv31.html"><meta property="og:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="og:description" content="Welcome to my blog!"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/ai/notes/%E4%BD%BF%E7%94%A8paddlepaddle2%E5%A4%8D%E7%8E%B0deeplabv31.html"><meta property="twitter:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="twitter:description" content="Welcome to my blog!"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script></head> <body data-astro-cid-uffxixac>  <div class="statement" data-astro-cid-uffxixac> <blockquote data-astro-cid-uffxixac> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>脱敏说明</strong>：本文所有出现的表名、字段名、接口地址、变量名、IP地址及示例数据等均非真实，
+    仅用于阐述技术思路与实现步骤，示例代码亦非公司真实代码。
+    示例方案亦非公司真实完整方案，仅为本人记忆总结，用于技术学习探讨。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;文中所示任何标识符并不对应实际生产环境中的名称或编号。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;示例&nbsp;SQL、脚本、代码及数据等均为演示用途，不含真实业务数据，也不具备直接运行或复现的完整上下文。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;读者若需在实际项目中参考本文方案，请结合自身业务场景及数据安全规范，使用符合内部命名和权限控制的配置。</p> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>版权声明</strong>：本文版权归原作者所有，未经作者事先书面许可，任何单位或个人不得以任何方式复制、转载、摘编或用于商业用途。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;若需非商业性引用或转载本文内容，请务必注明出处并保持内容完整。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;对因商业使用、篡改或不当引用本文内容所产生的法律纠纷，作者保留追究法律责任的权利。<br data-astro-cid-uffxixac><br data-astro-cid-uffxixac> <em data-astro-cid-uffxixac>Copyright&nbsp;©&nbsp;1989–Present&nbsp;Ge&nbsp;Yuxu.&nbsp;All&nbsp;Rights&nbsp;Reserved.</em></p> </blockquote> </div></body></html>  </article> </div> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2025 All rights reserved.
+</footer>  </body></html>

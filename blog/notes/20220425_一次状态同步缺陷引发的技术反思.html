@@ -1,0 +1,155 @@
+<!DOCTYPE html><html lang="zh"> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/notes/20220425_%E4%B8%80%E6%AC%A1%E7%8A%B6%E6%80%81%E5%90%8C%E6%AD%A5%E7%BC%BA%E9%99%B7%E5%BC%95%E5%8F%91%E7%9A%84%E6%8A%80%E6%9C%AF%E5%8F%8D%E6%80%9D.html"><!-- Primary Meta Tags --><title>一次状态同步缺陷引发的技术反思</title><meta name="title" content="一次状态同步缺陷引发的技术反思"><meta name="description"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/notes/20220425_%E4%B8%80%E6%AC%A1%E7%8A%B6%E6%80%81%E5%90%8C%E6%AD%A5%E7%BC%BA%E9%99%B7%E5%BC%95%E5%8F%91%E7%9A%84%E6%8A%80%E6%9C%AF%E5%8F%8D%E6%80%9D.html"><meta property="og:title" content="一次状态同步缺陷引发的技术反思"><meta property="og:description"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/notes/20220425_%E4%B8%80%E6%AC%A1%E7%8A%B6%E6%80%81%E5%90%8C%E6%AD%A5%E7%BC%BA%E9%99%B7%E5%BC%95%E5%8F%91%E7%9A%84%E6%8A%80%E6%9C%AF%E5%8F%8D%E6%80%9D.html"><meta property="twitter:title" content="一次状态同步缺陷引发的技术反思"><meta property="twitter:description"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script><script is:global>
+	window.addEventListener('DOMContentLoaded', () => {
+		$('.toc ol').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'margin': 0,
+		'padding-left': 0,       // 可按需调整
+		});
+		$('.toc ol > li').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'padding-left': 10
+		});
+        $('.sidebar').append($('.toc'));
+      });
+	</script><link rel="stylesheet" href="/_astro/_slug_.BvCO7WHQ.css">
+<style>a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astro-cid-eimmu3lg].active{font-weight:bolder;text-decoration:underline}header[data-astro-cid-3ef6ksr2]{margin:0;padding:0 1em;background:#fff;box-shadow:0 2px 8px rgba(var(--black),5%)}h2[data-astro-cid-3ef6ksr2]{margin:0;font-size:1em}h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2],h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none}nav[data-astro-cid-3ef6ksr2]{display:flex;align-items:center;justify-content:space-between}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{padding:1em .5em;color:var(--black);border-bottom:4px solid transparent;text-decoration:none}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none;border-bottom-color:var(--accent)}.social-links[data-astro-cid-3ef6ksr2],.social-links[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{display:flex}@media (max-width: 720px){.social-links[data-astro-cid-3ef6ksr2]{display:none}}footer[data-astro-cid-sz7xmlte]{padding:2em 1em 6em;background:linear-gradient(var(--gray-gradient)) no-repeat;color:rgb(var(--gray));text-align:center}.social-links[data-astro-cid-sz7xmlte]{display:flex;justify-content:center;gap:1em;margin-top:1em}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]{text-decoration:none;color:rgb(var(--gray))}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]:hover{color:rgb(var(--gray-dark))}
+.statement[data-astro-cid-uffxixac]{font-size:10px;color:gray}@media (max-width: 640px){.statement[data-astro-cid-uffxixac]{font-size:6px;color:gray}}
+</style></head> <body> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <!--<h2><a href="/">{SITE_TITLE}</a></h2>--> <h2 data-astro-cid-3ef6ksr2><a style="padding-left:0;color:blue;" href="/" data-astro-cid-3ef6ksr2>Ge Yuxu<br data-astro-cid-3ef6ksr2>AI & Engineering</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blog/1" class="active" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/series" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Series </a>  <a href="/projects" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Projects </a>  </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://github.com/geyuxu" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://www.linkedin.com/in/geyuxu/" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's LinkedIn profile</span> <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" data-astro-cid-3ef6ksr2> <path fill="currentColor" d="M20.447 20.452H17.2v-5.569c0-1.328-.025-3.039-1.852-3.039-1.853 0-2.136 1.447-2.136 2.942v5.666h-3.248V9h3.122v1.561h.045c.435-.823 1.498-1.688 3.083-1.688 3.295 0 3.903 2.17 3.903 4.989v6.59zM5.337 7.433a1.882 1.882 0 110-3.764 1.882 1.882 0 010 3.764zm1.626 13.019H3.708V9h3.255v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.222 0z" data-astro-cid-3ef6ksr2></path> </svg> </a> </div> </nav> <!-- Microsoft Clarity --> <script type="text/javascript">
+		(function(c,l,a,r,i,t,y){
+			c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+			t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+			y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+		})(window, document, "clarity", "script", "rc2w96osp6");
+	</script> </header>  <main class="page"> <!-- 左侧栏 --> <aside class="sidebar"> <div class="meta"> <b>一次状态同步缺陷引发的技术反思</b> <p><time datetime="2022-04-24T16:00:00.000Z"> 2022/04/25 00:00:00 </time></p>   </div> <hr> <br> </aside> <!-- 右侧正文区域（flex 居中） --> <div class="content-wrapper"> <article class="prose">  <nav class="toc"><ol class="toc-level toc-level-1"><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#背景">背景</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#问题出现">问题出现</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#原因分析">原因分析</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#修复过程">修复过程</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#日志驱动同步的常见风险">日志驱动同步的常见风险</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#批量操作一致性设计要点">批量操作一致性设计要点</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#示例python-实现批量状态更新与日志记录">示例：Python 实现批量状态更新与日志记录</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#结语">结语</a></li></ol></nav><h2 id="背景"><a aria-hidden="true" tabindex="-1" href="#背景"><span class="icon icon-link"></span></a>背景</h2>
+<p>在分布式系统中，我们经常需要对多个资源的状态进行管理。例如，一个资源可以处于“生效”或“冻结”等状态，表示其是否可用。为了提高运营效率，系统通常支持 <strong>批量</strong> 地变更这些资源的状态，比如一次性冻结或解冻多个资源。批量操作可以节省时间，减少重复劳动。然而，批量操作在带来便利的同时，也对数据 <strong>一致性</strong> 提出了更高要求。如果处理不当，很容易引发分布式系统中各组件状态不同步的问题。</p>
+<p>近期，某状态管理模块上线了批量冻结与解冻功能。本以为只是把单条操作循环执行一遍那么简单，没想到却埋下了隐患：一次偶然的线上故障让我们意识到批量状态同步中隐藏的陷阱。本文分享这一真实案例，并借此讨论分布式系统里批量操作与一致性保障的常见思路。</p>
+<h2 id="问题出现"><a aria-hidden="true" tabindex="-1" href="#问题出现"><span class="icon icon-link"></span></a>问题出现</h2>
+<p>新功能上线后不久，运维同事发现一个奇怪现象：通过批量冻结功能批量禁用了一批资源后，过了一段时间，这些本该冻结的资源又“悄悄”变回了可用状态，仿佛批量冻结操作没有生效一样。然而，在数据库中查看这些资源的主状态字段，值却显示为冻结状态。这意味着数据库的主状态已更新，但系统的其他部分并没有感知到这些资源已被冻结。</p>
+<p>进一步调查发现，系统中有一个定时运行的同步任务（job），负责将资源状态同步给其他依赖组件（例如缓存、搜索索引等）。这个任务并不是直接查询资源的主状态表获取更新，而是通过读取操作日志来了解最近哪些资源状态发生了变更。换句话说，当某个资源被冻结或解冻时，系统会在一个日志表中记录一条操作记录，供同步任务参考。这个设计属于一种日志驱动的状态同步模式，通过解耦实现了异步更新，提高了性能和模块独立性。</p>
+<p>然而，正是这里出了问题——批量冻结操作没有写入日志表。单个资源冻结时，系统会同时更新主状态表和日志表；但批量冻结的实现中，开发者只顾着一次更新多条主状态记录，却漏掉了对应的日志记录。结果，同步任务在后续运行时查看日志表，根本没有发现那些批量冻结的资源发生过“冻结”操作，于是误以为它们仍是激活状态，没有将冻结状态同步出去。这就解释了为何用户看到这些资源仍可用：前端或缓存用的还是旧数据，因为日志驱动的同步没起作用。</p>
+<h2 id="原因分析"><a aria-hidden="true" tabindex="-1" href="#原因分析"><span class="icon icon-link"></span></a>原因分析</h2>
+<p>问题原因归结起来其实很简单：批量操作时状态更新和日志记录不一致。究其根本，是代码实现上忽略了和单条操作逻辑的一致性。开发者在新增批量冻结功能时，没有复用单条冻结的完整逻辑，只是直接对主表数据进行了批量更新。由于单条冻结时日志记录是一个单独步骤，批量情况下如果不考虑日志，这一步就丢失了。</p>
+<p>进一步来说，这反映了分布式系统中双写不一致的典型问题：当我们需要将状态变化写到两个地方（这里是主状态表和操作日志表）时，如果没有保证原子性或严格的一致性流程，就可能出现一处更新了而另一处未更新的情况。此时，不同组件各自依赖不同的数据源（主表或日志表），就会各自得到不一致的状态视图。在本例中，主库的状态是冻结了，但日志缺失导致依赖日志的组件未感知到冻结。</p>
+<p>为何会采用日志表同步而不直接用主表？这是出于系统解耦和性能考虑。一方面，直接让同步任务大范围扫描主表找变化成本高，不如按日志增量同步高效；另一方面，日志表还承担了操作审计的作用，记录谁在何时对哪些资源做了什么操作。因此，日志作为事实来源之一是很多系统的设计选择。但这种设计要求每次状态变化时同时维护主数据和日志的一致更新。这种双写操作若无事务保障，就必须小心确保代码层面两者的完整更新。</p>
+<p>回到我们的案例，根本原因可以说是一次疏忽：批量操作代码缺少日志写入，使得状态变更没有完全被记录。幸运的是，这一问题被及时发现并定位，没有进一步造成严重后果。</p>
+<h2 id="修复过程"><a aria-hidden="true" tabindex="-1" href="#修复过程"><span class="icon icon-link"></span></a>修复过程</h2>
+<p>找准原因之后，解决方案也就相对明确了。修复工作主要包括两个部分：</p>
+<ul>
+<li>补录日志： 针对已经被冻结但未记录日志的资源，补写相应的操作日志。这样可以修复那些已经执行过批量冻结但日志缺失的数据，使后续同步任务能正确识别这些资源的冻结状态。具体做法是根据主状态表中标记为冻结且在日志表中没有对应记录的条目，补充插入日志记录。这一步相当于数据补救，确保历史数据的一致性。</li>
+<li>修改代码： 在批量冻结和批量解冻的代码实现中，加入与单条操作相同的日志记录逻辑。也就是说，每冻结一个资源，不仅要更新其主状态，还要在日志表插入一条记录。为了防止再次遗漏，我们采用了重用单条操作逻辑的方式：将原有单个资源冻结的过程提炼成可以被批量调用的方法，使批量和单条操作走同一套流程。这样避免了代码分叉导致的不一致。与此同时，我们还为这两个表的更新加上了数据库事务，确保主表和日志表的更新要么一起成功，要么一起回滚，杜绝了部分成功的情况。</li>
+</ul>
+<p>完成修复后，我们进行了多轮测试。首先单独验证批量冻结/解冻操作，在数据库的主表和日志表都能看到正确更新；接着模拟同步任务运行，确认批量操作后的资源状态能被其他模块正确感知。一切验证通过后，补丁顺利发布，线上问题得到解决。</p>
+<h2 id="日志驱动同步的常见风险"><a aria-hidden="true" tabindex="-1" href="#日志驱动同步的常见风险"><span class="icon icon-link"></span></a>日志驱动同步的常见风险</h2>
+<p>这个案例凸显了日志驱动同步模式中常见的问题与注意事项。在分布式系统里，常用一种做法是由一个模块产生日志（或事件），其他模块消费日志来达到数据同步的目的。这种模式包含以下关键点：
+•	日志即事件源： 日志记录代表了数据变化的事件流，消费方通过读取新增的日志来感知变化。优点是解耦，消费方无需直接访问主库即可获取变更，提高了安全性和效率。
+•	一致性依赖日志完整性： 日志必须完整、准确地记录每一次状态变更，否则会导致消费方与实际状态不一致。漏记一条日志，在消费方看来就等于漏掉了一次状态更新事件。
+•	双写原子性： 如果主数据更新和日志记录无法在同一事务中完成，就存在中间状态不一致的风险。必须通过代码控制、重试机制或事务机制（如将日志写入和状态更新放在同一数据库事务，或者使用消息队列事务消息）来保证两者要么都成功要么都失败。
+•	故障恢复： 即使做到以上两点，也需要考虑日志驱动同步中的故障场景。例如，消费方可能一段时间无法处理日志，恢复后需要有能力补消费之前漏掉的日志；或者主库和日志长时间不一致时，需要有校验工具能够扫描主表和日志表，找出差异并修正（这类似我们对历史数据补录日志的过程）。</p>
+<p>日志驱动的模式本质上是一种最终一致性方案：允许不同组件暂时不一致，但通过日志传播最终达到一致。在实际工程中，它常见于事件溯源、变更订阅、分布式缓存刷新等场景。不过，此模式给开发提出了更严格的要求——确保日志正确记录所有事件且不重不漏。一旦日志机制出现纰漏，就会直接导致状态同步偏差。因此，设计这类系统时需要周全的考虑和大量的测试来验证日志同步的可靠性。</p>
+<h2 id="批量操作一致性设计要点"><a aria-hidden="true" tabindex="-1" href="#批量操作一致性设计要点"><span class="icon icon-link"></span></a>批量操作一致性设计要点</h2>
+<p>批量操作在系统设计中也有一些特别需要注意的一致性问题。批量更新往往涉及对多条数据的改动，如果不能保证一致的成功或失败，很容易造成部分成功的尴尬局面。结合本次经验和常见的实践，批量操作要保证一致性应考虑以下要点：
+•	原子性（All or Nothing）： 尽可能使用事务或其他机制确保批量中各子操作要么全部完成要么全部取消。这样可以避免出现只冻结了一部分资源而另一些未冻结的情况（除非业务允许部分成功）。
+•	重试与幂等： 批量操作通常执行量大，出错概率也相对更高。如果批量过程中某个子操作失败，系统应支持重试失败部分。同时，要设计操作为幂等的，以便重复执行不会引入不一致。例如，可以根据资源当前状态决定是否需要再次冻结，确保重复冻结不会改变最终结果。
+•	代码路径统一： 正如我们修复时所做的，复用单条操作的逻辑可以减少遗漏。如果批量和单条操作共享同一实现，能保证他们遵循相同的业务规则和数据更新步骤，避免因为两套实现细微差异导致的数据不一致。
+•	性能与一致性平衡： 批量操作有时为了性能会分批次处理或者异步处理。这种情况下，需要设计好每批次之间的隔离和提交策略，防止批次之间数据依赖问题。例如，批量冻结1000条，可以每100条一个事务，但要防止前一批提交后后一批未提交时系统读取到半成品结果。如果无法避免，则需要在更高层次以“任务”作为单位进行隔离，在整个批量任务完成前对外表现为进行中状态。
+•	日志与监控： 批量操作涉及范围大，一旦出问题影响面广。因此要有良好的日志记录每个批次、每个子项的处理结果，并结合监控及时发现异常情况。比如批量冻结应记录冻结了哪些资源，哪些成功哪些失败，耗时多少等，方便出问题时快速定位和补救。</p>
+<p>通过遵循这些要点，我们在设计批量操作时就能预先考虑一致性问题，减少类似本次事故的发生概率。</p>
+<h2 id="示例python-实现批量状态更新与日志记录"><a aria-hidden="true" tabindex="-1" href="#示例python-实现批量状态更新与日志记录"><span class="icon icon-link"></span></a>示例：Python 实现批量状态更新与日志记录</h2>
+<p>为了更直观地展示上述问题和解决方案，我们可以用一个简化的 Python 示例来模拟批量状态更新的过程。假设有两个数据结构：state_table 用于保存资源的当前状态，log_table 用于记录操作日志。状态用字符串表示，“active” 表示生效，“frozen” 表示冻结。</p>
+<p>首先，我们实现单个资源的冻结函数和不完善的批量冻结函数：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D"># 定义示例数据表</span></span>
+<span class="line"><span style="color:#E1E4E8">state_table </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#9ECBFF">    "A"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"active"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">    "B"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"active"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">    "C"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"active"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">log_table </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> []  </span><span style="color:#6A737D"># 日志表开始时为空</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 单个资源冻结</span></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> freeze_single</span><span style="color:#E1E4E8">(resource_id, operator):</span></span>
+<span class="line"><span style="color:#6A737D">    # 更新主状态表</span></span>
+<span class="line"><span style="color:#E1E4E8">    state_table[resource_id] </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "frozen"</span></span>
+<span class="line"><span style="color:#6A737D">    # 记录操作日志</span></span>
+<span class="line"><span style="color:#E1E4E8">    log_entry </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#9ECBFF">        "resource"</span><span style="color:#E1E4E8">: resource_id,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "action"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"freeze"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "operator"</span><span style="color:#E1E4E8">: operator</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">    log_table.append(log_entry)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 批量冻结（初始版本，存在缺陷：没有记录日志）</span></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> freeze_batch</span><span style="color:#E1E4E8">(resources, operator):</span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> res </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> resources:</span></span>
+<span class="line"><span style="color:#E1E4E8">        state_table[res] </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "frozen"</span></span>
+<span class="line"><span style="color:#6A737D">    # 忘记记录每个资源的冻结日志</span></span></code></pre>
+<p>使用上述函数，假设我们冻结资源 A，以及批量冻结资源 B 和 C：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="py"><code><span class="line"><span style="color:#6A737D"># 冻结单个资源A</span></span>
+<span class="line"><span style="color:#E1E4E8">freeze_single(</span><span style="color:#9ECBFF">"A"</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">operator</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"User1"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#6A737D"># 批量冻结资源B和C</span></span>
+<span class="line"><span style="color:#E1E4E8">freeze_batch([</span><span style="color:#9ECBFF">"B"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"C"</span><span style="color:#E1E4E8">], </span><span style="color:#FFAB70">operator</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"User1"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(state_table)  </span><span style="color:#6A737D"># 查看主状态表</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(log_table)    </span><span style="color:#6A737D"># 查看日志表</span></span></code></pre>
+<p>输出结果：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>{'A': 'frozen', 'B': 'frozen', 'C': 'frozen'}</span></span>
+<span class="line"><span>[{'resource': 'A', 'action': 'freeze', 'operator': 'User1'}]</span></span></code></pre>
+<p>可以看到，主状态表中A、B、C三个资源都被标记为”frozen”，但是日志表中只有A的冻结操作记录，而没有B、C的记录。这就类似于我们遇到的问题场景：批量冻结更新了状态，但忘记记录日志。假如系统的其他组件依赖扫描log_table来感知状态变化，那么它们只会知道A被冻结了，完全察觉不到B和C的冻结。这将导致B和C在别的模块仍被视为“active”，造成数据不一致。</p>
+<p>接下来，我们编写改进的批量冻结函数，确保每个资源的状态更新和日志记录同时进行，并利用Python的异常处理来模拟事务回滚机制：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="py"><code><span class="line"><span style="color:#6A737D"># 改进的批量冻结，增加日志记录和简单的事务机制</span></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> freeze_batch_with_log</span><span style="color:#E1E4E8">(resources, operator):</span></span>
+<span class="line"><span style="color:#6A737D">    # 备份原始状态，以备回滚</span></span>
+<span class="line"><span style="color:#E1E4E8">    original_states </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {}</span></span>
+<span class="line"><span style="color:#F97583">    try</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#F97583">        for</span><span style="color:#E1E4E8"> res </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> resources:</span></span>
+<span class="line"><span style="color:#6A737D">            # 备份状态</span></span>
+<span class="line"><span style="color:#E1E4E8">            original_states[res] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> state_table[res]</span></span>
+<span class="line"><span style="color:#6A737D">            # 更新状态</span></span>
+<span class="line"><span style="color:#E1E4E8">            state_table[res] </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> "frozen"</span></span>
+<span class="line"><span style="color:#6A737D">            # 写入日志</span></span>
+<span class="line"><span style="color:#E1E4E8">            log_entry </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#9ECBFF">                "resource"</span><span style="color:#E1E4E8">: res,</span></span>
+<span class="line"><span style="color:#9ECBFF">                "action"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"freeze"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">                "operator"</span><span style="color:#E1E4E8">: operator</span></span>
+<span class="line"><span style="color:#E1E4E8">            }</span></span>
+<span class="line"><span style="color:#E1E4E8">            log_table.append(log_entry)</span></span>
+<span class="line"><span style="color:#6A737D">            # 模拟某种可能的错误，例如操作某个特殊资源出问题</span></span>
+<span class="line"><span style="color:#F97583">            if</span><span style="color:#E1E4E8"> res </span><span style="color:#F97583">==</span><span style="color:#9ECBFF"> "C"</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#F97583">                raise</span><span style="color:#79B8FF"> Exception</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"Failed to freeze </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">res</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)  </span><span style="color:#6A737D"># 模拟错误</span></span>
+<span class="line"><span style="color:#F97583">    except</span><span style="color:#79B8FF"> Exception</span><span style="color:#F97583"> as</span><span style="color:#E1E4E8"> e:</span></span>
+<span class="line"><span style="color:#6A737D">        # 发生错误，回滚之前的更新</span></span>
+<span class="line"><span style="color:#F97583">        for</span><span style="color:#E1E4E8"> res </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> resources:</span></span>
+<span class="line"><span style="color:#F97583">            if</span><span style="color:#E1E4E8"> res </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> original_states:</span></span>
+<span class="line"><span style="color:#E1E4E8">                state_table[res] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> original_states[res]  </span><span style="color:#6A737D"># 恢复原状态</span></span>
+<span class="line"><span style="color:#6A737D">        # 回滚日志（简单起见，将此次批量中的日志移除）</span></span>
+<span class="line"><span style="color:#E1E4E8">        log_table[:] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [entry </span><span style="color:#F97583">for</span><span style="color:#E1E4E8"> entry </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> log_table </span><span style="color:#F97583">if</span><span style="color:#E1E4E8"> entry[</span><span style="color:#9ECBFF">"resource"</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">not</span><span style="color:#F97583"> in</span><span style="color:#E1E4E8"> resources]</span></span>
+<span class="line"><span style="color:#79B8FF">        print</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Error during batch operation:"</span><span style="color:#E1E4E8">, e)</span></span></code></pre>
+<p>这段代码中，freeze_batch_with_log 函数会对传入的每个资源执行冻结，并写日志。一旦某个资源处理报错，我们在except中将已经处理过的资源状态恢复原样，并撤销它们对应的日志记录，从而保证整个批量操作对外“没发生过”（即原子性）。上述代码里我们特意在处理资源C时抛出一个异常来模拟中途出错的情况。</p>
+<p>现在重置数据，并尝试使用改进后的函数冻结B和C：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="py"><code><span class="line"><span style="color:#6A737D"># 重置状态</span></span>
+<span class="line"><span style="color:#E1E4E8">state_table </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {</span><span style="color:#9ECBFF">"A"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"frozen"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"B"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"active"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"C"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"active"</span><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">log_table </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [{</span><span style="color:#9ECBFF">"resource"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"A"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"action"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"freeze"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"operator"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"User1"</span><span style="color:#E1E4E8">}]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 尝试批量冻结B和C，期间模拟出错</span></span>
+<span class="line"><span style="color:#E1E4E8">freeze_batch_with_log([</span><span style="color:#9ECBFF">"B"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"C"</span><span style="color:#E1E4E8">], </span><span style="color:#FFAB70">operator</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"User1"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(state_table)  </span><span style="color:#6A737D"># 查看主状态表</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(log_table)    </span><span style="color:#6A737D"># 查看日志表</span></span></code></pre>
+<p>输出结果可能如下：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>Error during batch operation: Failed to freeze C</span></span>
+<span class="line"><span>{'A': 'frozen', 'B': 'active', 'C': 'active'}</span></span>
+<span class="line"><span>[{'resource': 'A', 'action': 'freeze', 'operator': 'User1'}]</span></span></code></pre>
+<p>可以看到，尽管在冻结C时发生了异常，错误被捕获并触发了回滚机制。最终主状态表中B仍保持为”active”，C也是”active”（批量操作前的状态），日志表也没有留下B或C的残留日志。也就是说，此次批量冻结操作对A、B、C的最终状态没有造成影响——要么全部成功（如果没有错误发生），要么在出错后完全回到初始状态。这实现了批量操作的原子性。实际生产环境中，我们会利用数据库事务或更健壮的机制来实现这种原子性保障，这里用Python代码做了一个形象的演示。</p>
+<p>通过这个示例，我们直观地看到保持状态表和日志表同步更新以及保证批操作原子性的重要性。在分布式系统中，这种细节决定了各组件认知的一致性，稍有不慎就会埋下隐患。</p>
+<h2 id="结语"><a aria-hidden="true" tabindex="-1" href="#结语"><span class="icon icon-link"></span></a>结语</h2>
+<p>这次批量状态同步缺陷的经历提醒我们：魔鬼藏在细节里。在分布式系统中，数据的一致性往往比功能本身更具挑战。当我们引入新功能（比如批量操作）或采用新架构（比如日志驱动同步）时，需要从全局视角去考虑数据流转和状态同步，确保每一步都严谨可靠。</p>
+<p>具体而言，一方面要强化开发流程中的审查和测试，对可能影响数据一致性的改动进行重点关注；另一方面，在架构设计上也应尽量避免让系统状态散落在多个来源而缺乏统一校验机制。如果不得不如此（例如为了性能和解耦需要拆分主数据和日志），那就务必在实现上保证强一致或提供自我修复能力（如定期对账校验）。</p>
+<p>分布式系统的高可用和高性能常常需要在一致性上做出权衡，但正如这次事件，我们宁可事先多花些心思，也不想事后疲于救火。希望这次分享的案例和思考能给你带来一些启发，在今后的系统设计与实现中少踩坑，更从容地保障数据一致性。</p> <html lang="en" data-astro-cid-uffxixac> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/notes/20220425_%E4%B8%80%E6%AC%A1%E7%8A%B6%E6%80%81%E5%90%8C%E6%AD%A5%E7%BC%BA%E9%99%B7%E5%BC%95%E5%8F%91%E7%9A%84%E6%8A%80%E6%9C%AF%E5%8F%8D%E6%80%9D.html"><!-- Primary Meta Tags --><title>Ge Yuxu • AI &amp; Engineering</title><meta name="title" content="Ge Yuxu • AI &#38; Engineering"><meta name="description" content="Welcome to my blog!"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/notes/20220425_%E4%B8%80%E6%AC%A1%E7%8A%B6%E6%80%81%E5%90%8C%E6%AD%A5%E7%BC%BA%E9%99%B7%E5%BC%95%E5%8F%91%E7%9A%84%E6%8A%80%E6%9C%AF%E5%8F%8D%E6%80%9D.html"><meta property="og:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="og:description" content="Welcome to my blog!"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/notes/20220425_%E4%B8%80%E6%AC%A1%E7%8A%B6%E6%80%81%E5%90%8C%E6%AD%A5%E7%BC%BA%E9%99%B7%E5%BC%95%E5%8F%91%E7%9A%84%E6%8A%80%E6%9C%AF%E5%8F%8D%E6%80%9D.html"><meta property="twitter:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="twitter:description" content="Welcome to my blog!"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script></head> <body data-astro-cid-uffxixac>  <div class="statement" data-astro-cid-uffxixac> <blockquote data-astro-cid-uffxixac> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>脱敏说明</strong>：本文所有出现的表名、字段名、接口地址、变量名、IP地址及示例数据等均非真实，
+    仅用于阐述技术思路与实现步骤，示例代码亦非公司真实代码。
+    示例方案亦非公司真实完整方案，仅为本人记忆总结，用于技术学习探讨。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;文中所示任何标识符并不对应实际生产环境中的名称或编号。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;示例&nbsp;SQL、脚本、代码及数据等均为演示用途，不含真实业务数据，也不具备直接运行或复现的完整上下文。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;读者若需在实际项目中参考本文方案，请结合自身业务场景及数据安全规范，使用符合内部命名和权限控制的配置。</p> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>版权声明</strong>：本文版权归原作者所有，未经作者事先书面许可，任何单位或个人不得以任何方式复制、转载、摘编或用于商业用途。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;若需非商业性引用或转载本文内容，请务必注明出处并保持内容完整。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;对因商业使用、篡改或不当引用本文内容所产生的法律纠纷，作者保留追究法律责任的权利。<br data-astro-cid-uffxixac><br data-astro-cid-uffxixac> <em data-astro-cid-uffxixac>Copyright&nbsp;©&nbsp;1989–Present&nbsp;Ge&nbsp;Yuxu.&nbsp;All&nbsp;Rights&nbsp;Reserved.</em></p> </blockquote> </div></body></html>  </article> </div> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2025 All rights reserved.
+</footer>  </body></html>

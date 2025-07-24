@@ -1,0 +1,166 @@
+<!DOCTYPE html><html lang="zh"> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/devops/20220325_python%E5%BA%94%E7%94%A8%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86%E5%88%B0elk%E6%8E%92%E6%9F%A5%E5%AE%9E%E5%BD%95.html"><!-- Primary Meta Tags --><title>Python应用日志采集到ELK排查实录</title><meta name="title" content="Python应用日志采集到ELK排查实录"><meta name="description"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/devops/20220325_python%E5%BA%94%E7%94%A8%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86%E5%88%B0elk%E6%8E%92%E6%9F%A5%E5%AE%9E%E5%BD%95.html"><meta property="og:title" content="Python应用日志采集到ELK排查实录"><meta property="og:description"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/devops/20220325_python%E5%BA%94%E7%94%A8%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86%E5%88%B0elk%E6%8E%92%E6%9F%A5%E5%AE%9E%E5%BD%95.html"><meta property="twitter:title" content="Python应用日志采集到ELK排查实录"><meta property="twitter:description"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script><script is:global>
+	window.addEventListener('DOMContentLoaded', () => {
+		$('.toc ol').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'margin': 0,
+		'padding-left': 0,       // 可按需调整
+		});
+		$('.toc ol > li').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'padding-left': 10
+		});
+        $('.sidebar').append($('.toc'));
+      });
+	</script><link rel="stylesheet" href="/_astro/_slug_.BvCO7WHQ.css">
+<style>a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astro-cid-eimmu3lg].active{font-weight:bolder;text-decoration:underline}header[data-astro-cid-3ef6ksr2]{margin:0;padding:0 1em;background:#fff;box-shadow:0 2px 8px rgba(var(--black),5%)}h2[data-astro-cid-3ef6ksr2]{margin:0;font-size:1em}h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2],h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none}nav[data-astro-cid-3ef6ksr2]{display:flex;align-items:center;justify-content:space-between}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{padding:1em .5em;color:var(--black);border-bottom:4px solid transparent;text-decoration:none}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none;border-bottom-color:var(--accent)}.social-links[data-astro-cid-3ef6ksr2],.social-links[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{display:flex}@media (max-width: 720px){.social-links[data-astro-cid-3ef6ksr2]{display:none}}footer[data-astro-cid-sz7xmlte]{padding:2em 1em 6em;background:linear-gradient(var(--gray-gradient)) no-repeat;color:rgb(var(--gray));text-align:center}.social-links[data-astro-cid-sz7xmlte]{display:flex;justify-content:center;gap:1em;margin-top:1em}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]{text-decoration:none;color:rgb(var(--gray))}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]:hover{color:rgb(var(--gray-dark))}
+.statement[data-astro-cid-uffxixac]{font-size:10px;color:gray}@media (max-width: 640px){.statement[data-astro-cid-uffxixac]{font-size:6px;color:gray}}
+</style></head> <body> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <!--<h2><a href="/">{SITE_TITLE}</a></h2>--> <h2 data-astro-cid-3ef6ksr2><a style="padding-left:0;color:blue;" href="/" data-astro-cid-3ef6ksr2>Ge Yuxu<br data-astro-cid-3ef6ksr2>AI & Engineering</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blog/1" class="active" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/series" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Series </a>  <a href="/projects" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Projects </a>  </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://github.com/geyuxu" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://www.linkedin.com/in/geyuxu/" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's LinkedIn profile</span> <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" data-astro-cid-3ef6ksr2> <path fill="currentColor" d="M20.447 20.452H17.2v-5.569c0-1.328-.025-3.039-1.852-3.039-1.853 0-2.136 1.447-2.136 2.942v5.666h-3.248V9h3.122v1.561h.045c.435-.823 1.498-1.688 3.083-1.688 3.295 0 3.903 2.17 3.903 4.989v6.59zM5.337 7.433a1.882 1.882 0 110-3.764 1.882 1.882 0 010 3.764zm1.626 13.019H3.708V9h3.255v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.222 0z" data-astro-cid-3ef6ksr2></path> </svg> </a> </div> </nav> <!-- Microsoft Clarity --> <script type="text/javascript">
+		(function(c,l,a,r,i,t,y){
+			c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+			t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+			y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+		})(window, document, "clarity", "script", "rc2w96osp6");
+	</script> </header>  <main class="page"> <!-- 左侧栏 --> <aside class="sidebar"> <div class="meta"> <b>Python应用日志采集到ELK排查实录</b> <p><time datetime="2022-03-24T16:00:00.000Z"> 2022/03/25 00:00:00 </time></p>   </div> <hr> <br> </aside> <!-- 右侧正文区域（flex 居中） --> <div class="content-wrapper"> <article class="prose">  <nav class="toc"><ol class="toc-level toc-level-1"><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#1-验证-filebeat-inputs">1. 验证 Filebeat inputs</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#2-临时软链压测">2. 临时软链压测</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#3-溯源后缀--neo">3. 溯源“后缀 -neo”</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#python-端结构化日志">Python 端结构化日志</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#filebeat-动态拾取">Filebeat 动态拾取</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#日志落-es">日志落 ES</a></li></ol></nav><h1 id="背景"><a aria-hidden="true" tabindex="-1" href="#背景"><span class="icon icon-link"></span></a>背景</h1>
+<p>在一个典型的分布式服务集群里，我们把应用日志统一扔进 <strong>ELK</strong>（Elasticsearch + Logstash + Kibana）做检索与可视化。本篇记录一次「日志写到了文件却进不了 ELK」的现场排查。</p>
+<h1 id="现象描述"><a aria-hidden="true" tabindex="-1" href="#现象描述"><span class="icon icon-link"></span></a>现象描述</h1>
+<ul>
+<li>线上 Dashboard 空空如也，Kibana 查看索引模板，没有任何新数据进来</li>
+<li>登录到容器，<code>tail -f /var/log/my_service/app.log</code> 能实时刷日志</li>
+<li>集群中其他服务（名称不含 “-neo” 后缀）一切正常</li>
+</ul>
+<h1 id="排查思路"><a aria-hidden="true" tabindex="-1" href="#排查思路"><span class="icon icon-link"></span></a>排查思路</h1>
+<ul>
+<li>「文件有 – ES 无」= 中间 Filebeat / Logstash 链路有问题</li>
+<li>先看 Filebeat 是否 <strong>“看见”</strong> 文件</li>
+<li>再看 Logstash 是否 <strong>“接到”</strong> 事件</li>
+<li>最后看 Elasticsearch 是否 <strong>“收录”</strong> 索引</li>
+</ul>
+<h1 id="排查过程"><a aria-hidden="true" tabindex="-1" href="#排查过程"><span class="icon icon-link"></span></a>排查过程</h1>
+<h2 id="1-验证-filebeat-inputs"><a aria-hidden="true" tabindex="-1" href="#1-验证-filebeat-inputs"><span class="icon icon-link"></span></a>1. 验证 Filebeat <code>inputs</code></h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">filebeat.inputs</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">  - </span><span style="color:#85E89D">type</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">log</span></span>
+<span class="line"><span style="color:#85E89D">    paths</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">      - </span><span style="color:#9ECBFF">/var/log/my_service/*.log</span></span>
+<span class="line"><span style="color:#85E89D">    fields</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      project</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">my_service</span></span></code></pre>
+<ul>
+<li>实际服务器日志目录是 <code>/var/log/my_service-neo/</code></li>
+<li>采集规则却写死为 <code>my_service</code> → <strong>路径失配</strong></li>
+</ul>
+<h2 id="2-临时软链压测"><a aria-hidden="true" tabindex="-1" href="#2-临时软链压测"><span class="icon icon-link"></span></a>2. 临时软链压测</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">ln</span><span style="color:#79B8FF"> -s</span><span style="color:#9ECBFF"> /var/log/my_service-neo</span><span style="color:#9ECBFF"> /var/log/my_service</span></span></code></pre>
+<ul>
+<li>软链一创建，Kibana 中立刻出现日志 → 路径就是元凶</li>
+<li>证明 Filebeat、Logstash、ES 本身都没毛病</li>
+</ul>
+<h2 id="3-溯源后缀--neo"><a aria-hidden="true" tabindex="-1" href="#3-溯源后缀--neo"><span class="icon icon-link"></span></a>3. 溯源“后缀 -neo”</h2>
+<ul>
+<li>Python 服务的工程名在 <code>settings.py</code> 里手动改过
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#79B8FF">SERVICE_NAME</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "my_service-neo"</span></span></code></pre>
+</li>
+<li>部署流水线和 Filebeat 规则却还是历史名 <code>my_service</code></li>
+</ul>
+<blockquote>
+<p><strong>工程名改动</strong> 如果没同步到所有配置，就一定埋雷。</p>
+</blockquote>
+<h1 id="根因分析"><a aria-hidden="true" tabindex="-1" href="#根因分析"><span class="icon icon-link"></span></a>根因分析</h1>
+<ul>
+<li>单节点可写日志 → Python <code>logging</code> 配置 OK</li>
+<li>Filebeat 不认路径 → 采集规则老化</li>
+<li>上游自动化脚本、K8s ConfigMap 同样硬编码了旧路径</li>
+</ul>
+<h1 id="解决方案"><a aria-hidden="true" tabindex="-1" href="#解决方案"><span class="icon icon-link"></span></a>解决方案</h1>
+<ul>
+<li><strong>方案 A：回滚工程名</strong>
+<ul>
+<li>简单粗暴，但需要全量回退 Tag、镜像仓库名，不推荐</li>
+</ul>
+</li>
+<li><strong>方案 B：升级采集规则</strong> ✅
+<ul>
+<li>把 Filebeat、Logstash、自定义监控统统改为新工程名</li>
+<li>全链路保持单一真名</li>
+</ul>
+</li>
+</ul>
+<p>下文以方案 B 为例。</p>
+<h2 id="python-端结构化日志"><a aria-hidden="true" tabindex="-1" href="#python-端结构化日志"><span class="icon icon-link"></span></a>Python 端结构化日志</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> logging</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> logging.config</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> json_log_formatter</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">formatter </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> json_log_formatter.JSONFormatter()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">LOG_CONFIG</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#9ECBFF">    "version"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">    "formatters"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">        "json"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">            "class"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"json_log_formatter.JSONFormatter"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">            "format"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">%(asctime)s</span><span style="color:#79B8FF"> %(levelname)s</span><span style="color:#79B8FF"> %(name)s</span><span style="color:#79B8FF"> %(message)s</span><span style="color:#9ECBFF">"</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#9ECBFF">    "handlers"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">        "file"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">            "class"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"logging.handlers.TimedRotatingFileHandler"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">            "filename"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"/var/log/my_service-neo/app.log"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">            "when"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"midnight"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">            "backupCount"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">7</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">            "formatter"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"json"</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">    },</span></span>
+<span class="line"><span style="color:#9ECBFF">    "root"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">        "handlers"</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">"file"</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#9ECBFF">        "level"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"INFO"</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">logging.config.dictConfig(</span><span style="color:#79B8FF">LOG_CONFIG</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">logger </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> logging.getLogger(</span><span style="color:#79B8FF">__name__</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">logger.info({</span><span style="color:#9ECBFF">"event"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"service_start"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"version"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"1.2.3"</span><span style="color:#E1E4E8">})</span></span></code></pre>
+<ul>
+<li>使用 <code>json_log_formatter</code> 把日志变成纯 JSON，Filebeat 解析无痛</li>
+<li><code>filename</code> 含新工程名 <code>my_service-neo</code></li>
+</ul>
+<h2 id="filebeat-动态拾取"><a aria-hidden="true" tabindex="-1" href="#filebeat-动态拾取"><span class="icon icon-link"></span></a>Filebeat 动态拾取</h2>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">filebeat.autodiscover</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  providers</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">    - </span><span style="color:#85E89D">type</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">kubernetes</span></span>
+<span class="line"><span style="color:#85E89D">      hints.enabled</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">      templates</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        - </span><span style="color:#85E89D">condition</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">            equals</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">              kubernetes.labels.app</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">my_service-neo</span></span>
+<span class="line"><span style="color:#85E89D">          config</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">            - </span><span style="color:#85E89D">type</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">log</span></span>
+<span class="line"><span style="color:#85E89D">              paths</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">                - </span><span style="color:#9ECBFF">/var/log/my_service-neo/*.log</span></span>
+<span class="line"><span style="color:#85E89D">              json.keys_under_root</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">              json.add_error_key</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span></code></pre>
+<ul>
+<li>只要 Pod 有 <code>app=my_service-neo</code> 标签，日志就能被采集</li>
+<li>彻底去掉硬编码</li>
+</ul>
+<h2 id="日志落-es"><a aria-hidden="true" tabindex="-1" href="#日志落-es"><span class="icon icon-link"></span></a>日志落 ES</h2>
+<ul>
+<li>Logstash 保持 <code>json</code> codec，按日期走 ILM</li>
+<li>Elasticsearch 索引命名：<code>my_service-neo-%{+yyyy.MM.dd}</code></li>
+<li>Kibana Saved Search 更新索引模式即可</li>
+</ul>
+<h1 id="经验总结"><a aria-hidden="true" tabindex="-1" href="#经验总结"><span class="icon icon-link"></span></a>经验总结</h1>
+<ul>
+<li><strong>工程名/路径改动要全链路跟</strong></li>
+<li><strong>日志用 JSON</strong>，字段少但结构稳</li>
+<li><strong>Filebeat 用 Autodiscover</strong>，避免人肉维护 YAML</li>
+<li><strong>监控采集量</strong>：Filebeat <code>event.published_time</code> 有助观察丢包</li>
+<li><strong>变更前加预案</strong>：灰度验证 + 手动链路压测是最快的保险</li>
+</ul> <html lang="en" data-astro-cid-uffxixac> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/devops/20220325_python%E5%BA%94%E7%94%A8%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86%E5%88%B0elk%E6%8E%92%E6%9F%A5%E5%AE%9E%E5%BD%95.html"><!-- Primary Meta Tags --><title>Ge Yuxu • AI &amp; Engineering</title><meta name="title" content="Ge Yuxu • AI &#38; Engineering"><meta name="description" content="Welcome to my blog!"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/devops/20220325_python%E5%BA%94%E7%94%A8%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86%E5%88%B0elk%E6%8E%92%E6%9F%A5%E5%AE%9E%E5%BD%95.html"><meta property="og:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="og:description" content="Welcome to my blog!"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/devops/20220325_python%E5%BA%94%E7%94%A8%E6%97%A5%E5%BF%97%E9%87%87%E9%9B%86%E5%88%B0elk%E6%8E%92%E6%9F%A5%E5%AE%9E%E5%BD%95.html"><meta property="twitter:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="twitter:description" content="Welcome to my blog!"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script></head> <body data-astro-cid-uffxixac>  <div class="statement" data-astro-cid-uffxixac> <blockquote data-astro-cid-uffxixac> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>脱敏说明</strong>：本文所有出现的表名、字段名、接口地址、变量名、IP地址及示例数据等均非真实，
+    仅用于阐述技术思路与实现步骤，示例代码亦非公司真实代码。
+    示例方案亦非公司真实完整方案，仅为本人记忆总结，用于技术学习探讨。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;文中所示任何标识符并不对应实际生产环境中的名称或编号。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;示例&nbsp;SQL、脚本、代码及数据等均为演示用途，不含真实业务数据，也不具备直接运行或复现的完整上下文。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;读者若需在实际项目中参考本文方案，请结合自身业务场景及数据安全规范，使用符合内部命名和权限控制的配置。</p> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>版权声明</strong>：本文版权归原作者所有，未经作者事先书面许可，任何单位或个人不得以任何方式复制、转载、摘编或用于商业用途。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;若需非商业性引用或转载本文内容，请务必注明出处并保持内容完整。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;对因商业使用、篡改或不当引用本文内容所产生的法律纠纷，作者保留追究法律责任的权利。<br data-astro-cid-uffxixac><br data-astro-cid-uffxixac> <em data-astro-cid-uffxixac>Copyright&nbsp;©&nbsp;1989–Present&nbsp;Ge&nbsp;Yuxu.&nbsp;All&nbsp;Rights&nbsp;Reserved.</em></p> </blockquote> </div></body></html>  </article> </div> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2025 All rights reserved.
+</footer>  </body></html>

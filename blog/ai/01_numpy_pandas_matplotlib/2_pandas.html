@@ -1,0 +1,415 @@
+<!DOCTYPE html><html lang="zh"> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/ai/01_numpy_pandas_matplotlib/2_pandas.html"><!-- Primary Meta Tags --><title>Pandas 学习笔记：核心对象与常用操作</title><meta name="title" content="Pandas 学习笔记：核心对象与常用操作"><meta name="description"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/ai/01_numpy_pandas_matplotlib/2_pandas.html"><meta property="og:title" content="Pandas 学习笔记：核心对象与常用操作"><meta property="og:description"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/ai/01_numpy_pandas_matplotlib/2_pandas.html"><meta property="twitter:title" content="Pandas 学习笔记：核心对象与常用操作"><meta property="twitter:description"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script><script is:global>
+	window.addEventListener('DOMContentLoaded', () => {
+		$('.toc ol').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'margin': 0,
+		'padding-left': 0,       // 可按需调整
+		});
+		$('.toc ol > li').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'padding-left': 10
+		});
+        $('.sidebar').append($('.toc'));
+      });
+	</script><link rel="stylesheet" href="/_astro/_slug_.BvCO7WHQ.css">
+<style>a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astro-cid-eimmu3lg].active{font-weight:bolder;text-decoration:underline}header[data-astro-cid-3ef6ksr2]{margin:0;padding:0 1em;background:#fff;box-shadow:0 2px 8px rgba(var(--black),5%)}h2[data-astro-cid-3ef6ksr2]{margin:0;font-size:1em}h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2],h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none}nav[data-astro-cid-3ef6ksr2]{display:flex;align-items:center;justify-content:space-between}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{padding:1em .5em;color:var(--black);border-bottom:4px solid transparent;text-decoration:none}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none;border-bottom-color:var(--accent)}.social-links[data-astro-cid-3ef6ksr2],.social-links[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{display:flex}@media (max-width: 720px){.social-links[data-astro-cid-3ef6ksr2]{display:none}}footer[data-astro-cid-sz7xmlte]{padding:2em 1em 6em;background:linear-gradient(var(--gray-gradient)) no-repeat;color:rgb(var(--gray));text-align:center}.social-links[data-astro-cid-sz7xmlte]{display:flex;justify-content:center;gap:1em;margin-top:1em}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]{text-decoration:none;color:rgb(var(--gray))}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]:hover{color:rgb(var(--gray-dark))}
+.statement[data-astro-cid-uffxixac]{font-size:10px;color:gray}@media (max-width: 640px){.statement[data-astro-cid-uffxixac]{font-size:6px;color:gray}}
+</style></head> <body> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <!--<h2><a href="/">{SITE_TITLE}</a></h2>--> <h2 data-astro-cid-3ef6ksr2><a style="padding-left:0;color:blue;" href="/" data-astro-cid-3ef6ksr2>Ge Yuxu<br data-astro-cid-3ef6ksr2>AI & Engineering</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blog/1" class="active" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/series" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Series </a>  <a href="/projects" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Projects </a>  </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://github.com/geyuxu" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://www.linkedin.com/in/geyuxu/" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's LinkedIn profile</span> <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" data-astro-cid-3ef6ksr2> <path fill="currentColor" d="M20.447 20.452H17.2v-5.569c0-1.328-.025-3.039-1.852-3.039-1.853 0-2.136 1.447-2.136 2.942v5.666h-3.248V9h3.122v1.561h.045c.435-.823 1.498-1.688 3.083-1.688 3.295 0 3.903 2.17 3.903 4.989v6.59zM5.337 7.433a1.882 1.882 0 110-3.764 1.882 1.882 0 010 3.764zm1.626 13.019H3.708V9h3.255v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.222 0z" data-astro-cid-3ef6ksr2></path> </svg> </a> </div> </nav> <!-- Microsoft Clarity --> <script type="text/javascript">
+		(function(c,l,a,r,i,t,y){
+			c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+			t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+			y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+		})(window, document, "clarity", "script", "rc2w96osp6");
+	</script> </header>  <main class="page"> <!-- 左侧栏 --> <aside class="sidebar"> <div class="meta"> <b>Pandas 学习笔记：核心对象与常用操作</b> <p><time datetime="2023-04-23T04:00:00.000Z"> 2023/04/23 12:00:00 </time></p>   <p class="series_title" style="margin-top:1rem;font-weight:bold;">系列：<a href="/series/人工智能学习笔记/">人工智能学习笔记</a></p> <ul class="series-list"> <li>🍉&nbsp;<a href="/blog/ai/01_numpy_pandas_matplotlib/1_numpy/">学习笔记-Numpy基础与实战入门</a></li><li>🍉&nbsp;<a href="/blog/ai/01_numpy_pandas_matplotlib/2_pandas/">Pandas 学习笔记：核心对象与常用操作</a></li><li>🍉&nbsp;<a href="/blog/ai/01_numpy_pandas_matplotlib/3_matplotlib/">matplotlib学习笔记</a></li><li>🍉&nbsp;<a href="/blog/ai/02_machine_learning/01_数据预处理/">机器学习中的数据预处理</a></li> </ul>  </div> <hr> <br> </aside> <!-- 右侧正文区域（flex 居中） --> <div class="content-wrapper"> <article class="prose">  <nav class="toc"><ol class="toc-level toc-level-1"><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#认识-series">认识 Series</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#series-的数据访问">Series 的数据访问</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#dataframe-是什么">DataFrame 是什么</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#dataframe-的属性和基本操作">DataFrame 的属性和基本操作</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#列操作-crud">列操作 CRUD</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#行操作-crud">行操作 CRUD</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#csv-文件读写实践">CSV 文件读写实践</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#总结">总结</a></li></ol></nav><h1 id="pandas-学习笔记核心对象与常用操作"><a aria-hidden="true" tabindex="-1" href="#pandas-学习笔记核心对象与常用操作"><span class="icon icon-link"></span></a>Pandas 学习笔记：核心对象与常用操作</h1>
+<p>Pandas 是 Python 强大的数据分析库，就像是 Python 世界里的 Excel 表格帮手。对于有一定 Python 基础的工程师，掌握 Pandas 的两个核心数据结构——Series 和 DataFrame，以及常见的增删改查操作，是迈入数据分析世界的重要一步。本文以实例代码为主线，用亲切自然的语言一步步介绍 Pandas 的基础用法，并辅以实战中常见问题的提示，希望帮助你快速上手。</p>
+<h2 id="认识-series"><a aria-hidden="true" tabindex="-1" href="#认识-series"><span class="icon icon-link"></span></a>认识 Series</h2>
+<p>Series 是 Pandas 提供的一种一维数组数据结构，它带有标签索引（index），有点类似于带索引的数据列表。一方面，Series 可以看作带索引的 NumPy 一维数组；另一方面，它也有点像 Python 的字典（dict），因为可以通过键值对形式查找数据。不过 Series 更强大：它支持向量化运算，且保留了数据顺序。</p>
+<p>简单来说，可以把 Series 想象成 Excel 表格中的一列数据，它有两部分组成：一是索引（这一列每个数据的“行标签”），二是值。下面通过几个例子来创建 Series 并查看其内容。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> pandas </span><span style="color:#F97583">as</span><span style="color:#E1E4E8"> pd</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> numpy </span><span style="color:#F97583">as</span><span style="color:#E1E4E8"> np</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 创建一个最简单的 Series：不指定索引时，会自动使用0,1,2,...作为索引</span></span>
+<span class="line"><span style="color:#E1E4E8">s1 </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> pd.Series([</span><span style="color:#79B8FF">10</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">20</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">30</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">40</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(s1)</span></span>
+<span class="line"><span style="color:#6A737D"># 输出:</span></span>
+<span class="line"><span style="color:#6A737D"># 0    10</span></span>
+<span class="line"><span style="color:#6A737D"># 1    20</span></span>
+<span class="line"><span style="color:#6A737D"># 2    30</span></span>
+<span class="line"><span style="color:#6A737D"># 3    40</span></span>
+<span class="line"><span style="color:#6A737D"># dtype: int64</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 创建 Series 时指定索引</span></span>
+<span class="line"><span style="color:#E1E4E8">s2 </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> pd.Series([</span><span style="color:#79B8FF">100</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">98</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">67</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">23</span><span style="color:#E1E4E8">], </span><span style="color:#FFAB70">index</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">'zs'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'ls'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'ww'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'sl'</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(s2)</span></span>
+<span class="line"><span style="color:#6A737D"># 输出:</span></span>
+<span class="line"><span style="color:#6A737D"># zs    100</span></span>
+<span class="line"><span style="color:#6A737D"># ls     98</span></span>
+<span class="line"><span style="color:#6A737D"># ww     67</span></span>
+<span class="line"><span style="color:#6A737D"># sl     23</span></span>
+<span class="line"><span style="color:#6A737D"># dtype: int64</span></span>
+<span class="line"><span style="color:#6A737D"># 这是一个 Series：左边是索引(index)，右边是对应的值，dtype 表示值的数据类型</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 通过字典创建 Series，键会成为索引，值成为数据</span></span>
+<span class="line"><span style="color:#E1E4E8">d </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {</span><span style="color:#9ECBFF">'zs'</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">100</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'ls'</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">98</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'ww'</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">67</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'sl'</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">23</span><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">s3 </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> pd.Series(d)</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(s3)</span></span>
+<span class="line"><span style="color:#6A737D"># 输出与上面 s2 相同（字典键的插入顺序即索引顺序）</span></span></code></pre>
+<p>上面代码展示了三种创建 Series 的方式：直接由列表创建（可以指定索引，也可以不指定用默认索引0,1,2,…），以及由字典创建。一般来说，通过列表创建可以灵活指定索引顺序，而通过字典创建会使用字典的键作为索引（顺序为插入顺序）。两者效果类似，都得到一个带索引的一维数据序列。</p>
+<p>还有一种快捷方式，如果想要创建内容全部相同的 Series，可以直接传入一个常数值和索引。例如下面代码将生成10个元素都为0.2的Series：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D"># 创建一个包含10个0.2的 Series</span></span>
+<span class="line"><span style="color:#E1E4E8">s4 </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> pd.Series(</span><span style="color:#79B8FF">0.2</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">index</span><span style="color:#F97583">=</span><span style="color:#79B8FF">range</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">10</span><span style="color:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(s4.head(</span><span style="color:#79B8FF">3</span><span style="color:#E1E4E8">))  </span><span style="color:#6A737D"># 先看头3行</span></span>
+<span class="line"><span style="color:#6A737D"># 输出:</span></span>
+<span class="line"><span style="color:#6A737D"># 0    0.2</span></span>
+<span class="line"><span style="color:#6A737D"># 1    0.2</span></span>
+<span class="line"><span style="color:#6A737D"># 2    0.2</span></span>
+<span class="line"><span style="color:#6A737D"># dtype: float64</span></span></code></pre>
+<p>可以看到，s4的每个元素都是0.2，指数0到9。head(3)方法返回前3行，便于我们预览数据。</p>
+<h3 id="series-的数据访问"><a aria-hidden="true" tabindex="-1" href="#series-的数据访问"><span class="icon icon-link"></span></a>Series 的数据访问</h3>
+<p>Series 有点类似于 Python 的列表和字典的结合，在访问数据时既可以用位置下标也可以用标签索引。需要注意的是：Series同时支持基于位置和基于标签的索引方式，这两套索引彼此独立。</p>
+<ul>
+<li>位置索引（下标）：按照元素的位置顺序，从0开始计数。例如 s[0] 取第一个元素，s[1:3] 取切片。</li>
+<li>标签索引（index）：按照我们定义的索引值来取。例如索引是字符串 ‘zs’，用 s[‘zs’] 来取对应的值。</li>
+</ul>
+<p>下面用具体例子说明 Series 的两种索引方法：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">s </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> pd.Series([</span><span style="color:#79B8FF">100</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">78</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">98</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">79</span><span style="color:#E1E4E8">], </span><span style="color:#FFAB70">index</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">'zs'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'ls'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'ww'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'sl'</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#6A737D"># 这个 Series 的索引为 'zs','ls','ww','sl'，对应的值如列表所给</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 按位置索引访问</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(s[</span><span style="color:#79B8FF">3</span><span style="color:#E1E4E8">])      </span><span style="color:#6A737D"># 第4个元素，位置从0开始计数</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(s[:</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">])     </span><span style="color:#6A737D"># 前2个元素的切片（不包含位置2）</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(s[[</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">]]) </span><span style="color:#6A737D"># 位置0和2的元素，返回一个新的 Series</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 按标签索引访问</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(s[</span><span style="color:#9ECBFF">'sl'</span><span style="color:#E1E4E8">])              </span><span style="color:#6A737D"># 索引标签为 'sl' 的元素</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(s[</span><span style="color:#9ECBFF">'zs'</span><span style="color:#E1E4E8">:</span><span style="color:#9ECBFF">'ww'</span><span style="color:#E1E4E8">])         </span><span style="color:#6A737D"># 按标签切片，包含 'zs' 到 'ww'（注意包含末端）</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(s[[</span><span style="color:#9ECBFF">'zs'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'ww'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'sl'</span><span style="color:#E1E4E8">]])</span><span style="color:#6A737D"># 指定标签列表，返回多个元素</span></span></code></pre>
+<p>上述代码中，s[3] 通过位置获取到了第4个元素 79，而 s[‘sl’] 则通过标签获取到了对应的值 79。区别：切片时，s[:2]按位置取不包括索引2，而 s[‘zs’:‘ww’]按标签取则是包含 ‘ww’ 这个索引的（也就是包含切片区间的末端）。这点与 Python 基本切片规则不同，需要特别注意。</p>
+<p>另外，Series 不支持像 Python 列表那样的负索引。也就是说，s[-1] 并不能取最后一个元素（除非你的索引恰好有 -1 这个标签）。如果需要取最后一个元素，可以使用 s.iloc[-1]（iloc 是后面会介绍的按位置选取的通用方式）。总之，Series 的下标索引只有正向的，没有反向的。</p>
+<p>我们还可以查看 Series 的一些属性来了解数据结构：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(s.index)   </span><span style="color:#6A737D"># Index(['zs', 'ls', 'ww', 'sl'], dtype='object')</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(s.values)  </span><span style="color:#6A737D"># [100  78  98  79]，值本身是一个 numpy.ndarray</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(s.dtype)   </span><span style="color:#6A737D"># int64，值的数据类型</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(s.shape)   </span><span style="color:#6A737D"># (4,)，Series 的形状，相当于长度为4的一维数组</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(s.size)    </span><span style="color:#6A737D"># 4，元素个数</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(s.ndim)    </span><span style="color:#6A737D"># 1，维度，对于Series永远是1</span></span></code></pre>
+<p>index 属性返回一个 Index 对象，包含 Series 的索引列表；values 则返回一个包含所有值的 NumPy 数组。在这个例子中，值全是整数，所以 dtype 是 int64。如果数据包含浮点或出现 NaN（缺失值），dtype 可能变为 float64。shape、size、ndim 等属性和 NumPy 的数组类似，分别表示数据的形状、元素数量和维度。</p>
+<h2 id="dataframe-是什么"><a aria-hidden="true" tabindex="-1" href="#dataframe-是什么"><span class="icon icon-link"></span></a>DataFrame 是什么</h2>
+<p>DataFrame 是 Pandas 中更为常用的二维表结构，可以理解为“带行标签和列标签的表格数据”。如果说 Series 有点像 Excel 中的一列，那么 DataFrame 就像整个表格（由多列组成），同时拥有行索引（index）和列名（columns）。DataFrame 也可以看作由多个共享同一个索引的 Series 组成的字典，每一列是一个 Series，列名是字典的键。</p>
+<p>举个例子，一个 DataFrame 可以用来表示多个人的若干属性，例如姓名、年龄、性别，每一列是一种属性，每一行代表一个人。我们可以使用多种方式来构造 DataFrame，常见的方法包括：由字典、由列表组成的列表、由多个 Series 等。下面通过代码来演示 DataFrame 的创建和基本属性。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> pandas </span><span style="color:#F97583">as</span><span style="color:#E1E4E8"> pd</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 通过字典创建 DataFrame，每个键代表一列</span></span>
+<span class="line"><span style="color:#E1E4E8">data </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#9ECBFF">    'Name'</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">'Tom'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'Jerry'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'Jack'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'Rose'</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#9ECBFF">    'Age'</span><span style="color:#E1E4E8">: [</span><span style="color:#79B8FF">18</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">18</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">20</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">20</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">df </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> pd.DataFrame(data)</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df)</span></span>
+<span class="line"><span style="color:#6A737D"># 输出:</span></span>
+<span class="line"><span style="color:#6A737D">#    Name  Age</span></span>
+<span class="line"><span style="color:#6A737D"># 0   Tom   18</span></span>
+<span class="line"><span style="color:#6A737D"># 1 Jerry   18</span></span>
+<span class="line"><span style="color:#6A737D"># 2  Jack   20</span></span>
+<span class="line"><span style="color:#6A737D"># 3  Rose   20</span></span></code></pre>
+<p>上面用字典创建了一个简单的 DataFrame df，包含两列：Name 和 Age。因为我们没有指定索引，Pandas 自动用了默认的整数索引 0,1,2,3。可以看到 DataFrame 打印输出时，会显示行索引和列名，以及每个单元格的数据。</p>
+<p>我们也可以指定自己的索引。例如，如果我们想用 a, b, c, d 作为每行的索引标签，可以传入参数 index= 来指定；另外用 columns= 可以指定列名的顺序。下面我们构造一个稍微复杂一点的 DataFrame：多加一列 Gender，并且让不同列来自不同长度的 Series，以演示 Pandas 会如何对齐数据。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D"># 用字典包含多个 Series 来创建 DataFrame，各 Series 按索引自动对齐</span></span>
+<span class="line"><span style="color:#E1E4E8">data2 </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#9ECBFF">    'Name'</span><span style="color:#E1E4E8">: pd.Series([</span><span style="color:#9ECBFF">'Tom'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'Jerry'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'Jack'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'Rose'</span><span style="color:#E1E4E8">], </span><span style="color:#FFAB70">index</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">'a'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'b'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'c'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'d'</span><span style="color:#E1E4E8">]),</span></span>
+<span class="line"><span style="color:#9ECBFF">    'Age'</span><span style="color:#E1E4E8">: pd.Series([</span><span style="color:#79B8FF">18</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">18</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">20</span><span style="color:#E1E4E8">], </span><span style="color:#FFAB70">index</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">'a'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'b'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'c'</span><span style="color:#E1E4E8">]),      </span><span style="color:#6A737D"># 少了索引 'd'</span></span>
+<span class="line"><span style="color:#9ECBFF">    'Gender'</span><span style="color:#E1E4E8">: pd.Series([</span><span style="color:#9ECBFF">'M'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'M'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'F'</span><span style="color:#E1E4E8">], </span><span style="color:#FFAB70">index</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">'a'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'c'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'d'</span><span style="color:#E1E4E8">]) </span><span style="color:#6A737D"># 少了索引 'b'</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">df2 </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> pd.DataFrame(data2)</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df2)</span></span>
+<span class="line"><span style="color:#6A737D"># 输出:</span></span>
+<span class="line"><span style="color:#6A737D">#   Name   Age Gender</span></span>
+<span class="line"><span style="color:#6A737D"># a   Tom  18.0      M</span></span>
+<span class="line"><span style="color:#6A737D"># b Jerry  18.0    NaN</span></span>
+<span class="line"><span style="color:#6A737D"># c  Jack  20.0      F</span></span>
+<span class="line"><span style="color:#6A737D"># d  Rose   NaN      M</span></span></code></pre>
+<p>在这个 df2 DataFrame 中，我们指定了索引为 ‘a’, ‘b’, ‘c’, ‘d’。Name 列有这四个索引的值，但 Age 列缺少 ‘d’的值，Gender 列缺少 ‘b’的值。Pandas 会根据索引自动对齐不同列的数据：对于缺失的位置以 NaN 填充。上面输出中，索引 b 的 Gender 显示为 NaN（因为没有提供 b 对应的 Gender），索引 d 的 Age 为 NaN（没有提供 d 对应的 Age）。NaN 表示缺失值，在 Pandas 中是一种特殊的浮点型值。</p>
+<blockquote>
+<p>注意： 由上述例子也可以看出，DataFrame 中每列数据可以是不同类型（Name 是字符串，Age 是数字，Gender 是字符串）。当某列出现 NaN 时，该列会被Upcast为浮点型，因为 NaN 被视作浮点类型特殊值。例如 Age 列本来是整数，一旦出现 NaN，就变成了 float。</p>
+</blockquote>
+<p>如果我们不想让某些值缺失，可以在创建 DataFrame 时提供完整的数据，对齐索引。或者创建后再手动填充缺失值。但这些属于后续处理范畴。</p>
+<h3 id="dataframe-的属性和基本操作"><a aria-hidden="true" tabindex="-1" href="#dataframe-的属性和基本操作"><span class="icon icon-link"></span></a>DataFrame 的属性和基本操作</h3>
+<p>类似于 Series，DataFrame 提供了许多属性和方法方便我们了解数据集的总体情况：</p>
+<ul>
+<li>df.index：获取行索引(Index对象)。</li>
+<li>df.columns：获取列名(Index对象)。</li>
+<li>df.values：以二维 numpy 数组的形式获取表格中的值。</li>
+<li>df.shape：返回 (行数, 列数) 的元组。</li>
+<li>df.dtypes：获取每一列的数据类型。</li>
+<li>df.size：返回元素总数 (行数 × 列数)。</li>
+<li>df.empty：布尔值，表示 DataFrame 是否为空（没有任何数据）。</li>
+<li>df.head(n)：查看前 n 行数据（默认 n=5）。</li>
+<li>df.tail(n)：查看最后 n 行数据。</li>
+<li>df.describe()：对数值列进行统计汇总（计数、均值、标准差、最小值、四分位数等）。</li>
+<li>df.T：获取转置的 DataFrame（行列互换）。</li>
+</ul>
+<p>举例来说，我们可以查看 df2 的一些基本信息：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df2.index)    </span><span style="color:#6A737D"># Index(['a', 'b', 'c', 'd'], dtype='object')</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df2.columns)  </span><span style="color:#6A737D"># Index(['Name', 'Age', 'Gender'], dtype='object')</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df2.shape)    </span><span style="color:#6A737D"># (4, 3) -> 4 行 3 列</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df2.dtypes)   </span></span>
+<span class="line"><span style="color:#6A737D"># Name      object</span></span>
+<span class="line"><span style="color:#6A737D"># Age      float64</span></span>
+<span class="line"><span style="color:#6A737D"># Gender    object</span></span>
+<span class="line"><span style="color:#6A737D"># dtype: object</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df2.head(</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#6A737D">#   Name   Age Gender</span></span>
+<span class="line"><span style="color:#6A737D"># a   Tom  18.0      M</span></span>
+<span class="line"><span style="color:#6A737D"># b Jerry  18.0    NaN</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df2.describe())</span></span>
+<span class="line"><span style="color:#6A737D">#              Age</span></span>
+<span class="line"><span style="color:#6A737D"># count   3.000000</span></span>
+<span class="line"><span style="color:#6A737D"># mean   18.666667</span></span>
+<span class="line"><span style="color:#6A737D"># std     1.154701</span></span>
+<span class="line"><span style="color:#6A737D"># min    18.000000</span></span>
+<span class="line"><span style="color:#6A737D"># 25%    18.000000</span></span>
+<span class="line"><span style="color:#6A737D"># 50%    18.000000</span></span>
+<span class="line"><span style="color:#6A737D"># 75%    19.000000</span></span>
+<span class="line"><span style="color:#6A737D"># max    20.000000</span></span></code></pre>
+<p>这里我们看到：index 和 columns 列出了 DataFrame 的索引和列标签，shape说明有4行3列。dtypes表明 Name 和 Gender 是object类型（字符串），Age是float64。head(2)输出了前两行数据，describe()则对 Age 列给出了统计摘要（因为 Name 和 Gender 非数字列被自动忽略）。</p>
+<p>了解了 Series 和 DataFrame 的基本结构，下面我们进入更具体的增删改查操作，以 DataFrame 为中心进行讲解。在以下示例中，我们将继续使用刚才创建的 df2 来演示。</p>
+<h2 id="列操作-crud"><a aria-hidden="true" tabindex="-1" href="#列操作-crud"><span class="icon icon-link"></span></a>列操作 CRUD</h2>
+<p>通常我们需要对 DataFrame 的列进行各种操作，例如读取某几列数据、添加新列、修改已有列或者删除列。DataFrame 在列操作上非常类似于 Python 的字典：把 DataFrame 当做一个字典的话，键就是列名，值是一列数据（一个 Series）。因此许多列操作可以类比为字典操作来记忆。</p>
+<p>下面我们按照查（读取）、增（添加）、改（修改）、删（删除）的顺序，演示列的常见操作。</p>
+<p>查（读取列）： DataFrame 可以通过列名来获取列数据。最简单的方式是使用方括号 df[‘列名’]，这会返回一个 Series，包含该列的所有数据和对应的行索引。另外，也可以传入一个列名列表 df[[‘列名1’,‘列名2’]] 来一次获取多列数据（此时返回一个新的 DataFrame）。需要注意的是，不能直接使用切片 df[‘col1’:‘col3’] 来选取多列，方括号中如果给的是切片会被解释为行切片（这是为了保持语义简单一致，方括号直接索引默认为列，切片符号默认为行切片，这点细节稍微有点反直觉）。</p>
+<p>我们来看具体例子：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">df </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> df2  </span><span style="color:#6A737D"># 继续使用前面的 df2: 有 Name, Age, Gender 三列，索引 a,b,c,d</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 访问单列数据</span></span>
+<span class="line"><span style="color:#E1E4E8">name_col </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> df[</span><span style="color:#9ECBFF">'Name'</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(name_col)           </span><span style="color:#6A737D"># 获取 Name 列（类型为 Series）</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 访问多列数据</span></span>
+<span class="line"><span style="color:#E1E4E8">subset </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> df[[</span><span style="color:#9ECBFF">'Name'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'Age'</span><span style="color:#E1E4E8">]]</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(subset)             </span><span style="color:#6A737D"># 获取 Name 和 Age 两列，返回 DataFrame</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 利用 df.columns 得到列名列表，比如去掉最后一列:</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df[df.columns[:</span><span style="color:#F97583">-</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">]])</span><span style="color:#6A737D"># 获取除最后一列外的所有列</span></span></code></pre>
+<p>输出（省略部分）将展示 name_col 是一个 Series，内容就是每个索引对应的 Name；而 subset 是一个 DataFrame，包含两列 Name 和 Age。最后一行通过 df.columns[:-1] 切片拿到了除最后一列（Gender）以外的列名列表，实现了获取多列的另一种方法。</p>
+<p>值得一提的是，Pandas 允许通过属性访问的方式获取列，例如 df.Name 可以直接得到 Name 列，这跟 df[‘Name’] 是等价的（前提是列名是合法的 Python 标识符且不与现有属性方法同名）。但是如果列名包含空格或特殊字符，或者碰巧和 DataFrame 的方法名冲突，就不能用点属性访问。建议初学者还是使用 df[…] 这种明确的方式。</p>
+<blockquote>
+<p>注意： 如果列名中包含空格，比如 “Total Sales” 这种，不能用 df.Total Sales（会语法错误或解析错误），此时必须用 df[‘Total Sales’] 来访问。同样地，列名包含点号、减号等特殊字符，或列名叫max、count等与DataFrame方法重名，也只能使用 df[‘列名’] 的方式。如果想方便地用点访问，最好的办法是统一修改列名，例如用 df.columns = df.columns.str.replace(’ ’, ’_’) 将空格替换为下划线，或者使用 df.rename 重命名列。</p>
+</blockquote>
+<p>增（添加列）： 向 DataFrame 增加新列也很直观：直接像字典赋值一样 df[‘新列名’] = … 即可。赋值的“…”可以是以下几种：</p>
+<ul>
+<li>一个固定值：则整列都会被这个值填充。</li>
+<li>一个列表或 ndarray：长度需要跟 DataFrame 的行数相等，数据会按顺序填充这一列。</li>
+<li>一个 Pandas 的 Series：如果 Series 的索引能对齐 DataFrame 的索引，那么会根据索引匹配填充，索引没有对应上的位置将出现 NaN。</li>
+</ul>
+<p>也可以一次性添加多列。Pandas 提供了 pd.concat 方法，可以用来把两个DataFrame按列方向拼接（axis=1）从而增加新列。此外，df.assign() 方法也可以同时添加多列，不过这里不展开。下面通过代码演示各种添加列的方式：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D"># 原始 DataFrame 回顾:</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df)</span></span>
+<span class="line"><span style="color:#6A737D">#   Name   Age Gender</span></span>
+<span class="line"><span style="color:#6A737D"># a   Tom  18.0      M</span></span>
+<span class="line"><span style="color:#6A737D"># b Jerry  18.0    NaN</span></span>
+<span class="line"><span style="color:#6A737D"># c  Jack  20.0      F</span></span>
+<span class="line"><span style="color:#6A737D"># d  Rose   NaN      M</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 1. 直接赋值列表，添加一列</span></span>
+<span class="line"><span style="color:#E1E4E8">df[</span><span style="color:#9ECBFF">'Math'</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">100</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">100</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">100</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">100</span><span style="color:#E1E4E8">]   </span><span style="color:#6A737D"># 所有行的 Math 值都是100</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df)</span></span>
+<span class="line"><span style="color:#6A737D"># 新增了 Math 列:</span></span>
+<span class="line"><span style="color:#6A737D">#   Name   Age Gender  Math</span></span>
+<span class="line"><span style="color:#6A737D"># a   Tom  18.0      M   100</span></span>
+<span class="line"><span style="color:#6A737D"># b Jerry  18.0    NaN   100</span></span>
+<span class="line"><span style="color:#6A737D"># c  Jack  20.0      F   100</span></span>
+<span class="line"><span style="color:#6A737D"># d  Rose   NaN      M   100</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 2. 赋值一个 Series，按索引对齐添加新列</span></span>
+<span class="line"><span style="color:#E1E4E8">df[</span><span style="color:#9ECBFF">'English'</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> pd.Series([</span><span style="color:#79B8FF">95</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">96</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">97</span><span style="color:#E1E4E8">], </span><span style="color:#FFAB70">index</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">'a'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'b'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'d'</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df)</span></span>
+<span class="line"><span style="color:#6A737D"># 新增 English 列（对齐索引，有缺失）:</span></span>
+<span class="line"><span style="color:#6A737D">#   Name   Age Gender  Math  English</span></span>
+<span class="line"><span style="color:#6A737D"># a   Tom  18.0      M   100     95.0</span></span>
+<span class="line"><span style="color:#6A737D"># b Jerry  18.0    NaN   100     96.0</span></span>
+<span class="line"><span style="color:#6A737D"># c  Jack  20.0      F   100      NaN  # c 没有 English 值，NaN</span></span>
+<span class="line"><span style="color:#6A737D"># d  Rose   NaN      M   100     97.0</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 3. 用 concat 横向拼接添加多列</span></span>
+<span class="line"><span style="color:#E1E4E8">new_cols </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> pd.DataFrame({</span></span>
+<span class="line"><span style="color:#9ECBFF">    'Chinese'</span><span style="color:#E1E4E8">: [</span><span style="color:#79B8FF">50</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">50</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">50</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">50</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#9ECBFF">    'P.E.'</span><span style="color:#E1E4E8">: [</span><span style="color:#79B8FF">60</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">60</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">60</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">60</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">}, </span><span style="color:#FFAB70">index</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">'a'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'b'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'c'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'d'</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#E1E4E8">df </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> pd.concat([df, new_cols], </span><span style="color:#FFAB70">axis</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df)</span></span>
+<span class="line"><span style="color:#6A737D"># 新增了 Chinese 和 P.E. 两列:</span></span>
+<span class="line"><span style="color:#6A737D">#   Name   Age Gender  Math  English  Chinese  P.E.</span></span>
+<span class="line"><span style="color:#6A737D"># a   Tom  18.0      M   100     95.0      50    60</span></span>
+<span class="line"><span style="color:#6A737D"># b Jerry  18.0    NaN   100     96.0      50    60</span></span>
+<span class="line"><span style="color:#6A737D"># c  Jack  20.0      F   100      NaN      50    60</span></span>
+<span class="line"><span style="color:#6A737D"># d  Rose   NaN      M   100     97.0      50    60</span></span></code></pre>
+<p>上面的操作依次给 DataFrame 添加了 Math 列（所有值相同），English 列（只有索引 a,b,d 有值，c 自动补NaN），以及通过 pd.concat 一次拼接两个新列 Chinese 和 P.E.。需要留意的是，我们使用了 ‘P.E.’ 作为列名，这里包含了一个点号，今后访问 P.E. 列就不能用 df.P.E.（会被解释成连续的属性访问而出错），只能用 df[‘P.E.’]。这再次说明了列名命名的规范性重要性。</p>
+<p>改（修改列）： 修改列的值实际上和添加列是一样的操作——用新的值赋值给已有的列名。如果该列存在，就会被新值覆盖；如果不存在，就会新建列。因此在语法上没有专门的“改列”方法，直接赋值即可。</p>
+<p>例如，我们可以把刚刚添加的 Chinese 列的分数全部改成 100：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">df[</span><span style="color:#9ECBFF">'Chinese'</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">100</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">100</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">100</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">100</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df)</span></span>
+<span class="line"><span style="color:#6A737D"># Chinese 列的值已更新为100:</span></span>
+<span class="line"><span style="color:#6A737D">#   Name   Age Gender  Math  English  Chinese  P.E.</span></span>
+<span class="line"><span style="color:#6A737D"># a   Tom  18.0      M   100     95.0      100    60</span></span>
+<span class="line"><span style="color:#6A737D"># b Jerry  18.0    NaN   100     96.0      100    60</span></span>
+<span class="line"><span style="color:#6A737D"># c  Jack  20.0      F   100      NaN      100    60</span></span>
+<span class="line"><span style="color:#6A737D"># d  Rose   NaN      M   100     97.0      100    60</span></span></code></pre>
+<p>这里将 df[‘Chinese’] 直接赋值为新的列表，[100,100,100,100]，达到了修改整列的目的。同样地，你也可以只修改某几个值，比如使用按行索引的 .loc 来定位再赋值，这属于“行操作”范畴，我们稍后介绍。</p>
+<p>删（删除列）： 删除 DataFrame 的列有多种方式：</p>
+<ul>
+<li>使用 del df[‘列名’]，就像删除字典键一样。</li>
+<li>使用 df.pop(‘列名’)，会返回被删除的列的 Series。</li>
+<li>使用 df.drop(columns=[…]) 或 df.drop([…], axis=1)，可以一次删除一列或多列。drop 默认返回一个新的 DataFrame，除非指定 inplace=True 原地删除。</li>
+</ul>
+<p>下面依次演示用上述方法删除我们不需要的列：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D"># 1. del 关键字删除列</span></span>
+<span class="line"><span style="color:#F97583">del</span><span style="color:#E1E4E8"> df[</span><span style="color:#9ECBFF">'P.E.'</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df.columns)  </span><span style="color:#6A737D"># Index(['Name', 'Age', 'Gender', 'Math', 'English', 'Chinese'], dtype='object')</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 2. pop 方法删除列</span></span>
+<span class="line"><span style="color:#E1E4E8">df.pop(</span><span style="color:#9ECBFF">'Chinese'</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df.columns)  </span><span style="color:#6A737D"># Index(['Name', 'Age', 'Gender', 'Math', 'English'], dtype='object')</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 3. drop 删除多列</span></span>
+<span class="line"><span style="color:#E1E4E8">df.drop([</span><span style="color:#9ECBFF">'Math'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'English'</span><span style="color:#E1E4E8">], </span><span style="color:#FFAB70">axis</span><span style="color:#F97583">=</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">inplace</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df.columns)  </span><span style="color:#6A737D"># Index(['Name', 'Age', 'Gender'], dtype='object')</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df)</span></span>
+<span class="line"><span style="color:#6A737D">#    Name   Age Gender</span></span>
+<span class="line"><span style="color:#6A737D"># a   Tom  18.0      M</span></span>
+<span class="line"><span style="color:#6A737D"># b Jerry  18.0    NaN</span></span>
+<span class="line"><span style="color:#6A737D"># c  Jack  20.0      F</span></span>
+<span class="line"><span style="color:#6A737D"># d  Rose   NaN      M</span></span></code></pre>
+<p>可以看到，先用 del 删掉了 P.E. 列，然后用 pop 删掉 Chinese 列，最后用 drop 一次性删掉 Math 和 English 列。删除后我们的 DataFrame 又只剩下最初的三列（Name, Age, Gender）以及原来的行索引。使用 drop 时记得加 axis=1 表示按列删除，并且可以根据需要选择是否 inplace。如果不使用 inplace，那么应当用 df = df.drop([…], axis=1) 赋值回去，因为 drop 默认返回删除指定列后的新 DataFrame。</p>
+<h2 id="行操作-crud"><a aria-hidden="true" tabindex="-1" href="#行操作-crud"><span class="icon icon-link"></span></a>行操作 CRUD</h2>
+<p>有时候我们需要对表格的行进行操作，例如按行查看数据、添加或删除某些行等。行的操作在 Pandas 中主要通过索引（index）来定位，分为按标签索引（index label）和按整数位置索引两大方式。</p>
+<p>对行的“查、增、改、删”，我们分别介绍。继续使用前面的 DataFrame（目前有 Name, Age, Gender 列，索引 a, b, c, d），来演示行操作。</p>
+<p>查（读取行）： 和列不同，直接使用 df[…] 的方括号不能直接按行标签取行。比如 df[‘a’] 并不会返回索引为 a 的那一行，而是试图取名为 ‘a’ 的列（通常不存在，会报错）。因此，Pandas 提供了专门的索引器属性：</p>
+<ul>
+<li>df.loc[行标签] 用行标签选取数据。</li>
+<li>df.iloc[行号] 用行位置（整数下标）选取数据。</li>
+</ul>
+<p>这两个索引器非常重要：loc 基于标签，iloc 基于整数位置。使用它们我们可以非常灵活地按行或按行列组合选取数据。</p>
+<p>loc 用法示例：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D"># 使用 loc 按标签索引行</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df.loc[</span><span style="color:#9ECBFF">'a'</span><span style="color:#E1E4E8">])         </span><span style="color:#6A737D"># 索引为 'a' 的整行数据，返回一个 Series</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df.loc[</span><span style="color:#9ECBFF">'b'</span><span style="color:#E1E4E8">:</span><span style="color:#9ECBFF">'c'</span><span style="color:#E1E4E8">])     </span><span style="color:#6A737D"># 从索引 'b' 到 'c' 的行（包括 'c' 行）</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df.loc[[</span><span style="color:#9ECBFF">'a'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'c'</span><span style="color:#E1E4E8">], [</span><span style="color:#9ECBFF">'Name'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'Gender'</span><span style="color:#E1E4E8">]])</span></span>
+<span class="line"><span style="color:#6A737D"># 上面一行选取索引 a 和 c 的两行，且只取其中的 Name 和 Gender 两列</span></span></code></pre>
+<p>iloc 用法示例：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D"># 使用 iloc 按位置索引行</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df.iloc[</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">])          </span><span style="color:#6A737D"># 第 0 号位置的行（即索引 'a' 这一行）</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df.iloc[</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">:</span><span style="color:#79B8FF">3</span><span style="color:#E1E4E8">])        </span><span style="color:#6A737D"># 位置 1 到 2 的行（不包括位置3），对应索引 b, c 两行</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df.iloc[[</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">], [</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">]])</span></span>
+<span class="line"><span style="color:#6A737D"># 上面一行选取位置 0 和 2 的两行，以及位置 0 和 2 的两列，实现行列交叉选取</span></span></code></pre>
+<p>loc 和 iloc 都可以接受单个索引、切片、列表等形式来选取多行/多列，非常灵活。需要注意几点：</p>
+<ul>
+<li>用 loc 做标签切片时，区间两端都是闭区间，也就是包含结束标签。例如上例中 df.loc[‘b’:‘c’] 包含 ‘c’ 行。</li>
+<li>用 iloc 做位置切片则和 Python 列表切片规则一致，左闭右开，不包含结束的索引位置。</li>
+<li>iloc 允许索引列表中有重复值或顺序打乱，这种情况下会相应返回重复或乱序的行。这在需要根据位置重复数据时可能有用。</li>
+<li>如果 DataFrame 的索引是数字且你用 df[some_number] 直接索引，Pandas会优先尝试按标签解析（因为索引可能正好是那个数字）。因此当索引是数字时，要特别注意区分 loc（按标签）和默认的[]行为。最安全的做法是始终使用 loc 或 iloc 来取行，避免歧义。</li>
+</ul>
+<p>增（添加行）： DataFrame 添加行相对没有添加列那么直接。以往 Pandas 有 df.append() 方法可以直接添加一行新的数据，但自 Pandas 1.4 起该方法已被废弃，官方建议使用 pd.concat 来完成这一功能。</p>
+<p>添加新行的思路是：先构造一个与原 DataFrame 列结构相同的 DataFrame 或 Series，然后通过 pd.concat([…], axis=0) 将其与原 DataFrame 按行拼接。注意保持新行的数据在列上的对齐。下面演示添加一行数据：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D"># 构造一行新数据，注意列名需与原 DataFrame 一致</span></span>
+<span class="line"><span style="color:#E1E4E8">new_row </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> pd.DataFrame([[</span><span style="color:#9ECBFF">'ZhangSan'</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">21</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'M'</span><span style="color:#E1E4E8">]], </span></span>
+<span class="line"><span style="color:#FFAB70">                       columns</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">'Name'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'Age'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'Gender'</span><span style="color:#E1E4E8">], </span></span>
+<span class="line"><span style="color:#FFAB70">                       index</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">'e'</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#6A737D"># 用 concat 连接新行</span></span>
+<span class="line"><span style="color:#E1E4E8">df </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> pd.concat([df, new_row], </span><span style="color:#FFAB70">axis</span><span style="color:#F97583">=</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df)</span></span>
+<span class="line"><span style="color:#6A737D"># 输出:</span></span>
+<span class="line"><span style="color:#6A737D">#    Name   Age Gender</span></span>
+<span class="line"><span style="color:#6A737D"># a    Tom  18.0      M</span></span>
+<span class="line"><span style="color:#6A737D"># b  Jerry  18.0    NaN</span></span>
+<span class="line"><span style="color:#6A737D"># c   Jack  20.0      F</span></span>
+<span class="line"><span style="color:#6A737D"># d   Rose   NaN      M</span></span>
+<span class="line"><span style="color:#6A737D"># e ZhangSan 21.0      M</span></span></code></pre>
+<p>上面我们添加了一行索引为 ‘e’ 的数据，Name 为 ZhangSan，Age 为21，Gender 为 M。拼接后可以看到 df 多了一行 ‘e’。如果不指定 index=[‘e’]，new_row 会默认用0作为索引，与原 DataFrame 的索引类型不一致甚至冲突。在这种情况下 concat 仍会成功（它不会因为索引重复而报错），但新行索引会是0，有可能与原有索引冲突导致两个索引相同。这通常不是我们想要的，所以指定一个不会重复的新索引比较安全。</p>
+<p>改（修改行）： 修改行通常可以通过 loc 或 iloc 来定位整行然后赋值。例如，我们把刚才添加的 ‘e’ 行数据的 Name 和 Age 修改一下：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">df.loc[</span><span style="color:#9ECBFF">'e'</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [</span><span style="color:#9ECBFF">'Peter'</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">22.0</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'M'</span><span style="color:#E1E4E8">]  </span><span style="color:#6A737D"># 将索引 'e' 的整行重置为新的值</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df.loc[</span><span style="color:#9ECBFF">'e'</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#6A737D"># 输出:</span></span>
+<span class="line"><span style="color:#6A737D"># Name      Peter</span></span>
+<span class="line"><span style="color:#6A737D"># Age        22.0</span></span>
+<span class="line"><span style="color:#6A737D"># Gender        M</span></span>
+<span class="line"><span style="color:#6A737D"># Name: e, dtype: object</span></span></code></pre>
+<p>我们成功地把索引 e 那行的数据更新为 Name = Peter, Age = 22.0, Gender = ‘M’。这里直接对 df.loc[‘e’] 赋予一个列表，新值会按照列的顺序填入对应的三个列。如果只想修改某个单元格，也可以使用 df.at[row_index, col_name] = value 或 df.iat[row_position, col_position] = value 来定位赋值。</p>
+<p>删（删除行）： 删除行使用 drop 方法，指定 axis=0（或者不指定，默认就是0也表示按行删）。可以传入要删除的索引标签列表。与删除列类似，drop 默认返回新对象，除非设置 inplace=True。示例：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D"># 删除索引为 'b' 和 'd' 的两行</span></span>
+<span class="line"><span style="color:#E1E4E8">df </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> df.drop([</span><span style="color:#9ECBFF">'b'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'d'</span><span style="color:#E1E4E8">], </span><span style="color:#FFAB70">axis</span><span style="color:#F97583">=</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df)</span></span>
+<span class="line"><span style="color:#6A737D"># 输出:</span></span>
+<span class="line"><span style="color:#6A737D">#    Name   Age Gender</span></span>
+<span class="line"><span style="color:#6A737D"># a   Tom  18.0      M</span></span>
+<span class="line"><span style="color:#6A737D"># c  Jack  20.0      F</span></span>
+<span class="line"><span style="color:#6A737D"># e Peter  22.0      M</span></span></code></pre>
+<p>索引 b 和 d 的行被删除了。可以看到现在 DataFrame 只剩下 a, c, e 三行数据。如果索引是默认的整数且希望按位置删除第几行，也可以直接传索引值（因为默认索引标签就是数字）。例如 df.drop([0], axis=0) 会删除索引为0的行。但是一旦索引不是默认整序，还是应该用标签。另外，如果想按条件删除（比如删除 Age 大于20的行），可以构造一个布尔型索引掩码然后用 df.drop(df[condition].index, axis=0) 实现，这里不展开。</p>
+<h2 id="csv-文件读写实践"><a aria-hidden="true" tabindex="-1" href="#csv-文件读写实践"><span class="icon icon-link"></span></a>CSV 文件读写实践</h2>
+<p>数据通常保存在文件中，Pandas 支持读取和保存多种格式的数据文件，其中CSV（Comma-Separated Values）是最常见的文本格式。下面我们介绍 Pandas 如何高效地读取CSV，以及一些常用参数和技巧。同样，写回CSV也非常简单。</p>
+<p>读取 CSV： 使用 pd.read_csv 函数即可读取CSV文件，基本用法是传入文件路径，Pandas 会自动将其解析为 DataFrame。示例：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> pandas </span><span style="color:#F97583">as</span><span style="color:#E1E4E8"> pd</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 基本读取（假设 CSV 第一行为表头）</span></span>
+<span class="line"><span style="color:#E1E4E8">df </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> pd.read_csv(</span><span style="color:#9ECBFF">'data.csv'</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df.head(</span><span style="color:#79B8FF">5</span><span style="color:#E1E4E8">))  </span><span style="color:#6A737D"># 查看前5行</span></span></code></pre>
+<p>如果CSV文件包含表头（第一行是列名），pd.read_csv 会自动将其作为列名。如果CSV没有表头行，我们需要告诉函数不要将第一行当作列名，可以使用 header=None，同时通过 names= 指定列名列表。例如：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D"># 如果 CSV 没有表头行，指定 header=None 并提供列名</span></span>
+<span class="line"><span style="color:#E1E4E8">df </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> pd.read_csv(</span><span style="color:#9ECBFF">'data_no_header.csv'</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">header</span><span style="color:#F97583">=</span><span style="color:#79B8FF">None</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">names</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">'col1'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'col2'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'col3'</span><span style="color:#E1E4E8">])</span></span></code></pre>
+<p>read_csv 还有许多有用的参数，常用的包括：</p>
+<ul>
+<li>sep：指定分隔符，默认是逗号,。如果是制表符分隔的文件，可以用 sep=‘\t’。</li>
+<li>header：用来指定哪一行作为列名。如果第一行是数据而非列名，用 header=None。</li>
+<li>names：当没有表头或者想自行指定列名时，用这个参数传入列表作为列名。</li>
+<li>index_col：指定将某一列读入时设置为行索引。例如 index_col=‘Date’ 会将”Date”那列作为索引而不是普通数据列。</li>
+<li>usecols：可以传入一个列名列表，表示只读取这些列，忽略其他列。对于很大的文件，读取必要的列可以明显加快速度、节省内存。</li>
+<li>dtype：可以指定列的数据类型，比如将某列强制读成字符串 dtype={‘col’: str}。正确指定类型也有助于加快读取和减少内存占用。</li>
+<li>nrows：只读取前 n 行，用于预览大型文件或测试。</li>
+<li>encoding：指定文件编码，比如中文常用 encoding=‘utf-8’（默认）、‘gbk’ 等。</li>
+<li>engine：解析引擎，一般不用特别指定。只有在分隔符比较特殊（例如多字符）时，会用到 engine=‘python’。</li>
+</ul>
+<p>我们将上述一些参数综合在一个例子里：假设有一个文件包含股票数据，没有列名，我们想读取其中的日期(date)作为索引，以及开盘价(open)、最高价(high)、最低价(low)、收盘价(close)这几列。文件用逗号分隔。读取代码可以这么写：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">df </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> pd.read_csv(</span><span style="color:#9ECBFF">'aapl.csv'</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">                 sep</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">','</span><span style="color:#E1E4E8">,         </span><span style="color:#6A737D"># 分隔符为逗号</span></span>
+<span class="line"><span style="color:#FFAB70">                 header</span><span style="color:#F97583">=</span><span style="color:#79B8FF">None</span><span style="color:#E1E4E8">,     </span><span style="color:#6A737D"># 文件中无表头行</span></span>
+<span class="line"><span style="color:#FFAB70">                 names</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">'name'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'date'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'_'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'open'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'high'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'low'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'close'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'volume'</span><span style="color:#E1E4E8">],  </span><span style="color:#6A737D"># 列名列表</span></span>
+<span class="line"><span style="color:#FFAB70">                 index_col</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">'date'</span><span style="color:#E1E4E8">,</span><span style="color:#6A737D"># 将"date"列作为行索引</span></span>
+<span class="line"><span style="color:#FFAB70">                 usecols</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">'date'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'open'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'high'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'low'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'close'</span><span style="color:#E1E4E8">]  </span><span style="color:#6A737D"># 只读取需要的五列</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(df.head(</span><span style="color:#79B8FF">3</span><span style="color:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#6A737D"># 输出示例:</span></span>
+<span class="line"><span style="color:#6A737D">#             open    high     low   close</span></span>
+<span class="line"><span style="color:#6A737D"># date</span></span>
+<span class="line"><span style="color:#6A737D"># 2011-01-28  344.17  344.40  333.53  336.10</span></span>
+<span class="line"><span style="color:#6A737D"># 2011-01-31  335.80  340.04  334.30  339.32</span></span>
+<span class="line"><span style="color:#6A737D"># 2011-02-01  341.30  345.65  340.98  345.03</span></span></code></pre>
+<p>在这个例子中，我们通过 names 提供了8个列名（文件每行有8个字段，其中第三个字段我们命名为_表示我们不关心），然后用 usecols 选择了我们想要的5列数据（date 和 OHLC 四列），并将 date 列设为索引。head(3) 打印输出验证了读取效果。使用 usecols 有效避免了读取不需要的数据，提高了速度。</p>
+<blockquote>
+<p>常见问题： <em>“如果 CSV 有五万行，那么用 Pandas 读会不会很慢、很卡？”</em></p>
+</blockquote>
+<blockquote>
+<p>答案是：不会。 五万行对 Pandas 而言不算很多，一般几百毫秒就能读完。不过如果数据达到上百万行乃至更大，内存和耗时就需要考虑。这种情况下可以使用分块读取：pd.read_csv(…, chunksize=10000) 会返回一个可迭代的 TextFileReader，每次读取10000行，我们可以遍历每个chunk逐步处理。这样可以避免一次性占用太多内存。另一个方法是使用 dtype 精确指定类型，避免Pandas猜测类型的开销和潜在的不必要的高精度类型。总的来说，对于超大文件，分块读取并逐步处理是常用策略。</p>
+</blockquote>
+<p>写出 CSV： 将 DataFrame 保存为 CSV 使用 DataFrame.to_csv 方法即可。例如：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#E1E4E8">df.to_csv(</span><span style="color:#9ECBFF">'output.csv'</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">index</span><span style="color:#F97583">=</span><span style="color:#79B8FF">False</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<p>上面代码将 DataFrame 写入当前目录下的 output.csv 文件，并设置 index=False 表示不保存行索引（因为有些情况下行索引没意义或者不要导出）。默认情况下 to_csv 会保存行索引和列标签，如果不想要可以分别用 index=False 和 header=False 关闭。to_csv 也支持 sep, encoding 等参数，自行根据需要设置即可。</p>
+<p>除了 CSV 之外，Pandas 也支持读取/写入多种常见格式：</p>
+<ul>
+<li>Excel：使用 pd.read_excel(‘file.xlsx’) 读取，DataFrame.to_excel(‘out.xlsx’) 写入。注意读取 Excel 需要安装相应的引擎库，如 openpyxl。一般 .xlsx 文件都会用 openpyxl 引擎。</li>
+<li>JSON：使用 pd.read_json(‘file.json’) 读取，DataFrame.to_json(‘out.json’) 写出。read_json 可以通过参数 orient 来指定 JSON 的组织格式（比如记录为行还是列）。</li>
+<li>SQL：使用 pd.read_sql(query, connection) 可以从数据库读取查询结果为 DataFrame，to_sql 可以写入数据库表。（这需要SQLAlchemy等支持，这里略过）</li>
+<li>以及其它格式例如 Parquet (read_parquet)、HTML表(read_html)、Stata (read_stata) 等等。</li>
+</ul>
+<p>简单来说，Pandas 提供了一套统一的高层接口来读取和存储数据，让数据在不同媒介之间转移变得非常方便。你可以将其视为数据转换的瑞士军刀：CSV、Excel、JSON 转DataFrame，DataFrame再转回各种格式，都不是问题。</p>
+<h2 id="总结"><a aria-hidden="true" tabindex="-1" href="#总结"><span class="icon icon-link"></span></a>总结</h2>
+<p>Pandas 的两个核心数据结构：Series（一维带索引数组）和 DataFrame（二维表格）。在实际工程中，Pandas 可以大幅提高我们处理表格数据的效率。遇到“表格里的列名有空格”这样的细节问题，我们知道可以通过更换访问方式或重命名来解决；面对“怎样读大文件不卡”这样的性能问题，我们也了解了分块读取等方案。熟悉这些技巧能让我们更加游刃有余地使用 Pandas 处理数据。</p> <html lang="en" data-astro-cid-uffxixac> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/ai/01_numpy_pandas_matplotlib/2_pandas.html"><!-- Primary Meta Tags --><title>Ge Yuxu • AI &amp; Engineering</title><meta name="title" content="Ge Yuxu • AI &#38; Engineering"><meta name="description" content="Welcome to my blog!"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/ai/01_numpy_pandas_matplotlib/2_pandas.html"><meta property="og:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="og:description" content="Welcome to my blog!"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/ai/01_numpy_pandas_matplotlib/2_pandas.html"><meta property="twitter:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="twitter:description" content="Welcome to my blog!"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script></head> <body data-astro-cid-uffxixac>  <div class="statement" data-astro-cid-uffxixac> <blockquote data-astro-cid-uffxixac> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>脱敏说明</strong>：本文所有出现的表名、字段名、接口地址、变量名、IP地址及示例数据等均非真实，
+    仅用于阐述技术思路与实现步骤，示例代码亦非公司真实代码。
+    示例方案亦非公司真实完整方案，仅为本人记忆总结，用于技术学习探讨。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;文中所示任何标识符并不对应实际生产环境中的名称或编号。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;示例&nbsp;SQL、脚本、代码及数据等均为演示用途，不含真实业务数据，也不具备直接运行或复现的完整上下文。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;读者若需在实际项目中参考本文方案，请结合自身业务场景及数据安全规范，使用符合内部命名和权限控制的配置。</p> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>版权声明</strong>：本文版权归原作者所有，未经作者事先书面许可，任何单位或个人不得以任何方式复制、转载、摘编或用于商业用途。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;若需非商业性引用或转载本文内容，请务必注明出处并保持内容完整。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;对因商业使用、篡改或不当引用本文内容所产生的法律纠纷，作者保留追究法律责任的权利。<br data-astro-cid-uffxixac><br data-astro-cid-uffxixac> <em data-astro-cid-uffxixac>Copyright&nbsp;©&nbsp;1989–Present&nbsp;Ge&nbsp;Yuxu.&nbsp;All&nbsp;Rights&nbsp;Reserved.</em></p> </blockquote> </div></body></html>  </article> </div> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2025 All rights reserved.
+</footer>  </body></html>

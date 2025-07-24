@@ -1,0 +1,447 @@
+<!DOCTYPE html><html lang="zh"> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/notes/full-stack-todo-list-application-development-practice-front-end-and-back-end-separation-architecture/"><!-- Primary Meta Tags --><title>Full-Stack Todo List Application Development Practice: Front-End and Back-End Separation Architecture</title><meta name="title" content="Full-Stack Todo List Application Development Practice: Front-End and Back-End Separation Architecture"><meta name="description"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/notes/full-stack-todo-list-application-development-practice-front-end-and-back-end-separation-architecture/"><meta property="og:title" content="Full-Stack Todo List Application Development Practice: Front-End and Back-End Separation Architecture"><meta property="og:description"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/notes/full-stack-todo-list-application-development-practice-front-end-and-back-end-separation-architecture/"><meta property="twitter:title" content="Full-Stack Todo List Application Development Practice: Front-End and Back-End Separation Architecture"><meta property="twitter:description"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script><script is:global>
+	window.addEventListener('DOMContentLoaded', () => {
+		$('.toc ol').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'margin': 0,
+		'padding-left': 0,       // 可按需调整
+		});
+		$('.toc ol > li').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'padding-left': 10
+		});
+        $('.sidebar').append($('.toc'));
+      });
+	</script><link rel="stylesheet" href="/_astro/_slug_.BvCO7WHQ.css">
+<style>a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astro-cid-eimmu3lg].active{font-weight:bolder;text-decoration:underline}header[data-astro-cid-3ef6ksr2]{margin:0;padding:0 1em;background:#fff;box-shadow:0 2px 8px rgba(var(--black),5%)}h2[data-astro-cid-3ef6ksr2]{margin:0;font-size:1em}h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2],h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none}nav[data-astro-cid-3ef6ksr2]{display:flex;align-items:center;justify-content:space-between}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{padding:1em .5em;color:var(--black);border-bottom:4px solid transparent;text-decoration:none}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none;border-bottom-color:var(--accent)}.social-links[data-astro-cid-3ef6ksr2],.social-links[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{display:flex}@media (max-width: 720px){.social-links[data-astro-cid-3ef6ksr2]{display:none}}footer[data-astro-cid-sz7xmlte]{padding:2em 1em 6em;background:linear-gradient(var(--gray-gradient)) no-repeat;color:rgb(var(--gray));text-align:center}.social-links[data-astro-cid-sz7xmlte]{display:flex;justify-content:center;gap:1em;margin-top:1em}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]{text-decoration:none;color:rgb(var(--gray))}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]:hover{color:rgb(var(--gray-dark))}
+.statement[data-astro-cid-uffxixac]{font-size:10px;color:gray}@media (max-width: 640px){.statement[data-astro-cid-uffxixac]{font-size:6px;color:gray}}
+</style></head> <body> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <!--<h2><a href="/">{SITE_TITLE}</a></h2>--> <h2 data-astro-cid-3ef6ksr2><a style="padding-left:0;color:blue;" href="/" data-astro-cid-3ef6ksr2>Ge Yuxu<br data-astro-cid-3ef6ksr2>AI & Engineering</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blog/1" class="active" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/series" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Series </a>  <a href="/projects" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Projects </a>  </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://github.com/geyuxu" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://www.linkedin.com/in/geyuxu/" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's LinkedIn profile</span> <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" data-astro-cid-3ef6ksr2> <path fill="currentColor" d="M20.447 20.452H17.2v-5.569c0-1.328-.025-3.039-1.852-3.039-1.853 0-2.136 1.447-2.136 2.942v5.666h-3.248V9h3.122v1.561h.045c.435-.823 1.498-1.688 3.083-1.688 3.295 0 3.903 2.17 3.903 4.989v6.59zM5.337 7.433a1.882 1.882 0 110-3.764 1.882 1.882 0 010 3.764zm1.626 13.019H3.708V9h3.255v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.222 0z" data-astro-cid-3ef6ksr2></path> </svg> </a> </div> </nav> <!-- Microsoft Clarity --> <script type="text/javascript">
+		(function(c,l,a,r,i,t,y){
+			c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+			t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+			y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+		})(window, document, "clarity", "script", "rc2w96osp6");
+	</script> </header>  <main class="page"> <!-- 左侧栏 --> <aside class="sidebar"> <div class="meta"> <b>Full-Stack Todo List Application Development Practice: Front-End and Back-End Separation Architecture</b> <p><time datetime="2025-07-21T00:00:00.000Z"> 2025/07/21 08:00:00 </time></p> <p style="font-size:.85rem;color:var(--gray);">更新：<time datetime="2025-07-21T00:00:00.000Z"> 2025/07/21 08:00:00 </time></p>  </div> <hr> <br> </aside> <!-- 右侧正文区域（flex 居中） --> <div class="content-wrapper"> <article class="prose">  <nav class="toc"><ol class="toc-level toc-level-1"><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#project-overview">Project Overview</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#technical-architecture">Technical Architecture</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#frontend-technology-stack">Frontend Technology Stack</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#backend-technology-stack">Backend Technology Stack</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#feature-design">Feature Design</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#core-features">Core Features</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#interface-features">Interface Features</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#frontend-implementation">Frontend Implementation</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#javascript-core-logic">JavaScript Core Logic</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#css-style-design">CSS Style Design</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#backend-implementation">Backend Implementation</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#flask-api-service">Flask API Service</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#project-features">Project Features</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#1-front-end-and-back-end-separation">1. Front-End and Back-End Separation</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#2-reasonable-technology-selection">2. Reasonable Technology Selection</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#3-well-organized-code">3. Well-Organized Code</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#4-excellent-user-experience">4. Excellent User Experience</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#deployment-and-running">Deployment and Running</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#local-development-environment">Local Development Environment</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#directory-structure">Directory Structure</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#technical-insights-and-reflections">Technical Insights and Reflections</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#architecture-design">Architecture Design</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#development-experience">Development Experience</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#code-quality">Code Quality</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#future-optimization-directions">Future Optimization Directions</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#summary">Summary</a></li></ol></nav><h2 id="project-overview"><a aria-hidden="true" tabindex="-1" href="#project-overview"><span class="icon icon-link"></span></a>Project Overview</h2>
+<p>Developed a complete <strong>Todo List full-stack application</strong> using front-end and back-end separation architecture. The frontend uses native JavaScript + jQuery technology stack, the backend is based on Python Flask framework, with SQLite database, implementing complete task management functionality.</p>
+<h2 id="technical-architecture"><a aria-hidden="true" tabindex="-1" href="#technical-architecture"><span class="icon icon-link"></span></a>Technical Architecture</h2>
+<h3 id="frontend-technology-stack"><a aria-hidden="true" tabindex="-1" href="#frontend-technology-stack"><span class="icon icon-link"></span></a>Frontend Technology Stack</h3>
+<ul>
+<li><strong>Native JavaScript</strong>: Core business logic</li>
+<li><strong>jQuery 3.x</strong>: DOM manipulation and AJAX requests</li>
+<li><strong>HTML5</strong>: Semantic structure</li>
+<li><strong>CSS3</strong>: Responsive layout and animation effects</li>
+</ul>
+<h3 id="backend-technology-stack"><a aria-hidden="true" tabindex="-1" href="#backend-technology-stack"><span class="icon icon-link"></span></a>Backend Technology Stack</h3>
+<ul>
+<li><strong>Python Flask</strong>: Lightweight web framework</li>
+<li><strong>SQLite</strong>: Embedded database</li>
+<li><strong>RESTful API</strong>: Standardized interface design</li>
+<li><strong>JSON</strong>: Data exchange format</li>
+</ul>
+<h2 id="feature-design"><a aria-hidden="true" tabindex="-1" href="#feature-design"><span class="icon icon-link"></span></a>Feature Design</h2>
+<h3 id="core-features"><a aria-hidden="true" tabindex="-1" href="#core-features"><span class="icon icon-link"></span></a>Core Features</h3>
+<ol>
+<li><strong>Task Creation</strong>: Add new todo items</li>
+<li><strong>Task Viewing</strong>: Display all task lists</li>
+<li><strong>Task Editing</strong>: Modify task content and status</li>
+<li><strong>Task Deletion</strong>: Remove completed or unwanted tasks</li>
+<li><strong>Status Toggle</strong>: Mark tasks as completed/incomplete</li>
+<li><strong>Data Persistence</strong>: Save task information to database</li>
+</ol>
+<h3 id="interface-features"><a aria-hidden="true" tabindex="-1" href="#interface-features"><span class="icon icon-link"></span></a>Interface Features</h3>
+<ul>
+<li><strong>Clean Design</strong>: Clear task display interface</li>
+<li><strong>Real-time Updates</strong>: Operations immediately reflected in the interface</li>
+<li><strong>Responsive Layout</strong>: Adapts to different screen sizes</li>
+<li><strong>Friendly Interaction</strong>: Intuitive user operation experience</li>
+</ul>
+<h2 id="frontend-implementation"><a aria-hidden="true" tabindex="-1" href="#frontend-implementation"><span class="icon icon-link"></span></a>Frontend Implementation</h2>
+<h3 id="javascript-core-logic"><a aria-hidden="true" tabindex="-1" href="#javascript-core-logic"><span class="icon icon-link"></span></a>JavaScript Core Logic</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#6A737D">// Task management class</span></span>
+<span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> TodoManager</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">    constructor</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.tasks </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [];</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">init</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // Initialize application</span></span>
+<span class="line"><span style="color:#B392F0">    init</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">bindEvents</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">loadTasks</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // Bind event handlers</span></span>
+<span class="line"><span style="color:#B392F0">    bindEvents</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#B392F0">        $</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'#add-task-btn'</span><span style="color:#E1E4E8">).</span><span style="color:#B392F0">on</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'click'</span><span style="color:#E1E4E8">, () </span><span style="color:#F97583">=></span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">addTask</span><span style="color:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#B392F0">        $</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'#task-input'</span><span style="color:#E1E4E8">).</span><span style="color:#B392F0">on</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'keypress'</span><span style="color:#E1E4E8">, (</span><span style="color:#FFAB70">e</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">            if</span><span style="color:#E1E4E8"> (e.which </span><span style="color:#F97583">===</span><span style="color:#79B8FF"> 13</span><span style="color:#E1E4E8">) </span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">addTask</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">        });</span></span>
+<span class="line"><span style="color:#B392F0">        $</span><span style="color:#E1E4E8">(document).</span><span style="color:#B392F0">on</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'click'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'.delete-btn'</span><span style="color:#E1E4E8">, (</span><span style="color:#FFAB70">e</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">            this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">deleteTask</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">$</span><span style="color:#E1E4E8">(e.target).</span><span style="color:#B392F0">data</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'id'</span><span style="color:#E1E4E8">));</span></span>
+<span class="line"><span style="color:#E1E4E8">        });</span></span>
+<span class="line"><span style="color:#B392F0">        $</span><span style="color:#E1E4E8">(document).</span><span style="color:#B392F0">on</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'change'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'.task-checkbox'</span><span style="color:#E1E4E8">, (</span><span style="color:#FFAB70">e</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">            this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">toggleTask</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">$</span><span style="color:#E1E4E8">(e.target).</span><span style="color:#B392F0">data</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'id'</span><span style="color:#E1E4E8">));</span></span>
+<span class="line"><span style="color:#E1E4E8">        });</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // Add task</span></span>
+<span class="line"><span style="color:#F97583">    async</span><span style="color:#B392F0"> addTask</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> taskText</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> $</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'#task-input'</span><span style="color:#E1E4E8">).</span><span style="color:#B392F0">val</span><span style="color:#E1E4E8">().</span><span style="color:#B392F0">trim</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">taskText) </span><span style="color:#F97583">return</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">        try</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">            const</span><span style="color:#79B8FF"> response</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> $.</span><span style="color:#B392F0">post</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'/api/tasks'</span><span style="color:#E1E4E8">, {</span></span>
+<span class="line"><span style="color:#E1E4E8">                text: taskText,</span></span>
+<span class="line"><span style="color:#E1E4E8">                completed: </span><span style="color:#79B8FF">false</span></span>
+<span class="line"><span style="color:#E1E4E8">            });</span></span>
+<span class="line"><span style="color:#79B8FF">            this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">renderTask</span><span style="color:#E1E4E8">(response);</span></span>
+<span class="line"><span style="color:#B392F0">            $</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'#task-input'</span><span style="color:#E1E4E8">).</span><span style="color:#B392F0">val</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">''</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">        } </span><span style="color:#F97583">catch</span><span style="color:#E1E4E8"> (error) {</span></span>
+<span class="line"><span style="color:#E1E4E8">            console.</span><span style="color:#B392F0">error</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'Failed to add task:'</span><span style="color:#E1E4E8">, error);</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // Delete task</span></span>
+<span class="line"><span style="color:#F97583">    async</span><span style="color:#B392F0"> deleteTask</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">taskId</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">        try</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">            await</span><span style="color:#E1E4E8"> $.</span><span style="color:#B392F0">ajax</span><span style="color:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#E1E4E8">                url: </span><span style="color:#9ECBFF">`/api/tasks/${</span><span style="color:#E1E4E8">taskId</span><span style="color:#9ECBFF">}`</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">                method: </span><span style="color:#9ECBFF">'DELETE'</span></span>
+<span class="line"><span style="color:#E1E4E8">            });</span></span>
+<span class="line"><span style="color:#B392F0">            $</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">`[data-id="${</span><span style="color:#E1E4E8">taskId</span><span style="color:#9ECBFF">}"]`</span><span style="color:#E1E4E8">).</span><span style="color:#B392F0">closest</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'.task-item'</span><span style="color:#E1E4E8">).</span><span style="color:#B392F0">remove</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">        } </span><span style="color:#F97583">catch</span><span style="color:#E1E4E8"> (error) {</span></span>
+<span class="line"><span style="color:#E1E4E8">            console.</span><span style="color:#B392F0">error</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'Failed to delete task:'</span><span style="color:#E1E4E8">, error);</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // Toggle task status</span></span>
+<span class="line"><span style="color:#F97583">    async</span><span style="color:#B392F0"> toggleTask</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">taskId</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">        try</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">            const</span><span style="color:#79B8FF"> response</span><span style="color:#F97583"> =</span><span style="color:#F97583"> await</span><span style="color:#E1E4E8"> $.</span><span style="color:#B392F0">ajax</span><span style="color:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#E1E4E8">                url: </span><span style="color:#9ECBFF">`/api/tasks/${</span><span style="color:#E1E4E8">taskId</span><span style="color:#9ECBFF">}`</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">                method: </span><span style="color:#9ECBFF">'PUT'</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">                data: { completed: </span><span style="color:#F97583">!</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">getTaskById</span><span style="color:#E1E4E8">(taskId).completed }</span></span>
+<span class="line"><span style="color:#E1E4E8">            });</span></span>
+<span class="line"><span style="color:#79B8FF">            this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">updateTaskDisplay</span><span style="color:#E1E4E8">(response);</span></span>
+<span class="line"><span style="color:#E1E4E8">        } </span><span style="color:#F97583">catch</span><span style="color:#E1E4E8"> (error) {</span></span>
+<span class="line"><span style="color:#E1E4E8">            console.</span><span style="color:#B392F0">error</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'Failed to update task:'</span><span style="color:#E1E4E8">, error);</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // Render task list</span></span>
+<span class="line"><span style="color:#B392F0">    renderTasks</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">tasks</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> $taskList</span><span style="color:#F97583"> =</span><span style="color:#B392F0"> $</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'#task-list'</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">        $taskList.</span><span style="color:#B392F0">empty</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#E1E4E8">        tasks.</span><span style="color:#B392F0">forEach</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">task</span><span style="color:#F97583"> =></span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">renderTask</span><span style="color:#E1E4E8">(task));</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // Render single task</span></span>
+<span class="line"><span style="color:#B392F0">    renderTask</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">task</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> taskHtml</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> `</span></span>
+<span class="line"><span style="color:#9ECBFF">            &#x3C;div class="task-item ${</span><span style="color:#E1E4E8">task</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">completed</span><span style="color:#F97583"> ?</span><span style="color:#9ECBFF"> 'completed'</span><span style="color:#F97583"> :</span><span style="color:#9ECBFF"> ''}"></span></span>
+<span class="line"><span style="color:#9ECBFF">                &#x3C;input type="checkbox" class="task-checkbox" </span></span>
+<span class="line"><span style="color:#9ECBFF">                       data-id="${</span><span style="color:#E1E4E8">task</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">id</span><span style="color:#9ECBFF">}" ${</span><span style="color:#E1E4E8">task</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">completed</span><span style="color:#F97583"> ?</span><span style="color:#9ECBFF"> 'checked'</span><span style="color:#F97583"> :</span><span style="color:#9ECBFF"> ''}></span></span>
+<span class="line"><span style="color:#9ECBFF">                &#x3C;span class="task-text">${</span><span style="color:#E1E4E8">task</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">text</span><span style="color:#9ECBFF">}&#x3C;/span></span></span>
+<span class="line"><span style="color:#9ECBFF">                &#x3C;button class="delete-btn" data-id="${</span><span style="color:#E1E4E8">task</span><span style="color:#9ECBFF">.</span><span style="color:#E1E4E8">id</span><span style="color:#9ECBFF">}">Delete&#x3C;/button></span></span>
+<span class="line"><span style="color:#9ECBFF">            &#x3C;/div></span></span>
+<span class="line"><span style="color:#9ECBFF">        `</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#B392F0">        $</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'#task-list'</span><span style="color:#E1E4E8">).</span><span style="color:#B392F0">append</span><span style="color:#E1E4E8">(taskHtml);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// Initialize application</span></span>
+<span class="line"><span style="color:#B392F0">$</span><span style="color:#E1E4E8">(document).</span><span style="color:#B392F0">ready</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">    new</span><span style="color:#B392F0"> TodoManager</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span></code></pre>
+<h3 id="css-style-design"><a aria-hidden="true" tabindex="-1" href="#css-style-design"><span class="icon icon-link"></span></a>CSS Style Design</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="css"><code><span class="line"><span style="color:#6A737D">/* Main container styles */</span></span>
+<span class="line"><span style="color:#B392F0">.todo-container</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">    max-width</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">600</span><span style="color:#F97583">px</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    margin</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">50</span><span style="color:#F97583">px</span><span style="color:#79B8FF"> auto</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    padding</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">20</span><span style="color:#F97583">px</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    background</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">#fff</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    border-radius</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">8</span><span style="color:#F97583">px</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    box-shadow</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">0</span><span style="color:#79B8FF"> 2</span><span style="color:#F97583">px</span><span style="color:#79B8FF"> 10</span><span style="color:#F97583">px</span><span style="color:#79B8FF"> rgba</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">,</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">,</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">,</span><span style="color:#79B8FF">0.1</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">/* Input section */</span></span>
+<span class="line"><span style="color:#B392F0">.input-section</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">    display</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">flex</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    margin-bottom</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">30</span><span style="color:#F97583">px</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    gap</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">10</span><span style="color:#F97583">px</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">#task-input</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">    flex</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    padding</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">12</span><span style="color:#F97583">px</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    border</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">2</span><span style="color:#F97583">px</span><span style="color:#79B8FF"> solid</span><span style="color:#79B8FF"> #ddd</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    border-radius</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">4</span><span style="color:#F97583">px</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    font-size</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">16</span><span style="color:#F97583">px</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">#add-task-btn</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">    padding</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">12</span><span style="color:#F97583">px</span><span style="color:#79B8FF"> 20</span><span style="color:#F97583">px</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    background</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">#007bff</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    color</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">white</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    border</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">none</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    border-radius</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">4</span><span style="color:#F97583">px</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    cursor</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">pointer</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    transition</span><span style="color:#E1E4E8">: </span><span style="color:#FDAEB7;font-style:italic">background</span><span style="color:#79B8FF"> 0.3</span><span style="color:#F97583">s</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">#add-task-btn:hover</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">    background</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">#0056b3</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">/* Task list */</span></span>
+<span class="line"><span style="color:#B392F0">.task-item</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">    display</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">flex</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    align-items</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">center</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    padding</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">15</span><span style="color:#F97583">px</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    border-bottom</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">1</span><span style="color:#F97583">px</span><span style="color:#79B8FF"> solid</span><span style="color:#79B8FF"> #eee</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    transition</span><span style="color:#E1E4E8">: </span><span style="color:#FDAEB7;font-style:italic">background</span><span style="color:#79B8FF"> 0.3</span><span style="color:#F97583">s</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">.task-item:hover</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">    background</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">#f8f9fa</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">.task-item.completed</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">    opacity</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">0.6</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">.task-item.completed</span><span style="color:#B392F0"> .task-text</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">    text-decoration</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">line-through</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">.task-checkbox</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">    margin-right</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">15</span><span style="color:#F97583">px</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">.task-text</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">    flex</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    font-size</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">16</span><span style="color:#F97583">px</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">.delete-btn</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">    background</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">#dc3545</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    color</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">white</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    border</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">none</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    padding</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">6</span><span style="color:#F97583">px</span><span style="color:#79B8FF"> 12</span><span style="color:#F97583">px</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    border-radius</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">4</span><span style="color:#F97583">px</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">    cursor</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">pointer</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">.delete-btn:hover</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">    background</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">#c82333</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h2 id="backend-implementation"><a aria-hidden="true" tabindex="-1" href="#backend-implementation"><span class="icon icon-link"></span></a>Backend Implementation</h2>
+<h3 id="flask-api-service"><a aria-hidden="true" tabindex="-1" href="#flask-api-service"><span class="icon icon-link"></span></a>Flask API Service</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> flask </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> Flask, request, jsonify, render_template</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> sqlite3</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> json</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> datetime </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> datetime</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">app </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Flask(</span><span style="color:#79B8FF">__name__</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Database initialization</span></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> init_db</span><span style="color:#E1E4E8">():</span></span>
+<span class="line"><span style="color:#E1E4E8">    conn </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> sqlite3.connect(</span><span style="color:#9ECBFF">'todo.db'</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    cursor </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> conn.cursor()</span></span>
+<span class="line"><span style="color:#E1E4E8">    cursor.execute(</span><span style="color:#9ECBFF">'''</span></span>
+<span class="line"><span style="color:#9ECBFF">        CREATE TABLE IF NOT EXISTS tasks (</span></span>
+<span class="line"><span style="color:#9ECBFF">            id INTEGER PRIMARY KEY AUTOINCREMENT,</span></span>
+<span class="line"><span style="color:#9ECBFF">            text TEXT NOT NULL,</span></span>
+<span class="line"><span style="color:#9ECBFF">            completed BOOLEAN DEFAULT FALSE,</span></span>
+<span class="line"><span style="color:#9ECBFF">            created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,</span></span>
+<span class="line"><span style="color:#9ECBFF">            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP</span></span>
+<span class="line"><span style="color:#9ECBFF">        )</span></span>
+<span class="line"><span style="color:#9ECBFF">    '''</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    conn.commit()</span></span>
+<span class="line"><span style="color:#E1E4E8">    conn.close()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Get all tasks</span></span>
+<span class="line"><span style="color:#B392F0">@app.route</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'/api/tasks'</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">methods</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">'GET'</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> get_tasks</span><span style="color:#E1E4E8">():</span></span>
+<span class="line"><span style="color:#E1E4E8">    conn </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> sqlite3.connect(</span><span style="color:#9ECBFF">'todo.db'</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    cursor </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> conn.cursor()</span></span>
+<span class="line"><span style="color:#E1E4E8">    cursor.execute(</span><span style="color:#9ECBFF">'SELECT * FROM tasks ORDER BY created_at DESC'</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    tasks </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> []</span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> row </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> cursor.fetchall():</span></span>
+<span class="line"><span style="color:#E1E4E8">        tasks.append({</span></span>
+<span class="line"><span style="color:#9ECBFF">            'id'</span><span style="color:#E1E4E8">: row[</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#9ECBFF">            'text'</span><span style="color:#E1E4E8">: row[</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#9ECBFF">            'completed'</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">bool</span><span style="color:#E1E4E8">(row[</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">]),</span></span>
+<span class="line"><span style="color:#9ECBFF">            'created_at'</span><span style="color:#E1E4E8">: row[</span><span style="color:#79B8FF">3</span><span style="color:#E1E4E8">],</span></span>
+<span class="line"><span style="color:#9ECBFF">            'updated_at'</span><span style="color:#E1E4E8">: row[</span><span style="color:#79B8FF">4</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        })</span></span>
+<span class="line"><span style="color:#E1E4E8">    conn.close()</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> jsonify(tasks)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Create new task</span></span>
+<span class="line"><span style="color:#B392F0">@app.route</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'/api/tasks'</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">methods</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">'POST'</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> create_task</span><span style="color:#E1E4E8">():</span></span>
+<span class="line"><span style="color:#E1E4E8">    data </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> request.get_json() </span><span style="color:#F97583">or</span><span style="color:#E1E4E8"> request.form</span></span>
+<span class="line"><span style="color:#E1E4E8">    text </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> data.get(</span><span style="color:#9ECBFF">'text'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">''</span><span style="color:#E1E4E8">).strip()</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#F97583"> not</span><span style="color:#E1E4E8"> text:</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> jsonify({</span><span style="color:#9ECBFF">'error'</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">'Task content cannot be empty'</span><span style="color:#E1E4E8">}), </span><span style="color:#79B8FF">400</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    conn </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> sqlite3.connect(</span><span style="color:#9ECBFF">'todo.db'</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    cursor </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> conn.cursor()</span></span>
+<span class="line"><span style="color:#E1E4E8">    cursor.execute(</span></span>
+<span class="line"><span style="color:#9ECBFF">        'INSERT INTO tasks (text, completed) VALUES (?, ?)'</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        (text, data.get(</span><span style="color:#9ECBFF">'completed'</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">False</span><span style="color:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#E1E4E8">    )</span></span>
+<span class="line"><span style="color:#E1E4E8">    task_id </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> cursor.lastrowid</span></span>
+<span class="line"><span style="color:#E1E4E8">    conn.commit()</span></span>
+<span class="line"><span style="color:#E1E4E8">    conn.close()</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> jsonify({</span></span>
+<span class="line"><span style="color:#9ECBFF">        'id'</span><span style="color:#E1E4E8">: task_id,</span></span>
+<span class="line"><span style="color:#9ECBFF">        'text'</span><span style="color:#E1E4E8">: text,</span></span>
+<span class="line"><span style="color:#9ECBFF">        'completed'</span><span style="color:#E1E4E8">: data.get(</span><span style="color:#9ECBFF">'completed'</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">False</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#9ECBFF">        'created_at'</span><span style="color:#E1E4E8">: datetime.now().isoformat()</span></span>
+<span class="line"><span style="color:#E1E4E8">    }), </span><span style="color:#79B8FF">201</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Update task</span></span>
+<span class="line"><span style="color:#B392F0">@app.route</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'/api/tasks/&#x3C;int:task_id>'</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">methods</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">'PUT'</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> update_task</span><span style="color:#E1E4E8">(task_id):</span></span>
+<span class="line"><span style="color:#E1E4E8">    data </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> request.get_json() </span><span style="color:#F97583">or</span><span style="color:#E1E4E8"> request.form</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    conn </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> sqlite3.connect(</span><span style="color:#9ECBFF">'todo.db'</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    cursor </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> conn.cursor()</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#6A737D">    # Check if task exists</span></span>
+<span class="line"><span style="color:#E1E4E8">    cursor.execute(</span><span style="color:#9ECBFF">'SELECT * FROM tasks WHERE id = ?'</span><span style="color:#E1E4E8">, (task_id,))</span></span>
+<span class="line"><span style="color:#E1E4E8">    task </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> cursor.fetchone()</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#F97583"> not</span><span style="color:#E1E4E8"> task:</span></span>
+<span class="line"><span style="color:#E1E4E8">        conn.close()</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> jsonify({</span><span style="color:#9ECBFF">'error'</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">'Task not found'</span><span style="color:#E1E4E8">}), </span><span style="color:#79B8FF">404</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#6A737D">    # Update task</span></span>
+<span class="line"><span style="color:#E1E4E8">    text </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> data.get(</span><span style="color:#9ECBFF">'text'</span><span style="color:#E1E4E8">, task[</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#E1E4E8">    completed </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> data.get(</span><span style="color:#9ECBFF">'completed'</span><span style="color:#E1E4E8">, task[</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    cursor.execute(</span></span>
+<span class="line"><span style="color:#9ECBFF">        'UPDATE tasks SET text = ?, completed = ?, updated_at = ? WHERE id = ?'</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        (text, completed, datetime.now().isoformat(), task_id)</span></span>
+<span class="line"><span style="color:#E1E4E8">    )</span></span>
+<span class="line"><span style="color:#E1E4E8">    conn.commit()</span></span>
+<span class="line"><span style="color:#E1E4E8">    conn.close()</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> jsonify({</span></span>
+<span class="line"><span style="color:#9ECBFF">        'id'</span><span style="color:#E1E4E8">: task_id,</span></span>
+<span class="line"><span style="color:#9ECBFF">        'text'</span><span style="color:#E1E4E8">: text,</span></span>
+<span class="line"><span style="color:#9ECBFF">        'completed'</span><span style="color:#E1E4E8">: completed,</span></span>
+<span class="line"><span style="color:#9ECBFF">        'updated_at'</span><span style="color:#E1E4E8">: datetime.now().isoformat()</span></span>
+<span class="line"><span style="color:#E1E4E8">    })</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Delete task</span></span>
+<span class="line"><span style="color:#B392F0">@app.route</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'/api/tasks/&#x3C;int:task_id>'</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">methods</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span><span style="color:#9ECBFF">'DELETE'</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> delete_task</span><span style="color:#E1E4E8">(task_id):</span></span>
+<span class="line"><span style="color:#E1E4E8">    conn </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> sqlite3.connect(</span><span style="color:#9ECBFF">'todo.db'</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    cursor </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> conn.cursor()</span></span>
+<span class="line"><span style="color:#E1E4E8">    cursor.execute(</span><span style="color:#9ECBFF">'DELETE FROM tasks WHERE id = ?'</span><span style="color:#E1E4E8">, (task_id,))</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> cursor.rowcount </span><span style="color:#F97583">==</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        conn.close()</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> jsonify({</span><span style="color:#9ECBFF">'error'</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">'Task not found'</span><span style="color:#E1E4E8">}), </span><span style="color:#79B8FF">404</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    conn.commit()</span></span>
+<span class="line"><span style="color:#E1E4E8">    conn.close()</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> jsonify({</span><span style="color:#9ECBFF">'message'</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">'Task deleted successfully'</span><span style="color:#E1E4E8">})</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Home route</span></span>
+<span class="line"><span style="color:#B392F0">@app.route</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'/'</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> index</span><span style="color:#E1E4E8">():</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> render_template(</span><span style="color:#9ECBFF">'index.html'</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">if</span><span style="color:#79B8FF"> __name__</span><span style="color:#F97583"> ==</span><span style="color:#9ECBFF"> '__main__'</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">    init_db()</span></span>
+<span class="line"><span style="color:#E1E4E8">    app.run(</span><span style="color:#FFAB70">debug</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">host</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">'0.0.0.0'</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">port</span><span style="color:#F97583">=</span><span style="color:#79B8FF">5000</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<h2 id="project-features"><a aria-hidden="true" tabindex="-1" href="#project-features"><span class="icon icon-link"></span></a>Project Features</h2>
+<h3 id="1-front-end-and-back-end-separation"><a aria-hidden="true" tabindex="-1" href="#1-front-end-and-back-end-separation"><span class="icon icon-link"></span></a>1. Front-End and Back-End Separation</h3>
+<ul>
+<li>Clear separation of responsibilities</li>
+<li>RESTful API design</li>
+<li>Frontend focuses on user interaction, backend focuses on data processing</li>
+</ul>
+<h3 id="2-reasonable-technology-selection"><a aria-hidden="true" tabindex="-1" href="#2-reasonable-technology-selection"><span class="icon icon-link"></span></a>2. Reasonable Technology Selection</h3>
+<ul>
+<li>Native JavaScript ensures performance</li>
+<li>jQuery simplifies DOM operations</li>
+<li>Flask is lightweight and easy to develop</li>
+<li>SQLite is a zero-configuration database</li>
+</ul>
+<h3 id="3-well-organized-code"><a aria-hidden="true" tabindex="-1" href="#3-well-organized-code"><span class="icon icon-link"></span></a>3. Well-Organized Code</h3>
+<ul>
+<li>Modular JavaScript class design</li>
+<li>Clear CSS style structure</li>
+<li>Standard Flask route organization</li>
+</ul>
+<h3 id="4-excellent-user-experience"><a aria-hidden="true" tabindex="-1" href="#4-excellent-user-experience"><span class="icon icon-link"></span></a>4. Excellent User Experience</h3>
+<ul>
+<li>Real-time response to user operations</li>
+<li>Intuitive visual feedback</li>
+<li>Clean and beautiful interface design</li>
+</ul>
+<h2 id="deployment-and-running"><a aria-hidden="true" tabindex="-1" href="#deployment-and-running"><span class="icon icon-link"></span></a>Deployment and Running</h2>
+<h3 id="local-development-environment"><a aria-hidden="true" tabindex="-1" href="#local-development-environment"><span class="icon icon-link"></span></a>Local Development Environment</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Backend startup</span></span>
+<span class="line"><span style="color:#B392F0">pip</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> flask</span></span>
+<span class="line"><span style="color:#B392F0">python</span><span style="color:#9ECBFF"> app.py</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Frontend access</span></span>
+<span class="line"><span style="color:#B392F0">http://localhost:5000</span></span></code></pre>
+<h3 id="directory-structure"><a aria-hidden="true" tabindex="-1" href="#directory-structure"><span class="icon icon-link"></span></a>Directory Structure</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>todo-app/</span></span>
+<span class="line"><span>├── app.py                 # Flask backend service</span></span>
+<span class="line"><span>├── todo.db               # SQLite database</span></span>
+<span class="line"><span>├── templates/</span></span>
+<span class="line"><span>│   └── index.html        # Main page template</span></span>
+<span class="line"><span>├── static/</span></span>
+<span class="line"><span>│   ├── js/</span></span>
+<span class="line"><span>│   │   └── app.js        # Frontend JavaScript</span></span>
+<span class="line"><span>│   └── css/</span></span>
+<span class="line"><span>│       └── style.css     # Style files</span></span>
+<span class="line"><span>└── requirements.txt      # Python dependencies</span></span></code></pre>
+<h2 id="technical-insights-and-reflections"><a aria-hidden="true" tabindex="-1" href="#technical-insights-and-reflections"><span class="icon icon-link"></span></a>Technical Insights and Reflections</h2>
+<h3 id="architecture-design"><a aria-hidden="true" tabindex="-1" href="#architecture-design"><span class="icon icon-link"></span></a>Architecture Design</h3>
+<ul>
+<li><strong>Front-end and back-end separation</strong> improved development efficiency and maintainability</li>
+<li><strong>RESTful API</strong> design ensured interface standardization</li>
+<li><strong>Lightweight technology stack</strong> reduced project complexity</li>
+</ul>
+<h3 id="development-experience"><a aria-hidden="true" tabindex="-1" href="#development-experience"><span class="icon icon-link"></span></a>Development Experience</h3>
+<ul>
+<li><strong>Native JavaScript</strong> provided better performance control</li>
+<li><strong>jQuery</strong> greatly simplified DOM operations and AJAX requests</li>
+<li><strong>Flask’s</strong> simplicity accelerated development progress</li>
+</ul>
+<h3 id="code-quality"><a aria-hidden="true" tabindex="-1" href="#code-quality"><span class="icon icon-link"></span></a>Code Quality</h3>
+<ul>
+<li><strong>Modular design</strong> improved code reusability</li>
+<li><strong>Exception handling</strong> ensured application stability</li>
+<li><strong>Data validation</strong> ensured data integrity</li>
+</ul>
+<h2 id="future-optimization-directions"><a aria-hidden="true" tabindex="-1" href="#future-optimization-directions"><span class="icon icon-link"></span></a>Future Optimization Directions</h2>
+<ol>
+<li><strong>Feature Expansion</strong>: Task categories, priorities, deadlines</li>
+<li><strong>Performance Optimization</strong>: Paginated loading, caching mechanisms</li>
+<li><strong>User System</strong>: Login registration, multi-user support</li>
+<li><strong>Interface Enhancement</strong>: Drag-and-drop sorting, batch operations</li>
+<li><strong>Mobile Adaptation</strong>: PWA support, offline functionality</li>
+</ol>
+<h2 id="summary"><a aria-hidden="true" tabindex="-1" href="#summary"><span class="icon icon-link"></span></a>Summary</h2>
+<p>This Todo List full-stack application successfully implemented a front-end and back-end separated architecture design. Through reasonable technology selection and clear code organization, it built a feature-complete task management application with good user experience.</p>
+<p>The project demonstrates how to use classic Web technology stack to build modern applications, laying a solid foundation for further feature expansion and technology upgrades.</p> <html lang="en" data-astro-cid-uffxixac> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/notes/full-stack-todo-list-application-development-practice-front-end-and-back-end-separation-architecture/"><!-- Primary Meta Tags --><title>Ge Yuxu • AI &amp; Engineering</title><meta name="title" content="Ge Yuxu • AI &#38; Engineering"><meta name="description" content="Welcome to my blog!"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/notes/full-stack-todo-list-application-development-practice-front-end-and-back-end-separation-architecture/"><meta property="og:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="og:description" content="Welcome to my blog!"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/notes/full-stack-todo-list-application-development-practice-front-end-and-back-end-separation-architecture/"><meta property="twitter:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="twitter:description" content="Welcome to my blog!"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script></head> <body data-astro-cid-uffxixac>  <div class="statement" data-astro-cid-uffxixac> <blockquote data-astro-cid-uffxixac> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>脱敏说明</strong>：本文所有出现的表名、字段名、接口地址、变量名、IP地址及示例数据等均非真实，
+    仅用于阐述技术思路与实现步骤，示例代码亦非公司真实代码。
+    示例方案亦非公司真实完整方案，仅为本人记忆总结，用于技术学习探讨。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;文中所示任何标识符并不对应实际生产环境中的名称或编号。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;示例&nbsp;SQL、脚本、代码及数据等均为演示用途，不含真实业务数据，也不具备直接运行或复现的完整上下文。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;读者若需在实际项目中参考本文方案，请结合自身业务场景及数据安全规范，使用符合内部命名和权限控制的配置。</p> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>版权声明</strong>：本文版权归原作者所有，未经作者事先书面许可，任何单位或个人不得以任何方式复制、转载、摘编或用于商业用途。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;若需非商业性引用或转载本文内容，请务必注明出处并保持内容完整。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;对因商业使用、篡改或不当引用本文内容所产生的法律纠纷，作者保留追究法律责任的权利。<br data-astro-cid-uffxixac><br data-astro-cid-uffxixac> <em data-astro-cid-uffxixac>Copyright&nbsp;©&nbsp;1989–Present&nbsp;Ge&nbsp;Yuxu.&nbsp;All&nbsp;Rights&nbsp;Reserved.</em></p> </blockquote> </div></body></html>  </article> </div> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2025 All rights reserved.
+</footer>  </body></html>

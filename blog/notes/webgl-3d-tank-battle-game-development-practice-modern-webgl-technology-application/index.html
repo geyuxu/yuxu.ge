@@ -1,0 +1,607 @@
+<!DOCTYPE html><html lang="zh"> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/notes/webgl-3d-tank-battle-game-development-practice-modern-webgl-technology-application/"><!-- Primary Meta Tags --><title>WebGL 3D Tank Battle Game Development Practice: Modern WebGL Technology Application</title><meta name="title" content="WebGL 3D Tank Battle Game Development Practice: Modern WebGL Technology Application"><meta name="description"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/notes/webgl-3d-tank-battle-game-development-practice-modern-webgl-technology-application/"><meta property="og:title" content="WebGL 3D Tank Battle Game Development Practice: Modern WebGL Technology Application"><meta property="og:description"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/notes/webgl-3d-tank-battle-game-development-practice-modern-webgl-technology-application/"><meta property="twitter:title" content="WebGL 3D Tank Battle Game Development Practice: Modern WebGL Technology Application"><meta property="twitter:description"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script><script is:global>
+	window.addEventListener('DOMContentLoaded', () => {
+		$('.toc ol').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'margin': 0,
+		'padding-left': 0,       // 可按需调整
+		});
+		$('.toc ol > li').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'padding-left': 10
+		});
+        $('.sidebar').append($('.toc'));
+      });
+	</script><link rel="stylesheet" href="/_astro/_slug_.BvCO7WHQ.css">
+<style>a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astro-cid-eimmu3lg].active{font-weight:bolder;text-decoration:underline}header[data-astro-cid-3ef6ksr2]{margin:0;padding:0 1em;background:#fff;box-shadow:0 2px 8px rgba(var(--black),5%)}h2[data-astro-cid-3ef6ksr2]{margin:0;font-size:1em}h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2],h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none}nav[data-astro-cid-3ef6ksr2]{display:flex;align-items:center;justify-content:space-between}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{padding:1em .5em;color:var(--black);border-bottom:4px solid transparent;text-decoration:none}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none;border-bottom-color:var(--accent)}.social-links[data-astro-cid-3ef6ksr2],.social-links[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{display:flex}@media (max-width: 720px){.social-links[data-astro-cid-3ef6ksr2]{display:none}}footer[data-astro-cid-sz7xmlte]{padding:2em 1em 6em;background:linear-gradient(var(--gray-gradient)) no-repeat;color:rgb(var(--gray));text-align:center}.social-links[data-astro-cid-sz7xmlte]{display:flex;justify-content:center;gap:1em;margin-top:1em}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]{text-decoration:none;color:rgb(var(--gray))}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]:hover{color:rgb(var(--gray-dark))}
+.statement[data-astro-cid-uffxixac]{font-size:10px;color:gray}@media (max-width: 640px){.statement[data-astro-cid-uffxixac]{font-size:6px;color:gray}}
+</style></head> <body> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <!--<h2><a href="/">{SITE_TITLE}</a></h2>--> <h2 data-astro-cid-3ef6ksr2><a style="padding-left:0;color:blue;" href="/" data-astro-cid-3ef6ksr2>Ge Yuxu<br data-astro-cid-3ef6ksr2>AI & Engineering</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blog/1" class="active" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/series" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Series </a>  <a href="/projects" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Projects </a>  </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://github.com/geyuxu" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://www.linkedin.com/in/geyuxu/" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's LinkedIn profile</span> <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" data-astro-cid-3ef6ksr2> <path fill="currentColor" d="M20.447 20.452H17.2v-5.569c0-1.328-.025-3.039-1.852-3.039-1.853 0-2.136 1.447-2.136 2.942v5.666h-3.248V9h3.122v1.561h.045c.435-.823 1.498-1.688 3.083-1.688 3.295 0 3.903 2.17 3.903 4.989v6.59zM5.337 7.433a1.882 1.882 0 110-3.764 1.882 1.882 0 010 3.764zm1.626 13.019H3.708V9h3.255v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.222 0z" data-astro-cid-3ef6ksr2></path> </svg> </a> </div> </nav> <!-- Microsoft Clarity --> <script type="text/javascript">
+		(function(c,l,a,r,i,t,y){
+			c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+			t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+			y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+		})(window, document, "clarity", "script", "rc2w96osp6");
+	</script> </header>  <main class="page"> <!-- 左侧栏 --> <aside class="sidebar"> <div class="meta"> <b>WebGL 3D Tank Battle Game Development Practice: Modern WebGL Technology Application</b> <p><time datetime="2025-07-21T00:00:00.000Z"> 2025/07/21 08:00:00 </time></p> <p style="font-size:.85rem;color:var(--gray);">更新：<time datetime="2025-07-21T00:00:00.000Z"> 2025/07/21 08:00:00 </time></p>  </div> <hr> <br> </aside> <!-- 右侧正文区域（flex 居中） --> <div class="content-wrapper"> <article class="prose">  <nav class="toc"><ol class="toc-level toc-level-1"><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#project-overview">Project Overview</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#technical-architecture">Technical Architecture</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#core-technology-stack">Core Technology Stack</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#system-architecture-design">System Architecture Design</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#rendering-engine-implementation">Rendering Engine Implementation</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#webgl-rendering-pipeline">WebGL Rendering Pipeline</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#shader-system">Shader System</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#physics-system-design">Physics System Design</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#collision-detection-system">Collision Detection System</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#ai-system-implementation">AI System Implementation</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#enemy-tank-ai">Enemy Tank AI</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#game-system-integration">Game System Integration</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#main-game-loop">Main Game Loop</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#performance-optimization-strategies">Performance Optimization Strategies</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#1-rendering-optimization">1. Rendering Optimization</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#2-physics-optimization">2. Physics Optimization</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#3-ai-optimization">3. AI Optimization</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#project-features-and-innovations">Project Features and Innovations</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#1-modern-webgl-technology-application">1. Modern WebGL Technology Application</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#2-complete-game-architecture">2. Complete Game Architecture</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#3-intelligent-ai-system">3. Intelligent AI System</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#4-immersive-gaming-experience">4. Immersive Gaming Experience</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#technical-insights-and-reflections">Technical Insights and Reflections</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#webgl-in-depth-application">WebGL In-depth Application</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#game-engine-architecture">Game Engine Architecture</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#performance-optimization-practice">Performance Optimization Practice</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#future-development-directions">Future Development Directions</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#summary">Summary</a></li></ol></nav><h2 id="project-overview"><a aria-hidden="true" tabindex="-1" href="#project-overview"><span class="icon icon-link"></span></a>Project Overview</h2>
+<p>Developed a <strong>WebGL technology-based</strong> 3D tank battle game that provides a complete 3D gaming experience using modern Web technologies. The project integrates a custom rendering engine, physics system, AI combat system, audio system, and user interface, showcasing WebGL’s powerful capabilities in complex game development.</p>
+<h2 id="technical-architecture"><a aria-hidden="true" tabindex="-1" href="#technical-architecture"><span class="icon icon-link"></span></a>Technical Architecture</h2>
+<h3 id="core-technology-stack"><a aria-hidden="true" tabindex="-1" href="#core-technology-stack"><span class="icon icon-link"></span></a>Core Technology Stack</h3>
+<ul>
+<li><strong>WebGL 2.0</strong>: 3D graphics rendering</li>
+<li><strong>GLSL</strong>: Shader programming language</li>
+<li><strong>JavaScript ES6+</strong>: Game logic implementation</li>
+<li><strong>Web Audio API</strong>: Audio system</li>
+<li><strong>Canvas 2D API</strong>: UI interface rendering</li>
+<li><strong>WebGL Matrix</strong>: 3D mathematical calculation library</li>
+</ul>
+<h3 id="system-architecture-design"><a aria-hidden="true" tabindex="-1" href="#system-architecture-design"><span class="icon icon-link"></span></a>System Architecture Design</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>WebGL 3D Tank Game</span></span>
+<span class="line"><span>├── Rendering Engine</span></span>
+<span class="line"><span>│   ├── Shader Manager</span></span>
+<span class="line"><span>│   ├── Texture System</span></span>
+<span class="line"><span>│   ├── Model Loader</span></span>
+<span class="line"><span>│   └── Scene Renderer</span></span>
+<span class="line"><span>├── Physics Engine</span></span>
+<span class="line"><span>│   ├── Collision Detection</span></span>
+<span class="line"><span>│   ├── Rigid Body Dynamics</span></span>
+<span class="line"><span>│   └── Spatial Partitioning</span></span>
+<span class="line"><span>├── AI System</span></span>
+<span class="line"><span>│   ├── Pathfinding</span></span>
+<span class="line"><span>│   ├── Behavior Tree</span></span>
+<span class="line"><span>│   └── Decision System</span></span>
+<span class="line"><span>├── Audio System</span></span>
+<span class="line"><span>├── User Interface</span></span>
+<span class="line"><span>└── Game Loop</span></span></code></pre>
+<h2 id="rendering-engine-implementation"><a aria-hidden="true" tabindex="-1" href="#rendering-engine-implementation"><span class="icon icon-link"></span></a>Rendering Engine Implementation</h2>
+<h3 id="webgl-rendering-pipeline"><a aria-hidden="true" tabindex="-1" href="#webgl-rendering-pipeline"><span class="icon icon-link"></span></a>WebGL Rendering Pipeline</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> RenderEngine</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">    constructor</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">canvas</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.canvas </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> canvas;</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.gl </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> canvas.</span><span style="color:#B392F0">getContext</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'webgl2'</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.shaderPrograms </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Map</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.textures </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Map</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.models </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Map</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">initWebGL</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">loadShaders</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">setupBuffers</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">    initWebGL</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> gl</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.gl;</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Enable depth testing</span></span>
+<span class="line"><span style="color:#E1E4E8">        gl.</span><span style="color:#B392F0">enable</span><span style="color:#E1E4E8">(gl.</span><span style="color:#79B8FF">DEPTH_TEST</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">        gl.</span><span style="color:#B392F0">depthFunc</span><span style="color:#E1E4E8">(gl.</span><span style="color:#79B8FF">LEQUAL</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Enable back-face culling</span></span>
+<span class="line"><span style="color:#E1E4E8">        gl.</span><span style="color:#B392F0">enable</span><span style="color:#E1E4E8">(gl.</span><span style="color:#79B8FF">CULL_FACE</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">        gl.</span><span style="color:#B392F0">cullFace</span><span style="color:#E1E4E8">(gl.</span><span style="color:#79B8FF">BACK</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Set viewport</span></span>
+<span class="line"><span style="color:#E1E4E8">        gl.</span><span style="color:#B392F0">viewport</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.canvas.width, </span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.canvas.height);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Set clear color</span></span>
+<span class="line"><span style="color:#E1E4E8">        gl.</span><span style="color:#B392F0">clearColor</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">0.2</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0.3</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0.3</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">1.0</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // Compile shader</span></span>
+<span class="line"><span style="color:#B392F0">    compileShader</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">source</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">type</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> gl</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.gl;</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> shader</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> gl.</span><span style="color:#B392F0">createShader</span><span style="color:#E1E4E8">(type);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#E1E4E8">        gl.</span><span style="color:#B392F0">shaderSource</span><span style="color:#E1E4E8">(shader, source);</span></span>
+<span class="line"><span style="color:#E1E4E8">        gl.</span><span style="color:#B392F0">compileShader</span><span style="color:#E1E4E8">(shader);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">gl.</span><span style="color:#B392F0">getShaderParameter</span><span style="color:#E1E4E8">(shader, gl.</span><span style="color:#79B8FF">COMPILE_STATUS</span><span style="color:#E1E4E8">)) {</span></span>
+<span class="line"><span style="color:#E1E4E8">            console.</span><span style="color:#B392F0">error</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'Shader compilation error:'</span><span style="color:#E1E4E8">, gl.</span><span style="color:#B392F0">getShaderInfoLog</span><span style="color:#E1E4E8">(shader));</span></span>
+<span class="line"><span style="color:#E1E4E8">            gl.</span><span style="color:#B392F0">deleteShader</span><span style="color:#E1E4E8">(shader);</span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> shader;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // Create shader program</span></span>
+<span class="line"><span style="color:#B392F0">    createShaderProgram</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">vertexSource</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">fragmentSource</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> gl</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.gl;</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> vertexShader</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">compileShader</span><span style="color:#E1E4E8">(vertexSource, gl.</span><span style="color:#79B8FF">VERTEX_SHADER</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> fragmentShader</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">compileShader</span><span style="color:#E1E4E8">(fragmentSource, gl.</span><span style="color:#79B8FF">FRAGMENT_SHADER</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> program</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> gl.</span><span style="color:#B392F0">createProgram</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">        gl.</span><span style="color:#B392F0">attachShader</span><span style="color:#E1E4E8">(program, vertexShader);</span></span>
+<span class="line"><span style="color:#E1E4E8">        gl.</span><span style="color:#B392F0">attachShader</span><span style="color:#E1E4E8">(program, fragmentShader);</span></span>
+<span class="line"><span style="color:#E1E4E8">        gl.</span><span style="color:#B392F0">linkProgram</span><span style="color:#E1E4E8">(program);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">gl.</span><span style="color:#B392F0">getProgramParameter</span><span style="color:#E1E4E8">(program, gl.</span><span style="color:#79B8FF">LINK_STATUS</span><span style="color:#E1E4E8">)) {</span></span>
+<span class="line"><span style="color:#E1E4E8">            console.</span><span style="color:#B392F0">error</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'Shader program linking error:'</span><span style="color:#E1E4E8">, gl.</span><span style="color:#B392F0">getProgramInfoLog</span><span style="color:#E1E4E8">(program));</span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> program;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // Render scene</span></span>
+<span class="line"><span style="color:#B392F0">    render</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">scene</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">camera</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> gl</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.gl;</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Clear buffers</span></span>
+<span class="line"><span style="color:#E1E4E8">        gl.</span><span style="color:#B392F0">clear</span><span style="color:#E1E4E8">(gl.</span><span style="color:#79B8FF">COLOR_BUFFER_BIT</span><span style="color:#F97583"> |</span><span style="color:#E1E4E8"> gl.</span><span style="color:#79B8FF">DEPTH_BUFFER_BIT</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Calculate view and projection matrices</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> viewMatrix</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> camera.</span><span style="color:#B392F0">getViewMatrix</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> projMatrix</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> camera.</span><span style="color:#B392F0">getProjectionMatrix</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Render all game objects</span></span>
+<span class="line"><span style="color:#E1E4E8">        scene.objects.</span><span style="color:#B392F0">forEach</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">obj</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#79B8FF">            this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">renderObject</span><span style="color:#E1E4E8">(obj, viewMatrix, projMatrix);</span></span>
+<span class="line"><span style="color:#E1E4E8">        });</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">    renderObject</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">object</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">viewMatrix</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">projMatrix</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> gl</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.gl;</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> program</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.shaderPrograms.</span><span style="color:#B392F0">get</span><span style="color:#E1E4E8">(object.material.shader);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#E1E4E8">        gl.</span><span style="color:#B392F0">useProgram</span><span style="color:#E1E4E8">(program);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Set matrix uniforms</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> modelMatrix</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> object.</span><span style="color:#B392F0">getModelMatrix</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> mvpMatrix</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> mat4.</span><span style="color:#B392F0">multiply</span><span style="color:#E1E4E8">(projMatrix, viewMatrix, modelMatrix);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#E1E4E8">        gl.</span><span style="color:#B392F0">uniformMatrix4fv</span><span style="color:#E1E4E8">(gl.</span><span style="color:#B392F0">getUniformLocation</span><span style="color:#E1E4E8">(program, </span><span style="color:#9ECBFF">'u_mvpMatrix'</span><span style="color:#E1E4E8">), </span><span style="color:#79B8FF">false</span><span style="color:#E1E4E8">, mvpMatrix);</span></span>
+<span class="line"><span style="color:#E1E4E8">        gl.</span><span style="color:#B392F0">uniformMatrix4fv</span><span style="color:#E1E4E8">(gl.</span><span style="color:#B392F0">getUniformLocation</span><span style="color:#E1E4E8">(program, </span><span style="color:#9ECBFF">'u_modelMatrix'</span><span style="color:#E1E4E8">), </span><span style="color:#79B8FF">false</span><span style="color:#E1E4E8">, modelMatrix);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Bind textures</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (object.material.diffuseTexture) {</span></span>
+<span class="line"><span style="color:#E1E4E8">            gl.</span><span style="color:#B392F0">activeTexture</span><span style="color:#E1E4E8">(gl.</span><span style="color:#79B8FF">TEXTURE0</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">            gl.</span><span style="color:#B392F0">bindTexture</span><span style="color:#E1E4E8">(gl.</span><span style="color:#79B8FF">TEXTURE_2D</span><span style="color:#E1E4E8">, object.material.diffuseTexture);</span></span>
+<span class="line"><span style="color:#E1E4E8">            gl.</span><span style="color:#B392F0">uniform1i</span><span style="color:#E1E4E8">(gl.</span><span style="color:#B392F0">getUniformLocation</span><span style="color:#E1E4E8">(program, </span><span style="color:#9ECBFF">'u_diffuseTexture'</span><span style="color:#E1E4E8">), </span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Bind vertex data and draw</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">bindVertexData</span><span style="color:#E1E4E8">(object.mesh);</span></span>
+<span class="line"><span style="color:#E1E4E8">        gl.</span><span style="color:#B392F0">drawElements</span><span style="color:#E1E4E8">(gl.</span><span style="color:#79B8FF">TRIANGLES</span><span style="color:#E1E4E8">, object.mesh.indices.</span><span style="color:#79B8FF">length</span><span style="color:#E1E4E8">, gl.</span><span style="color:#79B8FF">UNSIGNED_SHORT</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h3 id="shader-system"><a aria-hidden="true" tabindex="-1" href="#shader-system"><span class="icon icon-link"></span></a>Shader System</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="glsl"><code><span class="line"><span style="color:#6A737D">// Vertex Shader</span></span>
+<span class="line"><span style="color:#E1E4E8">#version </span><span style="color:#79B8FF">300</span><span style="color:#E1E4E8"> es</span></span>
+<span class="line"><span style="color:#E1E4E8">precision highp </span><span style="color:#F97583">float</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">in</span><span style="color:#F97583"> vec3</span><span style="color:#E1E4E8"> a_position;</span></span>
+<span class="line"><span style="color:#F97583">in</span><span style="color:#F97583"> vec3</span><span style="color:#E1E4E8"> a_normal;</span></span>
+<span class="line"><span style="color:#F97583">in</span><span style="color:#F97583"> vec2</span><span style="color:#E1E4E8"> a_texCoord;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">uniform</span><span style="color:#F97583"> mat4</span><span style="color:#E1E4E8"> u_mvpMatrix;</span></span>
+<span class="line"><span style="color:#F97583">uniform</span><span style="color:#F97583"> mat4</span><span style="color:#E1E4E8"> u_modelMatrix;</span></span>
+<span class="line"><span style="color:#F97583">uniform</span><span style="color:#F97583"> mat4</span><span style="color:#E1E4E8"> u_normalMatrix;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">out</span><span style="color:#F97583"> vec3</span><span style="color:#E1E4E8"> v_worldPos;</span></span>
+<span class="line"><span style="color:#F97583">out</span><span style="color:#F97583"> vec3</span><span style="color:#E1E4E8"> v_normal;</span></span>
+<span class="line"><span style="color:#F97583">out</span><span style="color:#F97583"> vec2</span><span style="color:#E1E4E8"> v_texCoord;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">void</span><span style="color:#B392F0"> main</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#E1E4E8">    vec4 worldPos </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> u_modelMatrix </span><span style="color:#F97583">*</span><span style="color:#B392F0"> vec4</span><span style="color:#E1E4E8">(a_position, </span><span style="color:#79B8FF">1.0</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    v_worldPos </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> worldPos.xyz;</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    v_normal </span><span style="color:#F97583">=</span><span style="color:#B392F0"> normalize</span><span style="color:#E1E4E8">((u_normalMatrix </span><span style="color:#F97583">*</span><span style="color:#B392F0"> vec4</span><span style="color:#E1E4E8">(a_normal, </span><span style="color:#79B8FF">0.0</span><span style="color:#E1E4E8">)).xyz);</span></span>
+<span class="line"><span style="color:#E1E4E8">    v_texCoord </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> a_texCoord;</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    gl_Position </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> u_mvpMatrix </span><span style="color:#F97583">*</span><span style="color:#B392F0"> vec4</span><span style="color:#E1E4E8">(a_position, </span><span style="color:#79B8FF">1.0</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="glsl"><code><span class="line"><span style="color:#6A737D">// Fragment Shader</span></span>
+<span class="line"><span style="color:#E1E4E8">#version </span><span style="color:#79B8FF">300</span><span style="color:#E1E4E8"> es</span></span>
+<span class="line"><span style="color:#E1E4E8">precision highp </span><span style="color:#F97583">float</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">in</span><span style="color:#F97583"> vec3</span><span style="color:#E1E4E8"> v_worldPos;</span></span>
+<span class="line"><span style="color:#F97583">in</span><span style="color:#F97583"> vec3</span><span style="color:#E1E4E8"> v_normal;</span></span>
+<span class="line"><span style="color:#F97583">in</span><span style="color:#F97583"> vec2</span><span style="color:#E1E4E8"> v_texCoord;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">uniform</span><span style="color:#F97583"> sampler2D</span><span style="color:#E1E4E8"> u_diffuseTexture;</span></span>
+<span class="line"><span style="color:#F97583">uniform</span><span style="color:#F97583"> vec3</span><span style="color:#E1E4E8"> u_lightPos;</span></span>
+<span class="line"><span style="color:#F97583">uniform</span><span style="color:#F97583"> vec3</span><span style="color:#E1E4E8"> u_lightColor;</span></span>
+<span class="line"><span style="color:#F97583">uniform</span><span style="color:#F97583"> vec3</span><span style="color:#E1E4E8"> u_viewPos;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">out</span><span style="color:#F97583"> vec4</span><span style="color:#E1E4E8"> fragColor;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">void</span><span style="color:#B392F0"> main</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#6A737D">    // Sample texture</span></span>
+<span class="line"><span style="color:#E1E4E8">    vec3 texColor </span><span style="color:#F97583">=</span><span style="color:#B392F0"> texture</span><span style="color:#E1E4E8">(u_diffuseTexture, v_texCoord).rgb;</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#6A737D">    // Calculate lighting</span></span>
+<span class="line"><span style="color:#E1E4E8">    vec3 lightDir </span><span style="color:#F97583">=</span><span style="color:#B392F0"> normalize</span><span style="color:#E1E4E8">(u_lightPos </span><span style="color:#F97583">-</span><span style="color:#E1E4E8"> v_worldPos);</span></span>
+<span class="line"><span style="color:#E1E4E8">    vec3 normal </span><span style="color:#F97583">=</span><span style="color:#B392F0"> normalize</span><span style="color:#E1E4E8">(v_normal);</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#6A737D">    // Ambient light</span></span>
+<span class="line"><span style="color:#F97583">    float</span><span style="color:#E1E4E8"> ambientStrength </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 0.3</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    vec3 ambient </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> ambientStrength </span><span style="color:#F97583">*</span><span style="color:#E1E4E8"> u_lightColor;</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#6A737D">    // Diffuse lighting</span></span>
+<span class="line"><span style="color:#F97583">    float</span><span style="color:#E1E4E8"> diff </span><span style="color:#F97583">=</span><span style="color:#B392F0"> max</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">dot</span><span style="color:#E1E4E8">(normal, lightDir), </span><span style="color:#79B8FF">0.0</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    vec3 diffuse </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> diff </span><span style="color:#F97583">*</span><span style="color:#E1E4E8"> u_lightColor;</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#6A737D">    // Specular reflection</span></span>
+<span class="line"><span style="color:#F97583">    float</span><span style="color:#E1E4E8"> specularStrength </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 0.8</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    vec3 viewDir </span><span style="color:#F97583">=</span><span style="color:#B392F0"> normalize</span><span style="color:#E1E4E8">(u_viewPos </span><span style="color:#F97583">-</span><span style="color:#E1E4E8"> v_worldPos);</span></span>
+<span class="line"><span style="color:#E1E4E8">    vec3 reflectDir </span><span style="color:#F97583">=</span><span style="color:#B392F0"> reflect</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">-</span><span style="color:#E1E4E8">lightDir, normal);</span></span>
+<span class="line"><span style="color:#F97583">    float</span><span style="color:#E1E4E8"> spec </span><span style="color:#F97583">=</span><span style="color:#B392F0"> pow</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">max</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">dot</span><span style="color:#E1E4E8">(viewDir, reflectDir), </span><span style="color:#79B8FF">0.0</span><span style="color:#E1E4E8">), </span><span style="color:#79B8FF">64.0</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    vec3 specular </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> specularStrength </span><span style="color:#F97583">*</span><span style="color:#E1E4E8"> spec </span><span style="color:#F97583">*</span><span style="color:#E1E4E8"> u_lightColor;</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    vec3 result </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> (ambient </span><span style="color:#F97583">+</span><span style="color:#E1E4E8"> diffuse </span><span style="color:#F97583">+</span><span style="color:#E1E4E8"> specular) </span><span style="color:#F97583">*</span><span style="color:#E1E4E8"> texColor;</span></span>
+<span class="line"><span style="color:#E1E4E8">    fragColor </span><span style="color:#F97583">=</span><span style="color:#B392F0"> vec4</span><span style="color:#E1E4E8">(result, </span><span style="color:#79B8FF">1.0</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h2 id="physics-system-design"><a aria-hidden="true" tabindex="-1" href="#physics-system-design"><span class="icon icon-link"></span></a>Physics System Design</h2>
+<h3 id="collision-detection-system"><a aria-hidden="true" tabindex="-1" href="#collision-detection-system"><span class="icon icon-link"></span></a>Collision Detection System</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> PhysicsEngine</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">    constructor</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.bodies </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [];</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.gravity </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> { x: </span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">, y: </span><span style="color:#F97583">-</span><span style="color:#79B8FF">9.81</span><span style="color:#E1E4E8">, z: </span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8"> };</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.spatialGrid </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> SpatialGrid</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">50</span><span style="color:#E1E4E8">); </span><span style="color:#6A737D">// 50x50 grid</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // Collision detection</span></span>
+<span class="line"><span style="color:#B392F0">    checkCollisions</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#6A737D">        // Use spatial partitioning to optimize collision detection</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> potentialPairs</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.spatialGrid.</span><span style="color:#B392F0">getPotentialCollisions</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#E1E4E8">        potentialPairs.</span><span style="color:#B392F0">forEach</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">pair</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">            const</span><span style="color:#E1E4E8"> [</span><span style="color:#79B8FF">bodyA</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">bodyB</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> pair;</span></span>
+<span class="line"><span style="color:#E1E4E8">            </span></span>
+<span class="line"><span style="color:#F97583">            if</span><span style="color:#E1E4E8"> (</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">detectCollision</span><span style="color:#E1E4E8">(bodyA, bodyB)) {</span></span>
+<span class="line"><span style="color:#79B8FF">                this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">resolveCollision</span><span style="color:#E1E4E8">(bodyA, bodyB);</span></span>
+<span class="line"><span style="color:#E1E4E8">            }</span></span>
+<span class="line"><span style="color:#E1E4E8">        });</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // AABB collision detection</span></span>
+<span class="line"><span style="color:#B392F0">    detectAABBCollision</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">boxA</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">boxB</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> (</span></span>
+<span class="line"><span style="color:#E1E4E8">            boxA.min.x </span><span style="color:#F97583">&#x3C;=</span><span style="color:#E1E4E8"> boxB.max.x </span><span style="color:#F97583">&#x26;&#x26;</span><span style="color:#E1E4E8"> boxA.max.x </span><span style="color:#F97583">>=</span><span style="color:#E1E4E8"> boxB.min.x </span><span style="color:#F97583">&#x26;&#x26;</span></span>
+<span class="line"><span style="color:#E1E4E8">            boxA.min.y </span><span style="color:#F97583">&#x3C;=</span><span style="color:#E1E4E8"> boxB.max.y </span><span style="color:#F97583">&#x26;&#x26;</span><span style="color:#E1E4E8"> boxA.max.y </span><span style="color:#F97583">>=</span><span style="color:#E1E4E8"> boxB.min.y </span><span style="color:#F97583">&#x26;&#x26;</span></span>
+<span class="line"><span style="color:#E1E4E8">            boxA.min.z </span><span style="color:#F97583">&#x3C;=</span><span style="color:#E1E4E8"> boxB.max.z </span><span style="color:#F97583">&#x26;&#x26;</span><span style="color:#E1E4E8"> boxA.max.z </span><span style="color:#F97583">>=</span><span style="color:#E1E4E8"> boxB.min.z</span></span>
+<span class="line"><span style="color:#E1E4E8">        );</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // Sphere collision detection</span></span>
+<span class="line"><span style="color:#B392F0">    detectSphereCollision</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">sphereA</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">sphereB</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> distance</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> vec3.</span><span style="color:#B392F0">distance</span><span style="color:#E1E4E8">(sphereA.center, sphereB.center);</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#E1E4E8"> distance </span><span style="color:#F97583">&#x3C;=</span><span style="color:#E1E4E8"> (sphereA.radius </span><span style="color:#F97583">+</span><span style="color:#E1E4E8"> sphereB.radius);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // Collision response</span></span>
+<span class="line"><span style="color:#B392F0">    resolveCollision</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">bodyA</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">bodyB</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#6A737D">        // Calculate collision normal</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> normal</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> vec3.</span><span style="color:#B392F0">normalize</span><span style="color:#E1E4E8">(vec3.</span><span style="color:#B392F0">subtract</span><span style="color:#E1E4E8">(bodyB.position, bodyA.position));</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Calculate relative velocity</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> relativeVelocity</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> vec3.</span><span style="color:#B392F0">subtract</span><span style="color:#E1E4E8">(bodyB.velocity, bodyA.velocity);</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> velocityAlongNormal</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> vec3.</span><span style="color:#B392F0">dot</span><span style="color:#E1E4E8">(relativeVelocity, normal);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // If objects are separating, don't resolve collision</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (velocityAlongNormal </span><span style="color:#F97583">></span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">return</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Calculate restitution coefficient</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> restitution</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Math.</span><span style="color:#B392F0">min</span><span style="color:#E1E4E8">(bodyA.restitution, bodyB.restitution);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Calculate impulse</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> impulse</span><span style="color:#F97583"> =</span><span style="color:#F97583"> -</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">1</span><span style="color:#F97583"> +</span><span style="color:#E1E4E8"> restitution) </span><span style="color:#F97583">*</span><span style="color:#E1E4E8"> velocityAlongNormal;</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> impulseVector</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> vec3.</span><span style="color:#B392F0">scale</span><span style="color:#E1E4E8">(normal, impulse);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Apply impulse</span></span>
+<span class="line"><span style="color:#E1E4E8">        bodyA.velocity </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> vec3.</span><span style="color:#B392F0">subtract</span><span style="color:#E1E4E8">(bodyA.velocity, vec3.</span><span style="color:#B392F0">scale</span><span style="color:#E1E4E8">(impulseVector, </span><span style="color:#79B8FF">1</span><span style="color:#F97583"> /</span><span style="color:#E1E4E8"> bodyA.mass));</span></span>
+<span class="line"><span style="color:#E1E4E8">        bodyB.velocity </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> vec3.</span><span style="color:#B392F0">add</span><span style="color:#E1E4E8">(bodyB.velocity, vec3.</span><span style="color:#B392F0">scale</span><span style="color:#E1E4E8">(impulseVector, </span><span style="color:#79B8FF">1</span><span style="color:#F97583"> /</span><span style="color:#E1E4E8"> bodyB.mass));</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">    // Physics update</span></span>
+<span class="line"><span style="color:#B392F0">    update</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">deltaTime</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.bodies.</span><span style="color:#B392F0">forEach</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">body</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#6A737D">            // Apply gravity</span></span>
+<span class="line"><span style="color:#F97583">            if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#E1E4E8">body.isStatic) {</span></span>
+<span class="line"><span style="color:#E1E4E8">                body.velocity </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> vec3.</span><span style="color:#B392F0">add</span><span style="color:#E1E4E8">(body.velocity, vec3.</span><span style="color:#B392F0">scale</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.gravity, deltaTime));</span></span>
+<span class="line"><span style="color:#E1E4E8">            }</span></span>
+<span class="line"><span style="color:#E1E4E8">            </span></span>
+<span class="line"><span style="color:#6A737D">            // Update position</span></span>
+<span class="line"><span style="color:#E1E4E8">            body.position </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> vec3.</span><span style="color:#B392F0">add</span><span style="color:#E1E4E8">(body.position, vec3.</span><span style="color:#B392F0">scale</span><span style="color:#E1E4E8">(body.velocity, deltaTime));</span></span>
+<span class="line"><span style="color:#E1E4E8">            </span></span>
+<span class="line"><span style="color:#6A737D">            // Update bounding box</span></span>
+<span class="line"><span style="color:#E1E4E8">            body.</span><span style="color:#B392F0">updateBoundingBox</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">        });</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Check collisions</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">checkCollisions</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h2 id="ai-system-implementation"><a aria-hidden="true" tabindex="-1" href="#ai-system-implementation"><span class="icon icon-link"></span></a>AI System Implementation</h2>
+<h3 id="enemy-tank-ai"><a aria-hidden="true" tabindex="-1" href="#enemy-tank-ai"><span class="icon icon-link"></span></a>Enemy Tank AI</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> TankAI</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">    constructor</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">tank</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.tank </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> tank;</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.state </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> 'patrol'</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.target </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> null</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.pathfinder </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Pathfinder</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.behaviorTree </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> BehaviorTree</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">setupBehaviorTree</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">    setupBehaviorTree</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#6A737D">        // Build behavior tree</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> root</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Selector</span><span style="color:#E1E4E8">([</span></span>
+<span class="line"><span style="color:#F97583">            new</span><span style="color:#B392F0"> Sequence</span><span style="color:#E1E4E8">([</span></span>
+<span class="line"><span style="color:#F97583">                new</span><span style="color:#B392F0"> Condition</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=></span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">hasTarget</span><span style="color:#E1E4E8">()),</span></span>
+<span class="line"><span style="color:#F97583">                new</span><span style="color:#B392F0"> Selector</span><span style="color:#E1E4E8">([</span></span>
+<span class="line"><span style="color:#F97583">                    new</span><span style="color:#B392F0"> Action</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=></span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">attack</span><span style="color:#E1E4E8">()),</span></span>
+<span class="line"><span style="color:#F97583">                    new</span><span style="color:#B392F0"> Action</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=></span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">chase</span><span style="color:#E1E4E8">())</span></span>
+<span class="line"><span style="color:#E1E4E8">                ])</span></span>
+<span class="line"><span style="color:#E1E4E8">            ]),</span></span>
+<span class="line"><span style="color:#F97583">            new</span><span style="color:#B392F0"> Action</span><span style="color:#E1E4E8">(() </span><span style="color:#F97583">=></span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">patrol</span><span style="color:#E1E4E8">())</span></span>
+<span class="line"><span style="color:#E1E4E8">        ]);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.behaviorTree.</span><span style="color:#B392F0">setRoot</span><span style="color:#E1E4E8">(root);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">    update</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">deltaTime</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">gameState</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#6A737D">        // Update perception system</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">updatePerception</span><span style="color:#E1E4E8">(gameState);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Execute behavior tree</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.behaviorTree.</span><span style="color:#B392F0">execute</span><span style="color:#E1E4E8">(deltaTime);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Update tank controls</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">updateTankControls</span><span style="color:#E1E4E8">(deltaTime);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">    updatePerception</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">gameState</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> playerTank</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> gameState.playerTank;</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> distance</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> vec3.</span><span style="color:#B392F0">distance</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.tank.position, playerTank.position);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Vision detection</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (distance </span><span style="color:#F97583">&#x3C;=</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.tank.viewDistance) {</span></span>
+<span class="line"><span style="color:#6A737D">            // Check if within field of view</span></span>
+<span class="line"><span style="color:#F97583">            const</span><span style="color:#79B8FF"> dirToPlayer</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> vec3.</span><span style="color:#B392F0">normalize</span><span style="color:#E1E4E8">(vec3.</span><span style="color:#B392F0">subtract</span><span style="color:#E1E4E8">(playerTank.position, </span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.tank.position));</span></span>
+<span class="line"><span style="color:#F97583">            const</span><span style="color:#79B8FF"> angle</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> vec3.</span><span style="color:#B392F0">angle</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.tank.forward, dirToPlayer);</span></span>
+<span class="line"><span style="color:#E1E4E8">            </span></span>
+<span class="line"><span style="color:#F97583">            if</span><span style="color:#E1E4E8"> (angle </span><span style="color:#F97583">&#x3C;=</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.tank.viewAngle) {</span></span>
+<span class="line"><span style="color:#6A737D">                // Ray casting for obstruction</span></span>
+<span class="line"><span style="color:#F97583">                if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">isObstructed</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.tank.position, playerTank.position, gameState.obstacles)) {</span></span>
+<span class="line"><span style="color:#79B8FF">                    this</span><span style="color:#E1E4E8">.target </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> playerTank;</span></span>
+<span class="line"><span style="color:#E1E4E8">                }</span></span>
+<span class="line"><span style="color:#E1E4E8">            }</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">    attack</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.target) </span><span style="color:#F97583">return</span><span style="color:#79B8FF"> false</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Aim at target</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> dirToTarget</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> vec3.</span><span style="color:#B392F0">normalize</span><span style="color:#E1E4E8">(vec3.</span><span style="color:#B392F0">subtract</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.target.position, </span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.tank.position));</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.tank.turretRotation </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Math.</span><span style="color:#B392F0">atan2</span><span style="color:#E1E4E8">(dirToTarget.x, dirToTarget.z);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Fire</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">isAimed</span><span style="color:#E1E4E8">() </span><span style="color:#F97583">&#x26;&#x26;</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.tank.</span><span style="color:#B392F0">canFire</span><span style="color:#E1E4E8">()) {</span></span>
+<span class="line"><span style="color:#79B8FF">            this</span><span style="color:#E1E4E8">.tank.</span><span style="color:#B392F0">fire</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#79B8FF"> true</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> false</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">    chase</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.target) </span><span style="color:#F97583">return</span><span style="color:#79B8FF"> false</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Use A* algorithm for path planning</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> path</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.pathfinder.</span><span style="color:#B392F0">findPath</span><span style="color:#E1E4E8">(</span></span>
+<span class="line"><span style="color:#79B8FF">            this</span><span style="color:#E1E4E8">.tank.position, </span></span>
+<span class="line"><span style="color:#79B8FF">            this</span><span style="color:#E1E4E8">.target.position, </span></span>
+<span class="line"><span style="color:#E1E4E8">            gameState.obstacles</span></span>
+<span class="line"><span style="color:#E1E4E8">        );</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (path.</span><span style="color:#79B8FF">length</span><span style="color:#F97583"> ></span><span style="color:#79B8FF"> 1</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">            const</span><span style="color:#79B8FF"> nextWaypoint</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> path[</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">];</span></span>
+<span class="line"><span style="color:#79B8FF">            this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">moveTowards</span><span style="color:#E1E4E8">(nextWaypoint);</span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#79B8FF"> true</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> false</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">    patrol</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#6A737D">        // Patrol behavior</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">!</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.patrolTarget </span><span style="color:#F97583">||</span><span style="color:#E1E4E8"> vec3.</span><span style="color:#B392F0">distance</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.tank.position, </span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.patrolTarget) </span><span style="color:#F97583">&#x3C;</span><span style="color:#79B8FF"> 2.0</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#79B8FF">            this</span><span style="color:#E1E4E8">.patrolTarget </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">getRandomPatrolPoint</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">moveTowards</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.patrolTarget);</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> true</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">    moveTowards</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">target</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> direction</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> vec3.</span><span style="color:#B392F0">normalize</span><span style="color:#E1E4E8">(vec3.</span><span style="color:#B392F0">subtract</span><span style="color:#E1E4E8">(target, </span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.tank.position));</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Turn towards target</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> targetRotation</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> Math.</span><span style="color:#B392F0">atan2</span><span style="color:#E1E4E8">(direction.x, direction.z);</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.tank.rotation </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">lerp</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.tank.rotation, targetRotation, </span><span style="color:#79B8FF">0.1</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Move forward</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.tank.</span><span style="color:#B392F0">moveForward</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h2 id="game-system-integration"><a aria-hidden="true" tabindex="-1" href="#game-system-integration"><span class="icon icon-link"></span></a>Game System Integration</h2>
+<h3 id="main-game-loop"><a aria-hidden="true" tabindex="-1" href="#main-game-loop"><span class="icon icon-link"></span></a>Main Game Loop</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> TankWarGame</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">    constructor</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">canvas</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.canvas </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> canvas;</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.renderEngine </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> RenderEngine</span><span style="color:#E1E4E8">(canvas);</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.physicsEngine </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> PhysicsEngine</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.audioSystem </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> AudioSystem</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.inputManager </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> InputManager</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.scene </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Scene</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.camera </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Camera</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.gameState </span><span style="color:#F97583">=</span><span style="color:#9ECBFF"> 'playing'</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.playerTank </span><span style="color:#F97583">=</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Tank</span><span style="color:#E1E4E8">(TankType.</span><span style="color:#79B8FF">PLAYER</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.enemyTanks </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [];</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">initGame</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">startGameLoop</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">    initGame</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#6A737D">        // Create terrain</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">createTerrain</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Create enemy tanks</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">spawnEnemyTanks</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">5</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Set camera follow</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.camera.</span><span style="color:#B392F0">setTarget</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.playerTank);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Load sound effects</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.audioSystem.</span><span style="color:#B392F0">loadSounds</span><span style="color:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#E1E4E8">            fire: </span><span style="color:#9ECBFF">'sounds/tank_fire.ogg'</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">            explosion: </span><span style="color:#9ECBFF">'sounds/explosion.ogg'</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">            engine: </span><span style="color:#9ECBFF">'sounds/tank_engine.ogg'</span></span>
+<span class="line"><span style="color:#E1E4E8">        });</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">    startGameLoop</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#F97583">        let</span><span style="color:#E1E4E8"> lastTime </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#B392F0"> gameLoop</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> (</span><span style="color:#FFAB70">currentTime</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">=></span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">            const</span><span style="color:#79B8FF"> deltaTime</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> (currentTime </span><span style="color:#F97583">-</span><span style="color:#E1E4E8"> lastTime) </span><span style="color:#F97583">/</span><span style="color:#79B8FF"> 1000.0</span><span style="color:#E1E4E8">;</span></span>
+<span class="line"><span style="color:#E1E4E8">            lastTime </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> currentTime;</span></span>
+<span class="line"><span style="color:#E1E4E8">            </span></span>
+<span class="line"><span style="color:#79B8FF">            this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">update</span><span style="color:#E1E4E8">(deltaTime);</span></span>
+<span class="line"><span style="color:#79B8FF">            this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">render</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">            </span></span>
+<span class="line"><span style="color:#B392F0">            requestAnimationFrame</span><span style="color:#E1E4E8">(gameLoop);</span></span>
+<span class="line"><span style="color:#E1E4E8">        };</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#B392F0">        requestAnimationFrame</span><span style="color:#E1E4E8">(gameLoop);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">    update</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">deltaTime</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#6A737D">        // Update input</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.inputManager.</span><span style="color:#B392F0">update</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Update player tank</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">updatePlayerTank</span><span style="color:#E1E4E8">(deltaTime);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Update enemy tank AI</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.enemyTanks.</span><span style="color:#B392F0">forEach</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">tank</span><span style="color:#F97583"> =></span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#E1E4E8">            tank.ai.</span><span style="color:#B392F0">update</span><span style="color:#E1E4E8">(deltaTime, </span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">getGameState</span><span style="color:#E1E4E8">());</span></span>
+<span class="line"><span style="color:#E1E4E8">        });</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Update physics system</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.physicsEngine.</span><span style="color:#B392F0">update</span><span style="color:#E1E4E8">(deltaTime);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Update camera</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.camera.</span><span style="color:#B392F0">update</span><span style="color:#E1E4E8">(deltaTime);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Check game over conditions</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">checkGameOver</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">    render</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#6A737D">        // Render 3D scene</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.renderEngine.</span><span style="color:#B392F0">render</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.scene, </span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.camera);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Render UI</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">renderUI</span><span style="color:#E1E4E8">();</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">    renderUI</span><span style="color:#E1E4E8">() {</span></span>
+<span class="line"><span style="color:#F97583">        const</span><span style="color:#79B8FF"> ctx</span><span style="color:#F97583"> =</span><span style="color:#79B8FF"> this</span><span style="color:#E1E4E8">.canvas.</span><span style="color:#B392F0">getContext</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'2d'</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Draw health bar</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">drawHealthBar</span><span style="color:#E1E4E8">(ctx, </span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.playerTank.health);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Draw ammo counter</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">drawAmmoCounter</span><span style="color:#E1E4E8">(ctx, </span><span style="color:#79B8FF">this</span><span style="color:#E1E4E8">.playerTank.ammo);</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        // Draw minimap</span></span>
+<span class="line"><span style="color:#79B8FF">        this</span><span style="color:#E1E4E8">.</span><span style="color:#B392F0">drawMiniMap</span><span style="color:#E1E4E8">(ctx);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h2 id="performance-optimization-strategies"><a aria-hidden="true" tabindex="-1" href="#performance-optimization-strategies"><span class="icon icon-link"></span></a>Performance Optimization Strategies</h2>
+<h3 id="1-rendering-optimization"><a aria-hidden="true" tabindex="-1" href="#1-rendering-optimization"><span class="icon icon-link"></span></a>1. Rendering Optimization</h3>
+<ul>
+<li><strong>Frustum Culling</strong>: Only render objects within camera view</li>
+<li><strong>LOD System</strong>: Use different detail levels based on distance</li>
+<li><strong>Instanced Rendering</strong>: Batch render identical objects</li>
+<li><strong>Texture Atlasing</strong>: Reduce texture switching</li>
+</ul>
+<h3 id="2-physics-optimization"><a aria-hidden="true" tabindex="-1" href="#2-physics-optimization"><span class="icon icon-link"></span></a>2. Physics Optimization</h3>
+<ul>
+<li><strong>Spatial Partitioning</strong>: Use spatial grid to accelerate collision detection</li>
+<li><strong>Sleep System</strong>: Static objects don’t participate in physics calculations</li>
+<li><strong>Simplified Collision Bodies</strong>: Use simple shapes instead of complex models</li>
+</ul>
+<h3 id="3-ai-optimization"><a aria-hidden="true" tabindex="-1" href="#3-ai-optimization"><span class="icon icon-link"></span></a>3. AI Optimization</h3>
+<ul>
+<li><strong>Behavior Caching</strong>: Cache AI decision results</li>
+<li><strong>Frame-distributed Updates</strong>: AI updates on different frames to distribute computational load</li>
+<li><strong>Hierarchical Decision Making</strong>: Coarse decisions + fine adjustments</li>
+</ul>
+<h2 id="project-features-and-innovations"><a aria-hidden="true" tabindex="-1" href="#project-features-and-innovations"><span class="icon icon-link"></span></a>Project Features and Innovations</h2>
+<h3 id="1-modern-webgl-technology-application"><a aria-hidden="true" tabindex="-1" href="#1-modern-webgl-technology-application"><span class="icon icon-link"></span></a>1. Modern WebGL Technology Application</h3>
+<ul>
+<li>Use advanced features of WebGL 2.0</li>
+<li>Custom shaders for complex lighting effects</li>
+<li>PBR (Physically Based Rendering) material system</li>
+</ul>
+<h3 id="2-complete-game-architecture"><a aria-hidden="true" tabindex="-1" href="#2-complete-game-architecture"><span class="icon icon-link"></span></a>2. Complete Game Architecture</h3>
+<ul>
+<li>Modular engine design</li>
+<li>Extensible component system</li>
+<li>Data-driven game logic</li>
+</ul>
+<h3 id="3-intelligent-ai-system"><a aria-hidden="true" tabindex="-1" href="#3-intelligent-ai-system"><span class="icon icon-link"></span></a>3. Intelligent AI System</h3>
+<ul>
+<li>Behavior tree-driven AI logic</li>
+<li>A* pathfinding algorithm</li>
+<li>Realistic perception and decision system</li>
+</ul>
+<h3 id="4-immersive-gaming-experience"><a aria-hidden="true" tabindex="-1" href="#4-immersive-gaming-experience"><span class="icon icon-link"></span></a>4. Immersive Gaming Experience</h3>
+<ul>
+<li>Realistic physics simulation</li>
+<li>Stereo audio system</li>
+<li>Smooth camera control</li>
+</ul>
+<h2 id="technical-insights-and-reflections"><a aria-hidden="true" tabindex="-1" href="#technical-insights-and-reflections"><span class="icon icon-link"></span></a>Technical Insights and Reflections</h2>
+<h3 id="webgl-in-depth-application"><a aria-hidden="true" tabindex="-1" href="#webgl-in-depth-application"><span class="icon icon-link"></span></a>WebGL In-depth Application</h3>
+<ul>
+<li>Mastered modern 3D graphics programming techniques</li>
+<li>Understood GPU rendering pipeline principles</li>
+<li>Learned shader programming and optimization techniques</li>
+</ul>
+<h3 id="game-engine-architecture"><a aria-hidden="true" tabindex="-1" href="#game-engine-architecture"><span class="icon icon-link"></span></a>Game Engine Architecture</h3>
+<ul>
+<li>Designed extensible engine architecture</li>
+<li>Implemented efficient inter-system communication</li>
+<li>Established complete resource management system</li>
+</ul>
+<h3 id="performance-optimization-practice"><a aria-hidden="true" tabindex="-1" href="#performance-optimization-practice"><span class="icon icon-link"></span></a>Performance Optimization Practice</h3>
+<ul>
+<li>Learned multiple performance analysis methods</li>
+<li>Implemented effective optimization strategies</li>
+<li>Balanced functional complexity with performance</li>
+</ul>
+<h2 id="future-development-directions"><a aria-hidden="true" tabindex="-1" href="#future-development-directions"><span class="icon icon-link"></span></a>Future Development Directions</h2>
+<ol>
+<li><strong>Multiplayer Online</strong>: WebSocket for real-time battles</li>
+<li><strong>Terrain Editor</strong>: Visual level editing tools</li>
+<li><strong>Particle System</strong>: Richer visual effects</li>
+<li><strong>VR Support</strong>: WebXR for virtual reality experience</li>
+<li><strong>Mobile Adaptation</strong>: Touch controls and performance optimization</li>
+</ol>
+<h2 id="summary"><a aria-hidden="true" tabindex="-1" href="#summary"><span class="icon icon-link"></span></a>Summary</h2>
+<p>This WebGL 3D tank battle game project successfully demonstrated the application potential of modern Web technologies in complex 3D game development. Through self-developed engine architecture, intelligent AI system, and meticulous performance optimization, it achieved an experience comparable to native games.</p>
+<p>The project is not only a demonstration of technical capabilities but also a complete exercise in modern game development engineering practices, accumulating valuable experience for subsequent development of more complex 3D applications.</p> <html lang="en" data-astro-cid-uffxixac> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/notes/webgl-3d-tank-battle-game-development-practice-modern-webgl-technology-application/"><!-- Primary Meta Tags --><title>Ge Yuxu • AI &amp; Engineering</title><meta name="title" content="Ge Yuxu • AI &#38; Engineering"><meta name="description" content="Welcome to my blog!"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/notes/webgl-3d-tank-battle-game-development-practice-modern-webgl-technology-application/"><meta property="og:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="og:description" content="Welcome to my blog!"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/notes/webgl-3d-tank-battle-game-development-practice-modern-webgl-technology-application/"><meta property="twitter:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="twitter:description" content="Welcome to my blog!"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script></head> <body data-astro-cid-uffxixac>  <div class="statement" data-astro-cid-uffxixac> <blockquote data-astro-cid-uffxixac> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>脱敏说明</strong>：本文所有出现的表名、字段名、接口地址、变量名、IP地址及示例数据等均非真实，
+    仅用于阐述技术思路与实现步骤，示例代码亦非公司真实代码。
+    示例方案亦非公司真实完整方案，仅为本人记忆总结，用于技术学习探讨。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;文中所示任何标识符并不对应实际生产环境中的名称或编号。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;示例&nbsp;SQL、脚本、代码及数据等均为演示用途，不含真实业务数据，也不具备直接运行或复现的完整上下文。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;读者若需在实际项目中参考本文方案，请结合自身业务场景及数据安全规范，使用符合内部命名和权限控制的配置。</p> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>版权声明</strong>：本文版权归原作者所有，未经作者事先书面许可，任何单位或个人不得以任何方式复制、转载、摘编或用于商业用途。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;若需非商业性引用或转载本文内容，请务必注明出处并保持内容完整。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;对因商业使用、篡改或不当引用本文内容所产生的法律纠纷，作者保留追究法律责任的权利。<br data-astro-cid-uffxixac><br data-astro-cid-uffxixac> <em data-astro-cid-uffxixac>Copyright&nbsp;©&nbsp;1989–Present&nbsp;Ge&nbsp;Yuxu.&nbsp;All&nbsp;Rights&nbsp;Reserved.</em></p> </blockquote> </div></body></html>  </article> </div> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2025 All rights reserved.
+</footer>  </body></html>

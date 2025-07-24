@@ -1,0 +1,450 @@
+<!DOCTYPE html><html lang="zh"> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/service_governance/20211112_%E7%94%B5%E5%95%86%E5%95%86%E5%93%81%E5%AA%92%E8%B5%84%E5%90%8C%E6%AD%A5%E6%9C%8D%E5%8A%A1%E8%BF%81%E7%A7%BB%E8%87%B3-apollo-%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E5%AE%9E%E8%B7%B5/"><!-- Primary Meta Tags --><title>电商商品媒资同步服务迁移至 Apollo 配置中心实践</title><meta name="title" content="电商商品媒资同步服务迁移至 Apollo 配置中心实践"><meta name="description"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/service_governance/20211112_%E7%94%B5%E5%95%86%E5%95%86%E5%93%81%E5%AA%92%E8%B5%84%E5%90%8C%E6%AD%A5%E6%9C%8D%E5%8A%A1%E8%BF%81%E7%A7%BB%E8%87%B3-apollo-%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E5%AE%9E%E8%B7%B5/"><meta property="og:title" content="电商商品媒资同步服务迁移至 Apollo 配置中心实践"><meta property="og:description"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/service_governance/20211112_%E7%94%B5%E5%95%86%E5%95%86%E5%93%81%E5%AA%92%E8%B5%84%E5%90%8C%E6%AD%A5%E6%9C%8D%E5%8A%A1%E8%BF%81%E7%A7%BB%E8%87%B3-apollo-%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E5%AE%9E%E8%B7%B5/"><meta property="twitter:title" content="电商商品媒资同步服务迁移至 Apollo 配置中心实践"><meta property="twitter:description"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script><script is:global>
+	window.addEventListener('DOMContentLoaded', () => {
+		$('.toc ol').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'margin': 0,
+		'padding-left': 0,       // 可按需调整
+		});
+		$('.toc ol > li').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'padding-left': 10
+		});
+        $('.sidebar').append($('.toc'));
+      });
+	</script><link rel="stylesheet" href="/_astro/_slug_.BvCO7WHQ.css">
+<style>a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astro-cid-eimmu3lg].active{font-weight:bolder;text-decoration:underline}header[data-astro-cid-3ef6ksr2]{margin:0;padding:0 1em;background:#fff;box-shadow:0 2px 8px rgba(var(--black),5%)}h2[data-astro-cid-3ef6ksr2]{margin:0;font-size:1em}h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2],h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none}nav[data-astro-cid-3ef6ksr2]{display:flex;align-items:center;justify-content:space-between}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{padding:1em .5em;color:var(--black);border-bottom:4px solid transparent;text-decoration:none}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none;border-bottom-color:var(--accent)}.social-links[data-astro-cid-3ef6ksr2],.social-links[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{display:flex}@media (max-width: 720px){.social-links[data-astro-cid-3ef6ksr2]{display:none}}footer[data-astro-cid-sz7xmlte]{padding:2em 1em 6em;background:linear-gradient(var(--gray-gradient)) no-repeat;color:rgb(var(--gray));text-align:center}.social-links[data-astro-cid-sz7xmlte]{display:flex;justify-content:center;gap:1em;margin-top:1em}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]{text-decoration:none;color:rgb(var(--gray))}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]:hover{color:rgb(var(--gray-dark))}
+.statement[data-astro-cid-uffxixac]{font-size:10px;color:gray}@media (max-width: 640px){.statement[data-astro-cid-uffxixac]{font-size:6px;color:gray}}
+</style></head> <body> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <!--<h2><a href="/">{SITE_TITLE}</a></h2>--> <h2 data-astro-cid-3ef6ksr2><a style="padding-left:0;color:blue;" href="/" data-astro-cid-3ef6ksr2>Ge Yuxu<br data-astro-cid-3ef6ksr2>AI & Engineering</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blog/1" class="active" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/series" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Series </a>  <a href="/projects" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Projects </a>  </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://github.com/geyuxu" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://www.linkedin.com/in/geyuxu/" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's LinkedIn profile</span> <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" data-astro-cid-3ef6ksr2> <path fill="currentColor" d="M20.447 20.452H17.2v-5.569c0-1.328-.025-3.039-1.852-3.039-1.853 0-2.136 1.447-2.136 2.942v5.666h-3.248V9h3.122v1.561h.045c.435-.823 1.498-1.688 3.083-1.688 3.295 0 3.903 2.17 3.903 4.989v6.59zM5.337 7.433a1.882 1.882 0 110-3.764 1.882 1.882 0 010 3.764zm1.626 13.019H3.708V9h3.255v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.222 0z" data-astro-cid-3ef6ksr2></path> </svg> </a> </div> </nav> <!-- Microsoft Clarity --> <script type="text/javascript">
+		(function(c,l,a,r,i,t,y){
+			c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+			t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+			y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+		})(window, document, "clarity", "script", "rc2w96osp6");
+	</script> </header>  <main class="page"> <!-- 左侧栏 --> <aside class="sidebar"> <div class="meta"> <b>电商商品媒资同步服务迁移至 Apollo 配置中心实践</b> <p><time datetime="2021-11-11T16:00:00.000Z"> 2021/11/12 00:00:00 </time></p>   </div> <hr> <br> </aside> <!-- 右侧正文区域（flex 居中） --> <div class="content-wrapper"> <article class="prose">  <nav class="toc"><ol class="toc-level toc-level-1"><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#写在前面">写在前面</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#1现状扫描yaml-的痛点">1 | 现状扫描：Yaml 的痛点</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#2apollo-极简科普">2 | Apollo 极简科普</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#3设计原则">3 | 设计原则</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#4落地步骤">4 | 落地步骤</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#41-拆分命名空间">4.1 拆分命名空间</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#42-写一个极简-python-sdk">4.2 写一个极简 Python SDK</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#43-接入业务">4.3 接入业务</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#44-写发布脚本运维--ci-用">4.4 写发布脚本（运维 &#x26; CI 用）</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#45-灰度与回滚">4.5 灰度与回滚</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#5踩坑合集">5 | 踩坑合集</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#6迁移效果">6 | 迁移效果</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#7最佳实践清单">7 | 最佳实践清单</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#8性能压测">8 | 性能压测</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#9openapi-集成细节">9 | OpenAPI 集成细节</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#91-token-管理">9.1 Token 管理</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#92-批量发布">9.2 批量发布</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#93-灰度规则">9.3 灰度规则</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#94-release-回滚">9.4 Release 回滚</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#10高级-feature-flag按类目动态开关">10 | 高级 Feature Flag：按类目动态开关</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#11后续顾规划">11 | 后续顾规划</a></li></ol></nav><h2 id="写在前面"><a aria-hidden="true" tabindex="-1" href="#写在前面"><span class="icon icon-link"></span></a>写在前面</h2>
+<p>作为 Python 应用，如何把应用服务的参数从散落的 YAML 文件迁移到 Apollo 配置中心？</p>
+<p>背景很简单：</p>
+<ul>
+<li>电商平台每天有上万张商品图、360° 旋转大图、短视频在后台排队上传。</li>
+<li><strong>shop‑asset‑sync</strong> 这一服务负责「监听本地落盘 → 多线程上传到对象存储 → 回写商品中心」。</li>
+<li>配置原本写在 <code>config.yml</code>，随着业务横向扩张（直播、二楼小视频、AI 修图），一份 Yaml 长到 3000 多行，开发、运维、运营轮番加班。</li>
+</ul>
+<p>最终，团队决定把配置托管到 <strong>Apollo</strong>，并且<strong>只用 Apollo 的 REST 接口</strong>做客户端集成。</p>
+<h2 id="1现状扫描yaml-的痛点"><a aria-hidden="true" tabindex="-1" href="#1现状扫描yaml-的痛点"><span class="icon icon-link"></span></a>1 | 现状扫描：Yaml 的痛点</h2>
+<ul>
+<li><strong>环境碎片化</strong>
+<ul>
+<li><em>dev</em>、<em>test</em>、<em>gray</em>、<em>prod</em> 起步，双十一再来一套 *sale‑9.9.，年底清仓还有 <em>clearance</em>。</li>
+<li>每个环境里都有不同的 OSS 域名、CDN 域名、限流阈值。</li>
+</ul>
+</li>
+<li><strong>发布流程漫长</strong>
+<ul>
+<li>改一行配置，需要走：PR → 审核 → Build 镜像 → 推到 K8s。</li>
+<li>即便全链路自动化，也要 15 分钟。遇到直播间图片非法，需要快修时根本来不及。</li>
+</ul>
+</li>
+<li><strong>回滚困难</strong>
+<ul>
+<li>想找「三分钟前那个正确版本」？只能翻 Git 历史自己对 diff。</li>
+<li>运维同学半夜在跳板机里用 <code>vi</code> 手改 yaml 的故事相信你也听过。</li>
+</ul>
+</li>
+<li><strong>权限混乱</strong>
+<ul>
+<li>运营要调“爆款” CD 标识，录入 <code>is_premium_banner: true</code>；</li>
+<li>结果把 <code>oss.secret_key</code> 也不小心改了，生产直接上传失败。</li>
+</ul>
+</li>
+</ul>
+<p><strong>配置中心</strong> 看似只是技术升级，实际上是治理团队协作方式。<br>
+Apollo 成熟、易部署、权限模型完备，于是排除万难，拉它上车。</p>
+<h2 id="2apollo-极简科普"><a aria-hidden="true" tabindex="-1" href="#2apollo-极简科普"><span class="icon icon-link"></span></a>2 | Apollo 极简科普</h2>
+<p>两句话概括 Apollo：</p>
+<ul>
+<li><em>服务端</em> 提供 <strong>Portal + ConfigService + AdminService</strong>，存储在 MySQL。</li>
+<li><em>客户端</em> 长轮询拿最新 Release，或者通过 REST 调 <code>/configs</code> 拉取 JSON。</li>
+</ul>
+<blockquote>
+<p>我们只用下列三个接口：</p>
+<ul>
+<li><code>GET /configs/{appId}/{cluster}/{namespace}</code> —— 拉取整个命名空间快照</li>
+<li><code>GET /notifications/v2</code> —— 长轮询，得到 Release Key 变更</li>
+<li><code>PUT /configs</code> —— 管理端脚本里做灰度发布</li>
+</ul>
+</blockquote>
+<h2 id="3设计原则"><a aria-hidden="true" tabindex="-1" href="#3设计原则"><span class="icon icon-link"></span></a>3 | 设计原则</h2>
+<ul>
+<li><em>配置即代码，但不混代码仓库</em> —— Apollo 维护运行时配置，Git 只存默认值。</li>
+<li><em>一行配置就是一次发布单</em> —— 通过 Apollo Release 做审计，拒绝跳板机手动改表。</li>
+<li><em>运维调基础、运营调业务</em> —— 用 Namespace 隔离读写权限。</li>
+<li><em>改配置不重启</em> —— 90% 配置通过热更新生效。</li>
+<li><em>可灰度可回滚</em> —— 每一个 Release Key 天生可回滚，灰度 1% Pod 验证。</li>
+</ul>
+<h2 id="4落地步骤"><a aria-hidden="true" tabindex="-1" href="#4落地步骤"><span class="icon icon-link"></span></a>4 | 落地步骤</h2>
+<h3 id="41-拆分命名空间"><a aria-hidden="true" tabindex="-1" href="#41-拆分命名空间"><span class="icon icon-link"></span></a>4.1 拆分命名空间</h3>
+<p>原 <code>config.yml</code> 超过三千行，先按 <strong>领域</strong> 切块：</p>
+<ul>
+<li><code>storage.oss</code> —— endpoint / ak / sk</li>
+<li><code>storage.cdn</code> —— 域名、缓存 TTL</li>
+<li><code>feature_flag</code> —— 是否开启智能压缩、是否启用 AVIF</li>
+<li><code>rate_limit</code> —— 上传并发、磁盘 IOPS 阈值</li>
+<li><code>promotion</code> —— 是否展示双十一徽章</li>
+</ul>
+<blockquote>
+<p>划分原则：</p>
+<ul>
+<li>读写人群不同的，必须拆；</li>
+<li>生命周期不同的，必须拆；</li>
+<li>变更频率不同的，最好拆。</li>
+</ul>
+</blockquote>
+<h3 id="42-写一个极简-python-sdk"><a aria-hidden="true" tabindex="-1" href="#42-写一个极简-python-sdk"><span class="icon icon-link"></span></a>4.2 写一个极简 Python SDK</h3>
+<p>团队不想引入重型库，于是 9. 行代码搞定 Apollo 客户端：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D"># apollo_client.py</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> requests, time, json, threading</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> Apollo</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#79B8FF"> __init__</span><span style="color:#E1E4E8">(self, host, app_id, cluster, namespaces, timeout</span><span style="color:#F97583">=</span><span style="color:#79B8FF">60</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.host, </span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.app_id, </span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.cluster </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> host, app_id, cluster</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.namespaces </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> namespaces</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.timeout </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> timeout</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">._cache </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {}</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">._notifications </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [</span></span>
+<span class="line"><span style="color:#E1E4E8">            {</span><span style="color:#9ECBFF">"namespaceName"</span><span style="color:#E1E4E8">: ns, </span><span style="color:#9ECBFF">"notificationId"</span><span style="color:#E1E4E8">: </span><span style="color:#F97583">-</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">} </span><span style="color:#F97583">for</span><span style="color:#E1E4E8"> ns </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> namespaces</span></span>
+<span class="line"><span style="color:#E1E4E8">        ]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> _url</span><span style="color:#E1E4E8">(self, path):</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#F97583"> f</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">{self</span><span style="color:#E1E4E8">.host</span><span style="color:#79B8FF">}{</span><span style="color:#E1E4E8">path</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> fetch_namespace</span><span style="color:#E1E4E8">(self, ns):</span></span>
+<span class="line"><span style="color:#E1E4E8">        resp </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> requests.get(</span></span>
+<span class="line"><span style="color:#79B8FF">            self</span><span style="color:#E1E4E8">._url(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"/configs/</span><span style="color:#79B8FF">{self</span><span style="color:#E1E4E8">.app_id</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">/</span><span style="color:#79B8FF">{self</span><span style="color:#E1E4E8">.cluster</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">/</span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">ns</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#FFAB70">            timeout</span><span style="color:#F97583">=</span><span style="color:#79B8FF">5</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">        )</span></span>
+<span class="line"><span style="color:#E1E4E8">        resp.raise_for_status()</span></span>
+<span class="line"><span style="color:#E1E4E8">        data </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> resp.json()</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">._cache[ns] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> data[</span><span style="color:#9ECBFF">"configurations"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#79B8FF">        print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"[Apollo] loaded </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">ns</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">@</span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">data[</span><span style="color:#9ECBFF">'releaseKey'</span><span style="color:#E1E4E8">][:</span><span style="color:#79B8FF">8</span><span style="color:#E1E4E8">]</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">._cache[ns]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> long_poll</span><span style="color:#E1E4E8">(self, on_change):</span></span>
+<span class="line"><span style="color:#F97583">        while</span><span style="color:#79B8FF"> True</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#F97583">            try</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">                resp </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> requests.get(</span></span>
+<span class="line"><span style="color:#79B8FF">                    self</span><span style="color:#E1E4E8">._url(</span><span style="color:#9ECBFF">"/notifications/v2"</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#FFAB70">                    params</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{</span><span style="color:#9ECBFF">"appId"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.app_id,</span></span>
+<span class="line"><span style="color:#9ECBFF">                            "cluster"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.cluster,</span></span>
+<span class="line"><span style="color:#9ECBFF">                            "notifications"</span><span style="color:#E1E4E8">: json.dumps(</span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">._notifications)},</span></span>
+<span class="line"><span style="color:#FFAB70">                    timeout</span><span style="color:#F97583">=</span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.timeout</span><span style="color:#F97583">+</span><span style="color:#79B8FF">10</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">                )</span></span>
+<span class="line"><span style="color:#F97583">                if</span><span style="color:#E1E4E8"> resp.status_code </span><span style="color:#F97583">==</span><span style="color:#79B8FF"> 304</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#F97583">                    continue</span></span>
+<span class="line"><span style="color:#E1E4E8">                updated </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> resp.json()</span></span>
+<span class="line"><span style="color:#F97583">                for</span><span style="color:#E1E4E8"> item </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> updated:</span></span>
+<span class="line"><span style="color:#E1E4E8">                    ns </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> item[</span><span style="color:#9ECBFF">"namespaceName"</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#79B8FF">                    self</span><span style="color:#E1E4E8">._notifications </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [</span></span>
+<span class="line"><span style="color:#E1E4E8">                        n </span><span style="color:#F97583">if</span><span style="color:#E1E4E8"> n[</span><span style="color:#9ECBFF">"namespaceName"</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">!=</span><span style="color:#E1E4E8"> ns </span><span style="color:#F97583">else</span><span style="color:#E1E4E8"> item</span></span>
+<span class="line"><span style="color:#F97583">                        for</span><span style="color:#E1E4E8"> n </span><span style="color:#F97583">in</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">._notifications</span></span>
+<span class="line"><span style="color:#E1E4E8">                    ]</span></span>
+<span class="line"><span style="color:#E1E4E8">                    on_change(ns, </span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.fetch_namespace(ns))</span></span>
+<span class="line"><span style="color:#F97583">            except</span><span style="color:#E1E4E8"> requests.exceptions.ReadTimeout:</span></span>
+<span class="line"><span style="color:#F97583">                continue</span></span>
+<span class="line"><span style="color:#F97583">            except</span><span style="color:#79B8FF"> Exception</span><span style="color:#F97583"> as</span><span style="color:#E1E4E8"> e:</span></span>
+<span class="line"><span style="color:#79B8FF">                print</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"poll error:"</span><span style="color:#E1E4E8">, e)</span></span>
+<span class="line"><span style="color:#E1E4E8">                time.sleep(</span><span style="color:#79B8FF">5</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> start</span><span style="color:#E1E4E8">(self, on_change):</span></span>
+<span class="line"><span style="color:#F97583">        for</span><span style="color:#E1E4E8"> ns </span><span style="color:#F97583">in</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.namespaces:</span></span>
+<span class="line"><span style="color:#79B8FF">            self</span><span style="color:#E1E4E8">.fetch_namespace(ns)</span></span>
+<span class="line"><span style="color:#E1E4E8">        threading.Thread(</span><span style="color:#FFAB70">target</span><span style="color:#F97583">=</span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.long_poll, </span><span style="color:#FFAB70">args</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">(on_change,), </span><span style="color:#FFAB70">daemon</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">).start()</span></span></code></pre>
+<ul>
+<li><strong>初始化</strong> 同步所有命名空间</li>
+<li><strong>长轮询</strong> 接口超时 60s，可自定义</li>
+<li><strong>on_change 回调</strong> 由业务层决定如何热更新</li>
+</ul>
+<h3 id="43-接入业务"><a aria-hidden="true" tabindex="-1" href="#43-接入业务"><span class="icon icon-link"></span></a>4.3 接入业务</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> apollo_client </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> Apollo</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> asyncio</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">apollo </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Apollo(</span></span>
+<span class="line"><span style="color:#FFAB70">    host</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"https://apollo.shop.com"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    app_id</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"shop-asset-sync"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    cluster</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"default"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">    namespaces</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span></span>
+<span class="line"><span style="color:#9ECBFF">        "storage.oss"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "storage.cdn"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "feature_flag"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "rate_limit"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        "promotion"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">    ],</span></span>
+<span class="line"><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> apply_config</span><span style="color:#E1E4E8">(ns, cfg):</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#E1E4E8"> ns </span><span style="color:#F97583">==</span><span style="color:#9ECBFF"> "storage.oss"</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        uploader.configure(cfg)        </span><span style="color:#6A737D"># 更新 ak/sk</span></span>
+<span class="line"><span style="color:#F97583">    elif</span><span style="color:#E1E4E8"> ns </span><span style="color:#F97583">==</span><span style="color:#9ECBFF"> "feature_flag"</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        switcher.refresh(cfg)          </span><span style="color:#6A737D"># 动态开关</span></span>
+<span class="line"><span style="color:#F97583">    elif</span><span style="color:#E1E4E8"> ns </span><span style="color:#F97583">==</span><span style="color:#9ECBFF"> "rate_limit"</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">        limiter.update(cfg)            </span><span style="color:#6A737D"># 容量限流</span></span>
+<span class="line"><span style="color:#79B8FF">    print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">">>> </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">ns</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF"> reloaded"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">apollo.start(apply_config)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">asyncio.get_event_loop().run_forever()</span></span></code></pre>
+<p>5 行就把 Apollo 拉起，剩下就是业务回调逻辑。<br>
+到这里，<strong>从 YAML 到 Apollo 的读取链已经跑通</strong>。</p>
+<h3 id="44-写发布脚本运维--ci-用"><a aria-hidden="true" tabindex="-1" href="#44-写发布脚本运维--ci-用"><span class="icon icon-link"></span></a>4.4 写发布脚本（运维 &#x26; CI 用）</h3>
+<p>运营同学不会进 Portal 点鼠标，于是给他们一个 <code>publish.py</code>：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> requests, sys, json</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#79B8FF">HOST</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "https://apollo.shop.com"</span></span>
+<span class="line"><span style="color:#79B8FF">TOKEN</span><span style="color:#F97583"> =</span><span style="color:#9ECBFF"> "api-token-here"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> publish</span><span style="color:#E1E4E8">(ns, kv, comment</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"auto publish"</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#E1E4E8">    url </span><span style="color:#F97583">=</span><span style="color:#F97583"> f</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">{HOST}</span><span style="color:#9ECBFF">/openapi/v1/envs/prod/apps/shop-asset-sync/clusters/default/namespaces/</span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">ns</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">/items"</span></span>
+<span class="line"><span style="color:#E1E4E8">    headers </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {</span><span style="color:#9ECBFF">"Authorization"</span><span style="color:#E1E4E8">: </span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"Bearer </span><span style="color:#79B8FF">{TOKEN}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> k, v </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> kv.items():</span></span>
+<span class="line"><span style="color:#E1E4E8">        payload </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {</span><span style="color:#9ECBFF">"key"</span><span style="color:#E1E4E8">: k, </span><span style="color:#9ECBFF">"value"</span><span style="color:#E1E4E8">: v, </span><span style="color:#9ECBFF">"dataChangeCreatedBy"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"bot"</span><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">        requests.post(url, </span><span style="color:#FFAB70">headers</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">headers, </span><span style="color:#FFAB70">json</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">payload).raise_for_status()</span></span>
+<span class="line"><span style="color:#6A737D">    # release</span></span>
+<span class="line"><span style="color:#E1E4E8">    rel_url </span><span style="color:#F97583">=</span><span style="color:#F97583"> f</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">{HOST}</span><span style="color:#9ECBFF">/openapi/v1/envs/prod/apps/shop-asset-sync/clusters/default/namespaces/</span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">ns</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">/releases"</span></span>
+<span class="line"><span style="color:#E1E4E8">    body </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {</span><span style="color:#9ECBFF">"releaseTitle"</span><span style="color:#E1E4E8">: comment, </span><span style="color:#9ECBFF">"releasedBy"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"bot"</span><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">    requests.post(rel_url, </span><span style="color:#FFAB70">headers</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">headers, </span><span style="color:#FFAB70">json</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">body).raise_for_status()</span></span>
+<span class="line"><span style="color:#79B8FF">    print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"Published </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">ns</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">: </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">json.dumps(kv)</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">if</span><span style="color:#79B8FF"> __name__</span><span style="color:#F97583"> ==</span><span style="color:#9ECBFF"> "__main__"</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">    publish(sys.argv[</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">], json.loads(sys.argv[</span><span style="color:#79B8FF">2</span><span style="color:#E1E4E8">]), sys.argv[</span><span style="color:#79B8FF">3</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">if</span><span style="color:#79B8FF"> len</span><span style="color:#E1E4E8">(sys.argv) </span><span style="color:#F97583">></span><span style="color:#79B8FF"> 3</span><span style="color:#F97583"> else</span><span style="color:#9ECBFF"> "auto"</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<p>CI Example:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#85E89D">image</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">python:3.11</span></span>
+<span class="line"><span style="color:#85E89D">stages</span><span style="color:#E1E4E8">: [</span><span style="color:#9ECBFF">publish</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#85E89D">publish_flag</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">  stage</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">publish</span></span>
+<span class="line"><span style="color:#85E89D">  script</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">    - </span><span style="color:#9ECBFF">python publish.py feature_flag '{"enable_avif":"true"}' "double 9.switch"</span></span>
+<span class="line"><span style="color:#85E89D">  only</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">    - </span><span style="color:#9ECBFF">schedules</span></span></code></pre>
+<p>每天凌晨定时跑任务，按运营表格切换活动广告标识。</p>
+<h3 id="45-灰度与回滚"><a aria-hidden="true" tabindex="-1" href="#45-灰度与回滚"><span class="icon icon-link"></span></a>4.5 灰度与回滚</h3>
+<ul>
+<li><strong>灰度</strong>
+<ul>
+<li>使用 Apollo Portal “灰度发布”功能，选择 5% IP Hash，Pod 级别覆盖。</li>
+<li>Pod 通过 <code>HOST_IP</code> 注册到监控，自带标签 <code>apollo.releaseKey</code>。</li>
+<li>监控维度：上传成功率、平均上传耗时、错误码分布。</li>
+</ul>
+</li>
+<li><strong>回滚</strong>
+<ul>
+<li>Portal 一键 Rollback。</li>
+<li>客户端长轮询会自动拉到旧 Release，回调 <code>apply_config</code>。</li>
+<li>30 秒之内即可完成全量回滚，无需滚动重启。</li>
+</ul>
+</li>
+</ul>
+<p>实际演练：我们把 <code>rate_limit.concurrent_upload</code> 从 9. 调到 9.线上明显积压。<br>
+点击 Rollback，上传队列 9.秒恢复正常，证明链路可靠。</p>
+<h2 id="5踩坑合集"><a aria-hidden="true" tabindex="-1" href="#5踩坑合集"><span class="icon icon-link"></span></a>5 | 踩坑合集</h2>
+<ul>
+<li><strong>超时时间传错</strong>
+<ul>
+<li>Apollo REST <code>/notifications/v2</code> 超时要 <strong>>60s</strong>，否则 502。</li>
+<li>Python <code>requests</code> 要把 <code>timeout=(connect, read)</code> 分开写。</li>
+</ul>
+</li>
+<li><strong>文本值自动去空格</strong>
+<ul>
+<li>Apollo Portal 会把配置值左右空格剪掉。</li>
+<li>我们的 CDN 域名列表差点多写一条空格，幸亏 UT 阻断。</li>
+</ul>
+</li>
+<li><strong>Namespace UTF‑8 Header</strong>
+<ul>
+<li>若 Namespace 名带中文，必须在 URL 打 <code>encodeURIComponent</code>，否则 404。</li>
+</ul>
+</li>
+<li><strong>ReleaseKey 缓存差异</strong>
+<ul>
+<li><code>GET /configs</code> 返回的 <code>releaseKey</code> 与 <code>/notifications</code> 里未必一致。</li>
+<li>以 <code>notificationId</code> 为准，拉取后再更新本地缓存。</li>
+</ul>
+</li>
+<li><strong>批量发布接口没有幂等</strong>
+<ul>
+<li>调 OpenAPI 发布同一个 key 多次会叠加历史版本，回滚 list 会很长。</li>
+<li>解决：脚本里先 <code>GET</code> 判断值是否一致。</li>
+</ul>
+</li>
+</ul>
+<h2 id="6迁移效果"><a aria-hidden="true" tabindex="-1" href="#6迁移效果"><span class="icon icon-link"></span></a>6 | 迁移效果</h2>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>指标</th><th>迁移前 (Yaml)</th><th>迁移后 (Apollo)</th></tr></thead><tbody><tr><td>平均配置生效时延</td><td>15 min (镜像滚动)</td><td>&#x3C; 1 s</td></tr><tr><td>回滚时间</td><td>10 min (重新部署)</td><td>30 s</td></tr><tr><td>配置版本追溯</td><td>手工 Git Diff</td><td>Portal 可视化</td></tr><tr><td>运营自助调整</td><td>无</td><td>支持自助脚本</td></tr><tr><td>发布事故次数 / 月</td><td>3+</td><td>0</td></tr></tbody></table>
+<h2 id="7最佳实践清单"><a aria-hidden="true" tabindex="-1" href="#7最佳实践清单"><span class="icon icon-link"></span></a>7 | 最佳实践清单</h2>
+<ul>
+<li><strong>Namespace 粒度</strong>
+<ul>
+<li>按业务功能拆分，最怕“一个命名空间装天下”。</li>
+</ul>
+</li>
+<li><strong>权限最小化</strong>
+<ul>
+<li>运维只掌基础设施 Namespace，运营只掌推广开关 Namespace。</li>
+</ul>
+</li>
+<li><strong>自动回滚剧本</strong>
+<ul>
+<li>预先写好脚本：监控报警触发 → 调用 Apollo Rollback → Slack 通知。</li>
+</ul>
+</li>
+<li><strong>强制 UT 校验配置</strong>
+<ul>
+<li>CI 阶段跑 <code>jsonschema</code> 检查，非法字段阻断发布。</li>
+</ul>
+</li>
+<li><strong>灰度先行文化</strong>
+<ul>
+<li>“没有 1% 灰度就没有 100% 正式”——写进团队 Checklist。</li>
+</ul>
+</li>
+</ul>
+<h2 id="8性能压测"><a aria-hidden="true" tabindex="-1" href="#8性能压测"><span class="icon icon-link"></span></a>8 | 性能压测</h2>
+<p>光看功能没用，双十一凌晨 0 点 00 分 01 秒，所有店铺同时刷新商品图，<strong>峰值 QPS 5w+</strong>。<br>
+配置中心若拉胯，长轮询暴增，ConfigService 吐核。</p>
+<p>压测脚本（简化）：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> concurrent.futures </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> ThreadPoolExecutor</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> requests, random, json, time</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> worker</span><span style="color:#E1E4E8">(i):</span></span>
+<span class="line"><span style="color:#E1E4E8">    ns </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> random.choice([</span><span style="color:#9ECBFF">"feature_flag"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"promotion"</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">"rate_limit"</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#E1E4E8">    r </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> requests.get(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"https://apollo.shop.com/configs/shop-asset-sync/default/</span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">ns</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">    assert</span><span style="color:#E1E4E8"> r.status_code </span><span style="color:#F97583">==</span><span style="color:#79B8FF"> 9</span><span style="color:#E1E4E8">.</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#79B8FF"> len</span><span style="color:#E1E4E8">(json.dumps(r.json()))</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E1E4E8">start </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> time.time()</span></span>
+<span class="line"><span style="color:#F97583">with</span><span style="color:#E1E4E8"> ThreadPoolExecutor(</span><span style="color:#FFAB70">max_workers</span><span style="color:#F97583">=</span><span style="color:#79B8FF">800</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">as</span><span style="color:#E1E4E8"> ex:</span></span>
+<span class="line"><span style="color:#E1E4E8">    sizes </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> list</span><span style="color:#E1E4E8">(ex.map(worker, </span><span style="color:#79B8FF">range</span><span style="color:#E1E4E8">(</span><span style="color:#79B8FF">9.00</span><span style="color:#E1E4E8">)))</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Total MB fetched:"</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">sum</span><span style="color:#E1E4E8">(sizes)</span><span style="color:#F97583">/</span><span style="color:#79B8FF">1024</span><span style="color:#F97583">/</span><span style="color:#79B8FF">1024</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#79B8FF">print</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"Elapsed:"</span><span style="color:#E1E4E8">, time.time() </span><span style="color:#F97583">-</span><span style="color:#E1E4E8"> start)</span></span></code></pre>
+<p>结果：</p>
+<ul>
+<li><strong>P99 Latency</strong>：45 ms</li>
+<li><strong>吞吐</strong>：9. req / 18 s ≈ 9.0 req/s （单实例）</li>
+<li>CPU 占用 &#x3C; 0.6 Core，内存波动 &#x3C; 50 MB</li>
+</ul>
+<p><strong>结论</strong>：双实例无压，水平扩容到 4 份足以撑住百万在线。</p>
+<h2 id="9openapi-集成细节"><a aria-hidden="true" tabindex="-1" href="#9openapi-集成细节"><span class="icon icon-link"></span></a>9 | OpenAPI 集成细节</h2>
+<p>真正 DevOps 场景，大部分配置变更来自自动化脚本。<br>
+Apollo 提供的 <strong>OpenAPI</strong> 足够强大，但文档略简，下面分享若干踩坑。</p>
+<h3 id="91-token-管理"><a aria-hidden="true" tabindex="-1" href="#91-token-管理"><span class="icon icon-link"></span></a>9.1 Token 管理</h3>
+<ul>
+<li>使用 <code>apollo.portal.access.key.token</code> 创建，只能 Portal Admin 操作。</li>
+<li>Token 默认 7 天过期，CI 环境要么定时刷新，要么直接设置 <code>expires = 0</code>（永不过期）。</li>
+<li>GitLab Secret 里保存 <code>APOLLO_OPENAPI_TOKEN</code>，<strong>切勿</strong>打印在日志。</li>
+</ul>
+<h3 id="92-批量发布"><a aria-hidden="true" tabindex="-1" href="#92-批量发布"><span class="icon icon-link"></span></a>9.2 批量发布</h3>
+<p>OpenAPI 没有「一次发布多个 Namespace」的接口，我们写了流水线：</p>
+<ol>
+<li>循环调用 <code>PUT /items</code> 把所有键写入临时 <code>draft</code></li>
+<li>最后调用 <code>POST /releases</code> 一次性发布</li>
+<li>返回 <code>releaseId</code>，存到 Artefact，后续回滚、灰度都靠它</li>
+</ol>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> batch_publish</span><span style="color:#E1E4E8">(env, cluster, ns_data: </span><span style="color:#79B8FF">dict</span><span style="color:#E1E4E8">, title):</span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> ns, kvs </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> ns_data.items():</span></span>
+<span class="line"><span style="color:#F97583">        for</span><span style="color:#E1E4E8"> k, v </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> kvs.items():</span></span>
+<span class="line"><span style="color:#E1E4E8">            create_item(env, cluster, ns, k, v)</span></span>
+<span class="line"><span style="color:#E1E4E8">        do_release(env, cluster, ns, title)</span></span></code></pre>
+<h3 id="93-灰度规则"><a aria-hidden="true" tabindex="-1" href="#93-灰度规则"><span class="icon icon-link"></span></a>9.3 灰度规则</h3>
+<p><code>POST /gray-deliveries</code> 接口支持三种维度：IP、AppId、ClientLabel。<br>
+我们使用 <strong>K8s Downward API</strong> 暴露 <code>HOST_IP</code> 给应用，保证一 Pod 一个 IP，操作示例：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#B392F0">curl</span><span style="color:#79B8FF"> -XPOST</span><span style="color:#9ECBFF"> "</span><span style="color:#E1E4E8">$HOST</span><span style="color:#9ECBFF">/gray-deliveries"</span><span style="color:#79B8FF">   -H</span><span style="color:#9ECBFF"> "Authorization: Bearer </span><span style="color:#E1E4E8">$TOKEN</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">   -d</span><span style="color:#9ECBFF"> '{"rules": [</span></span>
+<span class="line"><span style="color:#9ECBFF">        {"clientAppId":"shop-asset-sync","ip":"10.1.2.3"},</span></span>
+<span class="line"><span style="color:#9ECBFF">        {"clientAppId":"shop-asset-sync","ip":"10.1.2.4"}</span></span>
+<span class="line"><span style="color:#9ECBFF">      ]}'</span></span></code></pre>
+<p>灰度结束后记得 <code>DELETE</code>，否则历史规则会干扰新发布。</p>
+<h3 id="94-release-回滚"><a aria-hidden="true" tabindex="-1" href="#94-release-回滚"><span class="icon icon-link"></span></a>9.4 Release 回滚</h3>
+<p>OpenAPI 回滚只能按 <code>releaseId</code>，所以在发布时<strong>必须</strong>记录该 id。<br>
+我们在 <code>commit-msg</code> 里加脚本，把 <code>releaseId</code> 写回 MR Description，方便 SRE 复制粘贴。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> rollback</span><span style="color:#E1E4E8">(ns, release_id):</span></span>
+<span class="line"><span style="color:#E1E4E8">    url </span><span style="color:#F97583">=</span><span style="color:#F97583"> f</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">{HOST}</span><span style="color:#9ECBFF">/openapi/v1/envs/prod/apps/</span><span style="color:#79B8FF">{APP}</span><span style="color:#9ECBFF">/clusters/default/namespaces/</span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">ns</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">/releases/</span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">release_id</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">/rollback"</span></span>
+<span class="line"><span style="color:#E1E4E8">    requests.put(url, </span><span style="color:#FFAB70">headers</span><span style="color:#F97583">=</span><span style="color:#79B8FF">HEADERS</span><span style="color:#E1E4E8">).raise_for_status()</span></span></code></pre>
+<p>务必注意幂等——同一个 release 回滚两次会抛 400，需要代码兜底。</p>
+<h2 id="10高级-feature-flag按类目动态开关"><a aria-hidden="true" tabindex="-1" href="#10高级-feature-flag按类目动态开关"><span class="icon icon-link"></span></a>10 | 高级 Feature Flag：按类目动态开关</h2>
+<p>运营经常问：“能不能只给‘服饰’类目开启动态图压缩？”<br>
+Apollo Namespace 天生是全局的，但我们可以把<strong>类目列表</strong>存成配置值 + 本地判断。</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#6A737D"># feature_flag</span></span>
+<span class="line"><span style="color:#85E89D">enable_dynamic_gif</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">true</span></span>
+<span class="line"><span style="color:#85E89D">gif_category_whitelist</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"服饰,箱包,手表"</span></span></code></pre>
+<p>业务代码：</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> should_apply_gif</span><span style="color:#E1E4E8">(cat, cfg):</span></span>
+<span class="line"><span style="color:#F97583">    if</span><span style="color:#F97583"> not</span><span style="color:#E1E4E8"> cfg[</span><span style="color:#9ECBFF">"enable_dynamic_gif"</span><span style="color:#E1E4E8">]:</span></span>
+<span class="line"><span style="color:#F97583">        return</span><span style="color:#79B8FF"> False</span></span>
+<span class="line"><span style="color:#E1E4E8">    cats </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [c.strip() </span><span style="color:#F97583">for</span><span style="color:#E1E4E8"> c </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> cfg[</span><span style="color:#9ECBFF">"gif_category_whitelist"</span><span style="color:#E1E4E8">].split(</span><span style="color:#9ECBFF">","</span><span style="color:#E1E4E8">)]</span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> cat </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> cats</span></span></code></pre>
+<p>更精细的做法：</p>
+<ul>
+<li>把 whitelist 存成 JSON 数组，或 Base64 压缩后存；</li>
+<li>使用 <code>split_config=true</code> 参数，让 Apollo 把大字段拆小，Portal 可以分页加载。</li>
+</ul>
+<p>这样无需调用“灰度发布”，也能做到按业务 Tag 开关功能。</p>
+<h2 id="11后续顾规划"><a aria-hidden="true" tabindex="-1" href="#11后续顾规划"><span class="icon icon-link"></span></a>11 | 后续顾规划</h2>
+<p>迁移 Apollo 并不是万灵药。<br>
+<strong>配置治理</strong> 的核心还是人：</p>
+<ul>
+<li>持续审计 —— 删除僵尸字段</li>
+<li>审批流程 —— 谁改了什么，一张表说清</li>
+<li>监控告警 —— 让配置变更像代码回归一样有测试、有指标</li>
+</ul>
+<p><strong>后续规划：</strong></p>
+<ul>
+<li><strong>多集群热备</strong> —— 计划把 Apollo 抽象到 Terraform，双云部署，切换延迟 &#x3C; 5 s。</li>
+<li><strong>动态 Schema</strong> —— 让 Namespace 自带 JSON Schema，Portal 可视化校验。</li>
+<li><strong>自助可视化 Diff</strong> —— 运营点开商品详情时直接显示与灰度配置差异。</li>
+<li><strong>PromQL Alert 改造</strong> —— 从静态阈值转向异常检测算法，自动学习 baseline。</li>
+</ul>
+<p>每一个改动都指向同一个目标：</p>
+<blockquote>
+<p>让配置成为业务动态的安全护栏，而不是隐藏炸弹，愿你也早日摆脱手改 Yaml 的”午夜惊魂“！</p>
+</blockquote> <html lang="en" data-astro-cid-uffxixac> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/service_governance/20211112_%E7%94%B5%E5%95%86%E5%95%86%E5%93%81%E5%AA%92%E8%B5%84%E5%90%8C%E6%AD%A5%E6%9C%8D%E5%8A%A1%E8%BF%81%E7%A7%BB%E8%87%B3-apollo-%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E5%AE%9E%E8%B7%B5/"><!-- Primary Meta Tags --><title>Ge Yuxu • AI &amp; Engineering</title><meta name="title" content="Ge Yuxu • AI &#38; Engineering"><meta name="description" content="Welcome to my blog!"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/service_governance/20211112_%E7%94%B5%E5%95%86%E5%95%86%E5%93%81%E5%AA%92%E8%B5%84%E5%90%8C%E6%AD%A5%E6%9C%8D%E5%8A%A1%E8%BF%81%E7%A7%BB%E8%87%B3-apollo-%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E5%AE%9E%E8%B7%B5/"><meta property="og:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="og:description" content="Welcome to my blog!"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/service_governance/20211112_%E7%94%B5%E5%95%86%E5%95%86%E5%93%81%E5%AA%92%E8%B5%84%E5%90%8C%E6%AD%A5%E6%9C%8D%E5%8A%A1%E8%BF%81%E7%A7%BB%E8%87%B3-apollo-%E9%85%8D%E7%BD%AE%E4%B8%AD%E5%BF%83%E5%AE%9E%E8%B7%B5/"><meta property="twitter:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="twitter:description" content="Welcome to my blog!"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script></head> <body data-astro-cid-uffxixac>  <div class="statement" data-astro-cid-uffxixac> <blockquote data-astro-cid-uffxixac> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>脱敏说明</strong>：本文所有出现的表名、字段名、接口地址、变量名、IP地址及示例数据等均非真实，
+    仅用于阐述技术思路与实现步骤，示例代码亦非公司真实代码。
+    示例方案亦非公司真实完整方案，仅为本人记忆总结，用于技术学习探讨。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;文中所示任何标识符并不对应实际生产环境中的名称或编号。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;示例&nbsp;SQL、脚本、代码及数据等均为演示用途，不含真实业务数据，也不具备直接运行或复现的完整上下文。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;读者若需在实际项目中参考本文方案，请结合自身业务场景及数据安全规范，使用符合内部命名和权限控制的配置。</p> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>版权声明</strong>：本文版权归原作者所有，未经作者事先书面许可，任何单位或个人不得以任何方式复制、转载、摘编或用于商业用途。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;若需非商业性引用或转载本文内容，请务必注明出处并保持内容完整。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;对因商业使用、篡改或不当引用本文内容所产生的法律纠纷，作者保留追究法律责任的权利。<br data-astro-cid-uffxixac><br data-astro-cid-uffxixac> <em data-astro-cid-uffxixac>Copyright&nbsp;©&nbsp;1989–Present&nbsp;Ge&nbsp;Yuxu.&nbsp;All&nbsp;Rights&nbsp;Reserved.</em></p> </blockquote> </div></body></html>  </article> </div> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2025 All rights reserved.
+</footer>  </body></html>

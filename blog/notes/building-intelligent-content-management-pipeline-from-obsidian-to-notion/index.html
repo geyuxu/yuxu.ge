@@ -1,0 +1,751 @@
+<!DOCTYPE html><html lang="zh"> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/notes/building-intelligent-content-management-pipeline-from-obsidian-to-notion/"><!-- Primary Meta Tags --><title>Building an Intelligent Content Management Pipeline from Obsidian to Notion: A Three-Layer Architecture for Knowledge Automation</title><meta name="title" content="Building an Intelligent Content Management Pipeline from Obsidian to Notion: A Three-Layer Architecture for Knowledge Automation"><meta name="description"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/notes/building-intelligent-content-management-pipeline-from-obsidian-to-notion/"><meta property="og:title" content="Building an Intelligent Content Management Pipeline from Obsidian to Notion: A Three-Layer Architecture for Knowledge Automation"><meta property="og:description"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/notes/building-intelligent-content-management-pipeline-from-obsidian-to-notion/"><meta property="twitter:title" content="Building an Intelligent Content Management Pipeline from Obsidian to Notion: A Three-Layer Architecture for Knowledge Automation"><meta property="twitter:description"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script><script is:global>
+	window.addEventListener('DOMContentLoaded', () => {
+		$('.toc ol').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'margin': 0,
+		'padding-left': 0,       // 可按需调整
+		});
+		$('.toc ol > li').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'padding-left': 10
+		});
+        $('.sidebar').append($('.toc'));
+      });
+	</script><link rel="stylesheet" href="/_astro/_slug_.BvCO7WHQ.css">
+<style>a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astro-cid-eimmu3lg].active{font-weight:bolder;text-decoration:underline}header[data-astro-cid-3ef6ksr2]{margin:0;padding:0 1em;background:#fff;box-shadow:0 2px 8px rgba(var(--black),5%)}h2[data-astro-cid-3ef6ksr2]{margin:0;font-size:1em}h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2],h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none}nav[data-astro-cid-3ef6ksr2]{display:flex;align-items:center;justify-content:space-between}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{padding:1em .5em;color:var(--black);border-bottom:4px solid transparent;text-decoration:none}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none;border-bottom-color:var(--accent)}.social-links[data-astro-cid-3ef6ksr2],.social-links[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{display:flex}@media (max-width: 720px){.social-links[data-astro-cid-3ef6ksr2]{display:none}}footer[data-astro-cid-sz7xmlte]{padding:2em 1em 6em;background:linear-gradient(var(--gray-gradient)) no-repeat;color:rgb(var(--gray));text-align:center}.social-links[data-astro-cid-sz7xmlte]{display:flex;justify-content:center;gap:1em;margin-top:1em}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]{text-decoration:none;color:rgb(var(--gray))}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]:hover{color:rgb(var(--gray-dark))}
+.statement[data-astro-cid-uffxixac]{font-size:10px;color:gray}@media (max-width: 640px){.statement[data-astro-cid-uffxixac]{font-size:6px;color:gray}}
+</style></head> <body> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <!--<h2><a href="/">{SITE_TITLE}</a></h2>--> <h2 data-astro-cid-3ef6ksr2><a style="padding-left:0;color:blue;" href="/" data-astro-cid-3ef6ksr2>Ge Yuxu<br data-astro-cid-3ef6ksr2>AI & Engineering</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blog/1" class="active" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/series" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Series </a>  <a href="/projects" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Projects </a>  </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://github.com/geyuxu" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://www.linkedin.com/in/geyuxu/" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's LinkedIn profile</span> <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" data-astro-cid-3ef6ksr2> <path fill="currentColor" d="M20.447 20.452H17.2v-5.569c0-1.328-.025-3.039-1.852-3.039-1.853 0-2.136 1.447-2.136 2.942v5.666h-3.248V9h3.122v1.561h.045c.435-.823 1.498-1.688 3.083-1.688 3.295 0 3.903 2.17 3.903 4.989v6.59zM5.337 7.433a1.882 1.882 0 110-3.764 1.882 1.882 0 010 3.764zm1.626 13.019H3.708V9h3.255v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.222 0z" data-astro-cid-3ef6ksr2></path> </svg> </a> </div> </nav> <!-- Microsoft Clarity --> <script type="text/javascript">
+		(function(c,l,a,r,i,t,y){
+			c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+			t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+			y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+		})(window, document, "clarity", "script", "rc2w96osp6");
+	</script> </header>  <main class="page"> <!-- 左侧栏 --> <aside class="sidebar"> <div class="meta"> <b>Building an Intelligent Content Management Pipeline from Obsidian to Notion: A Three-Layer Architecture for Knowledge Automation</b> <p><time datetime="2025-07-24T15:30:45.000Z"> 2025/07/24 23:30:45 </time></p>   <p class="series_title" style="margin-top:1rem;font-weight:bold;">系列：<a href="/series/knowledge-management-automation/">Knowledge Management Automation</a></p> <ul class="series-list"> <li>🍉&nbsp;<a href="/blog/notes/building-intelligent-content-management-pipeline-from-obsidian-to-notion/">Building an Intelligent Content Management Pipeline from Obsidian to Notion: A Three-Layer Architecture for Knowledge Automation</a></li> </ul>  </div> <hr> <br> </aside> <!-- 右侧正文区域（flex 居中） --> <div class="content-wrapper"> <article class="prose">  <nav class="toc"><ol class="toc-level toc-level-1"><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#architecture-design-overview">Architecture Design Overview</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#layer-responsibility-analysis">Layer Responsibility Analysis</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#detailed-technical-implementation">Detailed Technical Implementation</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#1-content-source-layer-obsidian-configuration">1. Content Source Layer: Obsidian Configuration</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#2-ai-processing-layer-claude-code--gemini-cli-integration">2. AI Processing Layer: Claude Code / Gemini CLI Integration</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#3-sync-target-layer-notion-integration">3. Sync Target Layer: Notion Integration</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#end-to-end-workflow-example">End-to-End Workflow Example</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#complete-automation-script">Complete Automation Script</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#automation-deployment">Automation Deployment</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#key-limitations--best-practices">Key Limitations &#x26; Best Practices</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#platform-limitations">Platform Limitations</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#performance-optimization-recommendations">Performance Optimization Recommendations</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#security-considerations">Security Considerations</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#quick-start-guide">Quick Start Guide</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#5-minute-setup">5-Minute Setup</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#extended-application-scenarios">Extended Application Scenarios</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#bidirectional-sync">Bidirectional Sync</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#multi-source-integration">Multi-Source Integration</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#conclusion">Conclusion</a></li></ol></nav><h1 id="building-an-intelligent-content-management-pipeline-from-obsidian-to-notion-a-three-layer-architecture-for-knowledge-automation"><a aria-hidden="true" tabindex="-1" href="#building-an-intelligent-content-management-pipeline-from-obsidian-to-notion-a-three-layer-architecture-for-knowledge-automation"><span class="icon icon-link"></span></a>Building an Intelligent Content Management Pipeline from Obsidian to Notion: A Three-Layer Architecture for Knowledge Automation</h1>
+<p>In modern knowledge work, we often need to manage and synchronize content across multiple platforms: Obsidian for local knowledge accumulation, and Notion for team collaboration and publishing. How can we build an intelligent content processing pipeline that leverages AI tools to automatically process and synchronize this content? This article will detail a solution based on a three-layer architecture.</p>
+<h2 id="architecture-design-overview"><a aria-hidden="true" tabindex="-1" href="#architecture-design-overview"><span class="icon icon-link"></span></a>Architecture Design Overview</h2>
+<p>The entire system adopts a three-layer architecture design, with each layer responsible for different duties:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐</span></span>
+<span class="line"><span>│  Content Source │───▶│  AI Processing  │───▶│   Sync Target   │</span></span>
+<span class="line"><span>│   Obsidian      │    │ Claude/Gemini   │    │    Notion       │</span></span>
+<span class="line"><span>│                 │    │                 │    │                 │</span></span>
+<span class="line"><span>│ • Unified MD    │    │ • Summarization │    │ • Publishing    │</span></span>
+<span class="line"><span>│   Storage       │    │ • Smart Analysis│    │   Platform      │</span></span>
+<span class="line"><span>│ • Local Editing │    │ • Format        │    │ • Team          │</span></span>
+<span class="line"><span>│ • Version       │    │   Conversion    │    │   Collaboration │</span></span>
+<span class="line"><span>│   Control       │    │                 │    │ • Database      │</span></span>
+<span class="line"><span>│                 │    │                 │    │   Views         │</span></span>
+<span class="line"><span>└─────────────────┘    └─────────────────┘    └─────────────────┘</span></span></code></pre>
+<h3 id="layer-responsibility-analysis"><a aria-hidden="true" tabindex="-1" href="#layer-responsibility-analysis"><span class="icon icon-link"></span></a>Layer Responsibility Analysis</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Layer</th><th>Function</th><th>Key Technologies/Plugins</th></tr></thead><tbody><tr><td>① Content Source Layer</td><td>Centralize all .md files in Obsidian Vault and enable external script read/write access</td><td>• Direct filesystem access (simplest)<br>• Local REST API Plugin: HTTPS endpoints supporting read/create/PATCH note operations<br>• Advanced URI Plugin: Append content via obsidian://advanced-uri?…mode=append parameters</td></tr><tr><td>② AI Summary Layer</td><td>Use Claude Code or Gemini CLI to batch read notes and generate summaries</td><td>• Claude Code + MCP: Wrap Obsidian REST endpoints as tools, Claude can use list_notes / read_note / patch_note<br>• Gemini CLI: Built-in MCP extension points, can use gemini run —prompt <file> in scripts to generate summaries, supports 1M token context, script automation</file></td></tr><tr><td>③ Sync Target Layer</td><td>Write summaries to Notion (single pages or database entries)</td><td>• Official Notion API: POST /v1/pages can create pages with content blocks in one call; only requires “Add connections” permission<br>• Auto-GPT-Notion Plugin: Pre-wrapped notion_create_page / notion_append_page commands for direct Notion writing</td></tr></tbody></table>
+<h2 id="detailed-technical-implementation"><a aria-hidden="true" tabindex="-1" href="#detailed-technical-implementation"><span class="icon icon-link"></span></a>Detailed Technical Implementation</h2>
+<h3 id="1-content-source-layer-obsidian-configuration"><a aria-hidden="true" tabindex="-1" href="#1-content-source-layer-obsidian-configuration"><span class="icon icon-link"></span></a>1. Content Source Layer: Obsidian Configuration</h3>
+<h4 id="installing-essential-plugins"><a aria-hidden="true" tabindex="-1" href="#installing-essential-plugins"><span class="icon icon-link"></span></a>Installing Essential Plugins</h4>
+<p><strong>Local REST API Plugin</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Search "Local REST API" in Obsidian plugin marketplace and enable</span></span>
+<span class="line"><span style="color:#6A737D"># Settings → Local REST API → Generate Key</span></span>
+<span class="line"><span style="color:#6A737D"># Default port: 27123, recommend 127.0.0.1 binding + strong password</span></span></code></pre>
+<p><strong>Advanced URI Plugin</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Search "Advanced URI" in plugin marketplace and enable</span></span>
+<span class="line"><span style="color:#6A737D"># Supports note operations via URL parameters:</span></span>
+<span class="line"><span style="color:#6A737D"># obsidian://advanced-uri?vault=MyVault&#x26;mode=append&#x26;file=Note.md&#x26;data=New%20content</span></span></code></pre>
+<h4 id="api-endpoint-configuration"><a aria-hidden="true" tabindex="-1" href="#api-endpoint-configuration"><span class="icon icon-link"></span></a>API Endpoint Configuration</h4>
+<p>After installing the Local REST API Plugin, you’ll have access to these endpoints:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#6A737D">// Get notes list</span></span>
+<span class="line"><span style="color:#79B8FF">GET</span><span style="color:#B392F0"> https</span><span style="color:#E1E4E8">:</span><span style="color:#6A737D">//localhost:27123/notes?key=API_KEY</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// Read specific note</span></span>
+<span class="line"><span style="color:#79B8FF">GET</span><span style="color:#B392F0"> https</span><span style="color:#E1E4E8">:</span><span style="color:#6A737D">//localhost:27123/notes/{path}?key=API_KEY</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// Create new note</span></span>
+<span class="line"><span style="color:#79B8FF">POST</span><span style="color:#B392F0"> https</span><span style="color:#E1E4E8">:</span><span style="color:#6A737D">//localhost:27123/notes?key=API_KEY</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#9ECBFF">  "path"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"NewNote.md"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">  "content"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Note content"</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D">// Update note</span></span>
+<span class="line"><span style="color:#79B8FF">PATCH</span><span style="color:#B392F0"> https</span><span style="color:#E1E4E8">:</span><span style="color:#6A737D">//localhost:27123/notes/{path}?key=API_KEY</span></span>
+<span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#9ECBFF">  "content"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Updated content"</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h3 id="2-ai-processing-layer-claude-code--gemini-cli-integration"><a aria-hidden="true" tabindex="-1" href="#2-ai-processing-layer-claude-code--gemini-cli-integration"><span class="icon icon-link"></span></a>2. AI Processing Layer: Claude Code / Gemini CLI Integration</h3>
+<h4 id="claude-code-integration"><a aria-hidden="true" tabindex="-1" href="#claude-code-integration"><span class="icon icon-link"></span></a>Claude Code Integration</h4>
+<p><strong>MCP Tool Configuration</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#6A737D"># obsidian_rest.yaml</span></span>
+<span class="line"><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">obsidian_rest</span></span>
+<span class="line"><span style="color:#85E89D">description</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">Obsidian REST API integration</span></span>
+<span class="line"><span style="color:#85E89D">endpoints</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">  - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">list_notes</span></span>
+<span class="line"><span style="color:#85E89D">    url</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"https://localhost:27123/notes"</span></span>
+<span class="line"><span style="color:#85E89D">    method</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">GET</span></span>
+<span class="line"><span style="color:#85E89D">    headers</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      Authorization</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Bearer ${OBSIDIAN_API_KEY}"</span></span>
+<span class="line"><span style="color:#E1E4E8">  - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">read_note</span></span>
+<span class="line"><span style="color:#85E89D">    url</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"https://localhost:27123/notes/{path}"</span></span>
+<span class="line"><span style="color:#85E89D">    method</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">GET</span></span>
+<span class="line"><span style="color:#85E89D">    headers</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      Authorization</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Bearer ${OBSIDIAN_API_KEY}"</span></span>
+<span class="line"><span style="color:#E1E4E8">  - </span><span style="color:#85E89D">name</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">update_note</span></span>
+<span class="line"><span style="color:#85E89D">    url</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"https://localhost:27123/notes/{path}"</span></span>
+<span class="line"><span style="color:#85E89D">    method</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">PATCH</span></span>
+<span class="line"><span style="color:#85E89D">    headers</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#85E89D">      Authorization</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Bearer ${OBSIDIAN_API_KEY}"</span></span>
+<span class="line"><span style="color:#85E89D">      Content-Type</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"application/json"</span></span></code></pre>
+<p><strong>Usage Example</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Register tool</span></span>
+<span class="line"><span style="color:#B392F0">claude</span><span style="color:#9ECBFF"> tools</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> obsidian_rest.yaml</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Let Claude process notes</span></span>
+<span class="line"><span style="color:#B392F0">claude</span><span style="color:#9ECBFF"> chat</span><span style="color:#9ECBFF"> "Please read all my notes and generate 200-character summaries for each"</span></span></code></pre>
+<h4 id="gemini-cli-integration"><a aria-hidden="true" tabindex="-1" href="#gemini-cli-integration"><span class="icon icon-link"></span></a>Gemini CLI Integration</h4>
+<p><strong>Installation and Setup</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Install Gemini CLI</span></span>
+<span class="line"><span style="color:#B392F0">brew</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> gemini-cli</span><span style="color:#6A737D">  # or go install</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Configure API Key</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> GEMINI_API_KEY</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">your_api_key_here</span></span></code></pre>
+<p><strong>Batch Processing Script Example</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> os</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> requests</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> subprocess</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> json</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> process_notes_with_gemini</span><span style="color:#E1E4E8">(vault_path, api_key):</span></span>
+<span class="line"><span style="color:#9ECBFF">    """Batch process notes using Gemini CLI"""</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#6A737D">    # Get all markdown files</span></span>
+<span class="line"><span style="color:#E1E4E8">    md_files </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> []</span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> root, dirs, files </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> os.walk(vault_path):</span></span>
+<span class="line"><span style="color:#F97583">        for</span><span style="color:#FFAB70"> file</span><span style="color:#F97583"> in</span><span style="color:#E1E4E8"> files:</span></span>
+<span class="line"><span style="color:#F97583">            if</span><span style="color:#FFAB70"> file</span><span style="color:#E1E4E8">.endswith(</span><span style="color:#9ECBFF">'.md'</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#E1E4E8">                md_files.append(os.path.join(root, </span><span style="color:#FFAB70">file</span><span style="color:#E1E4E8">))</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    summaries </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> []</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> md_file </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> md_files:</span></span>
+<span class="line"><span style="color:#6A737D">        # Read file content</span></span>
+<span class="line"><span style="color:#F97583">        with</span><span style="color:#79B8FF"> open</span><span style="color:#E1E4E8">(md_file, </span><span style="color:#9ECBFF">'r'</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">encoding</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">'utf-8'</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">as</span><span style="color:#E1E4E8"> f:</span></span>
+<span class="line"><span style="color:#E1E4E8">            content </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> f.read()</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        # Generate summary using Gemini CLI</span></span>
+<span class="line"><span style="color:#E1E4E8">        prompt </span><span style="color:#F97583">=</span><span style="color:#F97583"> f</span><span style="color:#9ECBFF">"Please generate a 200-word summary in English for the following content, focusing on key information and core viewpoints:</span><span style="color:#79B8FF">\n\n{</span><span style="color:#E1E4E8">content</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#F97583">        try</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">            result </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> subprocess.run([</span></span>
+<span class="line"><span style="color:#9ECBFF">                'gemini'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'chat'</span><span style="color:#E1E4E8">, </span></span>
+<span class="line"><span style="color:#9ECBFF">                '-i'</span><span style="color:#E1E4E8">, prompt,</span></span>
+<span class="line"><span style="color:#9ECBFF">                '-p'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'Summarize in English'</span></span>
+<span class="line"><span style="color:#E1E4E8">            ], </span><span style="color:#FFAB70">capture_output</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">text</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">timeout</span><span style="color:#F97583">=</span><span style="color:#79B8FF">30</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">            </span></span>
+<span class="line"><span style="color:#F97583">            if</span><span style="color:#E1E4E8"> result.returncode </span><span style="color:#F97583">==</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">                summary </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> result.stdout.strip()</span></span>
+<span class="line"><span style="color:#E1E4E8">                summaries.append({</span></span>
+<span class="line"><span style="color:#9ECBFF">                    'file'</span><span style="color:#E1E4E8">: md_file,</span></span>
+<span class="line"><span style="color:#9ECBFF">                    'original_content'</span><span style="color:#E1E4E8">: content,</span></span>
+<span class="line"><span style="color:#9ECBFF">                    'summary'</span><span style="color:#E1E4E8">: summary</span></span>
+<span class="line"><span style="color:#E1E4E8">                })</span></span>
+<span class="line"><span style="color:#79B8FF">                print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"✅ Processed: </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">os.path.basename(md_file)</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">            else</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#79B8FF">                print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"❌ Processing failed: </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">md_file</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF"> - </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">result.stderr</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">                </span></span>
+<span class="line"><span style="color:#F97583">        except</span><span style="color:#E1E4E8"> subprocess.TimeoutExpired:</span></span>
+<span class="line"><span style="color:#79B8FF">            print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"⏱️ Processing timeout: </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">md_file</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">        except</span><span style="color:#79B8FF"> Exception</span><span style="color:#F97583"> as</span><span style="color:#E1E4E8"> e:</span></span>
+<span class="line"><span style="color:#79B8FF">            print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"🚫 Processing exception: </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">md_file</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF"> - </span><span style="color:#79B8FF">{str</span><span style="color:#E1E4E8">(e)</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#F97583">    return</span><span style="color:#E1E4E8"> summaries</span></span></code></pre>
+<h3 id="3-sync-target-layer-notion-integration"><a aria-hidden="true" tabindex="-1" href="#3-sync-target-layer-notion-integration"><span class="icon icon-link"></span></a>3. Sync Target Layer: Notion Integration</h3>
+<h4 id="notion-api-configuration"><a aria-hidden="true" tabindex="-1" href="#notion-api-configuration"><span class="icon icon-link"></span></a>Notion API Configuration</h4>
+<p><strong>Create Integration</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 1. Visit https://www.notion.com/my-integrations</span></span>
+<span class="line"><span style="color:#6A737D"># 2. Click "New integration"</span></span>
+<span class="line"><span style="color:#6A737D"># 3. Get Internal Integration Secret</span></span>
+<span class="line"><span style="color:#6A737D"># 4. In target page → ... → Add connections → Check your integration</span></span></code></pre>
+<p><strong>Permission Configuration</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="json"><code><span class="line"><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#79B8FF">  "capabilities"</span><span style="color:#E1E4E8">: [</span></span>
+<span class="line"><span style="color:#9ECBFF">    "read_content"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">    "update_content"</span><span style="color:#E1E4E8">, </span></span>
+<span class="line"><span style="color:#9ECBFF">    "insert_content"</span></span>
+<span class="line"><span style="color:#E1E4E8">  ]</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h4 id="notion-sdk-usage-examples"><a aria-hidden="true" tabindex="-1" href="#notion-sdk-usage-examples"><span class="icon icon-link"></span></a>Notion SDK Usage Examples</h4>
+<p><strong>Python Implementation</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> os</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> notion_client </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> Client</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> sync_to_notion</span><span style="color:#E1E4E8">(summaries, notion_token, database_id):</span></span>
+<span class="line"><span style="color:#9ECBFF">    """Sync summaries to Notion database"""</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#E1E4E8">    notion </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Client(</span><span style="color:#FFAB70">auth</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">notion_token)</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> item </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> summaries:</span></span>
+<span class="line"><span style="color:#E1E4E8">        file_name </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> os.path.basename(item[</span><span style="color:#9ECBFF">'file'</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#E1E4E8">        summary </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> item[</span><span style="color:#9ECBFF">'summary'</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#F97583">        try</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#6A737D">            # Create new page</span></span>
+<span class="line"><span style="color:#E1E4E8">            new_page </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> notion.pages.create(</span></span>
+<span class="line"><span style="color:#FFAB70">                parent</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{</span><span style="color:#9ECBFF">"database_id"</span><span style="color:#E1E4E8">: database_id},</span></span>
+<span class="line"><span style="color:#FFAB70">                properties</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#9ECBFF">                    "Name"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">                        "title"</span><span style="color:#E1E4E8">: [</span></span>
+<span class="line"><span style="color:#E1E4E8">                            {</span></span>
+<span class="line"><span style="color:#9ECBFF">                                "text"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">                                    "content"</span><span style="color:#E1E4E8">: file_name.replace(</span><span style="color:#9ECBFF">'.md'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">''</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">                                }</span></span>
+<span class="line"><span style="color:#E1E4E8">                            }</span></span>
+<span class="line"><span style="color:#E1E4E8">                        ]</span></span>
+<span class="line"><span style="color:#E1E4E8">                    },</span></span>
+<span class="line"><span style="color:#9ECBFF">                    "Source"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">                        "rich_text"</span><span style="color:#E1E4E8">: [</span></span>
+<span class="line"><span style="color:#E1E4E8">                            {</span></span>
+<span class="line"><span style="color:#9ECBFF">                                "text"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">                                    "content"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Obsidian"</span></span>
+<span class="line"><span style="color:#E1E4E8">                                }</span></span>
+<span class="line"><span style="color:#E1E4E8">                            }</span></span>
+<span class="line"><span style="color:#E1E4E8">                        ]</span></span>
+<span class="line"><span style="color:#E1E4E8">                    },</span></span>
+<span class="line"><span style="color:#9ECBFF">                    "Status"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">                        "select"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">                            "name"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Processed"</span></span>
+<span class="line"><span style="color:#E1E4E8">                        }</span></span>
+<span class="line"><span style="color:#E1E4E8">                    }</span></span>
+<span class="line"><span style="color:#E1E4E8">                },</span></span>
+<span class="line"><span style="color:#FFAB70">                children</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">[</span></span>
+<span class="line"><span style="color:#E1E4E8">                    {</span></span>
+<span class="line"><span style="color:#9ECBFF">                        "object"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"block"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">                        "type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"paragraph"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">                        "paragraph"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">                            "rich_text"</span><span style="color:#E1E4E8">: [</span></span>
+<span class="line"><span style="color:#E1E4E8">                                {</span></span>
+<span class="line"><span style="color:#9ECBFF">                                    "text"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">                                        "content"</span><span style="color:#E1E4E8">: summary</span></span>
+<span class="line"><span style="color:#E1E4E8">                                    }</span></span>
+<span class="line"><span style="color:#E1E4E8">                                }</span></span>
+<span class="line"><span style="color:#E1E4E8">                            ]</span></span>
+<span class="line"><span style="color:#E1E4E8">                        }</span></span>
+<span class="line"><span style="color:#E1E4E8">                    }</span></span>
+<span class="line"><span style="color:#E1E4E8">                ]</span></span>
+<span class="line"><span style="color:#E1E4E8">            )</span></span>
+<span class="line"><span style="color:#E1E4E8">            </span></span>
+<span class="line"><span style="color:#79B8FF">            print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"✅ Synced to Notion: </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">file_name</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">            </span></span>
+<span class="line"><span style="color:#F97583">        except</span><span style="color:#79B8FF"> Exception</span><span style="color:#F97583"> as</span><span style="color:#E1E4E8"> e:</span></span>
+<span class="line"><span style="color:#79B8FF">            print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"❌ Sync failed: </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">file_name</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF"> - </span><span style="color:#79B8FF">{str</span><span style="color:#E1E4E8">(e)</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span></code></pre>
+<p><strong>Node.js Implementation</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="javascript"><code><span class="line"><span style="color:#F97583">const</span><span style="color:#E1E4E8"> { </span><span style="color:#79B8FF">Client</span><span style="color:#E1E4E8"> } </span><span style="color:#F97583">=</span><span style="color:#B392F0"> require</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">'@notionhq/client'</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">const</span><span style="color:#79B8FF"> notion</span><span style="color:#F97583"> =</span><span style="color:#F97583"> new</span><span style="color:#B392F0"> Client</span><span style="color:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#E1E4E8">  auth: process.env.</span><span style="color:#79B8FF">NOTION_TOKEN</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">});</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">async</span><span style="color:#F97583"> function</span><span style="color:#B392F0"> syncToNotionDatabase</span><span style="color:#E1E4E8">(</span><span style="color:#FFAB70">summaries</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">databaseId</span><span style="color:#E1E4E8">) {</span></span>
+<span class="line"><span style="color:#F97583">  for</span><span style="color:#E1E4E8"> (</span><span style="color:#F97583">const</span><span style="color:#79B8FF"> item</span><span style="color:#F97583"> of</span><span style="color:#E1E4E8"> summaries) {</span></span>
+<span class="line"><span style="color:#F97583">    const</span><span style="color:#79B8FF"> fileName</span><span style="color:#F97583"> =</span><span style="color:#E1E4E8"> path.</span><span style="color:#B392F0">basename</span><span style="color:#E1E4E8">(item.file, </span><span style="color:#9ECBFF">'.md'</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#F97583">    try</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#F97583">      await</span><span style="color:#E1E4E8"> notion.pages.</span><span style="color:#B392F0">create</span><span style="color:#E1E4E8">({</span></span>
+<span class="line"><span style="color:#E1E4E8">        parent: { database_id: databaseId },</span></span>
+<span class="line"><span style="color:#E1E4E8">        properties: {</span></span>
+<span class="line"><span style="color:#9ECBFF">          'Name'</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#E1E4E8">            title: [{ text: { content: fileName } }]</span></span>
+<span class="line"><span style="color:#E1E4E8">          },</span></span>
+<span class="line"><span style="color:#9ECBFF">          'Summary'</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#E1E4E8">            rich_text: [{ text: { content: item.summary } }]</span></span>
+<span class="line"><span style="color:#E1E4E8">          },</span></span>
+<span class="line"><span style="color:#9ECBFF">          'Created'</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#E1E4E8">            date: { start: </span><span style="color:#F97583">new</span><span style="color:#B392F0"> Date</span><span style="color:#E1E4E8">().</span><span style="color:#B392F0">toISOString</span><span style="color:#E1E4E8">() }</span></span>
+<span class="line"><span style="color:#E1E4E8">          }</span></span>
+<span class="line"><span style="color:#E1E4E8">        },</span></span>
+<span class="line"><span style="color:#E1E4E8">        children: [</span></span>
+<span class="line"><span style="color:#E1E4E8">          {</span></span>
+<span class="line"><span style="color:#E1E4E8">            object: </span><span style="color:#9ECBFF">'block'</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">            type: </span><span style="color:#9ECBFF">'paragraph'</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#E1E4E8">            paragraph: {</span></span>
+<span class="line"><span style="color:#E1E4E8">              rich_text: [{ text: { content: item.summary } }]</span></span>
+<span class="line"><span style="color:#E1E4E8">            }</span></span>
+<span class="line"><span style="color:#E1E4E8">          }</span></span>
+<span class="line"><span style="color:#E1E4E8">        ]</span></span>
+<span class="line"><span style="color:#E1E4E8">      });</span></span>
+<span class="line"><span style="color:#E1E4E8">      </span></span>
+<span class="line"><span style="color:#E1E4E8">      console.</span><span style="color:#B392F0">log</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">`✅ Synced: ${</span><span style="color:#E1E4E8">fileName</span><span style="color:#9ECBFF">}`</span><span style="color:#E1E4E8">);</span></span>
+<span class="line"><span style="color:#E1E4E8">    } </span><span style="color:#F97583">catch</span><span style="color:#E1E4E8"> (error) {</span></span>
+<span class="line"><span style="color:#E1E4E8">      console.</span><span style="color:#B392F0">error</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">`❌ Sync failed: ${</span><span style="color:#E1E4E8">fileName</span><span style="color:#9ECBFF">}`</span><span style="color:#E1E4E8">, error);</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">  }</span></span>
+<span class="line"><span style="color:#E1E4E8">}</span></span></code></pre>
+<h2 id="end-to-end-workflow-example"><a aria-hidden="true" tabindex="-1" href="#end-to-end-workflow-example"><span class="icon icon-link"></span></a>End-to-End Workflow Example</h2>
+<h3 id="complete-automation-script"><a aria-hidden="true" tabindex="-1" href="#complete-automation-script"><span class="icon icon-link"></span></a>Complete Automation Script</h3>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D">#!/usr/bin/env python3</span></span>
+<span class="line"><span style="color:#9ECBFF">"""</span></span>
+<span class="line"><span style="color:#9ECBFF">Obsidian -> AI -> Notion Automated Processing Pipeline</span></span>
+<span class="line"><span style="color:#9ECBFF">"""</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> os</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> sys</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> json</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> time</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> requests</span></span>
+<span class="line"><span style="color:#F97583">import</span><span style="color:#E1E4E8"> subprocess</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> datetime </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> datetime</span></span>
+<span class="line"><span style="color:#F97583">from</span><span style="color:#E1E4E8"> notion_client </span><span style="color:#F97583">import</span><span style="color:#E1E4E8"> Client</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> ContentPipeline</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#79B8FF"> __init__</span><span style="color:#E1E4E8">(self, config):</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.obsidian_api_key </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> config[</span><span style="color:#9ECBFF">'obsidian_api_key'</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.obsidian_base_url </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> config[</span><span style="color:#9ECBFF">'obsidian_base_url'</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.notion_token </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> config[</span><span style="color:#9ECBFF">'notion_token'</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.notion_database_id </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> config[</span><span style="color:#9ECBFF">'notion_database_id'</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.ai_model </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> config.get(</span><span style="color:#9ECBFF">'ai_model'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'gemini'</span><span style="color:#E1E4E8">)  </span><span style="color:#6A737D"># 'gemini' or 'claude'</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.notion </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> Client(</span><span style="color:#FFAB70">auth</span><span style="color:#F97583">=</span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.notion_token)</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> get_updated_notes</span><span style="color:#E1E4E8">(self, since_hours</span><span style="color:#F97583">=</span><span style="color:#79B8FF">24</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#9ECBFF">        """Get recently updated notes"""</span></span>
+<span class="line"><span style="color:#F97583">        try</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">            response </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> requests.get(</span></span>
+<span class="line"><span style="color:#F97583">                f</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">{self</span><span style="color:#E1E4E8">.obsidian_base_url</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">/notes"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">                params</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{</span><span style="color:#9ECBFF">'key'</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.obsidian_api_key}</span></span>
+<span class="line"><span style="color:#E1E4E8">            )</span></span>
+<span class="line"><span style="color:#E1E4E8">            response.raise_for_status()</span></span>
+<span class="line"><span style="color:#E1E4E8">            </span></span>
+<span class="line"><span style="color:#E1E4E8">            all_notes </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> response.json()</span></span>
+<span class="line"><span style="color:#E1E4E8">            </span></span>
+<span class="line"><span style="color:#6A737D">            # Filter recently updated notes</span></span>
+<span class="line"><span style="color:#E1E4E8">            cutoff_time </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> time.time() </span><span style="color:#F97583">-</span><span style="color:#E1E4E8"> (since_hours </span><span style="color:#F97583">*</span><span style="color:#79B8FF"> 3600</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">            updated_notes </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> []</span></span>
+<span class="line"><span style="color:#E1E4E8">            </span></span>
+<span class="line"><span style="color:#F97583">            for</span><span style="color:#E1E4E8"> note </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> all_notes:</span></span>
+<span class="line"><span style="color:#F97583">                if</span><span style="color:#E1E4E8"> note.get(</span><span style="color:#9ECBFF">'mtime'</span><span style="color:#E1E4E8">, </span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">) </span><span style="color:#F97583">></span><span style="color:#E1E4E8"> cutoff_time:</span></span>
+<span class="line"><span style="color:#E1E4E8">                    updated_notes.append(note)</span></span>
+<span class="line"><span style="color:#E1E4E8">            </span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#E1E4E8"> updated_notes</span></span>
+<span class="line"><span style="color:#E1E4E8">            </span></span>
+<span class="line"><span style="color:#F97583">        except</span><span style="color:#79B8FF"> Exception</span><span style="color:#F97583"> as</span><span style="color:#E1E4E8"> e:</span></span>
+<span class="line"><span style="color:#79B8FF">            print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"❌ Failed to get notes: </span><span style="color:#79B8FF">{str</span><span style="color:#E1E4E8">(e)</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#E1E4E8"> []</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> read_note_content</span><span style="color:#E1E4E8">(self, note_path):</span></span>
+<span class="line"><span style="color:#9ECBFF">        """Read note content"""</span></span>
+<span class="line"><span style="color:#F97583">        try</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">            response </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> requests.get(</span></span>
+<span class="line"><span style="color:#F97583">                f</span><span style="color:#9ECBFF">"</span><span style="color:#79B8FF">{self</span><span style="color:#E1E4E8">.obsidian_base_url</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">/notes/</span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">note_path</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#FFAB70">                params</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{</span><span style="color:#9ECBFF">'key'</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.obsidian_api_key}</span></span>
+<span class="line"><span style="color:#E1E4E8">            )</span></span>
+<span class="line"><span style="color:#E1E4E8">            response.raise_for_status()</span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#E1E4E8"> response.text</span></span>
+<span class="line"><span style="color:#E1E4E8">            </span></span>
+<span class="line"><span style="color:#F97583">        except</span><span style="color:#79B8FF"> Exception</span><span style="color:#F97583"> as</span><span style="color:#E1E4E8"> e:</span></span>
+<span class="line"><span style="color:#79B8FF">            print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"❌ Failed to read note </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">note_path</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">: </span><span style="color:#79B8FF">{str</span><span style="color:#E1E4E8">(e)</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#79B8FF"> None</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> generate_summary_with_gemini</span><span style="color:#E1E4E8">(self, content):</span></span>
+<span class="line"><span style="color:#9ECBFF">        """Generate summary using Gemini"""</span></span>
+<span class="line"><span style="color:#E1E4E8">        prompt </span><span style="color:#F97583">=</span><span style="color:#F97583"> f</span><span style="color:#9ECBFF">"""Please generate a structured summary for the following content, including:</span></span>
+<span class="line"><span style="color:#9ECBFF">1. Core viewpoints (2-3 sentences)</span></span>
+<span class="line"><span style="color:#9ECBFF">2. Key information points (3-5 points)</span></span>
+<span class="line"><span style="color:#9ECBFF">3. Practical suggestions (if applicable)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#9ECBFF">Content:</span></span>
+<span class="line"><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">content</span><span style="color:#79B8FF">}</span></span>
+<span class="line"><span style="color:#9ECBFF">"""</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#F97583">        try</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">            result </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> subprocess.run([</span></span>
+<span class="line"><span style="color:#9ECBFF">                'gemini'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'chat'</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">                '-i'</span><span style="color:#E1E4E8">, prompt</span></span>
+<span class="line"><span style="color:#E1E4E8">            ], </span><span style="color:#FFAB70">capture_output</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">text</span><span style="color:#F97583">=</span><span style="color:#79B8FF">True</span><span style="color:#E1E4E8">, </span><span style="color:#FFAB70">timeout</span><span style="color:#F97583">=</span><span style="color:#79B8FF">60</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">            </span></span>
+<span class="line"><span style="color:#F97583">            if</span><span style="color:#E1E4E8"> result.returncode </span><span style="color:#F97583">==</span><span style="color:#79B8FF"> 0</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#F97583">                return</span><span style="color:#E1E4E8"> result.stdout.strip()</span></span>
+<span class="line"><span style="color:#F97583">            else</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#79B8FF">                print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"❌ Gemini processing failed: </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">result.stderr</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">                return</span><span style="color:#79B8FF"> None</span></span>
+<span class="line"><span style="color:#E1E4E8">                </span></span>
+<span class="line"><span style="color:#F97583">        except</span><span style="color:#79B8FF"> Exception</span><span style="color:#F97583"> as</span><span style="color:#E1E4E8"> e:</span></span>
+<span class="line"><span style="color:#79B8FF">            print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"❌ Gemini call exception: </span><span style="color:#79B8FF">{str</span><span style="color:#E1E4E8">(e)</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">            return</span><span style="color:#79B8FF"> None</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> generate_summary_with_claude</span><span style="color:#E1E4E8">(self, content):</span></span>
+<span class="line"><span style="color:#9ECBFF">        """Generate summary using Claude Code"""</span></span>
+<span class="line"><span style="color:#6A737D">        # This can integrate Claude Code MCP tools</span></span>
+<span class="line"><span style="color:#6A737D">        # or use Anthropic API</span></span>
+<span class="line"><span style="color:#F97583">        pass</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> sync_to_notion</span><span style="color:#E1E4E8">(self, note_path, original_content, summary):</span></span>
+<span class="line"><span style="color:#9ECBFF">        """Sync to Notion"""</span></span>
+<span class="line"><span style="color:#E1E4E8">        file_name </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> os.path.basename(note_path).replace(</span><span style="color:#9ECBFF">'.md'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">''</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#F97583">        try</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#6A737D">            # Check if already exists</span></span>
+<span class="line"><span style="color:#E1E4E8">            existing </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.notion.databases.query(</span></span>
+<span class="line"><span style="color:#FFAB70">                database_id</span><span style="color:#F97583">=</span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.notion_database_id,</span></span>
+<span class="line"><span style="color:#FFAB70">                filter</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#9ECBFF">                    "property"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Source File"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">                    "rich_text"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">                        "equals"</span><span style="color:#E1E4E8">: note_path</span></span>
+<span class="line"><span style="color:#E1E4E8">                    }</span></span>
+<span class="line"><span style="color:#E1E4E8">                }</span></span>
+<span class="line"><span style="color:#E1E4E8">            )</span></span>
+<span class="line"><span style="color:#E1E4E8">            </span></span>
+<span class="line"><span style="color:#E1E4E8">            page_data </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#9ECBFF">                "properties"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">                    "Name"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">                        "title"</span><span style="color:#E1E4E8">: [{</span><span style="color:#9ECBFF">"text"</span><span style="color:#E1E4E8">: {</span><span style="color:#9ECBFF">"content"</span><span style="color:#E1E4E8">: file_name}}]</span></span>
+<span class="line"><span style="color:#E1E4E8">                    },</span></span>
+<span class="line"><span style="color:#9ECBFF">                    "Source File"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">                        "rich_text"</span><span style="color:#E1E4E8">: [{</span><span style="color:#9ECBFF">"text"</span><span style="color:#E1E4E8">: {</span><span style="color:#9ECBFF">"content"</span><span style="color:#E1E4E8">: note_path}}]</span></span>
+<span class="line"><span style="color:#E1E4E8">                    },</span></span>
+<span class="line"><span style="color:#9ECBFF">                    "Last Updated"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">                        "date"</span><span style="color:#E1E4E8">: {</span><span style="color:#9ECBFF">"start"</span><span style="color:#E1E4E8">: datetime.now().isoformat()}</span></span>
+<span class="line"><span style="color:#E1E4E8">                    },</span></span>
+<span class="line"><span style="color:#9ECBFF">                    "Status"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">                        "select"</span><span style="color:#E1E4E8">: {</span><span style="color:#9ECBFF">"name"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Processed"</span><span style="color:#E1E4E8">}</span></span>
+<span class="line"><span style="color:#E1E4E8">                    }</span></span>
+<span class="line"><span style="color:#E1E4E8">                },</span></span>
+<span class="line"><span style="color:#9ECBFF">                "children"</span><span style="color:#E1E4E8">: [</span></span>
+<span class="line"><span style="color:#E1E4E8">                    {</span></span>
+<span class="line"><span style="color:#9ECBFF">                        "object"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"block"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">                        "type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"heading_2"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">                        "heading_2"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">                            "rich_text"</span><span style="color:#E1E4E8">: [{</span><span style="color:#9ECBFF">"text"</span><span style="color:#E1E4E8">: {</span><span style="color:#9ECBFF">"content"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"AI Generated Summary"</span><span style="color:#E1E4E8">}}]</span></span>
+<span class="line"><span style="color:#E1E4E8">                        }</span></span>
+<span class="line"><span style="color:#E1E4E8">                    },</span></span>
+<span class="line"><span style="color:#E1E4E8">                    {</span></span>
+<span class="line"><span style="color:#9ECBFF">                        "object"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"block"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">                        "type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"paragraph"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">                        "paragraph"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">                            "rich_text"</span><span style="color:#E1E4E8">: [{</span><span style="color:#9ECBFF">"text"</span><span style="color:#E1E4E8">: {</span><span style="color:#9ECBFF">"content"</span><span style="color:#E1E4E8">: summary}}]</span></span>
+<span class="line"><span style="color:#E1E4E8">                        }</span></span>
+<span class="line"><span style="color:#E1E4E8">                    },</span></span>
+<span class="line"><span style="color:#E1E4E8">                    {</span></span>
+<span class="line"><span style="color:#9ECBFF">                        "object"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"block"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">                        "type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"heading_2"</span><span style="color:#E1E4E8">, </span></span>
+<span class="line"><span style="color:#9ECBFF">                        "heading_2"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">                            "rich_text"</span><span style="color:#E1E4E8">: [{</span><span style="color:#9ECBFF">"text"</span><span style="color:#E1E4E8">: {</span><span style="color:#9ECBFF">"content"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Original Content"</span><span style="color:#E1E4E8">}}]</span></span>
+<span class="line"><span style="color:#E1E4E8">                        }</span></span>
+<span class="line"><span style="color:#E1E4E8">                    },</span></span>
+<span class="line"><span style="color:#E1E4E8">                    {</span></span>
+<span class="line"><span style="color:#9ECBFF">                        "object"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"block"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">                        "type"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"code"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">                        "code"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">                            "language"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"markdown"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">                            "rich_text"</span><span style="color:#E1E4E8">: [{</span><span style="color:#9ECBFF">"text"</span><span style="color:#E1E4E8">: {</span><span style="color:#9ECBFF">"content"</span><span style="color:#E1E4E8">: original_content[:</span><span style="color:#79B8FF">2000</span><span style="color:#E1E4E8">]}}]  </span><span style="color:#6A737D"># Limit length</span></span>
+<span class="line"><span style="color:#E1E4E8">                        }</span></span>
+<span class="line"><span style="color:#E1E4E8">                    }</span></span>
+<span class="line"><span style="color:#E1E4E8">                ]</span></span>
+<span class="line"><span style="color:#E1E4E8">            }</span></span>
+<span class="line"><span style="color:#E1E4E8">            </span></span>
+<span class="line"><span style="color:#F97583">            if</span><span style="color:#E1E4E8"> existing[</span><span style="color:#9ECBFF">'results'</span><span style="color:#E1E4E8">]:</span></span>
+<span class="line"><span style="color:#6A737D">                # Update existing page</span></span>
+<span class="line"><span style="color:#E1E4E8">                page_id </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> existing[</span><span style="color:#9ECBFF">'results'</span><span style="color:#E1E4E8">][</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">][</span><span style="color:#9ECBFF">'id'</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#79B8FF">                self</span><span style="color:#E1E4E8">.notion.pages.update(</span><span style="color:#FFAB70">page_id</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">page_id, </span><span style="color:#F97583">**</span><span style="color:#E1E4E8">page_data)</span></span>
+<span class="line"><span style="color:#79B8FF">                print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"🔄 Updated: </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">file_name</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">            else</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#6A737D">                # Create new page</span></span>
+<span class="line"><span style="color:#E1E4E8">                page_data[</span><span style="color:#9ECBFF">"parent"</span><span style="color:#E1E4E8">] </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {</span><span style="color:#9ECBFF">"database_id"</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.notion_database_id}</span></span>
+<span class="line"><span style="color:#79B8FF">                self</span><span style="color:#E1E4E8">.notion.pages.create(</span><span style="color:#F97583">**</span><span style="color:#E1E4E8">page_data)</span></span>
+<span class="line"><span style="color:#79B8FF">                print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"✅ Created: </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">file_name</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">                </span></span>
+<span class="line"><span style="color:#F97583">        except</span><span style="color:#79B8FF"> Exception</span><span style="color:#F97583"> as</span><span style="color:#E1E4E8"> e:</span></span>
+<span class="line"><span style="color:#79B8FF">            print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"❌ Notion sync failed </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">file_name</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">: </span><span style="color:#79B8FF">{str</span><span style="color:#E1E4E8">(e)</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> run_pipeline</span><span style="color:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#9ECBFF">        """Run complete pipeline"""</span></span>
+<span class="line"><span style="color:#79B8FF">        print</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"🚀 Starting content processing pipeline..."</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        # 1. Get updated notes</span></span>
+<span class="line"><span style="color:#E1E4E8">        updated_notes </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.get_updated_notes()</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#F97583"> not</span><span style="color:#E1E4E8"> updated_notes:</span></span>
+<span class="line"><span style="color:#79B8FF">            print</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"📝 No updated notes found"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">            return</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#79B8FF">        print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"📋 Found </span><span style="color:#79B8FF">{len</span><span style="color:#E1E4E8">(updated_notes)</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF"> updated notes"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        # 2. Process each note</span></span>
+<span class="line"><span style="color:#F97583">        for</span><span style="color:#E1E4E8"> note </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> updated_notes:</span></span>
+<span class="line"><span style="color:#E1E4E8">            note_path </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> note[</span><span style="color:#9ECBFF">'path'</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#79B8FF">            print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"📄 Processing note: </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">note_path</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">            </span></span>
+<span class="line"><span style="color:#6A737D">            # Read content</span></span>
+<span class="line"><span style="color:#E1E4E8">            content </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.read_note_content(note_path)</span></span>
+<span class="line"><span style="color:#F97583">            if</span><span style="color:#F97583"> not</span><span style="color:#E1E4E8"> content:</span></span>
+<span class="line"><span style="color:#F97583">                continue</span></span>
+<span class="line"><span style="color:#E1E4E8">            </span></span>
+<span class="line"><span style="color:#6A737D">            # Generate summary</span></span>
+<span class="line"><span style="color:#F97583">            if</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.ai_model </span><span style="color:#F97583">==</span><span style="color:#9ECBFF"> 'gemini'</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">                summary </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.generate_summary_with_gemini(content)</span></span>
+<span class="line"><span style="color:#F97583">            else</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">                summary </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.generate_summary_with_claude(content)</span></span>
+<span class="line"><span style="color:#E1E4E8">            </span></span>
+<span class="line"><span style="color:#F97583">            if</span><span style="color:#F97583"> not</span><span style="color:#E1E4E8"> summary:</span></span>
+<span class="line"><span style="color:#79B8FF">                print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"⚠️ Skipping note with failed summary generation: </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">note_path</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">                continue</span></span>
+<span class="line"><span style="color:#E1E4E8">            </span></span>
+<span class="line"><span style="color:#6A737D">            # Sync to Notion</span></span>
+<span class="line"><span style="color:#79B8FF">            self</span><span style="color:#E1E4E8">.sync_to_notion(note_path, content, summary)</span></span>
+<span class="line"><span style="color:#E1E4E8">            </span></span>
+<span class="line"><span style="color:#6A737D">            # Avoid API rate limits</span></span>
+<span class="line"><span style="color:#E1E4E8">            time.sleep(</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#79B8FF">        print</span><span style="color:#E1E4E8">(</span><span style="color:#9ECBFF">"✨ Pipeline run completed!"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> main</span><span style="color:#E1E4E8">():</span></span>
+<span class="line"><span style="color:#6A737D">    # Configuration</span></span>
+<span class="line"><span style="color:#E1E4E8">    config </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#9ECBFF">        'obsidian_api_key'</span><span style="color:#E1E4E8">: os.getenv(</span><span style="color:#9ECBFF">'OBSIDIAN_API_KEY'</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#9ECBFF">        'obsidian_base_url'</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">'https://localhost:27123'</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">        'notion_token'</span><span style="color:#E1E4E8">: os.getenv(</span><span style="color:#9ECBFF">'NOTION_TOKEN'</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#9ECBFF">        'notion_database_id'</span><span style="color:#E1E4E8">: os.getenv(</span><span style="color:#9ECBFF">'NOTION_DATABASE_ID'</span><span style="color:#E1E4E8">),</span></span>
+<span class="line"><span style="color:#9ECBFF">        'ai_model'</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">'gemini'</span><span style="color:#6A737D">  # or 'claude'</span></span>
+<span class="line"><span style="color:#E1E4E8">    }</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#6A737D">    # Validate configuration</span></span>
+<span class="line"><span style="color:#E1E4E8">    required_keys </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> [</span><span style="color:#9ECBFF">'obsidian_api_key'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'notion_token'</span><span style="color:#E1E4E8">, </span><span style="color:#9ECBFF">'notion_database_id'</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> key </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> required_keys:</span></span>
+<span class="line"><span style="color:#F97583">        if</span><span style="color:#F97583"> not</span><span style="color:#E1E4E8"> config[key]:</span></span>
+<span class="line"><span style="color:#79B8FF">            print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"❌ Missing required configuration: </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">key</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">            sys.exit(</span><span style="color:#79B8FF">1</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#6A737D">    # Run pipeline</span></span>
+<span class="line"><span style="color:#E1E4E8">    pipeline </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> ContentPipeline(config)</span></span>
+<span class="line"><span style="color:#E1E4E8">    pipeline.run_pipeline()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#F97583">if</span><span style="color:#79B8FF"> __name__</span><span style="color:#F97583"> ==</span><span style="color:#9ECBFF"> "__main__"</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">    main()</span></span></code></pre>
+<h3 id="automation-deployment"><a aria-hidden="true" tabindex="-1" href="#automation-deployment"><span class="icon icon-link"></span></a>Automation Deployment</h3>
+<p><strong>cron Scheduled Tasks</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Run daily at 23:30</span></span>
+<span class="line"><span style="color:#B392F0">30</span><span style="color:#79B8FF"> 23</span><span style="color:#79B8FF"> *</span><span style="color:#79B8FF"> *</span><span style="color:#79B8FF"> *</span><span style="color:#9ECBFF"> /usr/bin/python3</span><span style="color:#9ECBFF"> /path/to/content_pipeline.py</span><span style="color:#F97583"> >></span><span style="color:#9ECBFF"> /path/to/logs/pipeline.log</span><span style="color:#F97583"> 2>&#x26;1</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Check for updates every hour</span></span>
+<span class="line"><span style="color:#B392F0">0</span><span style="color:#79B8FF"> *</span><span style="color:#79B8FF"> *</span><span style="color:#79B8FF"> *</span><span style="color:#79B8FF"> *</span><span style="color:#9ECBFF"> /usr/bin/python3</span><span style="color:#9ECBFF"> /path/to/content_pipeline.py</span><span style="color:#79B8FF"> --incremental</span><span style="color:#F97583"> >></span><span style="color:#9ECBFF"> /path/to/logs/pipeline.log</span><span style="color:#F97583"> 2>&#x26;1</span></span></code></pre>
+<p><strong>systemd Service</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="ini"><code><span class="line"><span style="color:#B392F0">[Unit]</span></span>
+<span class="line"><span style="color:#F97583">Description</span><span style="color:#E1E4E8">=Obsidian to Notion Content Pipeline</span></span>
+<span class="line"><span style="color:#F97583">After</span><span style="color:#E1E4E8">=network.target</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">[Service]</span></span>
+<span class="line"><span style="color:#F97583">Type</span><span style="color:#E1E4E8">=oneshot</span></span>
+<span class="line"><span style="color:#F97583">User</span><span style="color:#E1E4E8">=your-username</span></span>
+<span class="line"><span style="color:#F97583">WorkingDirectory</span><span style="color:#E1E4E8">=/path/to/pipeline</span></span>
+<span class="line"><span style="color:#F97583">ExecStart</span><span style="color:#E1E4E8">=/usr/bin/python3 /path/to/content_pipeline.py</span></span>
+<span class="line"><span style="color:#F97583">EnvironmentFile</span><span style="color:#E1E4E8">=/path/to/.env</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#B392F0">[Install]</span></span>
+<span class="line"><span style="color:#F97583">WantedBy</span><span style="color:#E1E4E8">=multi-user.target</span></span></code></pre>
+<h2 id="key-limitations--best-practices"><a aria-hidden="true" tabindex="-1" href="#key-limitations--best-practices"><span class="icon icon-link"></span></a>Key Limitations &#x26; Best Practices</h2>
+<h3 id="platform-limitations"><a aria-hidden="true" tabindex="-1" href="#platform-limitations"><span class="icon icon-link"></span></a>Platform Limitations</h3>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th>Platform</th><th>Limitations &#x26; Best Practices</th></tr></thead><tbody><tr><td><strong>Obsidian</strong></td><td>REST API default port 27123, recommend 127.0.0.1 binding + strong password; Advanced URI requires Obsidian running</td></tr><tr><td><strong>Claude Code</strong></td><td>200k-token per request; use stream=true to reduce waiting; avoid processing too many notes at once, merge by topic first</td></tr><tr><td><strong>Gemini CLI</strong></td><td>Free quota 60 req/min, 1000 req/day; login via GEMINI_API_KEY or Google account</td></tr><tr><td><strong>Notion</strong></td><td>children ≤ 100 blocks per request; long summaries need batched append_block_children. Database property keys must match columns</td></tr></tbody></table>
+<h3 id="performance-optimization-recommendations"><a aria-hidden="true" tabindex="-1" href="#performance-optimization-recommendations"><span class="icon icon-link"></span></a>Performance Optimization Recommendations</h3>
+<ol>
+<li>
+<p><strong>Batch Processing Strategy</strong></p>
+<ul>
+<li>Merge related notes by topic before processing</li>
+<li>Use incremental sync, only process changed content</li>
+<li>Implement intelligent deduplication to avoid reprocessing</li>
+</ul>
+</li>
+<li>
+<p><strong>Error Handling</strong></p>
+<ul>
+<li>Implement retry mechanisms for network fluctuations</li>
+<li>Log detailed information for troubleshooting</li>
+<li>Set timeout controls to avoid long-term blocking</li>
+</ul>
+</li>
+<li>
+<p><strong>Content Quality Control</strong></p>
+<ul>
+<li>Set content length thresholds to filter invalid notes</li>
+<li>Implement summary quality assessment to ensure output quality</li>
+<li>Support manual review process for important content confirmation</li>
+</ul>
+</li>
+</ol>
+<h3 id="security-considerations"><a aria-hidden="true" tabindex="-1" href="#security-considerations"><span class="icon icon-link"></span></a>Security Considerations</h3>
+<ol>
+<li>
+<p><strong>API Key Management</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Use environment variables</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> OBSIDIAN_API_KEY</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"your_key_here"</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> NOTION_TOKEN</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"secret_token_here"</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> GEMINI_API_KEY</span><span style="color:#F97583">=</span><span style="color:#9ECBFF">"api_key_here"</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Or use .env file</span></span>
+<span class="line"><span style="color:#79B8FF">echo</span><span style="color:#9ECBFF"> "OBSIDIAN_API_KEY=your_key"</span><span style="color:#F97583"> >></span><span style="color:#9ECBFF"> .env</span></span>
+<span class="line"><span style="color:#79B8FF">echo</span><span style="color:#9ECBFF"> "NOTION_TOKEN=secret_token"</span><span style="color:#F97583"> >></span><span style="color:#9ECBFF"> .env</span></span>
+<span class="line"><span style="color:#B392F0">chmod</span><span style="color:#79B8FF"> 600</span><span style="color:#9ECBFF"> .env</span></span></code></pre>
+</li>
+<li>
+<p><strong>Network Security</strong></p>
+<ul>
+<li>Bind Obsidian REST API to local address only</li>
+<li>Use HTTPS and strong passwords to protect endpoints</li>
+<li>Consider using VPN or tunneling for encrypted communication</li>
+</ul>
+</li>
+</ol>
+<h2 id="quick-start-guide"><a aria-hidden="true" tabindex="-1" href="#quick-start-guide"><span class="icon icon-link"></span></a>Quick Start Guide</h2>
+<h3 id="5-minute-setup"><a aria-hidden="true" tabindex="-1" href="#5-minute-setup"><span class="icon icon-link"></span></a>5-Minute Setup</h3>
+<p><strong>Step 1: Obsidian Setup</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 1. Search "Local REST API" in plugin marketplace -> Enable</span></span>
+<span class="line"><span style="color:#6A737D"># 2. Settings → Local REST API → Generate Key</span></span>
+<span class="line"><span style="color:#6A737D"># 3. Record API Key and port (default 27123)</span></span></code></pre>
+<p><strong>Step 2: Notion Setup</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 1. Visit https://www.notion.com/my-integrations → New integration</span></span>
+<span class="line"><span style="color:#6A737D"># 2. Get Internal Integration Secret</span></span>
+<span class="line"><span style="color:#6A737D"># 3. In target page → ... → Add connections → Check integration</span></span>
+<span class="line"><span style="color:#6A737D"># 4. Create database, record Database ID</span></span></code></pre>
+<p><strong>Step 3: AI Tool Configuration</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Gemini CLI installation</span></span>
+<span class="line"><span style="color:#B392F0">brew</span><span style="color:#9ECBFF"> install</span><span style="color:#9ECBFF"> gemini-cli</span></span>
+<span class="line"><span style="color:#F97583">export</span><span style="color:#E1E4E8"> GEMINI_API_KEY</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">your_api_key</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Or Claude Code configuration</span></span>
+<span class="line"><span style="color:#B392F0">claude</span><span style="color:#9ECBFF"> tools</span><span style="color:#9ECBFF"> add</span><span style="color:#9ECBFF"> obsidian_rest.yaml</span><span style="color:#9ECBFF"> notion_sdk.yaml</span></span></code></pre>
+<p><strong>Step 4: Run Test</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Download example script</span></span>
+<span class="line"><span style="color:#B392F0">git</span><span style="color:#9ECBFF"> clone</span><span style="color:#9ECBFF"> https://github.com/example/obsidian-notion-pipeline</span></span>
+<span class="line"><span style="color:#79B8FF">cd</span><span style="color:#9ECBFF"> obsidian-notion-pipeline</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Configure environment variables</span></span>
+<span class="line"><span style="color:#B392F0">cp</span><span style="color:#9ECBFF"> .env.example</span><span style="color:#9ECBFF"> .env</span></span>
+<span class="line"><span style="color:#6A737D"># Edit .env file, fill in your API keys</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Install dependencies</span></span>
+<span class="line"><span style="color:#B392F0">pip</span><span style="color:#9ECBFF"> install</span><span style="color:#79B8FF"> -r</span><span style="color:#9ECBFF"> requirements.txt</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Run test</span></span>
+<span class="line"><span style="color:#B392F0">python</span><span style="color:#9ECBFF"> content_pipeline.py</span><span style="color:#79B8FF"> --test</span></span></code></pre>
+<p><strong>Step 5: Automation Deployment</strong></p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># Set up scheduled task</span></span>
+<span class="line"><span style="color:#B392F0">crontab</span><span style="color:#79B8FF"> -e</span></span>
+<span class="line"><span style="color:#6A737D"># Add: 30 23 * * * /usr/bin/python3 /path/to/content_pipeline.py</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Or use systemd</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> cp</span><span style="color:#9ECBFF"> pipeline.service</span><span style="color:#9ECBFF"> /etc/systemd/system/</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> systemctl</span><span style="color:#9ECBFF"> enable</span><span style="color:#9ECBFF"> pipeline.service</span></span>
+<span class="line"><span style="color:#B392F0">sudo</span><span style="color:#9ECBFF"> systemctl</span><span style="color:#9ECBFF"> start</span><span style="color:#9ECBFF"> pipeline.service</span></span></code></pre>
+<h2 id="extended-application-scenarios"><a aria-hidden="true" tabindex="-1" href="#extended-application-scenarios"><span class="icon icon-link"></span></a>Extended Application Scenarios</h2>
+<h3 id="bidirectional-sync"><a aria-hidden="true" tabindex="-1" href="#bidirectional-sync"><span class="icon icon-link"></span></a>Bidirectional Sync</h3>
+<p>If you need to sync Notion updates back to Obsidian later, you can implement a reverse pipeline:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">def</span><span style="color:#B392F0"> sync_notion_to_obsidian</span><span style="color:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#9ECBFF">    """Sync updates from Notion back to Obsidian"""</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#6A737D">    # Query recently updated Notion pages</span></span>
+<span class="line"><span style="color:#E1E4E8">    recent_pages </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.notion.databases.query(</span></span>
+<span class="line"><span style="color:#FFAB70">        database_id</span><span style="color:#F97583">=</span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.notion_database_id,</span></span>
+<span class="line"><span style="color:#FFAB70">        filter</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">{</span></span>
+<span class="line"><span style="color:#9ECBFF">            "property"</span><span style="color:#E1E4E8">: </span><span style="color:#9ECBFF">"Last Edited Time"</span><span style="color:#E1E4E8">,</span></span>
+<span class="line"><span style="color:#9ECBFF">            "date"</span><span style="color:#E1E4E8">: {</span></span>
+<span class="line"><span style="color:#9ECBFF">                "after"</span><span style="color:#E1E4E8">: (datetime.now() </span><span style="color:#F97583">-</span><span style="color:#E1E4E8"> timedelta(</span><span style="color:#FFAB70">hours</span><span style="color:#F97583">=</span><span style="color:#79B8FF">24</span><span style="color:#E1E4E8">)).isoformat()</span></span>
+<span class="line"><span style="color:#E1E4E8">            }</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">    )</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#F97583">    for</span><span style="color:#E1E4E8"> page </span><span style="color:#F97583">in</span><span style="color:#E1E4E8"> recent_pages[</span><span style="color:#9ECBFF">'results'</span><span style="color:#E1E4E8">]:</span></span>
+<span class="line"><span style="color:#E1E4E8">        source_file </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> page[</span><span style="color:#9ECBFF">'properties'</span><span style="color:#E1E4E8">][</span><span style="color:#9ECBFF">'Source File'</span><span style="color:#E1E4E8">][</span><span style="color:#9ECBFF">'rich_text'</span><span style="color:#E1E4E8">][</span><span style="color:#79B8FF">0</span><span style="color:#E1E4E8">][</span><span style="color:#9ECBFF">'text'</span><span style="color:#E1E4E8">][</span><span style="color:#9ECBFF">'content'</span><span style="color:#E1E4E8">]</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        # Get Notion page content</span></span>
+<span class="line"><span style="color:#E1E4E8">        blocks </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.notion.blocks.children.list(</span><span style="color:#FFAB70">block_id</span><span style="color:#F97583">=</span><span style="color:#E1E4E8">page[</span><span style="color:#9ECBFF">'id'</span><span style="color:#E1E4E8">])</span></span>
+<span class="line"><span style="color:#E1E4E8">        content </span><span style="color:#F97583">=</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.extract_content_from_blocks(blocks)</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        # Update Obsidian note</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.update_obsidian_note(source_file, content)</span></span></code></pre>
+<h3 id="multi-source-integration"><a aria-hidden="true" tabindex="-1" href="#multi-source-integration"><span class="icon icon-link"></span></a>Multi-Source Integration</h3>
+<p>Support collecting content from multiple data sources:</p>
+<pre class="astro-code github-dark" style="background-color:#24292e;color:#e1e4e8; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#F97583">class</span><span style="color:#B392F0"> MultiSourcePipeline</span><span style="color:#E1E4E8">(</span><span style="color:#B392F0">ContentPipeline</span><span style="color:#E1E4E8">):</span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#79B8FF"> __init__</span><span style="color:#E1E4E8">(self, config):</span></span>
+<span class="line"><span style="color:#79B8FF">        super</span><span style="color:#E1E4E8">().</span><span style="color:#79B8FF">__init__</span><span style="color:#E1E4E8">(config)</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.sources </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> {</span></span>
+<span class="line"><span style="color:#9ECBFF">            'obsidian'</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.process_obsidian_notes,</span></span>
+<span class="line"><span style="color:#9ECBFF">            'markdown_files'</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.process_local_markdown,</span></span>
+<span class="line"><span style="color:#9ECBFF">            'web_content'</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.process_web_bookmarks,</span></span>
+<span class="line"><span style="color:#9ECBFF">            'email_attachments'</span><span style="color:#E1E4E8">: </span><span style="color:#79B8FF">self</span><span style="color:#E1E4E8">.process_email_pdfs</span></span>
+<span class="line"><span style="color:#E1E4E8">        }</span></span>
+<span class="line"><span style="color:#E1E4E8">    </span></span>
+<span class="line"><span style="color:#F97583">    def</span><span style="color:#B392F0"> run_multi_source_pipeline</span><span style="color:#E1E4E8">(self):</span></span>
+<span class="line"><span style="color:#E1E4E8">        all_content </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> []</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#F97583">        for</span><span style="color:#E1E4E8"> source_name, processor </span><span style="color:#F97583">in</span><span style="color:#79B8FF"> self</span><span style="color:#E1E4E8">.sources.items():</span></span>
+<span class="line"><span style="color:#F97583">            try</span><span style="color:#E1E4E8">:</span></span>
+<span class="line"><span style="color:#E1E4E8">                content </span><span style="color:#F97583">=</span><span style="color:#E1E4E8"> processor()</span></span>
+<span class="line"><span style="color:#E1E4E8">                all_content.extend(content)</span></span>
+<span class="line"><span style="color:#79B8FF">                print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"✅ Processing completed: </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">source_name</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#F97583">            except</span><span style="color:#79B8FF"> Exception</span><span style="color:#F97583"> as</span><span style="color:#E1E4E8"> e:</span></span>
+<span class="line"><span style="color:#79B8FF">                print</span><span style="color:#E1E4E8">(</span><span style="color:#F97583">f</span><span style="color:#9ECBFF">"❌ Processing failed: </span><span style="color:#79B8FF">{</span><span style="color:#E1E4E8">source_name</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF"> - </span><span style="color:#79B8FF">{str</span><span style="color:#E1E4E8">(e)</span><span style="color:#79B8FF">}</span><span style="color:#9ECBFF">"</span><span style="color:#E1E4E8">)</span></span>
+<span class="line"><span style="color:#E1E4E8">        </span></span>
+<span class="line"><span style="color:#6A737D">        # Process all content uniformly</span></span>
+<span class="line"><span style="color:#79B8FF">        self</span><span style="color:#E1E4E8">.batch_process_content(all_content)</span></span></code></pre>
+<h2 id="conclusion"><a aria-hidden="true" tabindex="-1" href="#conclusion"><span class="icon icon-link"></span></a>Conclusion</h2>
+<p>This three-layer architecture content management pipeline achieves:</p>
+<ol>
+<li><strong>Centralized Management</strong>: Obsidian as the single source of truth, unified management of all markdown content</li>
+<li><strong>Intelligent Processing</strong>: AI tools automatically generate summaries and analysis, enhancing content value</li>
+<li><strong>Efficient Distribution</strong>: Notion as publishing platform, facilitating team collaboration and knowledge sharing</li>
+<li><strong>Automated Workflow</strong>: Scheduled execution without manual intervention, ensuring content synchronization</li>
+</ol>
+<p>Through this system, knowledge workers can focus on content creation while delegating repetitive organization, summarization, and synchronization tasks to the automated pipeline. As AI technology evolves, such intelligent knowledge management tools will become essential infrastructure for improving individual and team efficiency.</p>
+<p>Is it worth the investment? Absolutely. This pipeline not only solves the pain point of multi-platform content synchronization but more importantly establishes a scalable knowledge processing framework, laying the foundation for future intelligent applications.</p> <html lang="en" data-astro-cid-uffxixac> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/notes/building-intelligent-content-management-pipeline-from-obsidian-to-notion/"><!-- Primary Meta Tags --><title>Ge Yuxu • AI &amp; Engineering</title><meta name="title" content="Ge Yuxu • AI &#38; Engineering"><meta name="description" content="Welcome to my blog!"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/notes/building-intelligent-content-management-pipeline-from-obsidian-to-notion/"><meta property="og:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="og:description" content="Welcome to my blog!"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/notes/building-intelligent-content-management-pipeline-from-obsidian-to-notion/"><meta property="twitter:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="twitter:description" content="Welcome to my blog!"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script></head> <body data-astro-cid-uffxixac>  <div class="statement" data-astro-cid-uffxixac> <blockquote data-astro-cid-uffxixac> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>脱敏说明</strong>：本文所有出现的表名、字段名、接口地址、变量名、IP地址及示例数据等均非真实，
+    仅用于阐述技术思路与实现步骤，示例代码亦非公司真实代码。
+    示例方案亦非公司真实完整方案，仅为本人记忆总结，用于技术学习探讨。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;文中所示任何标识符并不对应实际生产环境中的名称或编号。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;示例&nbsp;SQL、脚本、代码及数据等均为演示用途，不含真实业务数据，也不具备直接运行或复现的完整上下文。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;读者若需在实际项目中参考本文方案，请结合自身业务场景及数据安全规范，使用符合内部命名和权限控制的配置。</p> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>版权声明</strong>：本文版权归原作者所有，未经作者事先书面许可，任何单位或个人不得以任何方式复制、转载、摘编或用于商业用途。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;若需非商业性引用或转载本文内容，请务必注明出处并保持内容完整。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;对因商业使用、篡改或不当引用本文内容所产生的法律纠纷，作者保留追究法律责任的权利。<br data-astro-cid-uffxixac><br data-astro-cid-uffxixac> <em data-astro-cid-uffxixac>Copyright&nbsp;©&nbsp;1989–Present&nbsp;Ge&nbsp;Yuxu.&nbsp;All&nbsp;Rights&nbsp;Reserved.</em></p> </blockquote> </div></body></html>  </article> </div> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2025 All rights reserved.
+</footer>  </body></html>

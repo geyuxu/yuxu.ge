@@ -1,0 +1,178 @@
+<!DOCTYPE html><html lang="zh"> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/projects/todo-list-app/"><!-- Primary Meta Tags --><title>Todo List - 全栈任务管理应用</title><meta name="title" content="Todo List - 全栈任务管理应用"><meta name="description"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/projects/todo-list-app/"><meta property="og:title" content="Todo List - 全栈任务管理应用"><meta property="og:description"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/projects/todo-list-app/"><meta property="twitter:title" content="Todo List - 全栈任务管理应用"><meta property="twitter:description"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script><script src="/js/copy-code-button.js" defer></script><!-- Dify Chatbot Configuration --><script>
+ window.difyChatbotConfig = {
+  token: 'VgrjCAto93bjE0MW',
+  systemVariables: {
+    // user_id: 'YOU CAN DEFINE USER ID HERE',
+    // conversation_id: 'YOU CAN DEFINE CONVERSATION ID HERE, IT MUST BE A VALID UUID',
+  },
+  userVariables: {
+    // avatar_url: 'YOU CAN DEFINE USER AVATAR URL HERE',
+    // name: 'YOU CAN DEFINE USER NAME HERE',
+  },
+ }
+</script><!-- Dify Chatbot Script --><script src="https://udify.app/embed.min.js" id="VgrjCAto93bjE0MW" defer>
+</script><!-- Dify Chatbot Custom Styles --><script is:global>
+	window.addEventListener('DOMContentLoaded', () => {
+    $('.toc').remove();
+  });
+	</script><style>a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astro-cid-eimmu3lg].active{font-weight:bolder;text-decoration:underline}header[data-astro-cid-3ef6ksr2]{margin:0;padding:0 1em;background:#fff;box-shadow:0 2px 8px rgba(var(--black),5%)}h2[data-astro-cid-3ef6ksr2]{margin:0;font-size:1em}h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2],h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none}nav[data-astro-cid-3ef6ksr2]{display:flex;align-items:center;justify-content:space-between}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{padding:1em .5em;color:var(--black);border-bottom:4px solid transparent;text-decoration:none}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none;border-bottom-color:var(--accent)}.social-links[data-astro-cid-3ef6ksr2],.social-links[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{display:flex}@media (max-width: 720px){.social-links[data-astro-cid-3ef6ksr2]{display:none}}footer[data-astro-cid-sz7xmlte]{padding:2em 1em 6em;background:linear-gradient(var(--gray-gradient)) no-repeat;color:rgb(var(--gray));text-align:center}.social-links[data-astro-cid-sz7xmlte]{display:flex;justify-content:center;gap:1em;margin-top:1em}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]{text-decoration:none;color:rgb(var(--gray))}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]:hover{color:rgb(var(--gray-dark))}
+</style>
+<link rel="stylesheet" href="/_astro/assets-slug_.BFPovWfH.css"></head> <body> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <!--<h2><a href="/">{SITE_TITLE}</a></h2>--> <h2 data-astro-cid-3ef6ksr2><a style="padding-left:0;color:blue;" href="/" data-astro-cid-3ef6ksr2>Ge Yuxu<br data-astro-cid-3ef6ksr2>AI & Engineering</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blog/1" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/series" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Series </a>  <a href="/projects" class="active" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Projects </a>  </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://github.com/geyuxu" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://www.linkedin.com/in/geyuxu/" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's LinkedIn profile</span> <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" data-astro-cid-3ef6ksr2> <path fill="currentColor" d="M20.447 20.452H17.2v-5.569c0-1.328-.025-3.039-1.852-3.039-1.853 0-2.136 1.447-2.136 2.942v5.666h-3.248V9h3.122v1.561h.045c.435-.823 1.498-1.688 3.083-1.688 3.295 0 3.903 2.17 3.903 4.989v6.59zM5.337 7.433a1.882 1.882 0 110-3.764 1.882 1.882 0 010 3.764zm1.626 13.019H3.708V9h3.255v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.222 0z" data-astro-cid-3ef6ksr2></path> </svg> </a> <a href="mailto:ngzerone@hotmail.com" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Send email to Ge Yuxu</span> <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" data-astro-cid-3ef6ksr2> <path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" data-astro-cid-3ef6ksr2></path> </svg> </a> </div> </nav> <!-- Microsoft Clarity --> <script type="text/javascript">
+		(function(c,l,a,r,i,t,y){
+			c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+			t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+			y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+		})(window, document, "clarity", "script", "rc2w96osp6");
+	</script> </header>  <main class="prose mx-auto px-4">  <nav class="toc"><ol class="toc-level toc-level-1"><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#-项目概述">🚀 项目概述</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#-技术栈">🛠 技术栈</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#前端技术">前端技术</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#后端技术">后端技术</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#-核心功能特性">✨ 核心功能特性</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#-任务管理核心功能">🎯 任务管理核心功能</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#-用户体验优化">🎨 用户体验优化</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#-技术特色">🔧 技术特色</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#-项目架构">🏗 项目架构</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#目录结构">目录结构</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#api接口设计">API接口设计</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#-快速开始">🚀 快速开始</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#环境要求">环境要求</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#安装运行">安装运行</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#使用示例">使用示例</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#-界面设计">🎨 界面设计</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#设计特色">设计特色</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#组件结构">组件结构</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#-技术亮点">🔧 技术亮点</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#1-前端技术实践">1. 前端技术实践</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#2-后端架构设计">2. 后端架构设计</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#3-全栈集成">3. 全栈集成</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#-应用场景">📊 应用场景</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#-项目价值">📈 项目价值</a></li></ol></nav><h1 id="todo-list---全栈任务管理应用"><a aria-hidden="true" tabindex="-1" href="#todo-list---全栈任务管理应用"><span class="icon icon-link"></span></a>Todo List - 全栈任务管理应用</h1>
+<blockquote>
+<p>功能完整的待办事项管理应用，采用前后端分离架构，提供直观的用户界面和强大的任务管理功能。</p>
+</blockquote>
+<h2 id="-项目概述"><a aria-hidden="true" tabindex="-1" href="#-项目概述"><span class="icon icon-link"></span></a>🚀 项目概述</h2>
+<p>Todo List 应用是一个现代化的任务管理系统，采用经典的Web技术栈构建。项目展示了从前端交互到后端数据处理的完整Web开发流程，是学习全栈开发的优秀实践项目。</p>
+<p><strong>GitHub</strong>: <a href="https://github.com/geyuxu/todo-list">https://github.com/geyuxu/todo-list</a></p>
+<h2 id="-技术栈"><a aria-hidden="true" tabindex="-1" href="#-技术栈"><span class="icon icon-link"></span></a>🛠 技术栈</h2>
+<h3 id="前端技术"><a aria-hidden="true" tabindex="-1" href="#前端技术"><span class="icon icon-link"></span></a>前端技术</h3>
+<ul>
+<li><strong>HTML5</strong>: 现代化的标记语言</li>
+<li><strong>CSS3</strong>: 响应式样式设计</li>
+<li><strong>原生JavaScript</strong>: 核心业务逻辑</li>
+<li><strong>jQuery 3.6.0</strong>: DOM操作和AJAX请求</li>
+</ul>
+<h3 id="后端技术"><a aria-hidden="true" tabindex="-1" href="#后端技术"><span class="icon icon-link"></span></a>后端技术</h3>
+<ul>
+<li><strong>Python</strong>: 核心开发语言</li>
+<li><strong>Flask 2.3.3</strong>: 轻量级Web框架</li>
+<li><strong>SQLite</strong>: 嵌入式数据库</li>
+<li><strong>RESTful API</strong>: 标准化接口设计</li>
+</ul>
+<h2 id="-核心功能特性"><a aria-hidden="true" tabindex="-1" href="#-核心功能特性"><span class="icon icon-link"></span></a>✨ 核心功能特性</h2>
+<h3 id="-任务管理核心功能"><a aria-hidden="true" tabindex="-1" href="#-任务管理核心功能"><span class="icon icon-link"></span></a>🎯 任务管理核心功能</h3>
+<ul>
+<li><strong>完整CRUD操作</strong>: 创建、读取、更新、删除任务</li>
+<li><strong>智能状态管理</strong>: 待办、进行中、已完成状态切换</li>
+<li><strong>实时任务统计</strong>: 动态显示各状态任务数量</li>
+<li><strong>任务过滤</strong>: 按状态快速筛选任务</li>
+<li><strong>数据持久化</strong>: SQLite数据库存储</li>
+</ul>
+<h3 id="-用户体验优化"><a aria-hidden="true" tabindex="-1" href="#-用户体验优化"><span class="icon icon-link"></span></a>🎨 用户体验优化</h3>
+<ul>
+<li><strong>响应式设计</strong>: 适配桌面和移动设备</li>
+<li><strong>流畅交互</strong>: 基于AJAX的无刷新操作</li>
+<li><strong>直观界面</strong>: 清晰的视觉层次和操作反馈</li>
+<li><strong>键盘支持</strong>: 支持Enter键快速添加任务</li>
+</ul>
+<h3 id="-技术特色"><a aria-hidden="true" tabindex="-1" href="#-技术特色"><span class="icon icon-link"></span></a>🔧 技术特色</h3>
+<ul>
+<li><strong>前后端分离</strong>: 清晰的架构边界</li>
+<li><strong>RESTful API</strong>: 标准化的HTTP接口</li>
+<li><strong>模块化设计</strong>: 可维护的代码结构</li>
+<li><strong>错误处理</strong>: 完善的异常处理机制</li>
+</ul>
+<h2 id="-项目架构"><a aria-hidden="true" tabindex="-1" href="#-项目架构"><span class="icon icon-link"></span></a>🏗 项目架构</h2>
+<h3 id="目录结构"><a aria-hidden="true" tabindex="-1" href="#目录结构"><span class="icon icon-link"></span></a>目录结构</h3>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>todo-list/</span></span>
+<span class="line"><span>├── backend/                 # 后端Flask应用</span></span>
+<span class="line"><span>│   ├── app.py              # 主应用入口</span></span>
+<span class="line"><span>│   ├── models.py           # 数据模型</span></span>
+<span class="line"><span>│   ├── routes.py           # API路由</span></span>
+<span class="line"><span>│   └── database.py         # 数据库操作</span></span>
+<span class="line"><span>├── static/                 # 前端静态资源</span></span>
+<span class="line"><span>│   ├── css/</span></span>
+<span class="line"><span>│   │   └── style.css      # 样式文件</span></span>
+<span class="line"><span>│   └── js/</span></span>
+<span class="line"><span>│       └── app.js         # JavaScript逻辑</span></span>
+<span class="line"><span>├── templates/              # HTML模板</span></span>
+<span class="line"><span>│   └── index.html         # 主页面模板</span></span>
+<span class="line"><span>└── requirements.txt        # Python依赖</span></span></code></pre>
+<h3 id="api接口设计"><a aria-hidden="true" tabindex="-1" href="#api接口设计"><span class="icon icon-link"></span></a>API接口设计</h3>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>GET    /api/todos          # 获取所有任务</span></span>
+<span class="line"><span>POST   /api/todos          # 创建新任务</span></span>
+<span class="line"><span>PUT    /api/todos/:id      # 更新任务</span></span>
+<span class="line"><span>DELETE /api/todos/:id      # 删除任务</span></span>
+<span class="line"><span>GET    /api/todos/stats    # 获取统计信息</span></span></code></pre>
+<h2 id="-快速开始"><a aria-hidden="true" tabindex="-1" href="#-快速开始"><span class="icon icon-link"></span></a>🚀 快速开始</h2>
+<h3 id="环境要求"><a aria-hidden="true" tabindex="-1" href="#环境要求"><span class="icon icon-link"></span></a>环境要求</h3>
+<ul>
+<li>Python 3.8+</li>
+<li>现代浏览器(支持ES6)</li>
+</ul>
+<h3 id="安装运行"><a aria-hidden="true" tabindex="-1" href="#安装运行"><span class="icon icon-link"></span></a>安装运行</h3>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 克隆项目</span></span>
+<span class="line"><span style="color:#6F42C1">git</span><span style="color:#032F62"> clone</span><span style="color:#032F62"> https://github.com/geyuxu/todo-list.git</span></span>
+<span class="line"><span style="color:#005CC5">cd</span><span style="color:#032F62"> todo-list</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 安装Python依赖</span></span>
+<span class="line"><span style="color:#6F42C1">pip</span><span style="color:#032F62"> install</span><span style="color:#005CC5"> -r</span><span style="color:#032F62"> requirements.txt</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 初始化数据库</span></span>
+<span class="line"><span style="color:#6F42C1">python</span><span style="color:#032F62"> backend/database.py</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 启动应用</span></span>
+<span class="line"><span style="color:#6F42C1">python</span><span style="color:#032F62"> backend/app.py</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 访问应用</span></span>
+<span class="line"><span style="color:#6A737D"># 打开浏览器访问 http://localhost:5000</span></span></code></pre>
+<h3 id="使用示例"><a aria-hidden="true" tabindex="-1" href="#使用示例"><span class="icon icon-link"></span></a>使用示例</h3>
+<ol>
+<li><strong>添加任务</strong>: 在输入框中输入任务内容，按Enter或点击添加按钮</li>
+<li><strong>状态管理</strong>: 点击任务项可切换完成状态</li>
+<li><strong>编辑任务</strong>: 双击任务可进入编辑模式</li>
+<li><strong>删除任务</strong>: 点击删除按钮移除任务</li>
+<li><strong>筛选查看</strong>: 使用顶部按钮筛选不同状态的任务</li>
+</ol>
+<h2 id="-界面设计"><a aria-hidden="true" tabindex="-1" href="#-界面设计"><span class="icon icon-link"></span></a>🎨 界面设计</h2>
+<h3 id="设计特色"><a aria-hidden="true" tabindex="-1" href="#设计特色"><span class="icon icon-link"></span></a>设计特色</h3>
+<ul>
+<li><strong>简洁现代</strong>: 采用现代化的扁平设计风格</li>
+<li><strong>色彩丰富</strong>: 不同状态使用不同颜色标识</li>
+<li><strong>交互友好</strong>: 悬停效果和过渡动画</li>
+<li><strong>移动优先</strong>: 响应式布局适配各种设备</li>
+</ul>
+<h3 id="组件结构"><a aria-hidden="true" tabindex="-1" href="#组件结构"><span class="icon icon-link"></span></a>组件结构</h3>
+<ul>
+<li><strong>任务输入区</strong>: 支持快速添加新任务</li>
+<li><strong>过滤控制区</strong>: 按钮组切换显示状态</li>
+<li><strong>任务列表区</strong>: 显示任务项和操作按钮</li>
+<li><strong>统计信息区</strong>: 实时显示任务统计数据</li>
+</ul>
+<h2 id="-技术亮点"><a aria-hidden="true" tabindex="-1" href="#-技术亮点"><span class="icon icon-link"></span></a>🔧 技术亮点</h2>
+<h3 id="1-前端技术实践"><a aria-hidden="true" tabindex="-1" href="#1-前端技术实践"><span class="icon icon-link"></span></a>1. 前端技术实践</h3>
+<ul>
+<li><strong>原生JavaScript</strong>: 展示了无框架的Web开发能力</li>
+<li><strong>jQuery集成</strong>: 高效的DOM操作和AJAX处理</li>
+<li><strong>模块化代码</strong>: 清晰的功能模块划分</li>
+<li><strong>事件驱动架构</strong>: 响应式的用户交互</li>
+</ul>
+<h3 id="2-后端架构设计"><a aria-hidden="true" tabindex="-1" href="#2-后端架构设计"><span class="icon icon-link"></span></a>2. 后端架构设计</h3>
+<ul>
+<li><strong>Flask微框架</strong>: 轻量级但功能完整的Web服务</li>
+<li><strong>SQLite集成</strong>: 简单高效的数据持久化</li>
+<li><strong>RESTful设计</strong>: 标准化的API接口</li>
+<li><strong>MVC模式</strong>: 清晰的代码组织结构</li>
+</ul>
+<h3 id="3-全栈集成"><a aria-hidden="true" tabindex="-1" href="#3-全栈集成"><span class="icon icon-link"></span></a>3. 全栈集成</h3>
+<ul>
+<li><strong>AJAX通信</strong>: 前后端异步数据交换</li>
+<li><strong>JSON数据格式</strong>: 标准化的数据传输</li>
+<li><strong>错误处理</strong>: 前后端协同的异常处理</li>
+<li><strong>状态同步</strong>: 前端UI与后端数据的实时同步</li>
+</ul>
+<h2 id="-应用场景"><a aria-hidden="true" tabindex="-1" href="#-应用场景"><span class="icon icon-link"></span></a>📊 应用场景</h2>
+<ul>
+<li><strong>个人任务管理</strong>: 日常工作和生活任务规划</li>
+<li><strong>团队协作</strong>: 小型团队的任务分配和跟踪</li>
+<li><strong>学习管理</strong>: 学习计划和进度跟踪</li>
+<li><strong>项目管理</strong>: 简单项目的任务分解和管理</li>
+</ul>
+<h2 id="-项目价值"><a aria-hidden="true" tabindex="-1" href="#-项目价值"><span class="icon icon-link"></span></a>📈 项目价值</h2>
+<p>Todo List 项目是一个完整的全栈Web应用实践：</p>
+<ul>
+<li><strong>全栈开发</strong>: 展示了前后端完整的开发流程</li>
+<li><strong>技术整合</strong>: 演示了多种技术的协同使用</li>
+<li><strong>工程实践</strong>: 体现了软件工程的基本原则</li>
+<li><strong>用户体验</strong>: 关注了实际使用中的用户需求</li>
+</ul>
+<p>这个项目让我深入理解了Web应用的完整开发生命周期，从需求分析到技术选型，从前端交互到后端服务，从数据建模到API设计，都有了全面的实践经验。</p>
+<p>通过构建这个应用，我不仅掌握了具体的技术工具，更重要的是培养了全栈思维和系统设计能力。</p>  </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2025 All rights reserved.
+</footer>  </body></html>

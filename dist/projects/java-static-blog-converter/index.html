@@ -1,0 +1,122 @@
+<!DOCTYPE html><html lang="zh"> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/projects/java-static-blog-converter/"><!-- Primary Meta Tags --><title>Java Static Blog Converter</title><meta name="title" content="Java Static Blog Converter"><meta name="description"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/projects/java-static-blog-converter/"><meta property="og:title" content="Java Static Blog Converter"><meta property="og:description"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/projects/java-static-blog-converter/"><meta property="twitter:title" content="Java Static Blog Converter"><meta property="twitter:description"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script><script src="/js/copy-code-button.js" defer></script><!-- Dify Chatbot Configuration --><script>
+ window.difyChatbotConfig = {
+  token: 'VgrjCAto93bjE0MW',
+  systemVariables: {
+    // user_id: 'YOU CAN DEFINE USER ID HERE',
+    // conversation_id: 'YOU CAN DEFINE CONVERSATION ID HERE, IT MUST BE A VALID UUID',
+  },
+  userVariables: {
+    // avatar_url: 'YOU CAN DEFINE USER AVATAR URL HERE',
+    // name: 'YOU CAN DEFINE USER NAME HERE',
+  },
+ }
+</script><!-- Dify Chatbot Script --><script src="https://udify.app/embed.min.js" id="VgrjCAto93bjE0MW" defer>
+</script><!-- Dify Chatbot Custom Styles --><script is:global>
+	window.addEventListener('DOMContentLoaded', () => {
+    $('.toc').remove();
+  });
+	</script><style>a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astro-cid-eimmu3lg].active{font-weight:bolder;text-decoration:underline}header[data-astro-cid-3ef6ksr2]{margin:0;padding:0 1em;background:#fff;box-shadow:0 2px 8px rgba(var(--black),5%)}h2[data-astro-cid-3ef6ksr2]{margin:0;font-size:1em}h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2],h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none}nav[data-astro-cid-3ef6ksr2]{display:flex;align-items:center;justify-content:space-between}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{padding:1em .5em;color:var(--black);border-bottom:4px solid transparent;text-decoration:none}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none;border-bottom-color:var(--accent)}.social-links[data-astro-cid-3ef6ksr2],.social-links[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{display:flex}@media (max-width: 720px){.social-links[data-astro-cid-3ef6ksr2]{display:none}}footer[data-astro-cid-sz7xmlte]{padding:2em 1em 6em;background:linear-gradient(var(--gray-gradient)) no-repeat;color:rgb(var(--gray));text-align:center}.social-links[data-astro-cid-sz7xmlte]{display:flex;justify-content:center;gap:1em;margin-top:1em}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]{text-decoration:none;color:rgb(var(--gray))}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]:hover{color:rgb(var(--gray-dark))}
+</style>
+<link rel="stylesheet" href="/_astro/assets-slug_.BFPovWfH.css"></head> <body> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <!--<h2><a href="/">{SITE_TITLE}</a></h2>--> <h2 data-astro-cid-3ef6ksr2><a style="padding-left:0;color:blue;" href="/" data-astro-cid-3ef6ksr2>Ge Yuxu<br data-astro-cid-3ef6ksr2>AI & Engineering</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blog/1" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/series" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Series </a>  <a href="/projects" class="active" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Projects </a>  </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://github.com/geyuxu" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://www.linkedin.com/in/geyuxu/" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's LinkedIn profile</span> <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" data-astro-cid-3ef6ksr2> <path fill="currentColor" d="M20.447 20.452H17.2v-5.569c0-1.328-.025-3.039-1.852-3.039-1.853 0-2.136 1.447-2.136 2.942v5.666h-3.248V9h3.122v1.561h.045c.435-.823 1.498-1.688 3.083-1.688 3.295 0 3.903 2.17 3.903 4.989v6.59zM5.337 7.433a1.882 1.882 0 110-3.764 1.882 1.882 0 010 3.764zm1.626 13.019H3.708V9h3.255v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.222 0z" data-astro-cid-3ef6ksr2></path> </svg> </a> <a href="mailto:ngzerone@hotmail.com" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Send email to Ge Yuxu</span> <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" data-astro-cid-3ef6ksr2> <path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" data-astro-cid-3ef6ksr2></path> </svg> </a> </div> </nav> <!-- Microsoft Clarity --> <script type="text/javascript">
+		(function(c,l,a,r,i,t,y){
+			c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+			t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+			y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+		})(window, document, "clarity", "script", "rc2w96osp6");
+	</script> </header>  <main class="prose mx-auto px-4">  <nav class="toc"><ol class="toc-level toc-level-1"><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#-项目概述">🚀 项目概述</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#-技术栈">🛠 技术栈</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#-核心功能特性">✨ 核心功能特性</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#-主要特性">🎯 主要特性</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#-核心组件">📁 核心组件</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#️-快速开始">🏃‍♂️ 快速开始</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#环境要求">环境要求</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#安装使用">安装使用</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#基本用法">基本用法</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#-项目特色">📚 项目特色</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#模块化架构">模块化架构</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#企业级代码质量">企业级代码质量</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#-应用场景">🎨 应用场景</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#-技术亮点">🔧 技术亮点</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#-项目价值">📈 项目价值</a></li></ol></nav><h1 id="java-static-blog-converter"><a aria-hidden="true" tabindex="-1" href="#java-static-blog-converter"><span class="icon icon-link"></span></a>Java Static Blog Converter</h1>
+<blockquote>
+<p>基于Java 8构建的强大而轻量级的静态网站生成器，专为从Markdown文件创建美观的博客和文档网站而设计。</p>
+</blockquote>
+<h2 id="-项目概述"><a aria-hidden="true" tabindex="-1" href="#-项目概述"><span class="icon icon-link"></span></a>🚀 项目概述</h2>
+<p>Java Static Blog Converter 是一个完全用Java编写的静态网站生成器，它可以将Markdown文件转换为美观的静态HTML网站。项目采用模块化设计，提供了完整的博客网站生成解决方案。</p>
+<p><strong>GitHub</strong>: <a href="https://github.com/geyuxu/java-static-blog-covert">https://github.com/geyuxu/java-static-blog-covert</a></p>
+<h2 id="-技术栈"><a aria-hidden="true" tabindex="-1" href="#-技术栈"><span class="icon icon-link"></span></a>🛠 技术栈</h2>
+<ul>
+<li><strong>Java 8</strong>: 核心开发语言</li>
+<li><strong>FlexMark</strong>: Markdown解析和处理</li>
+<li><strong>Jackson</strong>: YAML frontmatter解析</li>
+<li><strong>JUnit &#x26; AssertJ</strong>: 单元测试</li>
+<li><strong>Maven</strong>: 依赖管理和构建工具</li>
+</ul>
+<h2 id="-核心功能特性"><a aria-hidden="true" tabindex="-1" href="#-核心功能特性"><span class="icon icon-link"></span></a>✨ 核心功能特性</h2>
+<h3 id="-主要特性"><a aria-hidden="true" tabindex="-1" href="#-主要特性"><span class="icon icon-link"></span></a>🎯 主要特性</h3>
+<ul>
+<li><strong>快速轻量</strong>: 基于Java 8，性能优异</li>
+<li><strong>完整Markdown支持</strong>: 支持表格、代码块等扩展语法</li>
+<li><strong>灵活模板系统</strong>: 可自定义的HTML模板</li>
+<li><strong>YAML Frontmatter</strong>: 支持页面元数据</li>
+<li><strong>自动资源处理</strong>: 自动处理CSS、JS、图片等静态资源</li>
+<li><strong>零配置</strong>: 开箱即用，无需复杂配置</li>
+<li><strong>响应式设计</strong>: 生成的网站支持移动端</li>
+</ul>
+<h3 id="-核心组件"><a aria-hidden="true" tabindex="-1" href="#-核心组件"><span class="icon icon-link"></span></a>📁 核心组件</h3>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>src/main/java/</span></span>
+<span class="line"><span>├── BlogConverter.java          # CLI入口点</span></span>
+<span class="line"><span>├── StaticSiteGenerator.java    # 核心生成逻辑</span></span>
+<span class="line"><span>├── MarkdownConverter.java      # Markdown处理</span></span>
+<span class="line"><span>├── FrontmatterParser.java      # YAML元数据解析</span></span>
+<span class="line"><span>├── TemplateEngine.java         # 模板引擎</span></span>
+<span class="line"><span>└── AssetProcessor.java         # 静态资源处理</span></span></code></pre>
+<h2 id="️-快速开始"><a aria-hidden="true" tabindex="-1" href="#️-快速开始"><span class="icon icon-link"></span></a>🏃‍♂️ 快速开始</h2>
+<h3 id="环境要求"><a aria-hidden="true" tabindex="-1" href="#环境要求"><span class="icon icon-link"></span></a>环境要求</h3>
+<ul>
+<li>Java 8+</li>
+<li>Maven 3.6+</li>
+</ul>
+<h3 id="安装使用"><a aria-hidden="true" tabindex="-1" href="#安装使用"><span class="icon icon-link"></span></a>安装使用</h3>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6A737D"># 克隆项目</span></span>
+<span class="line"><span style="color:#6F42C1">git</span><span style="color:#032F62"> clone</span><span style="color:#032F62"> https://github.com/geyuxu/java-static-blog-covert.git</span></span>
+<span class="line"><span style="color:#005CC5">cd</span><span style="color:#032F62"> java-static-blog-covert</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 编译项目</span></span>
+<span class="line"><span style="color:#6F42C1">mvn</span><span style="color:#032F62"> clean</span><span style="color:#032F62"> compile</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># 运行生成器</span></span>
+<span class="line"><span style="color:#6F42C1">java</span><span style="color:#005CC5"> -cp</span><span style="color:#032F62"> target/classes</span><span style="color:#032F62"> BlogConverter</span></span></code></pre>
+<h3 id="基本用法"><a aria-hidden="true" tabindex="-1" href="#基本用法"><span class="icon icon-link"></span></a>基本用法</h3>
+<ol>
+<li>将Markdown文件放在 <code>content/</code> 目录下</li>
+<li>运行生成器</li>
+<li>生成的静态网站将在 <code>output/</code> 目录中</li>
+</ol>
+<h2 id="-项目特色"><a aria-hidden="true" tabindex="-1" href="#-项目特色"><span class="icon icon-link"></span></a>📚 项目特色</h2>
+<h3 id="模块化架构"><a aria-hidden="true" tabindex="-1" href="#模块化架构"><span class="icon icon-link"></span></a>模块化架构</h3>
+<p>项目采用清晰的模块化设计，每个组件都有明确的职责：</p>
+<ul>
+<li><strong>解析模块</strong>: 处理Markdown和YAML</li>
+<li><strong>模板模块</strong>: 管理HTML模板渲染</li>
+<li><strong>资源模块</strong>: 处理静态资源文件</li>
+<li><strong>生成模块</strong>: 协调整个生成流程</li>
+</ul>
+<h3 id="企业级代码质量"><a aria-hidden="true" tabindex="-1" href="#企业级代码质量"><span class="icon icon-link"></span></a>企业级代码质量</h3>
+<ul>
+<li>完整的单元测试覆盖</li>
+<li>使用AssertJ进行流畅的断言</li>
+<li>遵循Java最佳实践</li>
+<li>清晰的代码结构和文档</li>
+</ul>
+<h2 id="-应用场景"><a aria-hidden="true" tabindex="-1" href="#-应用场景"><span class="icon icon-link"></span></a>🎨 应用场景</h2>
+<ul>
+<li><strong>个人博客</strong>: 快速搭建技术博客</li>
+<li><strong>文档网站</strong>: 项目文档和API文档</li>
+<li><strong>企业官网</strong>: 静态企业展示网站</li>
+<li><strong>知识库</strong>: 团队知识管理系统</li>
+</ul>
+<h2 id="-技术亮点"><a aria-hidden="true" tabindex="-1" href="#-技术亮点"><span class="icon icon-link"></span></a>🔧 技术亮点</h2>
+<ol>
+<li><strong>纯Java实现</strong>: 无需额外运行时环境</li>
+<li><strong>高度可扩展</strong>: 模块化设计便于功能扩展</li>
+<li><strong>性能优异</strong>: 基于Java NIO的高效文件处理</li>
+<li><strong>跨平台</strong>: 支持Windows、macOS、Linux</li>
+</ol>
+<h2 id="-项目价值"><a aria-hidden="true" tabindex="-1" href="#-项目价值"><span class="icon icon-link"></span></a>📈 项目价值</h2>
+<p>这个项目展示了如何用Java构建一个完整的静态网站生成器，涵盖了：</p>
+<ul>
+<li>文件系统操作和模板处理</li>
+<li>Markdown解析和HTML生成</li>
+<li>企业级Java应用架构设计</li>
+<li>完整的测试驱动开发实践</li>
+</ul>
+<p>通过这个项目，我深入理解了静态网站生成的核心原理，并在Java生态中实现了一个高质量的解决方案。</p>  </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2025 All rights reserved.
+</footer>  </body></html>

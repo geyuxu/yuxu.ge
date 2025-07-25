@@ -1,0 +1,217 @@
+<!DOCTYPE html><html lang="zh"> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/ai/data-augmentation-underfitting-overfitting-en/"><!-- Primary Meta Tags --><title>Image Classification: Data Scarcity, Augmentation, and Underfitting/Overfitting</title><meta name="title" content="Image Classification: Data Scarcity, Augmentation, and Underfitting/Overfitting"><meta name="description"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/ai/data-augmentation-underfitting-overfitting-en/"><meta property="og:title" content="Image Classification: Data Scarcity, Augmentation, and Underfitting/Overfitting"><meta property="og:description"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/ai/data-augmentation-underfitting-overfitting-en/"><meta property="twitter:title" content="Image Classification: Data Scarcity, Augmentation, and Underfitting/Overfitting"><meta property="twitter:description"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script><script src="/js/copy-code-button.js" defer></script><!-- Dify Chatbot Configuration --><script>
+ window.difyChatbotConfig = {
+  token: 'VgrjCAto93bjE0MW',
+  systemVariables: {
+    // user_id: 'YOU CAN DEFINE USER ID HERE',
+    // conversation_id: 'YOU CAN DEFINE CONVERSATION ID HERE, IT MUST BE A VALID UUID',
+  },
+  userVariables: {
+    // avatar_url: 'YOU CAN DEFINE USER AVATAR URL HERE',
+    // name: 'YOU CAN DEFINE USER NAME HERE',
+  },
+ }
+</script><!-- Dify Chatbot Script --><script src="https://udify.app/embed.min.js" id="VgrjCAto93bjE0MW" defer>
+</script><!-- Dify Chatbot Custom Styles --><script is:global>
+	window.addEventListener('DOMContentLoaded', () => {
+		$('.toc ol').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'margin': 0,
+		'padding-left': 0,       // 可按需调整
+		});
+		$('.toc ol > li').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'padding-left': 10
+		});
+        $('.sidebar').append($('.toc'));
+      });
+	</script><link rel="stylesheet" href="/_astro/assets-slug_.BFPovWfH.css">
+<style>a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astro-cid-eimmu3lg].active{font-weight:bolder;text-decoration:underline}header[data-astro-cid-3ef6ksr2]{margin:0;padding:0 1em;background:#fff;box-shadow:0 2px 8px rgba(var(--black),5%)}h2[data-astro-cid-3ef6ksr2]{margin:0;font-size:1em}h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2],h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none}nav[data-astro-cid-3ef6ksr2]{display:flex;align-items:center;justify-content:space-between}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{padding:1em .5em;color:var(--black);border-bottom:4px solid transparent;text-decoration:none}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none;border-bottom-color:var(--accent)}.social-links[data-astro-cid-3ef6ksr2],.social-links[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{display:flex}@media (max-width: 720px){.social-links[data-astro-cid-3ef6ksr2]{display:none}}footer[data-astro-cid-sz7xmlte]{padding:2em 1em 6em;background:linear-gradient(var(--gray-gradient)) no-repeat;color:rgb(var(--gray));text-align:center}.social-links[data-astro-cid-sz7xmlte]{display:flex;justify-content:center;gap:1em;margin-top:1em}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]{text-decoration:none;color:rgb(var(--gray))}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]:hover{color:rgb(var(--gray-dark))}
+.statement[data-astro-cid-uffxixac]{font-size:10px;color:gray}@media (max-width: 640px){.statement[data-astro-cid-uffxixac]{font-size:6px;color:gray}}
+</style></head> <body> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <!--<h2><a href="/">{SITE_TITLE}</a></h2>--> <h2 data-astro-cid-3ef6ksr2><a style="padding-left:0;color:blue;" href="/" data-astro-cid-3ef6ksr2>Ge Yuxu<br data-astro-cid-3ef6ksr2>AI & Engineering</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blog/1" class="active" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/series" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Series </a>  <a href="/projects" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Projects </a>  </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://github.com/geyuxu" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://www.linkedin.com/in/geyuxu/" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's LinkedIn profile</span> <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" data-astro-cid-3ef6ksr2> <path fill="currentColor" d="M20.447 20.452H17.2v-5.569c0-1.328-.025-3.039-1.852-3.039-1.853 0-2.136 1.447-2.136 2.942v5.666h-3.248V9h3.122v1.561h.045c.435-.823 1.498-1.688 3.083-1.688 3.295 0 3.903 2.17 3.903 4.989v6.59zM5.337 7.433a1.882 1.882 0 110-3.764 1.882 1.882 0 010 3.764zm1.626 13.019H3.708V9h3.255v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.222 0z" data-astro-cid-3ef6ksr2></path> </svg> </a> <a href="mailto:ngzerone@hotmail.com" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Send email to Ge Yuxu</span> <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" data-astro-cid-3ef6ksr2> <path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" data-astro-cid-3ef6ksr2></path> </svg> </a> </div> </nav> <!-- Microsoft Clarity --> <script type="text/javascript">
+		(function(c,l,a,r,i,t,y){
+			c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+			t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+			y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+		})(window, document, "clarity", "script", "rc2w96osp6");
+	</script> </header>  <main class="page"> <!-- 左侧栏 --> <aside class="sidebar"> <div class="meta"> <b>Image Classification: Data Scarcity, Augmentation, and Underfitting/Overfitting</b> <p><time datetime="2025-07-25T08:21:00.000Z"> 2025/07/25 16:21:00 </time></p>   </div> <hr> <br> </aside> <!-- 右侧正文区域（flex 居中） --> <div class="content-wrapper"> <article class="prose">  <nav class="toc"><ol class="toc-level toc-level-1"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#1-preamble">1. Preamble</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#2-under-fitting-vs-over-fitting">2. Under-fitting vs. Over-fitting</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#3-data-augmentation-under-data-scarcity">3. Data Augmentation under Data Scarcity</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#4-implementation-in-pytorch">4. Implementation in PyTorch</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#5-integrated-tuning-workflow">5. Integrated Tuning Workflow</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#6-common-pitfalls--practical-tips">6. Common Pitfalls &#x26; Practical Tips</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#7-conclusion--further-exploration">7. Conclusion &#x26; Further Exploration</a></li></ol></nav><h3 id="1-preamble"><a aria-hidden="true" tabindex="-1" href="#1-preamble"><span class="icon icon-link"></span></a>1. Preamble</h3>
+<p>In many specialized fields, such as medical imaging analysis, industrial defect detection, or specific scientific research projects, we often face a common challenge: small-scale image classification. Unlike public datasets with millions of samples, the data volume in these scenarios might only be a few hundred or a few thousand images, making it extremely precious.</p>
+<p>Under such data scarcity, model training is prone to two extreme symptoms. The most common is <strong>over-fitting</strong>, where the model excessively learns the details and noise of the training data, leading to poor performance on unseen new data. Occasionally, if the data itself contains significant noise or the chosen model is too simple, <strong>under-fitting</strong> may also occur, where the model fails to adequately capture the underlying patterns in the data. Our core objective is to effectively enhance the model’s generalization performance using a series of technical means, all while controlling training resources and development costs.</p>
+<h3 id="2-under-fitting-vs-over-fitting"><a aria-hidden="true" tabindex="-1" href="#2-under-fitting-vs-over-fitting"><span class="icon icon-link"></span></a>2. Under-fitting vs. Over-fitting</h3>
+<p>To apply the right remedy, we must first accurately understand, diagnose, and differentiate between under-fitting and over-fitting. They represent two forms of imbalance between a model’s learning capacity and the complexity of the data.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="left">Dimension</th><th align="left">Under-fitting</th><th align="left">Over-fitting</th></tr></thead><tbody><tr><td align="left"><strong>Definition</strong></td><td align="left">The model fails to capture the underlying patterns in the data, exhibiting high bias.</td><td align="left">The model learns the noise in the training data as if it were a pattern, exhibiting high variance.</td></tr><tr><td align="left"><strong>Learning Curve</strong></td><td align="left">Both training and validation loss are high and converge early.</td><td align="left">Training loss decreases continuously, while validation loss starts to increase after a certain point.</td></tr><tr><td align="left"><strong>Analogy</strong></td><td align="left">Trying to fit a complex “S”-shaped curve with a straight line.</td><td align="left">Trying to draw a complex path that passes through every single training point.</td></tr><tr><td align="left"><strong>Trigger</strong></td><td align="left">The model’s capacity is much lower than the complexity of the data.</td><td align="left">The model’s capacity is much higher than the amount of information in the data.</td></tr><tr><td align="left"><strong>Diagnosis</strong></td><td align="left">Learning curves are parallel and high; bias cannot be reduced.</td><td align="left">The gap between training and validation accuracy is large (>5-10%); predictions are often wrong but with high confidence.</td></tr><tr><td align="left"><strong>Solutions</strong></td><td align="left">① Increase model capacity or add features. <br> ② Train longer or tune hyperparameters. <br> ③ Reduce regularization.</td><td align="left">① <strong>Data augmentation</strong> or collect more data. <br> ② Use regularization (L1/L2, Dropout, Early Stopping). <br> ③ Simplify the model. <br> ④ Use model ensembling or distillation.</td></tr></tbody></table>
+<h3 id="3-data-augmentation-under-data-scarcity"><a aria-hidden="true" tabindex="-1" href="#3-data-augmentation-under-data-scarcity"><span class="icon icon-link"></span></a>3. Data Augmentation under Data Scarcity</h3>
+<p>Among all strategies for mitigating over-fitting, data augmentation is one of the most direct and effective methods. It expands the information content of the dataset without additional labeling costs by applying a series of random transformations to the existing training data, creating more diverse samples that the model has “never seen” before.</p>
+<h4 id="31-geometric-transformations"><a aria-hidden="true" tabindex="-1" href="#31-geometric-transformations"><span class="icon icon-link"></span></a>3.1 Geometric Transformations</h4>
+<p>These transformations simulate variations in an object’s pose, scale, and position that might occur in the real world. Common operations include: random rotation (±15° to ±30°), random scaling (0.8× to 1.2×), and random translation (≤10% of image dimensions). More complex transformations like Elastic Distortion and Perspective Transformation can provide even stronger generalization capabilities.</p>
+<h4 id="32-pixel-level-perturbations"><a aria-hidden="true" tabindex="-1" href="#32-pixel-level-perturbations"><span class="icon icon-link"></span></a>3.2 Pixel-level Perturbations</h4>
+<p>These transformations aim to improve the model’s robustness to changes in image quality. For instance, adding Gaussian Noise (e.g., σ=0.01-0.05 × 255) or Salt-and-Pepper Noise (e.g., ratio=0.3-0.5%) to the image, and applying GaussianBlur (kernel size=3 or 5) or MotionBlur.</p>
+<h4 id="33-color-space-transformations"><a aria-hidden="true" tabindex="-1" href="#33-color-space-transformations"><span class="icon icon-link"></span></a>3.3 Color Space Transformations</h4>
+<p>Transformations in the color space enhance the model’s adaptability to variations in lighting, contrast, and color. <code>ColorJitter</code> is a common tool that randomly adjusts an image’s brightness, contrast, and saturation (e.g., between 0.8 and 1.2 times the original). Converting an image to grayscale and then duplicating it across three channels is another effective technique to force the model to focus on shape rather than color.</p>
+<h4 id="34-syntheticmixing-methods"><a aria-hidden="true" tabindex="-1" href="#34-syntheticmixing-methods"><span class="icon icon-link"></span></a>3.4 Synthetic/Mixing Methods</h4>
+<p>In recent years, augmentation methods that mix information from multiple images have become very popular. They create samples that do not exist in the real world but are highly beneficial for model regularization.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<table><thead><tr><th align="left">Method</th><th align="left">Core Idea</th><th align="left">Recommended Probability (p)</th><th align="left">Notes</th></tr></thead><tbody><tr><td align="left"><strong>Cutout/GridMask</strong></td><td align="left">Randomly erases one or more rectangular patches from an image.</td><td align="left"><code>p=0.3</code></td><td align="left">Be careful not to occlude key objects in detection/segmentation tasks.</td></tr><tr><td align="left"><strong>Mixup</strong></td><td align="left">Linearly interpolates two images and their labels using a ratio λ sampled from a Beta distribution.</td><td align="left"><code>1.0</code> (as a separate epoch)</td><td align="left">α=0.2 is a common hyperparameter.</td></tr><tr><td align="left"><strong>CutMix</strong></td><td align="left">Cuts a patch from one image and pastes it onto another, with label weights adjusted by the patch area.</td><td align="left"><code>p=0.5</code></td><td align="left">α=1.0 is a common hyperparameter.</td></tr></tbody></table>
+<h4 id="35-auto-augmentation"><a aria-hidden="true" tabindex="-1" href="#35-auto-augmentation"><span class="icon icon-link"></span></a>3.5 Auto-Augmentation</h4>
+<p>Manually designing augmentation policy combinations is time-consuming. Thus, auto-augmentation methods were developed. <strong>RandAugment</strong> is a simple yet effective method that randomly selects N transformations from a predefined pool and applies them with a uniform magnitude M. It often yields significant gains on small datasets (e.g., with N=2, M=9). The more complex <strong>AutoAugment</strong> uses reinforcement learning to search for the optimal policy combination but is computationally expensive.</p>
+<h3 id="4-implementation-in-pytorch"><a aria-hidden="true" tabindex="-1" href="#4-implementation-in-pytorch"><span class="icon icon-link"></span></a>4. Implementation in PyTorch</h3>
+<p>Here, we demonstrate how to build a <code>transform</code> pipeline in PyTorch that includes various augmentation strategies and implement a plug-and-play Mixup function.</p>
+<h4 id="41-transform-pipeline"><a aria-hidden="true" tabindex="-1" href="#41-transform-pipeline"><span class="icon icon-link"></span></a>4.1 Transform Pipeline</h4>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#D73A49">import</span><span style="color:#24292E"> torchvision.transforms </span><span style="color:#D73A49">as</span><span style="color:#24292E"> T</span></span>
+<span class="line"><span style="color:#D73A49">import</span><span style="color:#24292E"> torch</span></span>
+<span class="line"><span style="color:#D73A49">import</span><span style="color:#24292E"> numpy </span><span style="color:#D73A49">as</span><span style="color:#24292E"> np</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6A737D"># Custom Salt-and-Pepper noise class</span></span>
+<span class="line"><span style="color:#D73A49">class</span><span style="color:#6F42C1"> SaltPepperNoise</span><span style="color:#24292E">:</span></span>
+<span class="line"><span style="color:#D73A49">    def</span><span style="color:#005CC5"> __init__</span><span style="color:#24292E">(self, ratio</span><span style="color:#D73A49">=</span><span style="color:#005CC5">0.003</span><span style="color:#24292E">):</span></span>
+<span class="line"><span style="color:#005CC5">        self</span><span style="color:#24292E">.ratio </span><span style="color:#D73A49">=</span><span style="color:#24292E"> ratio</span></span>
+<span class="line"><span style="color:#D73A49">    def</span><span style="color:#005CC5"> __call__</span><span style="color:#24292E">(self, img):</span></span>
+<span class="line"><span style="color:#6A737D">        # ... (implementation omitted)</span></span>
+<span class="line"><span style="color:#D73A49">        return</span><span style="color:#24292E"> img</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E">train_tf </span><span style="color:#D73A49">=</span><span style="color:#24292E"> T.Compose([</span></span>
+<span class="line"><span style="color:#24292E">    T.RandomResizedCrop(</span><span style="color:#005CC5">224</span><span style="color:#24292E">, </span><span style="color:#E36209">scale</span><span style="color:#D73A49">=</span><span style="color:#24292E">(</span><span style="color:#005CC5">0.8</span><span style="color:#24292E">, </span><span style="color:#005CC5">1.0</span><span style="color:#24292E">)),</span></span>
+<span class="line"><span style="color:#24292E">    T.RandomHorizontalFlip(</span><span style="color:#E36209">p</span><span style="color:#D73A49">=</span><span style="color:#005CC5">0.5</span><span style="color:#24292E">),</span></span>
+<span class="line"><span style="color:#24292E">    T.RandomRotation(</span><span style="color:#005CC5">20</span><span style="color:#24292E">),</span></span>
+<span class="line"><span style="color:#24292E">    T.ColorJitter(</span><span style="color:#E36209">brightness</span><span style="color:#D73A49">=</span><span style="color:#005CC5">0.2</span><span style="color:#24292E">, </span><span style="color:#E36209">contrast</span><span style="color:#D73A49">=</span><span style="color:#005CC5">0.2</span><span style="color:#24292E">, </span><span style="color:#E36209">saturation</span><span style="color:#D73A49">=</span><span style="color:#005CC5">0.2</span><span style="color:#24292E">, </span><span style="color:#E36209">hue</span><span style="color:#D73A49">=</span><span style="color:#005CC5">0.1</span><span style="color:#24292E">),</span></span>
+<span class="line"><span style="color:#24292E">    T.GaussianBlur(</span><span style="color:#E36209">kernel_size</span><span style="color:#D73A49">=</span><span style="color:#005CC5">5</span><span style="color:#24292E">, </span><span style="color:#E36209">sigma</span><span style="color:#D73A49">=</span><span style="color:#24292E">(</span><span style="color:#005CC5">0.1</span><span style="color:#24292E">, </span><span style="color:#005CC5">2.0</span><span style="color:#24292E">)),</span></span>
+<span class="line"><span style="color:#6A737D">    # SaltPepperNoise(0.003), # Custom transform</span></span>
+<span class="line"><span style="color:#24292E">    T.ToTensor(),</span></span>
+<span class="line"><span style="color:#24292E">    T.Normalize(</span><span style="color:#E36209">mean</span><span style="color:#D73A49">=</span><span style="color:#24292E">[</span><span style="color:#005CC5">0.485</span><span style="color:#24292E">, </span><span style="color:#005CC5">0.456</span><span style="color:#24292E">, </span><span style="color:#005CC5">0.406</span><span style="color:#24292E">],</span></span>
+<span class="line"><span style="color:#E36209">                std</span><span style="color:#D73A49">=</span><span style="color:#24292E">[</span><span style="color:#005CC5">0.229</span><span style="color:#24292E">, </span><span style="color:#005CC5">0.224</span><span style="color:#24292E">, </span><span style="color:#005CC5">0.225</span><span style="color:#24292E">])</span></span>
+<span class="line"><span style="color:#24292E">])</span></span></code></pre>
+<p>This pipeline integrates various geometric and color transformations. Note that the <code>Normalize</code> step is typically placed at the end, and its mean and standard deviation should be set based on the dataset used for the pre-trained model (e.g., ImageNet).</p>
+<h4 id="42-plug-and-play-mixupcutmix"><a aria-hidden="true" tabindex="-1" href="#42-plug-and-play-mixupcutmix"><span class="icon icon-link"></span></a>4.2 Plug-and-Play Mixup/CutMix</h4>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#D73A49">def</span><span style="color:#6F42C1"> mixup_data</span><span style="color:#24292E">(x, y, alpha</span><span style="color:#D73A49">=</span><span style="color:#005CC5">0.2</span><span style="color:#24292E">, use_cuda</span><span style="color:#D73A49">=</span><span style="color:#005CC5">True</span><span style="color:#24292E">):</span></span>
+<span class="line"><span style="color:#032F62">    '''Returns mixed inputs, pairs of targets, and lambda'''</span></span>
+<span class="line"><span style="color:#D73A49">    if</span><span style="color:#24292E"> alpha </span><span style="color:#D73A49">></span><span style="color:#005CC5"> 0</span><span style="color:#24292E">:</span></span>
+<span class="line"><span style="color:#24292E">        lam </span><span style="color:#D73A49">=</span><span style="color:#24292E"> np.random.beta(alpha, alpha)</span></span>
+<span class="line"><span style="color:#D73A49">    else</span><span style="color:#24292E">:</span></span>
+<span class="line"><span style="color:#24292E">        lam </span><span style="color:#D73A49">=</span><span style="color:#005CC5"> 1</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E">    batch_size </span><span style="color:#D73A49">=</span><span style="color:#24292E"> x.size()[</span><span style="color:#005CC5">0</span><span style="color:#24292E">]</span></span>
+<span class="line"><span style="color:#D73A49">    if</span><span style="color:#24292E"> use_cuda:</span></span>
+<span class="line"><span style="color:#24292E">        index </span><span style="color:#D73A49">=</span><span style="color:#24292E"> torch.randperm(batch_size).cuda()</span></span>
+<span class="line"><span style="color:#D73A49">    else</span><span style="color:#24292E">:</span></span>
+<span class="line"><span style="color:#24292E">        index </span><span style="color:#D73A49">=</span><span style="color:#24292E"> torch.randperm(batch_size)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E">    mixed_x </span><span style="color:#D73A49">=</span><span style="color:#24292E"> lam </span><span style="color:#D73A49">*</span><span style="color:#24292E"> x </span><span style="color:#D73A49">+</span><span style="color:#24292E"> (</span><span style="color:#005CC5">1</span><span style="color:#D73A49"> -</span><span style="color:#24292E"> lam) </span><span style="color:#D73A49">*</span><span style="color:#24292E"> x[index, :]</span></span>
+<span class="line"><span style="color:#24292E">    y_a, y_b </span><span style="color:#D73A49">=</span><span style="color:#24292E"> y, y[index]</span></span>
+<span class="line"><span style="color:#D73A49">    return</span><span style="color:#24292E"> mixed_x, y_a, y_b, lam</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49">def</span><span style="color:#6F42C1"> mixup_criterion</span><span style="color:#24292E">(criterion, pred, y_a, y_b, lam):</span></span>
+<span class="line"><span style="color:#D73A49">    return</span><span style="color:#24292E"> lam </span><span style="color:#D73A49">*</span><span style="color:#24292E"> criterion(pred, y_a) </span><span style="color:#D73A49">+</span><span style="color:#24292E"> (</span><span style="color:#005CC5">1</span><span style="color:#D73A49"> -</span><span style="color:#24292E"> lam) </span><span style="color:#D73A49">*</span><span style="color:#24292E"> criterion(pred, y_b)</span></span></code></pre>
+<p>In your training loop, you can fetch <code>inputs</code> and <code>targets</code> from the DataLoader, call <code>mixup_data</code> to generate mixed data, and then compute the mixed loss using <code>mixup_criterion</code>.</p>
+<h4 id="43-learning-curve-monitoring"><a aria-hidden="true" tabindex="-1" href="#43-learning-curve-monitoring"><span class="icon icon-link"></span></a>4.3 Learning Curve Monitoring</h4>
+<p>Throughout the training process, it is crucial to continuously monitor the accuracy and loss curves for both the training and validation sets. A key practice is <strong>Early Stopping</strong>: when the validation loss stops decreasing and starts to rise for N consecutive epochs, training should be halted, and the model weights with the best previous validation performance should be saved. This effectively prevents the model from over-fitting in the later stages of training.</p>
+<h3 id="5-integrated-tuning-workflow"><a aria-hidden="true" tabindex="-1" href="#5-integrated-tuning-workflow"><span class="icon icon-link"></span></a>5. Integrated Tuning Workflow</h3>
+<p>A systematic tuning process can help you maximize the effectiveness of data augmentation:</p>
+<ol>
+<li><strong>Establish Baseline</strong>: First, train the model without any data augmentation and record its accuracy and loss as a baseline.</li>
+<li><strong>Phase 1</strong>: Add basic geometric and color transformations; the learning rate can be kept the same or slightly increased.</li>
+<li><strong>Phase 2</strong>: Introduce Mixup or CutMix, often in conjunction with Label Smoothing for better results.</li>
+<li><strong>Phase 3</strong>: If computational resources permit, try using RandAugment or AutoAugment to automatically search for the optimal augmentation policy.</li>
+<li><strong>Phase 4</strong>: Finally, fine-tune the model’s capacity (e.g., network depth) and regularization parameters (e.g., Dropout rate, weight decay) based on the augmented data distribution.</li>
+</ol>
+<h3 id="6-common-pitfalls--practical-tips"><a aria-hidden="true" tabindex="-1" href="#6-common-pitfalls--practical-tips"><span class="icon icon-link"></span></a>6. Common Pitfalls &#x26; Practical Tips</h3>
+<ul>
+<li><strong>Over-augmentation</strong>: Excessive augmentation can cause a significant distribution shift between the training set and the actual test set, thereby hurting performance. It’s advisable to start with a small application probability (e.g., <code>p=0.3</code>).</li>
+<li><strong>Label Synchronization</strong>: In object detection or semantic segmentation tasks, when applying geometric transformations to an image, the exact same transformations must be applied to the bounding boxes or masks.</li>
+<li><strong>Validation Set Purity</strong>: The validation set should be kept as “clean” as possible to accurately reflect the model’s performance on the original data distribution. Typically, only necessary resizing and center cropping are applied, without heavy augmentation.</li>
+<li><strong>Mixup with Small Batches</strong>: Using Mixup with a very small batch size can excessively dilute the original signal. In such cases, consider increasing the batch size or adjusting the learning rate.</li>
+</ul>
+<h3 id="7-conclusion--further-exploration"><a aria-hidden="true" tabindex="-1" href="#7-conclusion--further-exploration"><span class="icon icon-link"></span></a>7. Conclusion &#x26; Further Exploration</h3>
+<p>When faced with the challenge of data scarcity, our core objective is to <strong>expand the diversity</strong> of the data through augmentation, not just to increase its quantity. The struggle against under-fitting and over-fitting is essentially about finding a delicate balance between the model’s <strong>capacity</strong> and the data’s <strong>information content</strong>.</p>
+<p>The strategies introduced in this article are a classic starting point for solving this problem. Building on this foundation, you can further explore more advanced directions, such as: using unlabeled data for Self-supervised Pre-training, synthesizing new data with generative models (like Diffusion Models) or 3D rendering, and applying Semi-supervised Learning techniques.</p> <html lang="en" data-astro-cid-uffxixac> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/ai/data-augmentation-underfitting-overfitting-en/"><!-- Primary Meta Tags --><title>Ge Yuxu • AI &amp; Engineering</title><meta name="title" content="Ge Yuxu • AI &#38; Engineering"><meta name="description" content="Welcome to my blog!"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/ai/data-augmentation-underfitting-overfitting-en/"><meta property="og:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="og:description" content="Welcome to my blog!"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/ai/data-augmentation-underfitting-overfitting-en/"><meta property="twitter:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="twitter:description" content="Welcome to my blog!"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script><script src="/js/copy-code-button.js" defer></script><!-- Dify Chatbot Configuration --><script>
+ window.difyChatbotConfig = {
+  token: 'VgrjCAto93bjE0MW',
+  systemVariables: {
+    // user_id: 'YOU CAN DEFINE USER ID HERE',
+    // conversation_id: 'YOU CAN DEFINE CONVERSATION ID HERE, IT MUST BE A VALID UUID',
+  },
+  userVariables: {
+    // avatar_url: 'YOU CAN DEFINE USER AVATAR URL HERE',
+    // name: 'YOU CAN DEFINE USER NAME HERE',
+  },
+ }
+</script><!-- Dify Chatbot Script --><script src="https://udify.app/embed.min.js" id="VgrjCAto93bjE0MW" defer>
+</script><!-- Dify Chatbot Custom Styles --></head> <body data-astro-cid-uffxixac>  <div class="statement" data-astro-cid-uffxixac> <blockquote data-astro-cid-uffxixac> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>脱敏说明</strong>：本文所有出现的表名、字段名、接口地址、变量名、IP地址及示例数据等均非真实，仅用于阐述技术思路与实现步骤，示例代码亦非公司真实代码。示例方案亦非公司真实完整方案，仅为本人记忆总结，用于技术学习探讨。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;文中所示任何标识符并不对应实际生产环境中的名称或编号。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;示例&nbsp;SQL、脚本、代码及数据等均为演示用途，不含真实业务数据，也不具备直接运行或复现的完整上下文。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;读者若需在实际项目中参考本文方案，请结合自身业务场景及数据安全规范，使用符合内部命名和权限控制的配置。</p> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>Data Desensitization Notice</strong>: All table names, field names, API endpoints, variable names, IP addresses, and sample data appearing in this article are fictitious and intended solely to illustrate technical concepts and implementation steps. The sample code is not actual company code. The proposed solutions are not complete or actual company solutions but are summarized from the author's memory for technical learning and discussion.<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;Any identifiers shown in the text do not correspond to names or numbers in any actual production environment.<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;Sample SQL, scripts, code, and data are for demonstration purposes only, do not contain real business data, and lack the full context required for direct execution or reproduction.<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;Readers who wish to reference the solutions in this article for actual projects should adapt them to their own business scenarios and data security standards, using configurations that comply with internal naming and access control policies.</p> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>版权声明</strong>：本文版权归原作者所有，未经作者事先书面许可，任何单位或个人不得以任何方式复制、转载、摘编或用于商业用途。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;若需非商业性引用或转载本文内容，请务必注明出处并保持内容完整。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;对因商业使用、篡改或不当引用本文内容所产生的法律纠纷，作者保留追究法律责任的权利。</p> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>Copyright Notice</strong>: The copyright of this article belongs to the original author. Without prior written permission from the author, no entity or individual may copy, reproduce, excerpt, or use it for commercial purposes in any way.<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;For non-commercial citation or reproduction of this content, attribution must be given, and the integrity of the content must be maintained.<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;The author reserves the right to pursue legal action against any legal disputes arising from the commercial use, alteration, or improper citation of this article's content.</p> <p data-astro-cid-uffxixac><em data-astro-cid-uffxixac>Copyright&nbsp;©&nbsp;1989–Present&nbsp;Ge&nbsp;Yuxu.&nbsp;All&nbsp;Rights&nbsp;Reserved.</em></p> </blockquote> </div></body></html>  </article> </div> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2025 All rights reserved.
+</footer>  </body></html>

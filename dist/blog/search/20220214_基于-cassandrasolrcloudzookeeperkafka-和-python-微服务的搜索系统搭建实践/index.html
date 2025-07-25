@@ -1,0 +1,348 @@
+<!DOCTYPE html><html lang="zh"> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/search/20220214_%E5%9F%BA%E4%BA%8E-cassandrasolrcloudzookeeperkafka-%E5%92%8C-python-%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%9A%84%E6%90%9C%E7%B4%A2%E7%B3%BB%E7%BB%9F%E6%90%AD%E5%BB%BA%E5%AE%9E%E8%B7%B5/"><!-- Primary Meta Tags --><title>基于 Cassandra、SolrCloud、Zookeeper、Kafka 和 Python 微服务的搜索系统搭建实践</title><meta name="title" content="基于 Cassandra、SolrCloud、Zookeeper、Kafka 和 Python 微服务的搜索系统搭建实践"><meta name="description"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/search/20220214_%E5%9F%BA%E4%BA%8E-cassandrasolrcloudzookeeperkafka-%E5%92%8C-python-%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%9A%84%E6%90%9C%E7%B4%A2%E7%B3%BB%E7%BB%9F%E6%90%AD%E5%BB%BA%E5%AE%9E%E8%B7%B5/"><meta property="og:title" content="基于 Cassandra、SolrCloud、Zookeeper、Kafka 和 Python 微服务的搜索系统搭建实践"><meta property="og:description"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/search/20220214_%E5%9F%BA%E4%BA%8E-cassandrasolrcloudzookeeperkafka-%E5%92%8C-python-%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%9A%84%E6%90%9C%E7%B4%A2%E7%B3%BB%E7%BB%9F%E6%90%AD%E5%BB%BA%E5%AE%9E%E8%B7%B5/"><meta property="twitter:title" content="基于 Cassandra、SolrCloud、Zookeeper、Kafka 和 Python 微服务的搜索系统搭建实践"><meta property="twitter:description"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script><script src="/js/copy-code-button.js" defer></script><!-- Dify Chatbot Configuration --><script>
+ window.difyChatbotConfig = {
+  token: 'VgrjCAto93bjE0MW',
+  systemVariables: {
+    // user_id: 'YOU CAN DEFINE USER ID HERE',
+    // conversation_id: 'YOU CAN DEFINE CONVERSATION ID HERE, IT MUST BE A VALID UUID',
+  },
+  userVariables: {
+    // avatar_url: 'YOU CAN DEFINE USER AVATAR URL HERE',
+    // name: 'YOU CAN DEFINE USER NAME HERE',
+  },
+ }
+</script><!-- Dify Chatbot Script --><script src="https://udify.app/embed.min.js" id="VgrjCAto93bjE0MW" defer>
+</script><!-- Dify Chatbot Custom Styles --><script is:global>
+	window.addEventListener('DOMContentLoaded', () => {
+		$('.toc ol').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'margin': 0,
+		'padding-left': 0,       // 可按需调整
+		});
+		$('.toc ol > li').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'padding-left': 10
+		});
+        $('.sidebar').append($('.toc'));
+      });
+	</script><link rel="stylesheet" href="/_astro/assets-slug_.BFPovWfH.css">
+<style>a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astro-cid-eimmu3lg].active{font-weight:bolder;text-decoration:underline}header[data-astro-cid-3ef6ksr2]{margin:0;padding:0 1em;background:#fff;box-shadow:0 2px 8px rgba(var(--black),5%)}h2[data-astro-cid-3ef6ksr2]{margin:0;font-size:1em}h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2],h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none}nav[data-astro-cid-3ef6ksr2]{display:flex;align-items:center;justify-content:space-between}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{padding:1em .5em;color:var(--black);border-bottom:4px solid transparent;text-decoration:none}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none;border-bottom-color:var(--accent)}.social-links[data-astro-cid-3ef6ksr2],.social-links[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{display:flex}@media (max-width: 720px){.social-links[data-astro-cid-3ef6ksr2]{display:none}}footer[data-astro-cid-sz7xmlte]{padding:2em 1em 6em;background:linear-gradient(var(--gray-gradient)) no-repeat;color:rgb(var(--gray));text-align:center}.social-links[data-astro-cid-sz7xmlte]{display:flex;justify-content:center;gap:1em;margin-top:1em}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]{text-decoration:none;color:rgb(var(--gray))}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]:hover{color:rgb(var(--gray-dark))}
+.statement[data-astro-cid-uffxixac]{font-size:10px;color:gray}@media (max-width: 640px){.statement[data-astro-cid-uffxixac]{font-size:6px;color:gray}}
+</style></head> <body> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <!--<h2><a href="/">{SITE_TITLE}</a></h2>--> <h2 data-astro-cid-3ef6ksr2><a style="padding-left:0;color:blue;" href="/" data-astro-cid-3ef6ksr2>Ge Yuxu<br data-astro-cid-3ef6ksr2>AI & Engineering</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blog/1" class="active" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/series" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Series </a>  <a href="/projects" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Projects </a>  </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://github.com/geyuxu" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://www.linkedin.com/in/geyuxu/" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's LinkedIn profile</span> <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" data-astro-cid-3ef6ksr2> <path fill="currentColor" d="M20.447 20.452H17.2v-5.569c0-1.328-.025-3.039-1.852-3.039-1.853 0-2.136 1.447-2.136 2.942v5.666h-3.248V9h3.122v1.561h.045c.435-.823 1.498-1.688 3.083-1.688 3.295 0 3.903 2.17 3.903 4.989v6.59zM5.337 7.433a1.882 1.882 0 110-3.764 1.882 1.882 0 010 3.764zm1.626 13.019H3.708V9h3.255v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.222 0z" data-astro-cid-3ef6ksr2></path> </svg> </a> <a href="mailto:ngzerone@hotmail.com" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Send email to Ge Yuxu</span> <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" data-astro-cid-3ef6ksr2> <path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" data-astro-cid-3ef6ksr2></path> </svg> </a> </div> </nav> <!-- Microsoft Clarity --> <script type="text/javascript">
+		(function(c,l,a,r,i,t,y){
+			c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+			t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+			y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+		})(window, document, "clarity", "script", "rc2w96osp6");
+	</script> </header>  <main class="page"> <!-- 左侧栏 --> <aside class="sidebar"> <div class="meta"> <b>基于 Cassandra、SolrCloud、Zookeeper、Kafka 和 Python 微服务的搜索系统搭建实践</b> <p><time datetime="2022-02-13T16:00:00.000Z"> 2022/02/14 00:00:00 </time></p>   </div> <hr> <br> </aside> <!-- 右侧正文区域（flex 居中） --> <div class="content-wrapper"> <article class="prose">  <nav class="toc"><ol class="toc-level toc-level-1"><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#引言">引言</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#环境准备与架构概述">环境准备与架构概述</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#安装与配置-cassandra">安装与配置 Cassandra</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#安装-cassandra">安装 Cassandra</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#配置-cassandra-节点">配置 Cassandra 节点</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#安装与配置-zookeeper">安装与配置 Zookeeper</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#安装-zookeeper">安装 Zookeeper</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#配置-zookeeper">配置 Zookeeper</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#启动-zookeeper-集群">启动 Zookeeper 集群</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#安装与配置-kafka">安装与配置 Kafka</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#安装-kafka">安装 Kafka</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#配置-kafka-broker">配置 Kafka Broker</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#启动-kafka">启动 Kafka</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#创建主题-topic">创建主题 (Topic)</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#安装与配置-solrcloud">安装与配置 SolrCloud</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#安装-solr">安装 Solr</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#准备-solrcloud-配置">准备 SolrCloud 配置</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#上传-solr-配置并启动-solrcloud">上传 Solr 配置并启动 SolrCloud</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#启动-solr-节点">启动 Solr 节点</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#python-微服务开发与部署">Python 微服务开发与部署</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#集群部署注意事项">集群部署注意事项</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#总结与经验教训">总结与经验教训</a></li></ol></nav><h1 id="基于-cassandrasolrcloudzookeeperkafka-和-python-微服务的搜索系统搭建实践"><a aria-hidden="true" tabindex="-1" href="#基于-cassandrasolrcloudzookeeperkafka-和-python-微服务的搜索系统搭建实践"><span class="icon icon-link"></span></a>基于 Cassandra、SolrCloud、Zookeeper、Kafka 和 Python 微服务的搜索系统搭建实践</h1>
+<h2 id="引言"><a aria-hidden="true" tabindex="-1" href="#引言"><span class="icon icon-link"></span></a>引言</h2>
+<p>在现代电商和搜索业务中，常需要构建高性能的搜索平台。本次实践分享介绍如何使用 Cassandra（分布式 NoSQL 数据库）、SolrCloud（分布式搜索引擎）、Zookeeper（分布式协调服务）、Kafka（消息队列）以及 Python 微服务 来搭建一个可扩展的搜索系统。本文以一个实际项目为背景，该项目最初基于 Java/Spring Boot 实现，我们将演示如何改用 Python 微服务模块实现同样的功能。文章涵盖环境准备、各组件安装配置、Python 微服务部署、Cassandra 数据模型设计、Solr 索引配置、集群搭建注意事项等内容，最后总结实践经验和教训。</p>
+<h2 id="环境准备与架构概述"><a aria-hidden="true" tabindex="-1" href="#环境准备与架构概述"><span class="icon icon-link"></span></a>环境准备与架构概述</h2>
+<p>在开始搭建之前，需要准备好基础运行环境和硬件资源。本方案假设使用 Linux 服务器（例如 CentOS 或 Ubuntu），并已安装合适版本的 Java JDK（因为 Cassandra、Solr、Kafka 都依赖 Java 运行）。同时，准备多台服务器以搭建集群：</p>
+<ul>
+<li>Zookeeper 集群：3 台节点，用于协调 Kafka 和 SolrCloud（假定 IP 为 10.201.X.X 三台不同机器，客户端端口 2181）。</li>
+<li>Kafka 集群：若干节点（假设 3 台或以上），使用上述 Zookeeper 集群进行协调。Kafka 负责接收和传递产品数据更新的消息。</li>
+<li>Cassandra 节点：1 台或多台（根据数据量和容错需要，可部署为集群），用于存储产品数据，假定单节点 IP 为 10.201.X.X。</li>
+<li>SolrCloud 集群：3 台 Solr 节点，组成搜索索引集群，每台部署 SolrCloud 实例（假定 IP 分别为 10.201.X.X 三台）。</li>
+<li>Python 微服务：至少包含两个服务示例：</li>
+<li>数据同步服务：消费 Kafka 消息，将新产品数据写入 Cassandra，并更新 Solr 索引。</li>
+<li>搜索 API 服务：提供 REST 接口供前端查询，通过 Solr 提供搜索结果（也可直接由前端查询 Solr，但加入微服务可方便做权限控制和聚合）。</li>
+</ul>
+<p>各组件通过内部网络通信，确保各端口互通（例如：Cassandra 默认 9042，Solr 8983，Zookeeper 2181，Kafka 9092，微服务根据配置自定端口）。在实际配置中，请将文中出现的 IP、域名、账户密码等替换为您自己环境的实际信息（本文中已使用占位符如 10.201.X.X 进行脱敏处理）。</p>
+<h2 id="安装与配置-cassandra"><a aria-hidden="true" tabindex="-1" href="#安装与配置-cassandra"><span class="icon icon-link"></span></a>安装与配置 Cassandra</h2>
+<h3 id="安装-cassandra"><a aria-hidden="true" tabindex="-1" href="#安装-cassandra"><span class="icon icon-link"></span></a>安装 Cassandra</h3>
+<p>到 Apache 官方站点下载适用于您操作系统的 Cassandra 二进制发行版（本文以 Cassandra 3.11.12 为例）。将安装包上传到目标服务器 10.201.X.X 并解压，例如：</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> wget</span><span style="color:#032F62"> https://downloads.apache.org/cassandra/3.11.12/apache-cassandra-3.11.12-bin.tar.gz</span></span>
+<span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> tar</span><span style="color:#005CC5"> -zxvf</span><span style="color:#032F62"> apache-cassandra-3.11.12-bin.tar.gz</span></span>
+<span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> cd</span><span style="color:#032F62"> apache-cassandra-3.11.12</span></span></code></pre>
+<p>Cassandra 解压后即可使用，无需额外编译。进入 Cassandra 目录，可以直接通过 bin/cassandra 命令启动节点。第一次启动前，我们需要修改配置文件确保节点通信正常。</p>
+<h3 id="配置-cassandra-节点"><a aria-hidden="true" tabindex="-1" href="#配置-cassandra-节点"><span class="icon icon-link"></span></a>配置 Cassandra 节点</h3>
+<p>打开 conf/cassandra.yaml 配置文件，按照实际网络环境进行调整：</p>
+<ul>
+<li>cluster_name：集群名称，可自定义。例如 cluster_name: “SearchCluster”。</li>
+<li>listen_address：监听地址，设置为本机内网 IP，例如：listen_address: 10.201.X.X。</li>
+<li>rpc_address：RPC 地址（Thrift，仅在使用老客户端时需要）和 native_transport_address（CQL 使用的地址）。可以设置为本机 IP，如：rpc_address: 10.201.X.X （在 Cassandra 3.x 中 rpc_address 控制 CQL 服务绑定）。</li>
+<li>seed_provider：种子节点列表。如果是单节点测试，可将其设为本机 IP；如是多节点集群，填入初始引导的种子节点 IP 列表。例：</li>
+</ul>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="yaml"><code><span class="line"><span style="color:#22863A">seed_provider</span><span style="color:#24292E">:</span></span>
+<span class="line"><span style="color:#24292E">    - </span><span style="color:#22863A">class_name</span><span style="color:#24292E">: </span><span style="color:#032F62">org.apache.cassandra.locator.SimpleSeedProvider</span></span>
+<span class="line"><span style="color:#22863A">      parameters</span><span style="color:#24292E">:</span></span>
+<span class="line"><span style="color:#24292E">          - </span><span style="color:#22863A">seeds</span><span style="color:#24292E">: </span><span style="color:#032F62">"10.201.X.X,10.201.X.X"</span></span></code></pre>
+<p>确保至少包含集群中的一个节点 IP 作为种子。</p>
+<ul>
+<li>其他参数：根据需要调整内存和垃圾回收等设置（默认配置一般可用，生产环境视内存大小调整 -Xmx 等）。</li>
+</ul>
+<p>完成配置后，启动 Cassandra 服务：</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> bin/cassandra</span><span style="color:#005CC5"> -R</span><span style="color:#6A737D">   # 后台启动 Cassandra (-R 可去除超级用户模式限制)</span></span></code></pre>
+<p>初次启动可能需要等待片刻让 Cassandra 完成初始化。使用自带的 CQL Shell 验证连接：</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> bin/cqlsh</span><span style="color:#032F62"> 10.201.X.X</span><span style="color:#005CC5"> 9042</span><span style="color:#6A737D">   # 连接到本机的 Cassandra CQL 服务</span></span>
+<span class="line"><span style="color:#6F42C1">Connected</span><span style="color:#032F62"> to</span><span style="color:#032F62"> SearchCluster</span><span style="color:#032F62"> at</span><span style="color:#032F62"> 10.201.X.X:9042.</span></span>
+<span class="line"><span style="color:#6F42C1">cqlsh</span><span style="color:#24292E">></span></span></code></pre>
+<p>连接成功后，即可创建 Keyspace 和表。例如，创建关键空间 search：</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="sql"><code><span class="line"><span style="color:#D73A49">CREATE</span><span style="color:#24292E"> KEYSPACE search </span></span>
+<span class="line"><span style="color:#D73A49">WITH</span><span style="color:#24292E"> replication </span><span style="color:#D73A49">=</span><span style="color:#24292E"> {</span><span style="color:#032F62">'class'</span><span style="color:#24292E">: </span><span style="color:#032F62">'SimpleStrategy'</span><span style="color:#24292E">, </span><span style="color:#032F62">'replication_factor'</span><span style="color:#24292E">: </span><span style="color:#032F62">'1'</span><span style="color:#24292E">} </span></span>
+<span class="line"><span style="color:#D73A49">AND</span><span style="color:#24292E"> durable_writes </span><span style="color:#D73A49">=</span><span style="color:#24292E"> true;</span></span></code></pre>
+<p><strong>注意：</strong> 以上使用了简单策略和副本因子1，适用于测试环境。生产集群应根据机房分布采用 NetworkTopologyStrategy 并设定合适的副本数。</p>
+<p>设计 Cassandra 表： 针对搜索系统的需求，我们设计 Cassandra 数据模型来存储商品及相关属性信息。原则上 Cassandra 适合存储宽表结构的数据，每个表以查询需求为导向设计主键。我们在 search keyspace 下建立多张表来分别存储不同类型的信息。例如：</p>
+<ul>
+<li>产品主表 (goods)：存储商品的主要字段，以商品ID (id)为主键，包含商品名称、描述、主分类等。</li>
+<li>属性表 (attr 等)：按属性类型拆分成多张表，主键也是商品ID，每张表存储商品的特定属性集合（如规格参数、营销标签等），包含版本号字段用于记录更新版本。</li>
+<li>其他维度表 (category 等)：根据业务需要建立，例如按类目、品牌、促销等维度组织的数据表，用于支持特定查询或统计。</li>
+</ul>
+<p>每个商品在 Cassandra 中会有一系列关联记录。例如商品基本信息在主表一行，属性信息在属性表中一行，等等。这种设计便于通过商品ID快速获取完整信息。由于搜索查询主要由 Solr 执行，Cassandra 的作用是持久化存储和提供数据源，查询时通常并不会直接访问 Cassandra，而是由索引服务预先将数据导入 Solr。</p>
+<h2 id="安装与配置-zookeeper"><a aria-hidden="true" tabindex="-1" href="#安装与配置-zookeeper"><span class="icon icon-link"></span></a>安装与配置 Zookeeper</h2>
+<p>Zookeeper 在本方案中充当两个角色：Kafka 的协调服务和 SolrCloud 的配置管理。我们搭建一个由 3 台节点组成的 Zookeeper 集群，以保证高可用。</p>
+<h3 id="安装-zookeeper"><a aria-hidden="true" tabindex="-1" href="#安装-zookeeper"><span class="icon icon-link"></span></a>安装 Zookeeper</h3>
+<p>下载 Zookeeper（二进制发行版），例如使用 3.7.0 版本：</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> wget</span><span style="color:#032F62"> https://downloads.apache.org/zookeeper/zookeeper-3.7.0/apache-zookeeper-3.7.0-bin.tar.gz</span></span>
+<span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> tar</span><span style="color:#005CC5"> -zxvf</span><span style="color:#032F62"> apache-zookeeper-3.7.0-bin.tar.gz</span></span>
+<span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> mv</span><span style="color:#032F62"> apache-zookeeper-3.7.0-bin</span><span style="color:#032F62"> /opt/app/zookeeper</span></span></code></pre>
+<p>在每台 Zookeeper 服务器上都执行上述下载解压。假定三台 ZK 服务器的 IP 分别为 10.201.X.X、10.201.X.X、10.201.X.X。</p>
+<h3 id="配置-zookeeper"><a aria-hidden="true" tabindex="-1" href="#配置-zookeeper"><span class="icon icon-link"></span></a>配置 Zookeeper</h3>
+<p>在每台节点的 conf 目录下复制一份模板：</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> cp</span><span style="color:#032F62"> conf/zoo_sample.cfg</span><span style="color:#032F62"> conf/zoo.cfg</span></span></code></pre>
+<p>编辑 zoo.cfg，主要关注以下配置：</p>
+<ul>
+<li>dataDir=/path/to/zookeeper/data：指定数据存储目录，比如 /opt/app/zookeeper/data，确保该目录存在并有读写权限。</li>
+<li>clientPort=2181：客户端连接端口，默认2181，一般保持不变。</li>
+<li>集群相关配置，在文件末尾添加:</li>
+</ul>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="plaintext"><code><span class="line"><span>server.1=10.201.X.X:2888:3888</span></span>
+<span class="line"><span>server.2=10.201.X.X:2888:3888</span></span>
+<span class="line"><span>server.3=10.201.X.X:2888:3888</span></span></code></pre>
+<p>这里 server.N 的 N 对应每台服务器的唯一编号。2888 是集群通讯端口，3888 为选举端口。</p>
+<ul>
+<li>在每台节点上创建一个名为 myid 的文件放入 dataDir，文件内容为该节点的编号，例如节点1写入1，节点2写入2，节点3写入3。</li>
+</ul>
+<h3 id="启动-zookeeper-集群"><a aria-hidden="true" tabindex="-1" href="#启动-zookeeper-集群"><span class="icon icon-link"></span></a>启动 Zookeeper 集群</h3>
+<p>在每台服务器上执行:</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> ./bin/zkServer.sh</span><span style="color:#032F62"> start</span></span></code></pre>
+<p>启动后，可通过 zkServer.sh status 检查状态，应看到其中一台为 leader，其他为 follower。如果需要验证 ZK 集群可用性，使用 zkCli 连接任意节点:</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> ./bin/zkCli.sh</span><span style="color:#005CC5"> -server</span><span style="color:#032F62"> 10.201.X.X:2181</span></span></code></pre>
+<p>可以尝试创建节点测试，如：</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#24292E">[zk: 10.201.X.X:2181(CONNECTED) 0] create /solr_demo </span><span style="color:#032F62">"test"</span></span></code></pre>
+<p>成功创建则说明 ZK 正常工作。我们稍后会在 ZK 上使用路径 /solr_demo 来存储 SolrCloud 的配置数据（即设置一个chroot路径）。</p>
+<h2 id="安装与配置-kafka"><a aria-hidden="true" tabindex="-1" href="#安装与配置-kafka"><span class="icon icon-link"></span></a>安装与配置 Kafka</h2>
+<h3 id="安装-kafka"><a aria-hidden="true" tabindex="-1" href="#安装-kafka"><span class="icon icon-link"></span></a>安装 Kafka</h3>
+<p>Kafka 可以在 Kafka 官网或 Apache 存档下载。这里以 Kafka 2.x 为例：</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> wget</span><span style="color:#032F62"> https://downloads.apache.org/kafka/2.7.0/kafka_2.12-2.7.0.tgz</span></span>
+<span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> tar</span><span style="color:#005CC5"> -zxvf</span><span style="color:#032F62"> kafka_2.12-2.7.0.tgz</span></span>
+<span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> mv</span><span style="color:#032F62"> kafka_2.12-2.7.0</span><span style="color:#032F62"> /opt/app/kafka</span></span></code></pre>
+<p>在每台 Kafka 服务器上解压安装包。Kafka 也依赖 Java 环境，确保已经安装 JDK 1.8+。</p>
+<h3 id="配置-kafka-broker"><a aria-hidden="true" tabindex="-1" href="#配置-kafka-broker"><span class="icon icon-link"></span></a>配置 Kafka Broker</h3>
+<p>编辑 Kafka 的配置文件 config/server.properties：</p>
+<ul>
+<li>broker.id：集群中每个节点需要唯一的 broker.id（整数）。如第一台设为0，第二台1，第三台2等。</li>
+<li>listeners 和 advertised.listeners：配置监听地址和对外通告地址。例如单机可用默认 PLAINTEXT://:9092 监听所有网卡。如果有多网卡或 Docker 环境需设置 advertised.listeners 为实际可访问地址，比如 PLAINTEXT://10.201.X.X:9092。</li>
+<li>zookeeper.connect：设置连接的 Zookeeper 集群地址列表。例如：</li>
+</ul>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="properties"><code><span class="line"><span style="color:#D73A49">zookeeper.connect</span><span style="color:#24292E">=10.201.X.X:2181,10.201.X.X:2181,10.201.X.X:2181</span></span></code></pre>
+<p>如果 SolrCloud 使用了 ZK 的 /solr_demo 子路径，Kafka 可以不使用该子路径，直接连根目录（Kafka 会在 ZK 上创建 /brokers 等路径）。</p>
+<ul>
+<li>log.dirs：Kafka 存储消息的日志目录，指定一个实际存在的磁盘路径，如 /opt/app/kafka/logs.</li>
+</ul>
+<p>根据需要也可调整 Kafka 内存及其他参数，但默认配置适合初始测试。</p>
+<h3 id="启动-kafka"><a aria-hidden="true" tabindex="-1" href="#启动-kafka"><span class="icon icon-link"></span></a>启动 Kafka</h3>
+<p>依次在每台 Kafka 节点上启动 broker：</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> ./bin/kafka-server-start.sh</span><span style="color:#005CC5"> -daemon</span><span style="color:#032F62"> config/server.properties</span></span></code></pre>
+<p>使用 -daemon 参数可以后台运行。启动后，Kafka 会连接 Zookeeper 注册自己。可以通过 Zookeeper 客户端查看 /brokers/ids 节点下是否有对应的 broker ID 出现。</p>
+<h3 id="创建主题-topic"><a aria-hidden="true" tabindex="-1" href="#创建主题-topic"><span class="icon icon-link"></span></a>创建主题 (Topic)</h3>
+<p>根据业务需要创建 Kafka 主题，用于传递产品数据更新。例如创建一个名为 product_update 的主题，副本因子为2，分区数为3：</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> ./bin/kafka-topics.sh</span><span style="color:#005CC5"> --create</span><span style="color:#005CC5"> --topic</span><span style="color:#032F62"> product_update</span><span style="color:#005CC5"> --partitions</span><span style="color:#005CC5"> 3</span><span style="color:#005CC5"> --replication-factor</span><span style="color:#005CC5"> 2</span><span style="color:#005CC5"> --bootstrap-server</span><span style="color:#032F62"> 10.201.X.X:9092</span></span></code></pre>
+<p>（—bootstrap-server 指定任意一个Kafka节点的地址）。确保主题创建成功，可以列出当前主题验证：</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> ./bin/kafka-topics.sh</span><span style="color:#005CC5"> --list</span><span style="color:#005CC5"> --bootstrap-server</span><span style="color:#032F62"> 10.201.X.X:9092</span></span></code></pre>
+<p>Kafka 集群至此准备就绪。</p>
+<h2 id="安装与配置-solrcloud"><a aria-hidden="true" tabindex="-1" href="#安装与配置-solrcloud"><span class="icon icon-link"></span></a>安装与配置 SolrCloud</h2>
+<p>Solr 是构建搜索索引的核心组件。我们使用 SolrCloud 模式 部署，以支持分片和高可用。这里以 Solr 7.7.3 为例。</p>
+<h3 id="安装-solr"><a aria-hidden="true" tabindex="-1" href="#安装-solr"><span class="icon icon-link"></span></a>安装 Solr</h3>
+<p>从 Solr 官方下载对应版本压缩包（zip 或 tgz），然后在每台 Solr 节点上解压。例如：</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="bash"><code><span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> wget</span><span style="color:#032F62"> https://archive.apache.org/dist/lucene/solr/7.7.3/solr-7.7.3.tgz</span></span>
+<span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> tar</span><span style="color:#005CC5"> -zxvf</span><span style="color:#032F62"> solr-7.7.3.tgz</span></span>
+<span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> mv</span><span style="color:#032F62"> solr-7.7.3</span><span style="color:#032F62"> /opt/app/solr</span></span></code></pre>
+<h3 id="准备-solrcloud-配置"><a aria-hidden="true" tabindex="-1" href="#准备-solrcloud-配置"><span class="icon icon-link"></span></a>准备 SolrCloud 配置</h3>
+<p>在首次启动 SolrCloud 之前，需要将 Solr 核心配置 上传到 Zookeeper，或者在启动时指定让 Solr自动上传。本项目的 Solr 模块包含一个名为 “product” 的 collection（索引集合）。开发人员已经准备好 Solr 的 schema 配置和 DIH(Data Import Handler)配置。在我们的部署中，采取如下步骤：</p>
+<ul>
+<li>配置 ZK_HOST： 编辑 solr-7.7.3/bin/solr.in.sh 文件，找到 ZK_HOST 设置，将其指向我们的 Zookeeper 集群地址和Solr配置的路径。例如：</li>
+</ul>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#24292E">ZK_HOST</span><span style="color:#D73A49">=</span><span style="color:#032F62">"10.201.X.X:2181,10.201.X.X:2181,10.201.X.X:2181/solr_demo"</span></span></code></pre>
+<p>这里添加了 /solr_demo，意味着 SolrCloud 将在 ZK 上的该路径下存储配置数据。确保该路径已存在（之前通过 zkCli 创建过 /solr_demo 节点）。</p>
+<ul>
+<li>
+<p>集群其他配置： 如果需要，可以在 solr.in.sh 中调整 JVM 内存大小（SOLR_HEAP）以及 GC 策略等。默认情况下 Solr 7 会给出合理的 JVM 参数，我们根据节点内存大小调整，例如设置 SOLR_HEAP=“1g”。</p>
+</li>
+<li>
+<p>DataImportHandler (DIH) 配置： 如果采用 DIH 从 Cassandra 导入数据，需要在 Solr 中加入 DIH 的插件。Solr 7.7.3 已经提供 solr-dataimporthandler jar 包，但默认未包括在 solr-webapp 中。将以下jar复制到 Solr 的 solr-webapp/webapp/WEB-INF/lib/ 目录：</p>
+<ul>
+<li>dist/solr-dataimporthandler-7.7.3.jar</li>
+<li>dist/solr-dataimporthandler-extras-7.7.3.jar</li>
+<li>（如果有自定义的 DIH Handler 插件，例如本项目提供的 solr-support-7.7.0-1.0.jar，也复制到该目录）</li>
+</ul>
+</li>
+</ul>
+<p>这些操作可以在一台机器上完成 Solr 配置准备，然后打包整个 solr 目录供所有节点使用。例如，将配置好的 /opt/app/solr 压缩成 solr.zip，然后传到每台 Solr 服务器解压，以确保配置一致。</p>
+<h3 id="上传-solr-配置并启动-solrcloud"><a aria-hidden="true" tabindex="-1" href="#上传-solr-配置并启动-solrcloud"><span class="icon icon-link"></span></a>上传 Solr 配置并启动 SolrCloud</h3>
+<p>假设开发提供了 Solr core 的配置文件集合（包含 schema.xml, solrconfig.xml 及 DIH 配置 data-config.xml 等）保存在 <code>/home/netty/solr_core_config/product</code> 目录。将此配置上传到 Zookeeper：</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> cd</span><span style="color:#032F62"> /opt/app/solr</span></span>
+<span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> ./bin/solr</span><span style="color:#032F62"> zk</span><span style="color:#032F62"> upconfig</span><span style="color:#005CC5"> -z</span><span style="color:#032F62"> 10.201.X.X:2181,10.201.X.X:2181,10.201.X.X:2181/solr_demo</span><span style="color:#005CC5"> \</span></span>
+<span class="line"><span style="color:#005CC5">    -n</span><span style="color:#032F62"> product</span><span style="color:#005CC5"> -d</span><span style="color:#032F62"> /home/netty/solr_core_config/product</span></span></code></pre>
+<p>以上命令将本地的 product 配置目录上传到 ZK，命名为 config set “product”。（如果需要查看已经存在的 config，可用 downconfig 下载，如 ./bin/solr zk downconfig -n product -d ./downloaded_conf -z …）。</p>
+<h3 id="启动-solr-节点"><a aria-hidden="true" tabindex="-1" href="#启动-solr-节点"><span class="icon icon-link"></span></a>启动 Solr 节点</h3>
+<p>在每台 Solr 服务器上，以 SolrCloud 模式启动 Solr，并让其加入集群：</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> ./bin/solr</span><span style="color:#032F62"> start</span><span style="color:#005CC5"> -c</span><span style="color:#005CC5"> -m</span><span style="color:#032F62"> 1g</span><span style="color:#005CC5"> -z</span><span style="color:#032F62"> 10.201.X.X:2181,10.201.X.X:2181,10.201.X.X:2181/solr_demo</span><span style="color:#005CC5"> -p</span><span style="color:#005CC5"> 8983</span><span style="color:#005CC5"> -d</span><span style="color:#032F62"> /opt/app/solr/solr_data</span></span></code></pre>
+<p>参数说明：-c 表示以Cloud模式启动，-m 1g设置最大堆1GB，-z指定ZK地址列表和路径，-p 8983指定端口（默认8983），-d /opt/app/solr/solr_data 指定Solr实例的数据目录（这里我们将Solr自带的example/server内容复制到了solr_data以独立配置）。</p>
+<p>启动所有 Solr 节点后，它们会自动在Zookeeper上注册并形成一个SolrCloud集群。接下来通过 Solr API 创建集合（collection）。可以使用 bin/solr 脚本创建，也可以通过 Solr Admin UI 执行。使用脚本为例：</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="sh"><code><span class="line"><span style="color:#6F42C1">$</span><span style="color:#032F62"> ./bin/solr</span><span style="color:#032F62"> create</span><span style="color:#005CC5"> -c</span><span style="color:#032F62"> product</span><span style="color:#005CC5"> -n</span><span style="color:#032F62"> product</span><span style="color:#005CC5"> -shards</span><span style="color:#005CC5"> 2</span><span style="color:#005CC5"> -replicationFactor</span><span style="color:#005CC5"> 2</span><span style="color:#005CC5"> -p</span><span style="color:#005CC5"> 8983</span></span></code></pre>
+<p>这将创建名称为 product 的集合，使用我们上传的名为 product 的配置集，设置2个分片，每片2个副本。如果已在 solr.in.sh 设置 ZK_HOST，脚本会在集群上创建collection，并在各节点间分配 cores。成功后，SolrCloud 开始对外提供搜索服务。可以在浏览器访问任何一台 Solr 的管理界面（例如 <a href="http://10.201.X.X:8983/solr%EF%BC%89%EF%BC%8C%E6%9F%A5%E7%9C%8B%E9%9B%86%E7%BE%A4%E7%8A%B6%E6%80%81%E3%80%81collection">http://10.201.X.X:8983/solr），查看集群状态、collection</a> 列表等。</p>
+<p><strong>注意：</strong> SolrCloud 使用 Zookeeper 存储配置和集群状态，务必保证 ZK 集群稳定。在配置和启动 Solr 时，如果 ZK 信息有误（如地址或路径错误），Solr 将无法正常启动。</p>
+<h2 id="python-微服务开发与部署"><a aria-hidden="true" tabindex="-1" href="#python-微服务开发与部署"><span class="icon icon-link"></span></a>Python 微服务开发与部署</h2>
+<p>有了上述数据存储和索引组件后，我们使用 Python 实现微服务来连接它们。原项目中基于 Java/Spring Boot 的模块承担了数据同步、搜索等功能。我们以 Python 重写这些模块，并提供示例说明如何启动和管理。</p>
+<p>微服务功能划分</p>
+<ol>
+<li>
+<p>数据同步服务（Kafka 消费者）：持续消费 Kafka product_update 主题消息。每当有商品数据更新消息时，使用 Cassandra 驱动将新数据写入 Cassandra 对应表；然后触发 Solr 索引更新。索引更新可以通过Solr提供的HTTP接口提交增量文档或调用DIH全量导入（取决于实现策略）。在 Python 中，可以使用 kafka-python 或 confluent-kafka 库消费消息，用 DataStax 提供的 cassandra-driver 连接 Cassandra，使用 requests 或 pysolr 调用 Solr 的 API。</p>
+</li>
+<li>
+<p>搜索 API 服务：对外提供搜索接口（REST API）。客户端的搜索请求由此服务接收，并转发查询给 SolrCloud，整理结果后返回。可以基于 Flask 或 FastAPI 框架实现。服务内部使用 SolrJ 客户端的替代方案（Python 可使用 pysolr 库）查询 Solr 集群，或直接构造 HTTP 请求查询，并将结果转换为JSON输出。这个服务相当于原 Java 模块中的搜索查询模块，它也可从 Cassandra 获取部分信息做补充。例如查询返回的商品ID列表，再从 Cassandra 查询最新库存等（如果这些信息未在索引中）。</p>
+</li>
+<li>
+<p>其他辅助服务：比如文件批量导入服务（相当于 product-upload）或定时任务触发服务（相当于 job-trigger），也都可以用 Python 实现。如果使用调度框架（如 xxl-job）需要兼容，可通过 Python 调用其 HTTP 接口或按照协议实现执行器。这里不展开细节。</p>
+</li>
+</ol>
+<p>微服务代码与启动脚本示例</p>
+<p>我们以 FastAPI 构建搜索 API 服务为例，并示范如何编写 Python 启动脚本来管理服务的启动和停止。假设搜索服务代码为 app.py，内容如下（简化示例）：</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="py"><code><span class="line"><span style="color:#6A737D"># app.py (FastAPI 简易示例)</span></span>
+<span class="line"><span style="color:#D73A49">from</span><span style="color:#24292E"> fastapi </span><span style="color:#D73A49">import</span><span style="color:#24292E"> FastAPI</span></span>
+<span class="line"><span style="color:#D73A49">import</span><span style="color:#24292E"> pysolr</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E">solr </span><span style="color:#D73A49">=</span><span style="color:#24292E"> pysolr.Solr(</span><span style="color:#032F62">'http://10.201.X.X:8983/solr/product'</span><span style="color:#24292E">, </span><span style="color:#E36209">timeout</span><span style="color:#D73A49">=</span><span style="color:#005CC5">10</span><span style="color:#24292E">)  </span><span style="color:#6A737D"># Solr 地址</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E">app </span><span style="color:#D73A49">=</span><span style="color:#24292E"> FastAPI()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#6F42C1">@app.get</span><span style="color:#24292E">(</span><span style="color:#032F62">"/search"</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#D73A49">def</span><span style="color:#6F42C1"> search</span><span style="color:#24292E">(q: </span><span style="color:#005CC5">str</span><span style="color:#24292E">):</span></span>
+<span class="line"><span style="color:#6A737D">    # 在 Solr 中查询</span></span>
+<span class="line"><span style="color:#24292E">    results </span><span style="color:#D73A49">=</span><span style="color:#24292E"> solr.search(q)</span></span>
+<span class="line"><span style="color:#6A737D">    # 提取需要的字段返回</span></span>
+<span class="line"><span style="color:#24292E">    docs </span><span style="color:#D73A49">=</span><span style="color:#24292E"> [doc </span><span style="color:#D73A49">for</span><span style="color:#24292E"> doc </span><span style="color:#D73A49">in</span><span style="color:#24292E"> results]</span></span>
+<span class="line"><span style="color:#D73A49">    return</span><span style="color:#24292E"> {</span><span style="color:#032F62">"query"</span><span style="color:#24292E">: q, </span><span style="color:#032F62">"results"</span><span style="color:#24292E">: docs}</span></span></code></pre>
+<p>在实际项目中，可能会有更复杂的查询构造和结果处理，这里从简。接下来编写一个管理脚本 service_control.py，用于启动或停止该 FastAPI 服务。我们使用 subprocess 调用 Uvicorn 来运行 FastAPI 应用，以模拟传统 Shell 脚本中 java -jar … &#x26; 的做法：</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="python"><code><span class="line"><span style="color:#6A737D">#!/usr/bin/env python3</span></span>
+<span class="line"><span style="color:#6A737D"># service_control.py</span></span>
+<span class="line"><span style="color:#D73A49">import</span><span style="color:#24292E"> subprocess, sys, os, signal</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#005CC5">APP_COMMAND</span><span style="color:#D73A49"> =</span><span style="color:#24292E"> [</span><span style="color:#032F62">"uvicorn"</span><span style="color:#24292E">, </span><span style="color:#032F62">"app:app"</span><span style="color:#24292E">, </span><span style="color:#032F62">"--host"</span><span style="color:#24292E">, </span><span style="color:#032F62">"0.0.0.0"</span><span style="color:#24292E">, </span><span style="color:#032F62">"--port"</span><span style="color:#24292E">, </span><span style="color:#032F62">"7220"</span><span style="color:#24292E">]</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49">def</span><span style="color:#6F42C1"> start</span><span style="color:#24292E">():</span></span>
+<span class="line"><span style="color:#032F62">    """启动服务"""</span></span>
+<span class="line"><span style="color:#6A737D">    # 将输出重定向到日志文件</span></span>
+<span class="line"><span style="color:#24292E">    logfile </span><span style="color:#D73A49">=</span><span style="color:#005CC5"> open</span><span style="color:#24292E">(</span><span style="color:#032F62">"service.log"</span><span style="color:#24292E">, </span><span style="color:#032F62">"a"</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#6A737D">    # 使用 nohup &#x26; 类似效果启动子进程</span></span>
+<span class="line"><span style="color:#24292E">    process </span><span style="color:#D73A49">=</span><span style="color:#24292E"> subprocess.Popen(</span><span style="color:#005CC5">APP_COMMAND</span><span style="color:#24292E">, </span><span style="color:#E36209">stdout</span><span style="color:#D73A49">=</span><span style="color:#24292E">logfile, </span><span style="color:#E36209">stderr</span><span style="color:#D73A49">=</span><span style="color:#24292E">logfile, </span><span style="color:#E36209">preexec_fn</span><span style="color:#D73A49">=</span><span style="color:#24292E">os.setpgrp)</span></span>
+<span class="line"><span style="color:#005CC5">    print</span><span style="color:#24292E">(</span><span style="color:#D73A49">f</span><span style="color:#032F62">"Service started with PID </span><span style="color:#005CC5">{</span><span style="color:#24292E">process.pid</span><span style="color:#005CC5">}</span><span style="color:#032F62">"</span><span style="color:#24292E">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49">def</span><span style="color:#6F42C1"> stop</span><span style="color:#24292E">():</span></span>
+<span class="line"><span style="color:#032F62">    """停止服务"""</span></span>
+<span class="line"><span style="color:#6A737D">    # 查找运行中的进程（通过端口或命令名）</span></span>
+<span class="line"><span style="color:#D73A49">    try</span><span style="color:#24292E">:</span></span>
+<span class="line"><span style="color:#6A737D">        # 利用 pgrep 查找 uvicorn 进程</span></span>
+<span class="line"><span style="color:#24292E">        result </span><span style="color:#D73A49">=</span><span style="color:#24292E"> subprocess.run([</span><span style="color:#032F62">"pgrep"</span><span style="color:#24292E">, </span><span style="color:#032F62">"-f"</span><span style="color:#24292E">, </span><span style="color:#032F62">"uvicorn.*7220"</span><span style="color:#24292E">], </span><span style="color:#E36209">capture_output</span><span style="color:#D73A49">=</span><span style="color:#005CC5">True</span><span style="color:#24292E">, </span><span style="color:#E36209">text</span><span style="color:#D73A49">=</span><span style="color:#005CC5">True</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">        pids </span><span style="color:#D73A49">=</span><span style="color:#24292E"> result.stdout.strip().split()</span></span>
+<span class="line"><span style="color:#D73A49">        if</span><span style="color:#D73A49"> not</span><span style="color:#24292E"> pids:</span></span>
+<span class="line"><span style="color:#005CC5">            print</span><span style="color:#24292E">(</span><span style="color:#032F62">"Service is not running."</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#D73A49">            return</span></span>
+<span class="line"><span style="color:#D73A49">        for</span><span style="color:#24292E"> pid </span><span style="color:#D73A49">in</span><span style="color:#24292E"> pids:</span></span>
+<span class="line"><span style="color:#24292E">            os.kill(</span><span style="color:#005CC5">int</span><span style="color:#24292E">(pid), signal.</span><span style="color:#005CC5">SIGTERM</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#005CC5">        print</span><span style="color:#24292E">(</span><span style="color:#032F62">"Service stopped."</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#D73A49">    except</span><span style="color:#005CC5"> Exception</span><span style="color:#D73A49"> as</span><span style="color:#24292E"> e:</span></span>
+<span class="line"><span style="color:#005CC5">        print</span><span style="color:#24292E">(</span><span style="color:#D73A49">f</span><span style="color:#032F62">"Error stopping service: </span><span style="color:#005CC5">{</span><span style="color:#24292E">e</span><span style="color:#005CC5">}</span><span style="color:#032F62">"</span><span style="color:#24292E">)</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49">def</span><span style="color:#6F42C1"> restart</span><span style="color:#24292E">():</span></span>
+<span class="line"><span style="color:#032F62">    """重启服务"""</span></span>
+<span class="line"><span style="color:#24292E">    stop()</span></span>
+<span class="line"><span style="color:#24292E">    start()</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49">if</span><span style="color:#005CC5"> __name__</span><span style="color:#D73A49"> ==</span><span style="color:#032F62"> "__main__"</span><span style="color:#24292E">:</span></span>
+<span class="line"><span style="color:#D73A49">    if</span><span style="color:#005CC5"> len</span><span style="color:#24292E">(sys.argv) </span><span style="color:#D73A49">&#x3C;</span><span style="color:#005CC5"> 2</span><span style="color:#24292E">:</span></span>
+<span class="line"><span style="color:#005CC5">        print</span><span style="color:#24292E">(</span><span style="color:#032F62">"Usage: service_control.py [start|stop|restart]"</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">        sys.exit(</span><span style="color:#005CC5">1</span><span style="color:#24292E">)</span></span>
+<span class="line"><span style="color:#24292E">    cmd </span><span style="color:#D73A49">=</span><span style="color:#24292E"> sys.argv[</span><span style="color:#005CC5">1</span><span style="color:#24292E">]</span></span>
+<span class="line"><span style="color:#D73A49">    if</span><span style="color:#24292E"> cmd </span><span style="color:#D73A49">==</span><span style="color:#032F62"> "start"</span><span style="color:#24292E">:</span></span>
+<span class="line"><span style="color:#24292E">        start()</span></span>
+<span class="line"><span style="color:#D73A49">    elif</span><span style="color:#24292E"> cmd </span><span style="color:#D73A49">==</span><span style="color:#032F62"> "stop"</span><span style="color:#24292E">:</span></span>
+<span class="line"><span style="color:#24292E">        stop()</span></span>
+<span class="line"><span style="color:#D73A49">    elif</span><span style="color:#24292E"> cmd </span><span style="color:#D73A49">==</span><span style="color:#032F62"> "restart"</span><span style="color:#24292E">:</span></span>
+<span class="line"><span style="color:#24292E">        restart()</span></span>
+<span class="line"><span style="color:#D73A49">    else</span><span style="color:#24292E">:</span></span>
+<span class="line"><span style="color:#005CC5">        print</span><span style="color:#24292E">(</span><span style="color:#032F62">"Unknown command:"</span><span style="color:#24292E">, cmd)</span></span></code></pre>
+<p>上述脚本模拟了 Java 服务的启动脚本逻辑：</p>
+<ul>
+<li>使用 uvicorn 来运行 FastAPI 应用（监听在 7220 端口，模拟原 Java 服务端口）。</li>
+<li>start() 使用 subprocess.Popen 启动子进程，并将其置于独立进程组以脱离父进程（相当于 nohup）。日志输出定向到 service.log。</li>
+<li>stop() 使用系统命令 pgrep 查找匹配 uvicorn 和端口号的进程，然后发送 SIGTERM 信号关闭（也可直接用 process.pid 文件记录的方法，或使用更便捷的 psutil 库查找进程）。</li>
+<li>restart() 则顺序调用 stop 再 start。</li>
+</ul>
+<p>将 service_control.py 放在服务器上并赋予可执行权限，就可以通过 ./service_control.py start 来启动 Python 微服务，./service_control.py stop 来停止服务了。对于数据同步服务（Kafka 消费者），可以采用类似方式启动。比如编写一个 consumer.py 脚本启动 Kafka 消费循环，并同样用一个控制脚本管理。<strong>注意：</strong> 生产环境下建议使用更健壮的方式托管微服务（如 Supervisor、systemd 或容器编排等），此处的脚本仅作为示范。</p>
+<h2 id="集群部署注意事项"><a aria-hidden="true" tabindex="-1" href="#集群部署注意事项"><span class="icon icon-link"></span></a>集群部署注意事项</h2>
+<p>在将上述所有组件部署完成后，还需关注一些集群搭建的细节和最佳实践：</p>
+<ul>
+<li>配置管理与同步： 集群环境配置繁多，建议使用配置管理工具（如 Ansible、Chef）或至少使用脚本确保每台机器配置一致。例如 Solr 的 solr.in.sh、Cassandra 的 cassandra.yaml 等在不同节点上需保持一致的参数应统一修改。对于自定义配置文件（如 Solr schema），确保版本正确上传到 Zookeeper 并在所有 Solr 节点生效。</li>
+<li>资源分配： Cassandra、Solr、Kafka 都是对内存和IO较敏感的应用。根据机器规格调整它们的 JVM 内存参数：
+<ul>
+<li>Cassandra 默认使用一半物理内存作为堆，生产可按数据规模调整但避免过大（以免长 GC 停顿）。</li>
+<li>Solr 根据索引数据大小设置堆内存，保证能容纳常用查询的工作集。如果使用排序/聚合功能，也要考虑增加堆内存。Solr 索引放置在本地磁盘时，注意磁盘空间充足且IO性能良好。</li>
+<li>Kafka 对文件系统顺序写较友好，但要确保日志目录有足够空间，同时为 JVM 堆和操作系统页面缓存预留内存。通常 Kafka 本身堆不宜过大（几GB即可），更多依赖操作系统缓存加速磁盘IO。</li>
+</ul>
+</li>
+<li>网络与端口： 在部署多节点集群时，确保防火墙放行必要端口：
+<ul>
+<li>Cassandra 默认 9042 (CQL), 7000/7001 (集群通信), 7199 (JMX)。</li>
+<li>Zookeeper 2181 客户端端口，2888/3888 集群内部端口需内网互通。</li>
+<li>Kafka 9092 (或自定义 listeners 端口)需要消费者/生产者访问；若跨机房或容器环境，配置advertised.listeners为可达地址。</li>
+<li>Solr 8983 (默认)，以及 Solr 内部节点间通信端口。如果 SolrCloud 在防火墙隔离环境，需要开放 Solr 对外查询端口和 Zookeeper 端口。</li>
+</ul>
+</li>
+<li>数据导入与一致性： 首次部署时，需要将已有的商品数据导入 Cassandra 和 Solr。可以通过编写批处理脚本读取原始数据源（如CSV/数据库）写入 Cassandra，然后利用 Solr DIH 全量导入，或直接使用 Solr API 批量索引。从此之后，增量数据走 Kafka -> 消费者服务流程自动更新。要确保 Kafka 消费与 Cassandra 写入、Solr 更新三者的事务一致性：可考虑先写 Cassandra，再写 Solr，如果 Solr 更新失败可以有补偿机制（例如定期全量同步修复）。由于 Cassandra 本身是最终一致性模型，写入成功即算完成，不提供事务回滚，所以应用层要做好失败重试。</li>
+<li>监控和日志： 部署完成后，推荐为各组件建立监控：
+<ul>
+<li>Cassandra 可监控节点延迟、读写吞吐、Compaction 状态等，及时扩容或调整参数。</li>
+<li>Solr 可监控查询QPS、索引大小、缓存命中率等，通过接口或 JMX 获取指标。</li>
+<li>Kafka 需监控消息堆积情况（Lag）、消费者组状态、磁盘使用等。</li>
+<li>Python 微服务应记录关键操作日志（如消费了多少消息、查询耗时多少），并配置守护进程确保异常退出时自动重启。可将微服务注册到 Supervisor 或 systemd 以增强稳定性。</li>
+</ul>
+</li>
+<li>故障演练： 在生产前应测试各部分的容错性。例如停止一个 Cassandra 节点看查询是否受影响（需在应用层考虑一致性级别），停止一个 Solr 节点检查查询是否自动切换到副本，以及Kafka任一 broker 挂掉后消息是否仍可正常发送和消费。一旦验证通过，再正式上线运行。</li>
+</ul>
+<h2 id="总结与经验教训"><a aria-hidden="true" tabindex="-1" href="#总结与经验教训"><span class="icon icon-link"></span></a>总结与经验教训</h2>
+<p>通过上述实践，我们成功搭建了一个基于 Cassandra、SolrCloud、Zookeeper、Kafka 和 Python 微服务的分布式搜索系统。相比传统单体搜索应用，这种架构具有良好的扩展性和解耦性：Cassandra 提供高写入性能和水平扩展能力，SolrCloud 提供强大的搜索索引功能，Kafka 则作为异步解耦的管道，Python 微服务让业务逻辑实现更加灵活高效。</p>
+<p>在实施过程中，我们得到以下经验教训：</p>
+<ul>
+<li>合理的架构设计：在引入多种组件时，要明确它们各自职责，设计好数据流转路径。比如本案例中采用 Kafka 进行数据同步解耦，如果数据变化频率不高，也可以考虑直接由应用触发 Solr 更新，但引入消息队列使系统更松耦合、可伸缩。</li>
+<li>充分的测试验证：集群环境的配置细节繁杂，部署完成后需要反复测试。如曾遇到 Solr 节点无法加入集群，后发现是 ZK 路径配置错误；Kafka 消费延迟过高，追查是因消费者线程处理过慢。通过逐一定位问题并调整（例如修改配置或优化代码逻辑），最终使各部分协调工作。</li>
+<li>Python 替代 Java 的思考：使用 Python 重构微服务模块，大幅减少了样板代码和编译部署时间，开发效率提升。但是也要注意 Python 在多线程、多进程方面的差异，充分利用异步IO或多进程来发挥硬件性能。如果对性能要求极高的场景，仍需慎重评估使用 Python 的成本（可以考虑关键部分用 Cython 或调用JNI等方式优化）。在我们的实践中，Python 完全能够胜任数据消费和查询API的工作，并且易于维护。</li>
+<li>配置与维护：集中管理配置是运维成功的关键。建议将配置文件纳入版本控制，并使用配置管理工具批量部署。对于敏感信息（如密码、密钥），使用加密或配置中心管理。整个系统上线后，要有定期的维护计划，包括 Cassandra 列压缩、Solr 索引优化、Kafka 日志清理等任务，以保证系统长时间稳定运行。</li>
+</ul>
+<p>总之，本次搭建与部署实践展示了一套较完整的搜索解决方案。从零开始组建这样一个系统需要跨越多个技术领域的知识，通过一步步安装配置和调优，我们掌握了各组件协同工作的要点。在未来的扩展中，可以考虑将此架构容器化部署于 Kubernetes，实现更加自动化的扩容和运维。希望这些经验对正在构建类似搜索平台的工程师有所帮助。</p> <html lang="en" data-astro-cid-uffxixac> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/search/20220214_%E5%9F%BA%E4%BA%8E-cassandrasolrcloudzookeeperkafka-%E5%92%8C-python-%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%9A%84%E6%90%9C%E7%B4%A2%E7%B3%BB%E7%BB%9F%E6%90%AD%E5%BB%BA%E5%AE%9E%E8%B7%B5/"><!-- Primary Meta Tags --><title>Ge Yuxu • AI &amp; Engineering</title><meta name="title" content="Ge Yuxu • AI &#38; Engineering"><meta name="description" content="Welcome to my blog!"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/search/20220214_%E5%9F%BA%E4%BA%8E-cassandrasolrcloudzookeeperkafka-%E5%92%8C-python-%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%9A%84%E6%90%9C%E7%B4%A2%E7%B3%BB%E7%BB%9F%E6%90%AD%E5%BB%BA%E5%AE%9E%E8%B7%B5/"><meta property="og:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="og:description" content="Welcome to my blog!"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/search/20220214_%E5%9F%BA%E4%BA%8E-cassandrasolrcloudzookeeperkafka-%E5%92%8C-python-%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%9A%84%E6%90%9C%E7%B4%A2%E7%B3%BB%E7%BB%9F%E6%90%AD%E5%BB%BA%E5%AE%9E%E8%B7%B5/"><meta property="twitter:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="twitter:description" content="Welcome to my blog!"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script><script src="/js/copy-code-button.js" defer></script><!-- Dify Chatbot Configuration --><script>
+ window.difyChatbotConfig = {
+  token: 'VgrjCAto93bjE0MW',
+  systemVariables: {
+    // user_id: 'YOU CAN DEFINE USER ID HERE',
+    // conversation_id: 'YOU CAN DEFINE CONVERSATION ID HERE, IT MUST BE A VALID UUID',
+  },
+  userVariables: {
+    // avatar_url: 'YOU CAN DEFINE USER AVATAR URL HERE',
+    // name: 'YOU CAN DEFINE USER NAME HERE',
+  },
+ }
+</script><!-- Dify Chatbot Script --><script src="https://udify.app/embed.min.js" id="VgrjCAto93bjE0MW" defer>
+</script><!-- Dify Chatbot Custom Styles --></head> <body data-astro-cid-uffxixac>  <div class="statement" data-astro-cid-uffxixac> <blockquote data-astro-cid-uffxixac> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>脱敏说明</strong>：本文所有出现的表名、字段名、接口地址、变量名、IP地址及示例数据等均非真实，仅用于阐述技术思路与实现步骤，示例代码亦非公司真实代码。示例方案亦非公司真实完整方案，仅为本人记忆总结，用于技术学习探讨。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;文中所示任何标识符并不对应实际生产环境中的名称或编号。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;示例&nbsp;SQL、脚本、代码及数据等均为演示用途，不含真实业务数据，也不具备直接运行或复现的完整上下文。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;读者若需在实际项目中参考本文方案，请结合自身业务场景及数据安全规范，使用符合内部命名和权限控制的配置。</p> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>Data Desensitization Notice</strong>: All table names, field names, API endpoints, variable names, IP addresses, and sample data appearing in this article are fictitious and intended solely to illustrate technical concepts and implementation steps. The sample code is not actual company code. The proposed solutions are not complete or actual company solutions but are summarized from the author's memory for technical learning and discussion.<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;Any identifiers shown in the text do not correspond to names or numbers in any actual production environment.<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;Sample SQL, scripts, code, and data are for demonstration purposes only, do not contain real business data, and lack the full context required for direct execution or reproduction.<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;Readers who wish to reference the solutions in this article for actual projects should adapt them to their own business scenarios and data security standards, using configurations that comply with internal naming and access control policies.</p> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>版权声明</strong>：本文版权归原作者所有，未经作者事先书面许可，任何单位或个人不得以任何方式复制、转载、摘编或用于商业用途。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;若需非商业性引用或转载本文内容，请务必注明出处并保持内容完整。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;对因商业使用、篡改或不当引用本文内容所产生的法律纠纷，作者保留追究法律责任的权利。</p> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>Copyright Notice</strong>: The copyright of this article belongs to the original author. Without prior written permission from the author, no entity or individual may copy, reproduce, excerpt, or use it for commercial purposes in any way.<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;For non-commercial citation or reproduction of this content, attribution must be given, and the integrity of the content must be maintained.<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;The author reserves the right to pursue legal action against any legal disputes arising from the commercial use, alteration, or improper citation of this article's content.</p> <p data-astro-cid-uffxixac><em data-astro-cid-uffxixac>Copyright&nbsp;©&nbsp;1989–Present&nbsp;Ge&nbsp;Yuxu.&nbsp;All&nbsp;Rights&nbsp;Reserved.</em></p> </blockquote> </div></body></html>  </article> </div> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2025 All rights reserved.
+</footer>  </body></html>

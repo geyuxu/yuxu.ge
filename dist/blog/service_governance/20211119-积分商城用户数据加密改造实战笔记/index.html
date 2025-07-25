@@ -1,0 +1,179 @@
+<!DOCTYPE html><html lang="zh"> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/service_governance/20211119-%E7%A7%AF%E5%88%86%E5%95%86%E5%9F%8E%E7%94%A8%E6%88%B7%E6%95%B0%E6%8D%AE%E5%8A%A0%E5%AF%86%E6%94%B9%E9%80%A0%E5%AE%9E%E6%88%98%E7%AC%94%E8%AE%B0/"><!-- Primary Meta Tags --><title>积分商城用户数据加密改造实战技术博客</title><meta name="title" content="积分商城用户数据加密改造实战技术博客"><meta name="description"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/service_governance/20211119-%E7%A7%AF%E5%88%86%E5%95%86%E5%9F%8E%E7%94%A8%E6%88%B7%E6%95%B0%E6%8D%AE%E5%8A%A0%E5%AF%86%E6%94%B9%E9%80%A0%E5%AE%9E%E6%88%98%E7%AC%94%E8%AE%B0/"><meta property="og:title" content="积分商城用户数据加密改造实战技术博客"><meta property="og:description"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/service_governance/20211119-%E7%A7%AF%E5%88%86%E5%95%86%E5%9F%8E%E7%94%A8%E6%88%B7%E6%95%B0%E6%8D%AE%E5%8A%A0%E5%AF%86%E6%94%B9%E9%80%A0%E5%AE%9E%E6%88%98%E7%AC%94%E8%AE%B0/"><meta property="twitter:title" content="积分商城用户数据加密改造实战技术博客"><meta property="twitter:description"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script><script src="/js/copy-code-button.js" defer></script><!-- Dify Chatbot Configuration --><script>
+ window.difyChatbotConfig = {
+  token: 'VgrjCAto93bjE0MW',
+  systemVariables: {
+    // user_id: 'YOU CAN DEFINE USER ID HERE',
+    // conversation_id: 'YOU CAN DEFINE CONVERSATION ID HERE, IT MUST BE A VALID UUID',
+  },
+  userVariables: {
+    // avatar_url: 'YOU CAN DEFINE USER AVATAR URL HERE',
+    // name: 'YOU CAN DEFINE USER NAME HERE',
+  },
+ }
+</script><!-- Dify Chatbot Script --><script src="https://udify.app/embed.min.js" id="VgrjCAto93bjE0MW" defer>
+</script><!-- Dify Chatbot Custom Styles --><script is:global>
+	window.addEventListener('DOMContentLoaded', () => {
+		$('.toc ol').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'margin': 0,
+		'padding-left': 0,       // 可按需调整
+		});
+		$('.toc ol > li').css({
+		'list-style': 'none',   // 隐藏 1. 2. 3.
+		'padding-left': 10
+		});
+        $('.sidebar').append($('.toc'));
+      });
+	</script><link rel="stylesheet" href="/_astro/assets-slug_.BFPovWfH.css">
+<style>a[data-astro-cid-eimmu3lg]{display:inline-block;text-decoration:none}a[data-astro-cid-eimmu3lg].active{font-weight:bolder;text-decoration:underline}header[data-astro-cid-3ef6ksr2]{margin:0;padding:0 1em;background:#fff;box-shadow:0 2px 8px rgba(var(--black),5%)}h2[data-astro-cid-3ef6ksr2]{margin:0;font-size:1em}h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2],h2[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none}nav[data-astro-cid-3ef6ksr2]{display:flex;align-items:center;justify-content:space-between}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{padding:1em .5em;color:var(--black);border-bottom:4px solid transparent;text-decoration:none}nav[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2].active{text-decoration:none;border-bottom-color:var(--accent)}.social-links[data-astro-cid-3ef6ksr2],.social-links[data-astro-cid-3ef6ksr2] a[data-astro-cid-3ef6ksr2]{display:flex}@media (max-width: 720px){.social-links[data-astro-cid-3ef6ksr2]{display:none}}footer[data-astro-cid-sz7xmlte]{padding:2em 1em 6em;background:linear-gradient(var(--gray-gradient)) no-repeat;color:rgb(var(--gray));text-align:center}.social-links[data-astro-cid-sz7xmlte]{display:flex;justify-content:center;gap:1em;margin-top:1em}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]{text-decoration:none;color:rgb(var(--gray))}.social-links[data-astro-cid-sz7xmlte] a[data-astro-cid-sz7xmlte]:hover{color:rgb(var(--gray-dark))}
+.statement[data-astro-cid-uffxixac]{font-size:10px;color:gray}@media (max-width: 640px){.statement[data-astro-cid-uffxixac]{font-size:6px;color:gray}}
+</style></head> <body> <header data-astro-cid-3ef6ksr2> <nav data-astro-cid-3ef6ksr2> <!--<h2><a href="/">{SITE_TITLE}</a></h2>--> <h2 data-astro-cid-3ef6ksr2><a style="padding-left:0;color:blue;" href="/" data-astro-cid-3ef6ksr2>Ge Yuxu<br data-astro-cid-3ef6ksr2>AI & Engineering</a></h2> <div class="internal-links" data-astro-cid-3ef6ksr2> <a href="/" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Home </a>  <a href="/blog/1" class="active" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Blog </a>  <a href="/series" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Series </a>  <a href="/projects" data-astro-cid-3ef6ksr2="true" data-astro-cid-eimmu3lg> Projects </a>  </div> <div class="social-links" data-astro-cid-3ef6ksr2> <a href="https://github.com/geyuxu" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's GitHub repo</span> <svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32" data-astro-cid-3ef6ksr2><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z" data-astro-cid-3ef6ksr2></path></svg> </a> <a href="https://www.linkedin.com/in/geyuxu/" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Go to Ge Yuxu's LinkedIn profile</span> <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" data-astro-cid-3ef6ksr2> <path fill="currentColor" d="M20.447 20.452H17.2v-5.569c0-1.328-.025-3.039-1.852-3.039-1.853 0-2.136 1.447-2.136 2.942v5.666h-3.248V9h3.122v1.561h.045c.435-.823 1.498-1.688 3.083-1.688 3.295 0 3.903 2.17 3.903 4.989v6.59zM5.337 7.433a1.882 1.882 0 110-3.764 1.882 1.882 0 010 3.764zm1.626 13.019H3.708V9h3.255v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.226.792 24 1.771 24h20.451C23.2 24 24 23.226 24 22.271V1.729C24 .774 23.2 0 22.222 0z" data-astro-cid-3ef6ksr2></path> </svg> </a> <a href="mailto:ngzerone@hotmail.com" target="_blank" data-astro-cid-3ef6ksr2> <span class="sr-only" data-astro-cid-3ef6ksr2>Send email to Ge Yuxu</span> <svg viewBox="0 0 24 24" width="32" height="32" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" data-astro-cid-3ef6ksr2> <path fill="currentColor" d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" data-astro-cid-3ef6ksr2></path> </svg> </a> </div> </nav> <!-- Microsoft Clarity --> <script type="text/javascript">
+		(function(c,l,a,r,i,t,y){
+			c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+			t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+			y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+		})(window, document, "clarity", "script", "rc2w96osp6");
+	</script> </header>  <main class="page"> <!-- 左侧栏 --> <aside class="sidebar"> <div class="meta"> <b>积分商城用户数据加密改造实战技术博客</b> <p><time datetime="2021-11-18T16:00:00.000Z"> 2021/11/19 00:00:00 </time></p>   </div> <hr> <br> </aside> <!-- 右侧正文区域（flex 居中） --> <div class="content-wrapper"> <article class="prose">  <nav class="toc"><ol class="toc-level toc-level-1"><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#1-项目背景">1. 项目背景</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#2-技术集成总结">2. 技术集成总结</a></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#3-具体技术进程">3. 具体技术进程</a><ol class="toc-level toc-level-2"><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#31-分析字段">3.1 分析字段</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#32-aes加密工具">3.2 AES加密工具</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#33-实现mybatis-typehandler">3.3 实现MyBatis TypeHandler</a></li><li class="toc-item toc-item-h3"><a class="toc-link toc-link-h3" href="#34-数据移植脚本">3.4 数据移植脚本</a></li></ol></li><li class="toc-item toc-item-h2"><a class="toc-link toc-link-h2" href="#4-实践结果">4. 实践结果</a></li></ol></nav><h1 id="积分商城用户数据加密改造实战"><a aria-hidden="true" tabindex="-1" href="#积分商城用户数据加密改造实战"><span class="icon icon-link"></span></a>积分商城用户数据加密改造实战</h1>
+<h2 id="1-项目背景"><a aria-hidden="true" tabindex="-1" href="#1-项目背景"><span class="icon icon-link"></span></a>1. 项目背景</h2>
+<p>在积分商城系统中，保护用户个人信息很重要。因此，需要对不定长字符串类型的系统基础表结构中需要加密的字段进行加密处理，保证数据安全性。</p>
+<p>同时，需要保证加密前后数据转换后，不影响环境性展示和上线用户体验。</p>
+<h2 id="2-技术集成总结"><a aria-hidden="true" tabindex="-1" href="#2-技术集成总结"><span class="icon icon-link"></span></a>2. 技术集成总结</h2>
+<ul>
+<li><strong>实现策略：</strong> 使用 <strong>AES</strong> 加密算法，将敏感字段加密后存储，同时保留原始数据处理方式以实现同时兼容。</li>
+<li><strong>解决方案：</strong> 通过 <strong>MyBatis TypeHandler</strong> 解耦存取过程，自动将某些指定字段进行加密和解密操作，无需修改上应应用逻辑。</li>
+<li><strong>分步执行：</strong>
+<ul>
+<li>分析需加密字段</li>
+<li>编写AES加密/解密公共类</li>
+<li>实现MyBatis TypeHandler</li>
+<li>数据移植工具脚本，实现旧数据加密</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-具体技术进程"><a aria-hidden="true" tabindex="-1" href="#3-具体技术进程"><span class="icon icon-link"></span></a>3. 具体技术进程</h2>
+<h3 id="31-分析字段"><a aria-hidden="true" tabindex="-1" href="#31-分析字段"><span class="icon icon-link"></span></a>3.1 分析字段</h3>
+<p>根据数据存储结构，确定哪些字段需要加密：</p>
+<ul>
+<li>用户姓名</li>
+<li>电话号码</li>
+<li>邮箱</li>
+<li>身份证号</li>
+</ul>
+<h3 id="32-aes加密工具"><a aria-hidden="true" tabindex="-1" href="#32-aes加密工具"><span class="icon icon-link"></span></a>3.2 AES加密工具</h3>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#D73A49">import</span><span style="color:#24292E"> javax.crypto.Cipher;</span></span>
+<span class="line"><span style="color:#D73A49">import</span><span style="color:#24292E"> javax.crypto.spec.SecretKeySpec;</span></span>
+<span class="line"><span style="color:#D73A49">import</span><span style="color:#24292E"> java.util.Base64;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49">public</span><span style="color:#D73A49"> class</span><span style="color:#6F42C1"> AesUtil</span><span style="color:#24292E"> {</span></span>
+<span class="line"><span style="color:#D73A49">    private</span><span style="color:#D73A49"> static</span><span style="color:#D73A49"> final</span><span style="color:#24292E"> String ALGORITHM </span><span style="color:#D73A49">=</span><span style="color:#032F62"> "AES"</span><span style="color:#24292E">;</span></span>
+<span class="line"><span style="color:#D73A49">    private</span><span style="color:#D73A49"> static</span><span style="color:#D73A49"> final</span><span style="color:#24292E"> String KEY </span><span style="color:#D73A49">=</span><span style="color:#032F62"> "1234567890abcdef"</span><span style="color:#24292E">; </span><span style="color:#6A737D">// 16位密钥</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49">    public</span><span style="color:#D73A49"> static</span><span style="color:#24292E"> String </span><span style="color:#6F42C1">encrypt</span><span style="color:#24292E">(String </span><span style="color:#E36209">value</span><span style="color:#24292E">) </span><span style="color:#D73A49">throws</span><span style="color:#24292E"> Exception {</span></span>
+<span class="line"><span style="color:#24292E">        SecretKeySpec keySpec </span><span style="color:#D73A49">=</span><span style="color:#D73A49"> new</span><span style="color:#6F42C1"> SecretKeySpec</span><span style="color:#24292E">(KEY.</span><span style="color:#6F42C1">getBytes</span><span style="color:#24292E">(), ALGORITHM);</span></span>
+<span class="line"><span style="color:#24292E">        Cipher cipher </span><span style="color:#D73A49">=</span><span style="color:#24292E"> Cipher.</span><span style="color:#6F42C1">getInstance</span><span style="color:#24292E">(ALGORITHM);</span></span>
+<span class="line"><span style="color:#24292E">        cipher.</span><span style="color:#6F42C1">init</span><span style="color:#24292E">(Cipher.ENCRYPT_MODE, keySpec);</span></span>
+<span class="line"><span style="color:#D73A49">        byte</span><span style="color:#24292E">[] encrypted </span><span style="color:#D73A49">=</span><span style="color:#24292E"> cipher.</span><span style="color:#6F42C1">doFinal</span><span style="color:#24292E">(value.</span><span style="color:#6F42C1">getBytes</span><span style="color:#24292E">());</span></span>
+<span class="line"><span style="color:#D73A49">        return</span><span style="color:#24292E"> Base64.</span><span style="color:#6F42C1">getEncoder</span><span style="color:#24292E">().</span><span style="color:#6F42C1">encodeToString</span><span style="color:#24292E">(encrypted);</span></span>
+<span class="line"><span style="color:#24292E">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49">    public</span><span style="color:#D73A49"> static</span><span style="color:#24292E"> String </span><span style="color:#6F42C1">decrypt</span><span style="color:#24292E">(String </span><span style="color:#E36209">encrypted</span><span style="color:#24292E">) </span><span style="color:#D73A49">throws</span><span style="color:#24292E"> Exception {</span></span>
+<span class="line"><span style="color:#24292E">        SecretKeySpec keySpec </span><span style="color:#D73A49">=</span><span style="color:#D73A49"> new</span><span style="color:#6F42C1"> SecretKeySpec</span><span style="color:#24292E">(KEY.</span><span style="color:#6F42C1">getBytes</span><span style="color:#24292E">(), ALGORITHM);</span></span>
+<span class="line"><span style="color:#24292E">        Cipher cipher </span><span style="color:#D73A49">=</span><span style="color:#24292E"> Cipher.</span><span style="color:#6F42C1">getInstance</span><span style="color:#24292E">(ALGORITHM);</span></span>
+<span class="line"><span style="color:#24292E">        cipher.</span><span style="color:#6F42C1">init</span><span style="color:#24292E">(Cipher.DECRYPT_MODE, keySpec);</span></span>
+<span class="line"><span style="color:#D73A49">        byte</span><span style="color:#24292E">[] decoded </span><span style="color:#D73A49">=</span><span style="color:#24292E"> Base64.</span><span style="color:#6F42C1">getDecoder</span><span style="color:#24292E">().</span><span style="color:#6F42C1">decode</span><span style="color:#24292E">(encrypted);</span></span>
+<span class="line"><span style="color:#D73A49">        byte</span><span style="color:#24292E">[] original </span><span style="color:#D73A49">=</span><span style="color:#24292E"> cipher.</span><span style="color:#6F42C1">doFinal</span><span style="color:#24292E">(decoded);</span></span>
+<span class="line"><span style="color:#D73A49">        return</span><span style="color:#D73A49"> new</span><span style="color:#6F42C1"> String</span><span style="color:#24292E">(original);</span></span>
+<span class="line"><span style="color:#24292E">    }</span></span>
+<span class="line"><span style="color:#24292E">}</span></span></code></pre>
+<h3 id="33-实现mybatis-typehandler"><a aria-hidden="true" tabindex="-1" href="#33-实现mybatis-typehandler"><span class="icon icon-link"></span></a>3.3 实现MyBatis TypeHandler</h3>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#D73A49">import</span><span style="color:#24292E"> org.apache.ibatis.type.BaseTypeHandler;</span></span>
+<span class="line"><span style="color:#D73A49">import</span><span style="color:#24292E"> org.apache.ibatis.type.JdbcType;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49">import</span><span style="color:#24292E"> java.sql.CallableStatement;</span></span>
+<span class="line"><span style="color:#D73A49">import</span><span style="color:#24292E"> java.sql.PreparedStatement;</span></span>
+<span class="line"><span style="color:#D73A49">import</span><span style="color:#24292E"> java.sql.ResultSet;</span></span>
+<span class="line"><span style="color:#D73A49">import</span><span style="color:#24292E"> java.sql.SQLException;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#D73A49">public</span><span style="color:#D73A49"> class</span><span style="color:#6F42C1"> EncryptTypeHandler</span><span style="color:#D73A49"> extends</span><span style="color:#6F42C1"> BaseTypeHandler</span><span style="color:#24292E">&#x3C;</span><span style="color:#D73A49">String</span><span style="color:#24292E">> {</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E">    @</span><span style="color:#D73A49">Override</span></span>
+<span class="line"><span style="color:#D73A49">    public</span><span style="color:#D73A49"> void</span><span style="color:#6F42C1"> setNonNullParameter</span><span style="color:#24292E">(PreparedStatement </span><span style="color:#E36209">ps</span><span style="color:#24292E">, </span><span style="color:#D73A49">int</span><span style="color:#E36209"> i</span><span style="color:#24292E">, String </span><span style="color:#E36209">parameter</span><span style="color:#24292E">, JdbcType </span><span style="color:#E36209">jdbcType</span><span style="color:#24292E">) </span><span style="color:#D73A49">throws</span><span style="color:#24292E"> SQLException {</span></span>
+<span class="line"><span style="color:#D73A49">        try</span><span style="color:#24292E"> {</span></span>
+<span class="line"><span style="color:#24292E">            ps.</span><span style="color:#6F42C1">setString</span><span style="color:#24292E">(i, AesUtil.</span><span style="color:#6F42C1">encrypt</span><span style="color:#24292E">(parameter));</span></span>
+<span class="line"><span style="color:#24292E">        } </span><span style="color:#D73A49">catch</span><span style="color:#24292E"> (Exception </span><span style="color:#E36209">e</span><span style="color:#24292E">) {</span></span>
+<span class="line"><span style="color:#D73A49">            throw</span><span style="color:#D73A49"> new</span><span style="color:#6F42C1"> SQLException</span><span style="color:#24292E">(</span><span style="color:#032F62">"Encryption failed"</span><span style="color:#24292E">, e);</span></span>
+<span class="line"><span style="color:#24292E">        }</span></span>
+<span class="line"><span style="color:#24292E">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E">    @</span><span style="color:#D73A49">Override</span></span>
+<span class="line"><span style="color:#D73A49">    public</span><span style="color:#24292E"> String </span><span style="color:#6F42C1">getNullableResult</span><span style="color:#24292E">(ResultSet </span><span style="color:#E36209">rs</span><span style="color:#24292E">, String </span><span style="color:#E36209">columnName</span><span style="color:#24292E">) </span><span style="color:#D73A49">throws</span><span style="color:#24292E"> SQLException {</span></span>
+<span class="line"><span style="color:#D73A49">        try</span><span style="color:#24292E"> {</span></span>
+<span class="line"><span style="color:#D73A49">            return</span><span style="color:#24292E"> AesUtil.</span><span style="color:#6F42C1">decrypt</span><span style="color:#24292E">(rs.</span><span style="color:#6F42C1">getString</span><span style="color:#24292E">(columnName));</span></span>
+<span class="line"><span style="color:#24292E">        } </span><span style="color:#D73A49">catch</span><span style="color:#24292E"> (Exception </span><span style="color:#E36209">e</span><span style="color:#24292E">) {</span></span>
+<span class="line"><span style="color:#D73A49">            return</span><span style="color:#005CC5"> null</span><span style="color:#24292E">;</span></span>
+<span class="line"><span style="color:#24292E">        }</span></span>
+<span class="line"><span style="color:#24292E">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E">    @</span><span style="color:#D73A49">Override</span></span>
+<span class="line"><span style="color:#D73A49">    public</span><span style="color:#24292E"> String </span><span style="color:#6F42C1">getNullableResult</span><span style="color:#24292E">(ResultSet </span><span style="color:#E36209">rs</span><span style="color:#24292E">, </span><span style="color:#D73A49">int</span><span style="color:#E36209"> columnIndex</span><span style="color:#24292E">) </span><span style="color:#D73A49">throws</span><span style="color:#24292E"> SQLException {</span></span>
+<span class="line"><span style="color:#D73A49">        try</span><span style="color:#24292E"> {</span></span>
+<span class="line"><span style="color:#D73A49">            return</span><span style="color:#24292E"> AesUtil.</span><span style="color:#6F42C1">decrypt</span><span style="color:#24292E">(rs.</span><span style="color:#6F42C1">getString</span><span style="color:#24292E">(columnIndex));</span></span>
+<span class="line"><span style="color:#24292E">        } </span><span style="color:#D73A49">catch</span><span style="color:#24292E"> (Exception </span><span style="color:#E36209">e</span><span style="color:#24292E">) {</span></span>
+<span class="line"><span style="color:#D73A49">            return</span><span style="color:#005CC5"> null</span><span style="color:#24292E">;</span></span>
+<span class="line"><span style="color:#24292E">        }</span></span>
+<span class="line"><span style="color:#24292E">    }</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#24292E">    @</span><span style="color:#D73A49">Override</span></span>
+<span class="line"><span style="color:#D73A49">    public</span><span style="color:#24292E"> String </span><span style="color:#6F42C1">getNullableResult</span><span style="color:#24292E">(CallableStatement </span><span style="color:#E36209">cs</span><span style="color:#24292E">, </span><span style="color:#D73A49">int</span><span style="color:#E36209"> columnIndex</span><span style="color:#24292E">) </span><span style="color:#D73A49">throws</span><span style="color:#24292E"> SQLException {</span></span>
+<span class="line"><span style="color:#D73A49">        try</span><span style="color:#24292E"> {</span></span>
+<span class="line"><span style="color:#D73A49">            return</span><span style="color:#24292E"> AesUtil.</span><span style="color:#6F42C1">decrypt</span><span style="color:#24292E">(cs.</span><span style="color:#6F42C1">getString</span><span style="color:#24292E">(columnIndex));</span></span>
+<span class="line"><span style="color:#24292E">        } </span><span style="color:#D73A49">catch</span><span style="color:#24292E"> (Exception </span><span style="color:#E36209">e</span><span style="color:#24292E">) {</span></span>
+<span class="line"><span style="color:#D73A49">            return</span><span style="color:#005CC5"> null</span><span style="color:#24292E">;</span></span>
+<span class="line"><span style="color:#24292E">        }</span></span>
+<span class="line"><span style="color:#24292E">    }</span></span>
+<span class="line"><span style="color:#24292E">}</span></span></code></pre>
+<p>配合 MyBatis Mapper 使用：</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="xml"><code><span class="line"><span style="color:#24292E">&#x3C;</span><span style="color:#22863A">result</span><span style="color:#6F42C1"> property</span><span style="color:#24292E">=</span><span style="color:#032F62">"phone"</span><span style="color:#6F42C1"> column</span><span style="color:#24292E">=</span><span style="color:#032F62">"phone"</span><span style="color:#6F42C1"> typeHandler</span><span style="color:#24292E">=</span><span style="color:#032F62">"xxx.EncryptTypeHandler"</span><span style="color:#24292E"> /></span></span></code></pre>
+<h3 id="34-数据移植脚本"><a aria-hidden="true" tabindex="-1" href="#34-数据移植脚本"><span class="icon icon-link"></span></a>3.4 数据移植脚本</h3>
+<p>写一个移植脚本，将旧数据转为加密形式。</p>
+<p>基本步骤：</p>
+<ul>
+<li>找出所有旧数据</li>
+<li>调用AesUtil进行加密</li>
+<li>更新回原数据表</li>
+</ul>
+<p>示例：</p>
+<pre class="astro-code github-light" style="background-color:#fff;color:#24292e; overflow-x: auto;" tabindex="0" data-language="java"><code><span class="line"><span style="color:#24292E">List&#x3C;</span><span style="color:#D73A49">User</span><span style="color:#24292E">> users </span><span style="color:#D73A49">=</span><span style="color:#24292E"> userDao.</span><span style="color:#6F42C1">findAll</span><span style="color:#24292E">();</span></span>
+<span class="line"><span style="color:#D73A49">for</span><span style="color:#24292E"> (User user </span><span style="color:#D73A49">:</span><span style="color:#24292E"> users) {</span></span>
+<span class="line"><span style="color:#24292E">    String encryptedPhone </span><span style="color:#D73A49">=</span><span style="color:#24292E"> AesUtil.</span><span style="color:#6F42C1">encrypt</span><span style="color:#24292E">(user.</span><span style="color:#6F42C1">getPhone</span><span style="color:#24292E">());</span></span>
+<span class="line"><span style="color:#24292E">    userDao.</span><span style="color:#6F42C1">updatePhone</span><span style="color:#24292E">(user.</span><span style="color:#6F42C1">getId</span><span style="color:#24292E">(), encryptedPhone);</span></span>
+<span class="line"><span style="color:#24292E">}</span></span></code></pre>
+<h2 id="4-实践结果"><a aria-hidden="true" tabindex="-1" href="#4-实践结果"><span class="icon icon-link"></span></a>4. 实践结果</h2>
+<p>完成数据加密改造后，系统正常运行，上线用户体验无明显变化，同时提升了数据安全性，成功满足后续安全管控需求。</p>
+<hr>
+<p>整体过程中，最关键的是定制好规范，遵循加密协议，确保各组件互相兼容。实际工程中，还可考虑增加片段加密（如通过指定段名来分类加密），更精精刻控制实施效果。</p> <html lang="en" data-astro-cid-uffxixac> <head><!-- Global Metadata --><meta charset="utf-8"><!--<meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">--><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.15.2/dist/katex.min.css"><link rel="shortcut icon" href="/favicon.png" type="image/png"><link rel="sitemap" href="/sitemap-index.xml"><link rel="alternate" type="application/rss+xml" title="Ge Yuxu • AI &#38; Engineering" href="https://geyuxu.com/rss.xml"><meta name="generator" content="Astro v5.5.6"><!-- Font preloads --><link rel="preload" href="/fonts/atkinson-regular.woff" as="font" type="font/woff" crossorigin><link rel="preload" href="/fonts/atkinson-bold.woff" as="font" type="font/woff" crossorigin><!-- Canonical URL --><link rel="canonical" href="https://geyuxu.com/blog/service_governance/20211119-%E7%A7%AF%E5%88%86%E5%95%86%E5%9F%8E%E7%94%A8%E6%88%B7%E6%95%B0%E6%8D%AE%E5%8A%A0%E5%AF%86%E6%94%B9%E9%80%A0%E5%AE%9E%E6%88%98%E7%AC%94%E8%AE%B0/"><!-- Primary Meta Tags --><title>Ge Yuxu • AI &amp; Engineering</title><meta name="title" content="Ge Yuxu • AI &#38; Engineering"><meta name="description" content="Welcome to my blog!"><!-- Open Graph / Facebook --><meta property="og:type" content="website"><meta property="og:url" content="https://geyuxu.com/blog/service_governance/20211119-%E7%A7%AF%E5%88%86%E5%95%86%E5%9F%8E%E7%94%A8%E6%88%B7%E6%95%B0%E6%8D%AE%E5%8A%A0%E5%AF%86%E6%94%B9%E9%80%A0%E5%AE%9E%E6%88%98%E7%AC%94%E8%AE%B0/"><meta property="og:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="og:description" content="Welcome to my blog!"><meta property="og:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><!-- Twitter --><meta property="twitter:card" content="summary_large_image"><meta property="twitter:url" content="https://geyuxu.com/blog/service_governance/20211119-%E7%A7%AF%E5%88%86%E5%95%86%E5%9F%8E%E7%94%A8%E6%88%B7%E6%95%B0%E6%8D%AE%E5%8A%A0%E5%AF%86%E6%94%B9%E9%80%A0%E5%AE%9E%E6%88%98%E7%AC%94%E8%AE%B0/"><meta property="twitter:title" content="Ge Yuxu • AI &#38; Engineering"><meta property="twitter:description" content="Welcome to my blog!"><meta property="twitter:image" content="https://geyuxu.com/blog-placeholder-1.jpg"><script src="/js/jquery-3.7.1.min.js"></script><script src="/js/copy-code-button.js" defer></script><!-- Dify Chatbot Configuration --><script>
+ window.difyChatbotConfig = {
+  token: 'VgrjCAto93bjE0MW',
+  systemVariables: {
+    // user_id: 'YOU CAN DEFINE USER ID HERE',
+    // conversation_id: 'YOU CAN DEFINE CONVERSATION ID HERE, IT MUST BE A VALID UUID',
+  },
+  userVariables: {
+    // avatar_url: 'YOU CAN DEFINE USER AVATAR URL HERE',
+    // name: 'YOU CAN DEFINE USER NAME HERE',
+  },
+ }
+</script><!-- Dify Chatbot Script --><script src="https://udify.app/embed.min.js" id="VgrjCAto93bjE0MW" defer>
+</script><!-- Dify Chatbot Custom Styles --></head> <body data-astro-cid-uffxixac>  <div class="statement" data-astro-cid-uffxixac> <blockquote data-astro-cid-uffxixac> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>脱敏说明</strong>：本文所有出现的表名、字段名、接口地址、变量名、IP地址及示例数据等均非真实，仅用于阐述技术思路与实现步骤，示例代码亦非公司真实代码。示例方案亦非公司真实完整方案，仅为本人记忆总结，用于技术学习探讨。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;文中所示任何标识符并不对应实际生产环境中的名称或编号。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;示例&nbsp;SQL、脚本、代码及数据等均为演示用途，不含真实业务数据，也不具备直接运行或复现的完整上下文。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;读者若需在实际项目中参考本文方案，请结合自身业务场景及数据安全规范，使用符合内部命名和权限控制的配置。</p> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>Data Desensitization Notice</strong>: All table names, field names, API endpoints, variable names, IP addresses, and sample data appearing in this article are fictitious and intended solely to illustrate technical concepts and implementation steps. The sample code is not actual company code. The proposed solutions are not complete or actual company solutions but are summarized from the author's memory for technical learning and discussion.<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;Any identifiers shown in the text do not correspond to names or numbers in any actual production environment.<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;Sample SQL, scripts, code, and data are for demonstration purposes only, do not contain real business data, and lack the full context required for direct execution or reproduction.<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;Readers who wish to reference the solutions in this article for actual projects should adapt them to their own business scenarios and data security standards, using configurations that comply with internal naming and access control policies.</p> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>版权声明</strong>：本文版权归原作者所有，未经作者事先书面许可，任何单位或个人不得以任何方式复制、转载、摘编或用于商业用途。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;若需非商业性引用或转载本文内容，请务必注明出处并保持内容完整。<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;对因商业使用、篡改或不当引用本文内容所产生的法律纠纷，作者保留追究法律责任的权利。</p> <p data-astro-cid-uffxixac><strong data-astro-cid-uffxixac>Copyright Notice</strong>: The copyright of this article belongs to the original author. Without prior written permission from the author, no entity or individual may copy, reproduce, excerpt, or use it for commercial purposes in any way.<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;For non-commercial citation or reproduction of this content, attribution must be given, and the integrity of the content must be maintained.<br data-astro-cid-uffxixac>
+&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;The author reserves the right to pursue legal action against any legal disputes arising from the commercial use, alteration, or improper citation of this article's content.</p> <p data-astro-cid-uffxixac><em data-astro-cid-uffxixac>Copyright&nbsp;©&nbsp;1989–Present&nbsp;Ge&nbsp;Yuxu.&nbsp;All&nbsp;Rights&nbsp;Reserved.</em></p> </blockquote> </div></body></html>  </article> </div> </main> <footer data-astro-cid-sz7xmlte>
+&copy; 2025 All rights reserved.
+</footer>  </body></html>

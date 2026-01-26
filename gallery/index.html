@@ -94,7 +94,215 @@
 
         .page-desc {
             color: var(--dark-grey);
-            margin-bottom: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Gallery Navigation */
+        .gallery-nav {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px dashed var(--sketch-color);
+        }
+
+        .nav-section {
+            margin-bottom: 1rem;
+        }
+
+        .nav-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .nav-label {
+            font-family: 'Caveat', cursive;
+            font-size: 1rem;
+            color: var(--dark-grey);
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-label::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--sketch-color);
+            opacity: 0.3;
+        }
+
+        .nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .nav-btn {
+            padding: 0.35rem 0.8rem;
+            border: 2px solid var(--sketch-color);
+            border-radius: 20px;
+            background: transparent;
+            color: var(--dark-grey);
+            font-family: 'Caveat', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            filter: url(#sketch-filter);
+            white-space: nowrap;
+        }
+
+        .nav-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-btn.year-btn {
+            font-size: 1.1rem;
+            padding: 0.4rem 1rem;
+        }
+
+        .location-nav {
+            max-height: 40px;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .location-nav.expanded {
+            max-height: 500px;
+        }
+
+        .nav-toggle {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border: 2px solid var(--sketch-color);
+            border-radius: 50%;
+            background: transparent;
+            color: var(--dark-grey);
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            filter: url(#sketch-filter);
+            margin-left: 0.5rem;
+            flex-shrink: 0;
+        }
+
+        .nav-toggle:hover {
+            background: var(--vermilion);
+            border-color: var(--vermilion);
+            color: white;
+        }
+
+        .nav-toggle.expanded {
+            transform: rotate(180deg);
+        }
+
+        .nav-label-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-label-row .nav-label {
+            margin-bottom: 0;
+        }
+
+        /* Floating Navigation */
+        .float-nav {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 100;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .float-nav.visible {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .float-nav-toggle {
+            width: 48px;
+            height: 48px;
+            border: 2px solid var(--sketch-color);
+            border-radius: 50%;
+            background: var(--off-white);
+            color: var(--dark-grey);
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            filter: url(#sketch-filter);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .float-nav-toggle:hover {
+            background: var(--vermilion);
+            border-color: var(--vermilion);
+            color: white;
+        }
+
+        .float-nav-panel {
+            position: absolute;
+            bottom: 56px;
+            right: 0;
+            width: 240px;
+            max-height: 0;
+            overflow: hidden;
+            background: var(--off-white);
+            border: 2px solid var(--sketch-color);
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            transition: all 0.3s ease;
+            opacity: 0;
+            filter: url(#sketch-filter);
+        }
+
+        .float-nav:hover .float-nav-panel {
+            max-height: 300px;
+            opacity: 1;
+            padding: 0.8rem;
+        }
+
+        .float-nav-section {
+            margin-bottom: 0.6rem;
+        }
+
+        .float-nav-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .float-nav-label {
+            font-family: 'Caveat', cursive;
+            font-size: 0.85rem;
+            color: var(--dark-grey);
+            margin-bottom: 0.3rem;
+        }
+
+        .float-nav-buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+        }
+
+        .float-nav-btn {
+            padding: 0.25rem 0.6rem;
+            border: 2px solid;
+            border-radius: 12px;
+            background: transparent;
+            font-family: 'Caveat', cursive;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .float-nav-btn:hover {
+            transform: scale(1.05);
         }
 
         /* Timeline Container */
@@ -459,6 +667,56 @@
                 width: 15px;
             }
 
+            .gallery-nav {
+                margin-bottom: 1.5rem;
+            }
+
+            .nav-section {
+                margin-bottom: 0.75rem;
+            }
+
+            .nav-buttons {
+                gap: 0.3rem;
+            }
+
+            .nav-btn {
+                padding: 0.25rem 0.6rem;
+                font-size: 0.9rem;
+            }
+
+            .nav-btn.year-btn {
+                font-size: 1rem;
+                padding: 0.3rem 0.75rem;
+            }
+
+            .location-nav {
+                max-height: 36px;
+            }
+
+            .location-nav.expanded {
+                max-height: 400px;
+            }
+
+            .nav-toggle {
+                width: 24px;
+                height: 24px;
+                font-size: 0.7rem;
+            }
+
+            .float-nav {
+                bottom: 1rem;
+                right: 1rem;
+            }
+
+            .float-nav-toggle {
+                width: 44px;
+                height: 44px;
+            }
+
+            .float-nav-panel {
+                min-width: 150px;
+            }
+
             .photo-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -518,10 +776,22 @@
         <h2 class="page-title">Gallery</h2>
         <p class="page-desc">Moments captured through the lens.</p>
 
+        <div class="gallery-nav" id="gallery-nav">
+            <!-- Navigation will be generated here -->
+        </div>
+
         <div class="timeline" id="timeline">
             <!-- Photos will be loaded here -->
         </div>
     </main>
+</div>
+
+<!-- Floating Navigation -->
+<div class="float-nav" id="float-nav">
+    <div class="float-nav-panel" id="float-nav-panel">
+        <!-- Navigation buttons will be generated here -->
+    </div>
+    <button class="float-nav-toggle" onclick="scrollToTop()" title="Back to top">↑</button>
 </div>
 
 <!-- Lightbox -->
@@ -532,15 +802,104 @@
 </div>
 
 <script>
+// Random colors for navigation buttons
+const navColors = [
+    '#E74C3C', '#3498DB', '#2ECC71', '#9B59B6', '#F39C12',
+    '#1ABC9C', '#E91E63', '#00BCD4', '#FF5722', '#673AB7',
+    '#4CAF50', '#FF9800', '#795548', '#607D8B', '#8BC34A'
+];
+
+function getColor(index) {
+    return navColors[index % navColors.length];
+}
+
 // Load photos from generated JSON
 fetch('/gallery/photos.json')
     .then(r => r.json())
     .then(photos => {
+        renderGalleryNav(photos);
         renderTimeline(photos);
+        renderFloatNav(photos);
     })
     .catch(() => {
         document.getElementById('timeline').innerHTML = '<p>No photos yet.</p>';
     });
+
+// Render gallery navigation (years + locations)
+function renderGalleryNav(photos) {
+    const nav = document.getElementById('gallery-nav');
+    const years = [...new Set(photos.map(p => p.year))];
+
+    // Extract unique base locations (remove "Part N" for grouping)
+    const locationMap = new Map();
+    photos.forEach(p => {
+        const baseLocation = p.location;
+        if (!locationMap.has(baseLocation)) {
+            locationMap.set(baseLocation, p.folder);
+        }
+    });
+    const locations = Array.from(locationMap.entries());
+
+    let html = `
+        <div class="nav-section">
+            <div class="nav-label">By Year</div>
+            <div class="nav-buttons">
+                ${years.map((year, idx) => {
+                    const color = getColor(idx);
+                    return `<button class="nav-btn year-btn" style="border-color: ${color}; color: ${color};"
+                            onmouseover="this.style.background='${color}'; this.style.color='white';"
+                            onmouseout="this.style.background='transparent'; this.style.color='${color}';"
+                            onclick="scrollToYear('${year}')">${year}</button>`;
+                }).join('')}
+            </div>
+        </div>
+        <div class="nav-section">
+            <div class="nav-label-row">
+                <div class="nav-label">By Location</div>
+                <button class="nav-toggle" id="location-toggle" onclick="toggleLocationNav()" title="展开/收起">▼</button>
+            </div>
+            <div class="nav-buttons location-nav" id="location-nav">
+                ${locations.map(([loc, folder], idx) => {
+                    const color = getColor(idx + years.length);
+                    const albumId = 'album-' + folder.replace(/[^a-zA-Z0-9]/g, '-');
+                    return `<button class="nav-btn" style="border-color: ${color}; color: ${color};"
+                            onmouseover="this.style.background='${color}'; this.style.color='white';"
+                            onmouseout="this.style.background='transparent'; this.style.color='${color}';"
+                            onclick="scrollToAlbum('${albumId}')">${loc}</button>`;
+                }).join('')}
+            </div>
+        </div>
+    `;
+    nav.innerHTML = html;
+}
+
+// Toggle location navigation
+function toggleLocationNav() {
+    const nav = document.getElementById('location-nav');
+    const toggle = document.getElementById('location-toggle');
+    nav.classList.toggle('expanded');
+    toggle.classList.toggle('expanded');
+}
+
+// Scroll to year
+function scrollToYear(year) {
+    const target = document.getElementById('year-' + year);
+    if (target) {
+        const offset = 20;
+        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+    }
+}
+
+// Scroll to album
+function scrollToAlbum(albumId) {
+    const target = document.getElementById(albumId);
+    if (target) {
+        const offset = 20;
+        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+    }
+}
 
 // Render timeline
 function renderTimeline(photos) {
@@ -548,17 +907,19 @@ function renderTimeline(photos) {
     let html = '';
     let currentYear = null;
     let side = 'left';
+    let albumIndex = 0;
 
     photos.forEach(group => {
-        // Year marker
+        // Year marker with anchor
         if (group.year !== currentYear) {
-            html += `<div class="year-marker"><span>${group.year}</span></div>`;
+            html += `<div class="year-marker" id="year-${group.year}"><span>${group.year}</span></div>`;
             currentYear = group.year;
         }
 
-        // Album section
+        // Album section with anchor
+        const albumId = `album-${group.folder.replace(/[^a-zA-Z0-9]/g, '-')}`;
         html += `
-            <div class="album-section ${side}">
+            <div class="album-section ${side}" id="${albumId}">
                 <div class="album-content">
                     <div class="album-header">
                         <div class="album-date">${group.date}</div>
@@ -594,6 +955,7 @@ function renderTimeline(photos) {
         `;
 
         side = side === 'left' ? 'right' : 'left';
+        albumIndex++;
     });
 
     timeline.innerHTML = html;
@@ -622,6 +984,43 @@ document.addEventListener('keydown', function(e) {
         document.getElementById('lightbox').classList.remove('active');
     }
 });
+
+// Floating navigation
+const floatNav = document.getElementById('float-nav');
+
+window.addEventListener('scroll', function() {
+    if (window.pageYOffset > 400) {
+        floatNav.classList.add('visible');
+    } else {
+        floatNav.classList.remove('visible');
+    }
+});
+
+function scrollToTop() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// Render floating nav panel (years only)
+function renderFloatNav(photos) {
+    const panel = document.getElementById('float-nav-panel');
+    const years = [...new Set(photos.map(p => p.year))];
+
+    let html = `
+        <div class="float-nav-section">
+            <div class="float-nav-label">By Year</div>
+            <div class="float-nav-buttons">
+                ${years.map((year, idx) => {
+                    const color = getColor(idx);
+                    return `<button class="float-nav-btn year" style="border-color: ${color}; color: ${color};"
+                            onmouseover="this.style.background='${color}'; this.style.color='white';"
+                            onmouseout="this.style.background='transparent'; this.style.color='${color}';"
+                            onclick="scrollToYear('${year}')">${year}</button>`;
+                }).join('')}
+            </div>
+        </div>
+    `;
+    panel.innerHTML = html;
+}
 
 </script>
 

@@ -106,6 +106,7 @@ function main() {
                 year: parseInt(year),
                 date: parsed.date,
                 location: parsed.location,
+                folder: event,
                 images: images,
                 description: readDescription(eventPath)
             });

@@ -3,6 +3,7 @@
     "year": 2026,
     "date": "2026-01-20",
     "location": "Leeds Royal Armouries Museum",
+    "folder": "20260120-Leeds Royal Armouries Museum",
     "images": [
       "/photos/2026/20260120-Leeds Royal Armouries Museum/A7C00295.JPG",
       "/photos/2026/20260120-Leeds Royal Armouries Museum/A7C00307.JPG",
@@ -17,6 +18,7 @@
     "year": 2026,
     "date": "2026-01-20",
     "location": "Leeds",
+    "folder": "20260120-Leeds",
     "images": [
       "/photos/2026/20260120-Leeds/A7C00267.JPG",
       "/photos/2026/20260120-Leeds/A7C00274.JPG",
@@ -31,6 +33,7 @@
     "year": 2026,
     "date": "2026-01-12",
     "location": "York Nation Railway Museum",
+    "folder": "20260112-York Nation Railway Museum",
     "images": [
       "/photos/2026/20260112-York Nation Railway Museum/A7C00228.JPG",
       "/photos/2026/20260112-York Nation Railway Museum/A7C00229.JPG",
@@ -45,6 +48,7 @@
     "year": 2026,
     "date": "2026-01-05",
     "location": "The heavy snow in Paris",
+    "folder": "20260105-The heavy snow in Paris",
     "images": [
       "/photos/2026/20260105-The heavy snow in Paris/A7C00007.JPG",
       "/photos/2026/20260105-The heavy snow in Paris/A7C00010.JPG",
@@ -62,6 +66,7 @@
     "year": 2026,
     "date": "2026-01-04",
     "location": "Paris The Hôtel National des Invalides",
+    "folder": "20260104-Paris The Hôtel National des Invalides",
     "images": [
       "/photos/2026/20260104-Paris The Hôtel National des Invalides/A7C09943.JPG",
       "/photos/2026/20260104-Paris The Hôtel National des Invalides/A7C09947.JPG",
@@ -73,6 +78,7 @@
     "year": 2026,
     "date": "2026-01-03",
     "location": "Paris The Louvre",
+    "folder": "20260103-Paris The Louvre",
     "images": [
       "/photos/2026/20260103-Paris The Louvre/A7C09822.JPG",
       "/photos/2026/20260103-Paris The Louvre/A7C09826.JPG",
@@ -90,6 +96,7 @@
     "year": 2026,
     "date": "2026-01-02",
     "location": "Home at Paris",
+    "folder": "20260102-Home at Paris",
     "images": [
       "/photos/2026/20260102-Home at Paris/A7C09979.JPG",
       "/photos/2026/20260102-Home at Paris/A7C09986.JPG",
@@ -104,6 +111,7 @@
     "year": 2025,
     "date": "2025-12-19",
     "location": "Belfast",
+    "folder": "20251219-Belfast Part 2",
     "images": [
       "/photos/2025/20251219-Belfast Part 2/IMG_20251219111817971.jpg",
       "/photos/2025/20251219-Belfast Part 2/IMG_20251219113438289.jpg",
@@ -115,6 +123,7 @@
     "year": 2025,
     "date": "2025-12-19",
     "location": "Belfast",
+    "folder": "20251219-Belfast",
     "images": [
       "/photos/2025/20251219-Belfast/IMG_20251217145728754.jpg",
       "/photos/2025/20251219-Belfast/IMG_20251218111906345.jpg",
@@ -132,6 +141,7 @@
     "year": 2025,
     "date": "2025-12-15",
     "location": "Edinburg",
+    "folder": "20251215-Edinburg Part 2",
     "images": [
       "/photos/2025/20251215-Edinburg Part 2/A7C09740.JPG",
       "/photos/2025/20251215-Edinburg Part 2/A7C09750.JPG",
@@ -146,6 +156,7 @@
     "year": 2025,
     "date": "2025-12-15",
     "location": "Edinburg",
+    "folder": "20251215-Edinburg",
     "images": [
       "/photos/2025/20251215-Edinburg/A7C09551.JPG",
       "/photos/2025/20251215-Edinburg/A7C09590.JPG",
@@ -163,6 +174,7 @@
     "year": 2025,
     "date": "2025-11-12",
     "location": "Manchester",
+    "folder": "20251112-Manchester",
     "images": [
       "/photos/2025/20251112-Manchester/A7C09508.JPG",
       "/photos/2025/20251112-Manchester/A7C09513.JPG",
@@ -177,6 +189,7 @@
     "year": 2025,
     "date": "2025-11-08",
     "location": "Oxford",
+    "folder": "20251108-Oxford Part 2",
     "images": [
       "/photos/2025/20251108-Oxford Part 2/IMG_0344.jpg",
       "/photos/2025/20251108-Oxford Part 2/IMG_0362.jpg",
@@ -192,6 +205,7 @@
     "year": 2025,
     "date": "2025-11-08",
     "location": "Oxford",
+    "folder": "20251108-Oxford",
     "images": [
       "/photos/2025/20251108-Oxford/A7C09271.JPG",
       "/photos/2025/20251108-Oxford/A7C09282.JPG",
@@ -209,6 +223,7 @@
     "year": 2025,
     "date": "2025-11-01",
     "location": "Whitby",
+    "folder": "20251101-Whitby Part 2",
     "images": [
       "/photos/2025/20251101-Whitby Part 2/A7C09236.JPG",
       "/photos/2025/20251101-Whitby Part 2/A7C09239.JPG",
@@ -223,6 +238,7 @@
     "year": 2025,
     "date": "2025-11-01",
     "location": "Whitby",
+    "folder": "20251101-Whitby",
     "images": [
       "/photos/2025/20251101-Whitby/A7C09168.JPG",
       "/photos/2025/20251101-Whitby/A7C09181.JPG",
@@ -240,6 +256,7 @@
     "year": 2025,
     "date": "2025-11-01",
     "location": "Saltburn-by-the-Sea",
+    "folder": "20251101-Saltburn-by-the-Sea Part 2",
     "images": [
       "/photos/2025/20251101-Saltburn-by-the-Sea Part 2/A7C09111.JPG",
       "/photos/2025/20251101-Saltburn-by-the-Sea Part 2/A7C09115.JPG",
@@ -251,6 +268,7 @@
     "year": 2025,
     "date": "2025-11-01",
     "location": "Saltburn-by-the-Sea",
+    "folder": "20251101-Saltburn-by-the-Sea",
     "images": [
       "/photos/2025/20251101-Saltburn-by-the-Sea/A7C09033-1.JPG",
       "/photos/2025/20251101-Saltburn-by-the-Sea/A7C09044.JPG",
@@ -268,6 +286,7 @@
     "year": 2025,
     "date": "2025-10-28",
     "location": "London British Museum",
+    "folder": "20251028-London British Museum",
     "images": [
       "/photos/2025/20251028-London British Museum/A7C08972.JPG",
       "/photos/2025/20251028-London British Museum/A7C08973.JPG",
@@ -285,6 +304,7 @@
     "year": 2025,
     "date": "2025-10-25",
     "location": "London",
+    "folder": "20251025-London Part 5",
     "images": [
       "/photos/2025/20251025-London Part 5/IMG_9542.jpg",
       "/photos/2025/20251025-London Part 5/IMG_9552.jpg",
@@ -299,6 +319,7 @@
     "year": 2025,
     "date": "2025-10-25",
     "location": "London",
+    "folder": "20251025-London Part 4",
     "images": [
       "/photos/2025/20251025-London Part 4/IMG_9258.jpg",
       "/photos/2025/20251025-London Part 4/IMG_9261.jpg",
@@ -314,6 +335,7 @@
     "year": 2025,
     "date": "2025-10-25",
     "location": "London",
+    "folder": "20251025-London Part 3",
     "images": [
       "/photos/2025/20251025-London Part 3/IMG_9090.jpg",
       "/photos/2025/20251025-London Part 3/IMG_9175.jpg",
@@ -331,6 +353,7 @@
     "year": 2025,
     "date": "2025-10-25",
     "location": "London",
+    "folder": "20251025-London Part 2",
     "images": [
       "/photos/2025/20251025-London Part 2/IMG_8996.jpg",
       "/photos/2025/20251025-London Part 2/IMG_9027.jpg",
@@ -348,6 +371,7 @@
     "year": 2025,
     "date": "2025-10-25",
     "location": "London",
+    "folder": "20251025-London",
     "images": [
       "/photos/2025/20251025-London/IMG_20251030131934081.jpg",
       "/photos/2025/20251025-London/IMG_20251030141553560.jpg",
@@ -365,6 +389,7 @@
     "year": 2025,
     "date": "2025-10-18",
     "location": "North Wales",
+    "folder": "20251018-North Wales Part 7",
     "images": [
       "/photos/2025/20251018-North Wales Part 7/IMG_8343.jpg",
       "/photos/2025/20251018-North Wales Part 7/IMG_8359.jpg",
@@ -382,6 +407,7 @@
     "year": 2025,
     "date": "2025-10-18",
     "location": "North Wales",
+    "folder": "20251018-North Wales Part 6",
     "images": [
       "/photos/2025/20251018-North Wales Part 6/IMG_8253.jpg",
       "/photos/2025/20251018-North Wales Part 6/IMG_8255.jpg",
@@ -399,6 +425,7 @@
     "year": 2025,
     "date": "2025-10-18",
     "location": "North Wales",
+    "folder": "20251018-North Wales Part 5",
     "images": [
       "/photos/2025/20251018-North Wales Part 5/IMG_8183.jpg",
       "/photos/2025/20251018-North Wales Part 5/IMG_8191.jpg",
@@ -416,6 +443,7 @@
     "year": 2025,
     "date": "2025-10-18",
     "location": "North Wales",
+    "folder": "20251018-North Wales Part 4",
     "images": [
       "/photos/2025/20251018-North Wales Part 4/IMG_8138.jpg",
       "/photos/2025/20251018-North Wales Part 4/IMG_8142.jpg",
@@ -433,6 +461,7 @@
     "year": 2025,
     "date": "2025-10-18",
     "location": "North Wales",
+    "folder": "20251018-North Wales Part 3",
     "images": [
       "/photos/2025/20251018-North Wales Part 3/IMG_8123.jpg",
       "/photos/2025/20251018-North Wales Part 3/IMG_8125.jpg",
@@ -450,6 +479,7 @@
     "year": 2025,
     "date": "2025-10-18",
     "location": "North Wales",
+    "folder": "20251018-North Wales Part 2",
     "images": [
       "/photos/2025/20251018-North Wales Part 2/IMG_8088.jpg",
       "/photos/2025/20251018-North Wales Part 2/IMG_8103.jpg",
@@ -467,6 +497,7 @@
     "year": 2025,
     "date": "2025-10-18",
     "location": "North Wales",
+    "folder": "20251018-North Wales",
     "images": [
       "/photos/2025/20251018-North Wales/A7C08689.JPG",
       "/photos/2025/20251018-North Wales/A7C08704.JPG",
@@ -484,6 +515,7 @@
     "year": 2025,
     "date": "2025-10-04",
     "location": "Chatsworth",
+    "folder": "20251004-Chatsworth Part 5",
     "images": [
       "/photos/2025/20251004-Chatsworth Part 5/A7C06539.JPG",
       "/photos/2025/20251004-Chatsworth Part 5/A7C06545.JPG",
@@ -497,6 +529,7 @@
     "year": 2025,
     "date": "2025-10-04",
     "location": "Chatsworth",
+    "folder": "20251004-Chatsworth Part 4",
     "images": [
       "/photos/2025/20251004-Chatsworth Part 4/A7C06477-1.JPG",
       "/photos/2025/20251004-Chatsworth Part 4/A7C06495.JPG",
@@ -514,6 +547,7 @@
     "year": 2025,
     "date": "2025-10-04",
     "location": "Chatsworth",
+    "folder": "20251004-Chatsworth Part 3",
     "images": [
       "/photos/2025/20251004-Chatsworth Part 3/A7C06451.JPG",
       "/photos/2025/20251004-Chatsworth Part 3/A7C06455.JPG",
@@ -531,6 +565,7 @@
     "year": 2025,
     "date": "2025-10-04",
     "location": "Chatsworth",
+    "folder": "20251004-Chatsworth Part 2",
     "images": [
       "/photos/2025/20251004-Chatsworth Part 2/A7C06414.JPG",
       "/photos/2025/20251004-Chatsworth Part 2/A7C06424.JPG",
@@ -548,6 +583,7 @@
     "year": 2025,
     "date": "2025-10-04",
     "location": "Chatsworth",
+    "folder": "20251004-Chatsworth",
     "images": [
       "/photos/2025/20251004-Chatsworth/A7C06337.JPG",
       "/photos/2025/20251004-Chatsworth/A7C06339.JPG",
@@ -565,6 +601,7 @@
     "year": 2025,
     "date": "2025-09-27",
     "location": "Cambridge",
+    "folder": "20250927-Cambridge Part 2",
     "images": [
       "/photos/2025/20250927-Cambridge Part 2/A7C06186.JPG",
       "/photos/2025/20250927-Cambridge Part 2/A7C06188.JPG",
@@ -585,6 +622,7 @@
     "year": 2025,
     "date": "2025-09-27",
     "location": "Cambridge",
+    "folder": "20250927-Cambridge",
     "images": [
       "/photos/2025/20250927-Cambridge/A7C06095.JPG",
       "/photos/2025/20250927-Cambridge/A7C06097.JPG",
@@ -602,6 +640,7 @@
     "year": 2025,
     "date": "2025-09-21",
     "location": "York",
+    "folder": "20250921-York Part 5",
     "images": [
       "/photos/2025/20250921-York Part 5/A7C06021.jpg",
       "/photos/2025/20250921-York Part 5/A7C06025.jpg",
@@ -615,6 +654,7 @@
     "year": 2025,
     "date": "2025-09-21",
     "location": "York",
+    "folder": "20250921-York Part 4",
     "images": [
       "/photos/2025/20250921-York Part 4/A7C06000.jpg",
       "/photos/2025/20250921-York Part 4/A7C06001.jpg",
@@ -632,6 +672,7 @@
     "year": 2025,
     "date": "2025-09-21",
     "location": "York",
+    "folder": "20250921-York Part 3",
     "images": [
       "/photos/2025/20250921-York Part 3/A7C05932.jpg",
       "/photos/2025/20250921-York Part 3/A7C05944.jpg",
@@ -649,6 +690,7 @@
     "year": 2025,
     "date": "2025-09-21",
     "location": "York",
+    "folder": "20250921-York Part 2",
     "images": [
       "/photos/2025/20250921-York Part 2/A7C05877.jpg",
       "/photos/2025/20250921-York Part 2/A7C05879.jpg",
@@ -666,6 +708,7 @@
     "year": 2025,
     "date": "2025-09-21",
     "location": "York",
+    "folder": "20250921-York",
     "images": [
       "/photos/2025/20250921-York/A7C05847.jpg",
       "/photos/2025/20250921-York/A7C05848.jpg",
@@ -683,6 +726,7 @@
     "year": 2025,
     "date": "2025-09-11",
     "location": "Dubai",
+    "folder": "20250911-Dubai Part 3",
     "images": [
       "/photos/2025/20250911-Dubai Part 3/IMG_3141.jpg",
       "/photos/2025/20250911-Dubai Part 3/IMG_3143.jpg",
@@ -700,6 +744,7 @@
     "year": 2025,
     "date": "2025-09-11",
     "location": "Dubai",
+    "folder": "20250911-Dubai Part 2",
     "images": [
       "/photos/2025/20250911-Dubai Part 2/A7C05832.jpg",
       "/photos/2025/20250911-Dubai Part 2/A7C05833.jpg",
@@ -717,6 +762,7 @@
     "year": 2025,
     "date": "2025-09-11",
     "location": "Dubai",
+    "folder": "20250911-Dubai",
     "images": [
       "/photos/2025/20250911-Dubai/A7C05781.jpg",
       "/photos/2025/20250911-Dubai/A7C05784.jpg",
@@ -734,6 +780,7 @@
     "year": 2025,
     "date": "2025-08-04",
     "location": "Shanghai China Joy",
+    "folder": "20250804-Shanghai China Joy Part 3",
     "images": [
       "/photos/2025/20250804-Shanghai China Joy Part 3/A7C05699.jpg",
       "/photos/2025/20250804-Shanghai China Joy Part 3/A7C05719.jpg",
@@ -747,6 +794,7 @@
     "year": 2025,
     "date": "2025-08-04",
     "location": "Shanghai China Joy",
+    "folder": "20250804-Shanghai China Joy Part 2",
     "images": [
       "/photos/2025/20250804-Shanghai China Joy Part 2/A7C05634.jpg",
       "/photos/2025/20250804-Shanghai China Joy Part 2/A7C05635.jpg",
@@ -764,6 +812,7 @@
     "year": 2025,
     "date": "2025-08-04",
     "location": "Shanghai China Joy",
+    "folder": "20250804-Shanghai China Joy",
     "images": [
       "/photos/2025/20250804-Shanghai China Joy/A7C05582.jpg",
       "/photos/2025/20250804-Shanghai China Joy/A7C05592.jpg",
@@ -781,6 +830,7 @@
     "year": 2025,
     "date": "2025-05-11",
     "location": "Sun Yat-sen Mausoleum, Ming Xiaoling Mausoleum, Meiling Palace, Linggu Temple Part2",
+    "folder": "20250511-Sun Yat-sen Mausoleum, Ming Xiaoling Mausoleum, Meiling Palace, Linggu Temple Part2",
     "images": [
       "/photos/2025/20250511-Sun Yat-sen Mausoleum, Ming Xiaoling Mausoleum, Meiling Palace, Linggu Temple Part2/A7C03707.JPG",
       "/photos/2025/20250511-Sun Yat-sen Mausoleum, Ming Xiaoling Mausoleum, Meiling Palace, Linggu Temple Part2/A7C03715.JPG",
@@ -798,6 +848,7 @@
     "year": 2025,
     "date": "2025-05-11",
     "location": "Sun Yat-sen Mausoleum, Ming Xiaoling Mausoleum, Meiling Palace, Linggu Temple",
+    "folder": "20250511-Sun Yat-sen Mausoleum, Ming Xiaoling Mausoleum, Meiling Palace, Linggu Temple Part 4",
     "images": [
       "/photos/2025/20250511-Sun Yat-sen Mausoleum, Ming Xiaoling Mausoleum, Meiling Palace, Linggu Temple Part 4/A7C03482.JPG",
       "/photos/2025/20250511-Sun Yat-sen Mausoleum, Ming Xiaoling Mausoleum, Meiling Palace, Linggu Temple Part 4/A7C03483.JPG",
@@ -813,6 +864,7 @@
     "year": 2025,
     "date": "2025-05-11",
     "location": "Sun Yat-sen Mausoleum, Ming Xiaoling Mausoleum, Meiling Palace, Linggu Temple",
+    "folder": "20250511-Sun Yat-sen Mausoleum, Ming Xiaoling Mausoleum, Meiling Palace, Linggu Temple Part 3",
     "images": [
       "/photos/2025/20250511-Sun Yat-sen Mausoleum, Ming Xiaoling Mausoleum, Meiling Palace, Linggu Temple Part 3/A7C03515.JPG",
       "/photos/2025/20250511-Sun Yat-sen Mausoleum, Ming Xiaoling Mausoleum, Meiling Palace, Linggu Temple Part 3/A7C03518.JPG",
@@ -830,6 +882,7 @@
     "year": 2025,
     "date": "2025-05-11",
     "location": "Sun Yat-sen Mausoleum, Ming Xiaoling Mausoleum, Meiling Palace, Linggu Temple",
+    "folder": "20250511-Sun Yat-sen Mausoleum, Ming Xiaoling Mausoleum, Meiling Palace, Linggu Temple",
     "images": [
       "/photos/2025/20250511-Sun Yat-sen Mausoleum, Ming Xiaoling Mausoleum, Meiling Palace, Linggu Temple/A7C03900.JPG",
       "/photos/2025/20250511-Sun Yat-sen Mausoleum, Ming Xiaoling Mausoleum, Meiling Palace, Linggu Temple/A7C03906.JPG",
@@ -847,6 +900,7 @@
     "year": 2024,
     "date": "2024-11-23",
     "location": "Nanjing Xuan Wu Lake",
+    "folder": "20241123-Nanjing Xuan Wu Lake",
     "images": [
       "/photos/2024/20241123-Nanjing Xuan Wu Lake/DSC02027.JPG",
       "/photos/2024/20241123-Nanjing Xuan Wu Lake/DSC02028.JPG",
@@ -864,6 +918,7 @@
     "year": 2024,
     "date": "2024-11-17",
     "location": "Dali, Yunnan",
+    "folder": "20241117-Dali, Yunnan Part 4",
     "images": [
       "/photos/2024/20241117-Dali, Yunnan Part 4/DJI_0010.JPG",
       "/photos/2024/20241117-Dali, Yunnan Part 4/DJI_0053.JPG",
@@ -884,6 +939,7 @@
     "year": 2024,
     "date": "2024-11-17",
     "location": "Dali, Yunnan",
+    "folder": "20241117-Dali, Yunnan Part 3",
     "images": [
       "/photos/2024/20241117-Dali, Yunnan Part 3/DSC01093.JPG",
       "/photos/2024/20241117-Dali, Yunnan Part 3/DSC01108.JPG",
@@ -901,6 +957,7 @@
     "year": 2024,
     "date": "2024-11-17",
     "location": "Dali, Yunnan",
+    "folder": "20241117-Dali, Yunnan Part 2",
     "images": [
       "/photos/2024/20241117-Dali, Yunnan Part 2/DSC01205.JPG",
       "/photos/2024/20241117-Dali, Yunnan Part 2/DSC01212.JPG",
@@ -918,6 +975,7 @@
     "year": 2024,
     "date": "2024-11-17",
     "location": "Dali, Yunnan",
+    "folder": "20241117-Dali, Yunnan",
     "images": [
       "/photos/2024/20241117-Dali, Yunnan/DSC01271.JPG",
       "/photos/2024/20241117-Dali, Yunnan/DSC01276.JPG",
@@ -935,6 +993,7 @@
     "year": 2024,
     "date": "2024-11-11",
     "location": "Yulong Snow Mountain",
+    "folder": "20241111-Yulong Snow Mountain",
     "images": [
       "/photos/2024/20241111-Yulong Snow Mountain/DSC00726.JPG",
       "/photos/2024/20241111-Yulong Snow Mountain/DSC00734.JPG",
@@ -956,6 +1015,7 @@
     "year": 2024,
     "date": "2024-11-09",
     "location": "Shangri-La, Yunnan",
+    "folder": "20241109-Shangri-La, Yunnan Part 2",
     "images": [
       "/photos/2024/20241109-Shangri-La, Yunnan Part 2/DSC00618.JPG",
       "/photos/2024/20241109-Shangri-La, Yunnan Part 2/DSC00641.JPG",
@@ -970,6 +1030,7 @@
     "year": 2024,
     "date": "2024-11-09",
     "location": "Shangri-La, Yunnan",
+    "folder": "20241109-Shangri-La, Yunnan",
     "images": [
       "/photos/2024/20241109-Shangri-La, Yunnan/DSC00316.JPG",
       "/photos/2024/20241109-Shangri-La, Yunnan/DSC00322.JPG",
@@ -987,6 +1048,7 @@
     "year": 2024,
     "date": "2024-11-07",
     "location": "Lijiang, Yunnan",
+    "folder": "20241107-Lijiang, Yunnan Part 6",
     "images": [
       "/photos/2024/20241107-Lijiang, Yunnan Part 6/DSC00272.JPG",
       "/photos/2024/20241107-Lijiang, Yunnan Part 6/DSC00275.JPG",
@@ -1005,6 +1067,7 @@
     "year": 2024,
     "date": "2024-11-07",
     "location": "Lijiang, Yunnan",
+    "folder": "20241107-Lijiang, Yunnan Part 5",
     "images": [
       "/photos/2024/20241107-Lijiang, Yunnan Part 5/DSC00241.JPG",
       "/photos/2024/20241107-Lijiang, Yunnan Part 5/DSC00242.JPG",
@@ -1022,6 +1085,7 @@
     "year": 2024,
     "date": "2024-11-07",
     "location": "Lijiang, Yunnan",
+    "folder": "20241107-Lijiang, Yunnan Part 4",
     "images": [
       "/photos/2024/20241107-Lijiang, Yunnan Part 4/DSC00199.JPG",
       "/photos/2024/20241107-Lijiang, Yunnan Part 4/DSC00216.JPG",
@@ -1039,6 +1103,7 @@
     "year": 2024,
     "date": "2024-11-07",
     "location": "Lijiang, Yunnan",
+    "folder": "20241107-Lijiang, Yunnan Part 3",
     "images": [
       "/photos/2024/20241107-Lijiang, Yunnan Part 3/DSC00147.JPG",
       "/photos/2024/20241107-Lijiang, Yunnan Part 3/DSC00149.JPG",
@@ -1056,6 +1121,7 @@
     "year": 2024,
     "date": "2024-11-07",
     "location": "Lijiang, Yunnan",
+    "folder": "20241107-Lijiang, Yunnan Part 2",
     "images": [
       "/photos/2024/20241107-Lijiang, Yunnan Part 2/DJI_0002.JPG",
       "/photos/2024/20241107-Lijiang, Yunnan Part 2/DJI_20241107123939_0002_D.JPG",
@@ -1073,6 +1139,7 @@
     "year": 2024,
     "date": "2024-11-07",
     "location": "Lijiang, Yunnan",
+    "folder": "20241107-Lijiang, Yunnan",
     "images": [
       "/photos/2024/20241107-Lijiang, Yunnan/DSC00168.jpeg",
       "/photos/2024/20241107-Lijiang, Yunnan/DSC00175.jpeg",
@@ -1090,6 +1157,7 @@
     "year": 2024,
     "date": "2024-11-04",
     "location": "Guangzhou",
+    "folder": "20241104-Guangzhou Part 5",
     "images": [
       "/photos/2024/20241104-Guangzhou Part 5/R0009206.JPG",
       "/photos/2024/20241104-Guangzhou Part 5/R0009250.JPG",
@@ -1102,6 +1170,7 @@
     "year": 2024,
     "date": "2024-11-04",
     "location": "Guangzhou",
+    "folder": "20241104-Guangzhou Part 4",
     "images": [
       "/photos/2024/20241104-Guangzhou Part 4/R0009158.JPG",
       "/photos/2024/20241104-Guangzhou Part 4/R0009166.JPG",
@@ -1119,6 +1188,7 @@
     "year": 2024,
     "date": "2024-11-04",
     "location": "Guangzhou",
+    "folder": "20241104-Guangzhou Part 3",
     "images": [
       "/photos/2024/20241104-Guangzhou Part 3/R0009091.JPG",
       "/photos/2024/20241104-Guangzhou Part 3/R0009094.JPG",
@@ -1136,6 +1206,7 @@
     "year": 2024,
     "date": "2024-11-04",
     "location": "Guangzhou",
+    "folder": "20241104-Guangzhou Part 2",
     "images": [
       "/photos/2024/20241104-Guangzhou Part 2/R0009057.JPG",
       "/photos/2024/20241104-Guangzhou Part 2/R0009058.JPG",
@@ -1153,6 +1224,7 @@
     "year": 2024,
     "date": "2024-11-04",
     "location": "Guangzhou",
+    "folder": "20241104-Guangzhou",
     "images": [
       "/photos/2024/20241104-Guangzhou/DJI_20241105102144_0004_D.JPG",
       "/photos/2024/20241104-Guangzhou/DJI_20241106124342_0012_D.JPG",
@@ -1170,6 +1242,7 @@
     "year": 2024,
     "date": "2024-10-31",
     "location": "Shanghai Disney",
+    "folder": "20241031-Shanghai Disney Part 3",
     "images": [
       "/photos/2024/20241031-Shanghai Disney Part 3/IMG_3416.JPEG",
       "/photos/2024/20241031-Shanghai Disney Part 3/IMG_3455.JPEG",
@@ -1185,6 +1258,7 @@
     "year": 2024,
     "date": "2024-10-31",
     "location": "Shanghai Disney",
+    "folder": "20241031-Shanghai Disney Part 2",
     "images": [
       "/photos/2024/20241031-Shanghai Disney Part 2/IMG_3294.JPEG",
       "/photos/2024/20241031-Shanghai Disney Part 2/IMG_3297.JPEG",
@@ -1202,6 +1276,7 @@
     "year": 2024,
     "date": "2024-10-31",
     "location": "Shanghai Disney",
+    "folder": "20241031-Shanghai Disney",
     "images": [
       "/photos/2024/20241031-Shanghai Disney/IMG_3250.JPEG",
       "/photos/2024/20241031-Shanghai Disney/IMG_3257.JPEG",
@@ -1219,6 +1294,7 @@
     "year": 2024,
     "date": "2024-10-25",
     "location": "Lhasa, Tibet",
+    "folder": "20241025-Lhasa, Tibet Part 5",
     "images": [
       "/photos/2024/20241025-Lhasa, Tibet Part 5/IMG_3140.jpeg",
       "/photos/2024/20241025-Lhasa, Tibet Part 5/IMG_3149.jpeg",
@@ -1233,14 +1309,15 @@
     "year": 2024,
     "date": "2024-10-25",
     "location": "Lhasa, Tibet",
+    "folder": "20241025-Lhasa, Tibet Part 4",
     "images": [
+      "/photos/2024/20241025-Lhasa, Tibet Part 4/DSC1521.JPG",
+      "/photos/2024/20241025-Lhasa, Tibet Part 4/DSC1523.JPG",
       "/photos/2024/20241025-Lhasa, Tibet Part 4/IMG_20241028_202004.jpg",
       "/photos/2024/20241025-Lhasa, Tibet Part 4/IMG_20241028_202211.jpg",
       "/photos/2024/20241025-Lhasa, Tibet Part 4/IMG_3137.jpeg",
       "/photos/2024/20241025-Lhasa, Tibet Part 4/IMG_3170.jpeg",
-      "/photos/2024/20241025-Lhasa, Tibet Part 4/IMG_3171.jpeg",
-      "/photos/2024/20241025-Lhasa, Tibet Part 4/_DSC1521.JPG",
-      "/photos/2024/20241025-Lhasa, Tibet Part 4/_DSC1523.JPG"
+      "/photos/2024/20241025-Lhasa, Tibet Part 4/IMG_3171.jpeg"
     ],
     "description": "Sera and Drepung monasteries. The great seats of learning where Buddhist philosophy has been debated for centuries."
   },
@@ -1248,16 +1325,17 @@
     "year": 2024,
     "date": "2024-10-25",
     "location": "Lhasa, Tibet",
+    "folder": "20241025-Lhasa, Tibet Part 3",
     "images": [
+      "/photos/2024/20241025-Lhasa, Tibet Part 3/DSC1519.JPG",
+      "/photos/2024/20241025-Lhasa, Tibet Part 3/DSC1524.JPG",
+      "/photos/2024/20241025-Lhasa, Tibet Part 3/DSC1530.JPG",
       "/photos/2024/20241025-Lhasa, Tibet Part 3/IMG_3062.jpeg",
       "/photos/2024/20241025-Lhasa, Tibet Part 3/IMG_3121.jpeg",
       "/photos/2024/20241025-Lhasa, Tibet Part 3/IMG_3122.jpeg",
       "/photos/2024/20241025-Lhasa, Tibet Part 3/IMG_3123.jpeg",
       "/photos/2024/20241025-Lhasa, Tibet Part 3/IMG_3134.jpeg",
-      "/photos/2024/20241025-Lhasa, Tibet Part 3/IMG_3135.jpeg",
-      "/photos/2024/20241025-Lhasa, Tibet Part 3/_DSC1519.JPG",
-      "/photos/2024/20241025-Lhasa, Tibet Part 3/_DSC1524.JPG",
-      "/photos/2024/20241025-Lhasa, Tibet Part 3/_DSC1530.JPG"
+      "/photos/2024/20241025-Lhasa, Tibet Part 3/IMG_3135.jpeg"
     ],
     "description": "Inside the Potala Palace. The Dalai Lamas' former winter residence holds centuries of Buddhist art and sacred relics."
   },
@@ -1265,16 +1343,17 @@
     "year": 2024,
     "date": "2024-10-25",
     "location": "Lhasa, Tibet",
+    "folder": "20241025-Lhasa, Tibet Part 2",
     "images": [
-      "/photos/2024/20241025-Lhasa, Tibet Part 2/_DSC0383.jpeg",
-      "/photos/2024/20241025-Lhasa, Tibet Part 2/_DSC0399.jpeg",
-      "/photos/2024/20241025-Lhasa, Tibet Part 2/_DSC0402.jpeg",
-      "/photos/2024/20241025-Lhasa, Tibet Part 2/_DSC0411.jpeg",
-      "/photos/2024/20241025-Lhasa, Tibet Part 2/_DSC0428.jpeg",
-      "/photos/2024/20241025-Lhasa, Tibet Part 2/_DSC0624.jpeg",
-      "/photos/2024/20241025-Lhasa, Tibet Part 2/_DSC0884.jpeg",
-      "/photos/2024/20241025-Lhasa, Tibet Part 2/_DSC0919.jpeg",
-      "/photos/2024/20241025-Lhasa, Tibet Part 2/_DSC0927.jpeg"
+      "/photos/2024/20241025-Lhasa, Tibet Part 2/DSC0383.jpeg",
+      "/photos/2024/20241025-Lhasa, Tibet Part 2/DSC0399.jpeg",
+      "/photos/2024/20241025-Lhasa, Tibet Part 2/DSC0402.jpeg",
+      "/photos/2024/20241025-Lhasa, Tibet Part 2/DSC0411.jpeg",
+      "/photos/2024/20241025-Lhasa, Tibet Part 2/DSC0428.jpeg",
+      "/photos/2024/20241025-Lhasa, Tibet Part 2/DSC0624.jpeg",
+      "/photos/2024/20241025-Lhasa, Tibet Part 2/DSC0884.jpeg",
+      "/photos/2024/20241025-Lhasa, Tibet Part 2/DSC0919.jpeg",
+      "/photos/2024/20241025-Lhasa, Tibet Part 2/DSC0927.jpeg"
     ],
     "description": "The Jokhang Temple and Barkhor Street. Pilgrims prostrate themselves on the circuit around Tibet's holiest shrine."
   },
@@ -1282,7 +1361,9 @@
     "year": 2024,
     "date": "2024-10-25",
     "location": "Lhasa, Tibet",
+    "folder": "20241025-Lhasa, Tibet",
     "images": [
+      "/photos/2024/20241025-Lhasa, Tibet/DSC0349.jpeg",
       "/photos/2024/20241025-Lhasa, Tibet/IMG_20241025_201739.jpeg",
       "/photos/2024/20241025-Lhasa, Tibet/IMG_20241025_201748.jpeg",
       "/photos/2024/20241025-Lhasa, Tibet/IMG_20241025_201858.jpeg",
@@ -1291,8 +1372,7 @@
       "/photos/2024/20241025-Lhasa, Tibet/IMG_20241025_211642.jpeg",
       "/photos/2024/20241025-Lhasa, Tibet/IMG_20241025_211731.jpeg",
       "/photos/2024/20241025-Lhasa, Tibet/IMG_20241025_211758.jpeg",
-      "/photos/2024/20241025-Lhasa, Tibet/IMG_20241025_212948.jpeg",
-      "/photos/2024/20241025-Lhasa, Tibet/_DSC0349.jpeg"
+      "/photos/2024/20241025-Lhasa, Tibet/IMG_20241025_212948.jpeg"
     ],
     "description": "Lhasa, the sacred city on the roof of the world. The Potala Palace rises above a land where spirituality permeates every aspect of life."
   },
@@ -1300,6 +1380,7 @@
     "year": 2024,
     "date": "2024-10-24",
     "location": "Shanghai Museum Egypt Special Exhibition",
+    "folder": "20241024-Shanghai Museum Egypt Special Exhibition Part 6",
     "images": [
       "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 6/IMG_2933.jpeg",
       "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 6/IMG_2935.jpeg",
@@ -1314,16 +1395,17 @@
     "year": 2024,
     "date": "2024-10-24",
     "location": "Shanghai Museum Egypt Special Exhibition",
+    "folder": "20241024-Shanghai Museum Egypt Special Exhibition Part 5",
     "images": [
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 5/DSC0294.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 5/DSC0295.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 5/DSC0304.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 5/DSC0312.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 5/DSC0316.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 5/DSC0317.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 5/DSC0318.JPG",
       "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 5/IMG_2879.jpeg",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 5/IMG_2905.jpeg",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 5/_DSC0294.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 5/_DSC0295.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 5/_DSC0304.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 5/_DSC0312.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 5/_DSC0316.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 5/_DSC0317.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 5/_DSC0318.JPG"
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 5/IMG_2905.jpeg"
     ],
     "description": "The Book of the Dead and other papyri. Ancient spells meant to guide souls through the afterlife."
   },
@@ -1331,16 +1413,17 @@
     "year": 2024,
     "date": "2024-10-24",
     "location": "Shanghai Museum Egypt Special Exhibition",
+    "folder": "20241024-Shanghai Museum Egypt Special Exhibition Part 4",
     "images": [
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 4/_DSC0225.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 4/_DSC0227.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 4/_DSC0232.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 4/_DSC0245.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 4/_DSC0252.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 4/_DSC0253.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 4/_DSC0256.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 4/_DSC0258.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 4/_DSC0264.JPG"
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 4/DSC0225.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 4/DSC0227.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 4/DSC0232.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 4/DSC0245.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 4/DSC0252.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 4/DSC0253.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 4/DSC0256.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 4/DSC0258.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 4/DSC0264.JPG"
     ],
     "description": "Daily life in ancient Egypt. Jewelry, cosmetics, and tools that reveal how ordinary people lived millennia ago."
   },
@@ -1348,16 +1431,17 @@
     "year": 2024,
     "date": "2024-10-24",
     "location": "Shanghai Museum Egypt Special Exhibition",
+    "folder": "20241024-Shanghai Museum Egypt Special Exhibition Part 3",
     "images": [
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 3/_DSC0205.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 3/_DSC0209.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 3/_DSC0213.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 3/_DSC0217.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 3/_DSC0218.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 3/_DSC0219.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 3/_DSC0220.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 3/_DSC0223.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 3/_DSC0224.JPG"
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 3/DSC0205.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 3/DSC0209.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 3/DSC0213.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 3/DSC0217.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 3/DSC0218.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 3/DSC0219.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 3/DSC0220.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 3/DSC0223.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 3/DSC0224.JPG"
     ],
     "description": "Gods and pharaohs. Statues and reliefs that once adorned temples along the Nile."
   },
@@ -1365,16 +1449,17 @@
     "year": 2024,
     "date": "2024-10-24",
     "location": "Shanghai Museum Egypt Special Exhibition",
+    "folder": "20241024-Shanghai Museum Egypt Special Exhibition Part 2",
     "images": [
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 2/_DSC0178.jpeg",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 2/_DSC0184.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 2/_DSC0187.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 2/_DSC0188.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 2/_DSC0191.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 2/_DSC0193.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 2/_DSC0194.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 2/_DSC0199.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 2/_DSC0201.JPG"
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 2/DSC0178.jpeg",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 2/DSC0184.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 2/DSC0187.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 2/DSC0188.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 2/DSC0191.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 2/DSC0193.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 2/DSC0194.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 2/DSC0199.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition Part 2/DSC0201.JPG"
     ],
     "description": "Royal artifacts and funerary objects. The Egyptian obsession with eternal life preserved in gold and stone."
   },
@@ -1382,16 +1467,17 @@
     "year": 2024,
     "date": "2024-10-24",
     "location": "Shanghai Museum Egypt Special Exhibition",
+    "folder": "20241024-Shanghai Museum Egypt Special Exhibition",
     "images": [
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition/_DSC0147.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition/_DSC0149.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition/_DSC0150.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition/_DSC0151.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition/_DSC0156.jpeg",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition/_DSC0159.jpeg",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition/_DSC0165.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition/_DSC0173.JPG",
-      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition/_DSC0176.JPG"
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition/DSC0147.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition/DSC0149.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition/DSC0150.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition/DSC0151.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition/DSC0156.jpeg",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition/DSC0159.jpeg",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition/DSC0165.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition/DSC0173.JPG",
+      "/photos/2024/20241024-Shanghai Museum Egypt Special Exhibition/DSC0176.JPG"
     ],
     "description": "Ancient Egypt comes to Shanghai. Mummies, hieroglyphics, and treasures from the Nile Valley in a special exhibition at Shanghai Museum."
   },
@@ -1399,15 +1485,16 @@
     "year": 2024,
     "date": "2024-10-23",
     "location": "Shanghai Wukang road",
+    "folder": "20241023-Shanghai Wukang road",
     "images": [
       "/photos/2024/20241023-Shanghai Wukang road/DJI_20241023_160709_068.jpeg",
-      "/photos/2024/20241023-Shanghai Wukang road/_DSC0084.JPG",
-      "/photos/2024/20241023-Shanghai Wukang road/_DSC0085.JPG",
-      "/photos/2024/20241023-Shanghai Wukang road/_DSC0088.JPG",
-      "/photos/2024/20241023-Shanghai Wukang road/_DSC0091.JPG",
-      "/photos/2024/20241023-Shanghai Wukang road/_DSC0092.JPG",
-      "/photos/2024/20241023-Shanghai Wukang road/_DSC0108.JPG",
-      "/photos/2024/20241023-Shanghai Wukang road/_DSC0111.JPG"
+      "/photos/2024/20241023-Shanghai Wukang road/DSC0084.JPG",
+      "/photos/2024/20241023-Shanghai Wukang road/DSC0085.JPG",
+      "/photos/2024/20241023-Shanghai Wukang road/DSC0088.JPG",
+      "/photos/2024/20241023-Shanghai Wukang road/DSC0091.JPG",
+      "/photos/2024/20241023-Shanghai Wukang road/DSC0092.JPG",
+      "/photos/2024/20241023-Shanghai Wukang road/DSC0108.JPG",
+      "/photos/2024/20241023-Shanghai Wukang road/DSC0111.JPG"
     ],
     "description": "Wukang Road, Shanghai's most picturesque lane. French Plane trees arch over art deco mansions where history whispers from every doorway."
   },
@@ -1415,6 +1502,7 @@
     "year": 2021,
     "date": "2021-07-31",
     "location": "Shanghai The Bund No. 1 Impressionist Painting Exhibition Monet",
+    "folder": "20210731-Shanghai The Bund No. 1 Impressionist Painting Exhibition Monet Part 5",
     "images": [
       "/photos/2021/20210731-Shanghai The Bund No. 1 Impressionist Painting Exhibition Monet Part 5/PXL_20210731_104457039.jpg",
       "/photos/2021/20210731-Shanghai The Bund No. 1 Impressionist Painting Exhibition Monet Part 5/PXL_20210731_121247258.MP.jpg",
@@ -1429,6 +1517,7 @@
     "year": 2021,
     "date": "2021-07-31",
     "location": "Shanghai The Bund No. 1 Impressionist Painting Exhibition Monet",
+    "folder": "20210731-Shanghai The Bund No. 1 Impressionist Painting Exhibition Monet Part 4",
     "images": [
       "/photos/2021/20210731-Shanghai The Bund No. 1 Impressionist Painting Exhibition Monet Part 4/PXL_20210731_120239208.jpg",
       "/photos/2021/20210731-Shanghai The Bund No. 1 Impressionist Painting Exhibition Monet Part 4/PXL_20210731_120502232.jpg",
@@ -1446,6 +1535,7 @@
     "year": 2021,
     "date": "2021-07-31",
     "location": "Shanghai The Bund No. 1 Impressionist Painting Exhibition Monet",
+    "folder": "20210731-Shanghai The Bund No. 1 Impressionist Painting Exhibition Monet Part 3",
     "images": [
       "/photos/2021/20210731-Shanghai The Bund No. 1 Impressionist Painting Exhibition Monet Part 3/PXL_20210731_113516736.jpg",
       "/photos/2021/20210731-Shanghai The Bund No. 1 Impressionist Painting Exhibition Monet Part 3/PXL_20210731_113933305.MP.jpg",
@@ -1463,6 +1553,7 @@
     "year": 2021,
     "date": "2021-07-31",
     "location": "Shanghai The Bund No. 1 Impressionist Painting Exhibition Monet",
+    "folder": "20210731-Shanghai The Bund No. 1 Impressionist Painting Exhibition Monet Part 2",
     "images": [
       "/photos/2021/20210731-Shanghai The Bund No. 1 Impressionist Painting Exhibition Monet Part 2/PXL_20210731_110824953.jpg",
       "/photos/2021/20210731-Shanghai The Bund No. 1 Impressionist Painting Exhibition Monet Part 2/PXL_20210731_111011648.jpg",
@@ -1480,6 +1571,7 @@
     "year": 2021,
     "date": "2021-07-31",
     "location": "Shanghai The Bund No. 1 Impressionist Painting Exhibition Monet",
+    "folder": "20210731-Shanghai The Bund No. 1 Impressionist Painting Exhibition Monet",
     "images": [
       "/photos/2021/20210731-Shanghai The Bund No. 1 Impressionist Painting Exhibition Monet/PXL_20210731_104810340.jpg",
       "/photos/2021/20210731-Shanghai The Bund No. 1 Impressionist Painting Exhibition Monet/PXL_20210731_105116408.jpg",
@@ -1497,6 +1589,7 @@
     "year": 2021,
     "date": "2021-07-31",
     "location": "Shanghai Museum of Art Pudong",
+    "folder": "20210731-Shanghai Museum of Art Pudong Part 7",
     "images": [
       "/photos/2021/20210731-Shanghai Museum of Art Pudong Part 7/PXL_20210731_055344822.jpg",
       "/photos/2021/20210731-Shanghai Museum of Art Pudong Part 7/PXL_20210731_055422650.jpg",
@@ -1513,6 +1606,7 @@
     "year": 2021,
     "date": "2021-07-31",
     "location": "Shanghai Museum of Art Pudong",
+    "folder": "20210731-Shanghai Museum of Art Pudong Part 6",
     "images": [
       "/photos/2021/20210731-Shanghai Museum of Art Pudong Part 6/PXL_20210731_051202598.MP.jpg",
       "/photos/2021/20210731-Shanghai Museum of Art Pudong Part 6/PXL_20210731_051224569.jpg",
@@ -1530,6 +1624,7 @@
     "year": 2021,
     "date": "2021-07-31",
     "location": "Shanghai Museum of Art Pudong",
+    "folder": "20210731-Shanghai Museum of Art Pudong Part 5",
     "images": [
       "/photos/2021/20210731-Shanghai Museum of Art Pudong Part 5/IMG_4416.JPG",
       "/photos/2021/20210731-Shanghai Museum of Art Pudong Part 5/IMG_4417.JPG",
@@ -1549,6 +1644,7 @@
     "year": 2021,
     "date": "2021-07-31",
     "location": "Shanghai Museum of Art Pudong",
+    "folder": "20210731-Shanghai Museum of Art Pudong Part 4",
     "images": [
       "/photos/2021/20210731-Shanghai Museum of Art Pudong Part 4/IMG_4363.JPG",
       "/photos/2021/20210731-Shanghai Museum of Art Pudong Part 4/IMG_4365.JPG",
@@ -1566,6 +1662,7 @@
     "year": 2021,
     "date": "2021-07-31",
     "location": "Shanghai Museum of Art Pudong",
+    "folder": "20210731-Shanghai Museum of Art Pudong Part 3",
     "images": [
       "/photos/2021/20210731-Shanghai Museum of Art Pudong Part 3/IMG_4331.JPG",
       "/photos/2021/20210731-Shanghai Museum of Art Pudong Part 3/IMG_4336.JPG",
@@ -1583,6 +1680,7 @@
     "year": 2021,
     "date": "2021-07-31",
     "location": "Shanghai Museum of Art Pudong",
+    "folder": "20210731-Shanghai Museum of Art Pudong Part 2",
     "images": [
       "/photos/2021/20210731-Shanghai Museum of Art Pudong Part 2/IMG_4260.JPG",
       "/photos/2021/20210731-Shanghai Museum of Art Pudong Part 2/IMG_4267.JPG",
@@ -1600,6 +1698,7 @@
     "year": 2021,
     "date": "2021-07-31",
     "location": "Shanghai Museum of Art Pudong",
+    "folder": "20210731-Shanghai Museum of Art Pudong",
     "images": [
       "/photos/2021/20210731-Shanghai Museum of Art Pudong/IMG_4195.JPG",
       "/photos/2021/20210731-Shanghai Museum of Art Pudong/IMG_4209.JPG",
@@ -1617,6 +1716,7 @@
     "year": 2021,
     "date": "2021-07-17",
     "location": "Leshan Giant Buddha",
+    "folder": "20210717-Leshan Giant Buddha Part 2",
     "images": [
       "/photos/2021/20210717-Leshan Giant Buddha Part 2/IMG_3774.JPG",
       "/photos/2021/20210717-Leshan Giant Buddha Part 2/IMG_3810.JPG",
@@ -1633,6 +1733,7 @@
     "year": 2021,
     "date": "2021-07-17",
     "location": "Leshan Giant Buddha",
+    "folder": "20210717-Leshan Giant Buddha",
     "images": [
       "/photos/2021/20210717-Leshan Giant Buddha/IMG_3520.JPG",
       "/photos/2021/20210717-Leshan Giant Buddha/IMG_3553.JPG",
@@ -1650,6 +1751,7 @@
     "year": 2021,
     "date": "2021-07-16",
     "location": "E Mei Mountain",
+    "folder": "20210716-E Mei Mountain Part 2",
     "images": [
       "/photos/2021/20210716-E Mei Mountain Part 2/IMG_3437.JPG",
       "/photos/2021/20210716-E Mei Mountain Part 2/IMG_3445.JPG",
@@ -1666,6 +1768,7 @@
     "year": 2021,
     "date": "2021-07-16",
     "location": "E Mei Mountain",
+    "folder": "20210716-E Mei Mountain",
     "images": [
       "/photos/2021/20210716-E Mei Mountain/IMG_3380.JPG",
       "/photos/2021/20210716-E Mei Mountain/IMG_3397.JPG",
@@ -1680,6 +1783,7 @@
     "year": 2021,
     "date": "2021-07-15",
     "location": "Chengdu Wuhou Temple",
+    "folder": "20210715-Chengdu Wuhou Temple",
     "images": [
       "/photos/2021/20210715-Chengdu Wuhou Temple/IMG_3242.JPG",
       "/photos/2021/20210715-Chengdu Wuhou Temple/IMG_3248.JPG",
@@ -1697,6 +1801,7 @@
     "year": 2021,
     "date": "2021-07-14",
     "location": "Chengdu Sanxingdui",
+    "folder": "20210714-Chengdu Sanxingdui Part 5",
     "images": [
       "/photos/2021/20210714-Chengdu Sanxingdui Part 5/IMG_3172.JPG",
       "/photos/2021/20210714-Chengdu Sanxingdui Part 5/IMG_3181.JPG",
@@ -1712,6 +1817,7 @@
     "year": 2021,
     "date": "2021-07-14",
     "location": "Chengdu Sanxingdui",
+    "folder": "20210714-Chengdu Sanxingdui Part 4",
     "images": [
       "/photos/2021/20210714-Chengdu Sanxingdui Part 4/IMG_3004.JPG",
       "/photos/2021/20210714-Chengdu Sanxingdui Part 4/IMG_3020.JPG",
@@ -1729,6 +1835,7 @@
     "year": 2021,
     "date": "2021-07-14",
     "location": "Chengdu Sanxingdui",
+    "folder": "20210714-Chengdu Sanxingdui Part 3",
     "images": [
       "/photos/2021/20210714-Chengdu Sanxingdui Part 3/IMG_2892.JPG",
       "/photos/2021/20210714-Chengdu Sanxingdui Part 3/IMG_2908.JPG",
@@ -1746,6 +1853,7 @@
     "year": 2021,
     "date": "2021-07-14",
     "location": "Chengdu Sanxingdui",
+    "folder": "20210714-Chengdu Sanxingdui Part 2",
     "images": [
       "/photos/2021/20210714-Chengdu Sanxingdui Part 2/IMG_2795.JPG",
       "/photos/2021/20210714-Chengdu Sanxingdui Part 2/IMG_2797.JPG",
@@ -1763,6 +1871,7 @@
     "year": 2021,
     "date": "2021-07-14",
     "location": "Chengdu Sanxingdui",
+    "folder": "20210714-Chengdu Sanxingdui",
     "images": [
       "/photos/2021/20210714-Chengdu Sanxingdui/IMG_2609.JPG",
       "/photos/2021/20210714-Chengdu Sanxingdui/IMG_2615.JPG",
@@ -1780,6 +1889,7 @@
     "year": 2021,
     "date": "2021-07-12",
     "location": "Chengdu Sichuan cuisine",
+    "folder": "20210712-Chengdu Sichuan cuisine Part 2",
     "images": [
       "/photos/2021/20210712-Chengdu Sichuan cuisine Part 2/IMG_2268.JPG",
       "/photos/2021/20210712-Chengdu Sichuan cuisine Part 2/IMG_2272.JPG",
@@ -1796,6 +1906,7 @@
     "year": 2021,
     "date": "2021-07-12",
     "location": "Chengdu Sichuan cuisine",
+    "folder": "20210712-Chengdu Sichuan cuisine",
     "images": [
       "/photos/2021/20210712-Chengdu Sichuan cuisine/IMG_2594.JPG",
       "/photos/2021/20210712-Chengdu Sichuan cuisine/IMG_2596.JPG",
@@ -1810,6 +1921,7 @@
     "year": 2021,
     "date": "2021-07-12",
     "location": "Chengdu Dujiangyan",
+    "folder": "20210712-Chengdu Dujiangyan",
     "images": [
       "/photos/2021/20210712-Chengdu Dujiangyan/IMG_2320.JPG",
       "/photos/2021/20210712-Chengdu Dujiangyan/IMG_2441.JPG",
@@ -1824,6 +1936,7 @@
     "year": 2021,
     "date": "2021-07-11",
     "location": "Chengdu Panda zoo",
+    "folder": "20210711-Chengdu Panda zoo",
     "images": [
       "/photos/2021/20210711-Chengdu Panda zoo/IMG_2117.JPG",
       "/photos/2021/20210711-Chengdu Panda zoo/IMG_2119.JPG",
@@ -1845,6 +1958,7 @@
     "year": 2021,
     "date": "2021-07-09",
     "location": "Shanghai City walk",
+    "folder": "20210709-Shanghai City walk",
     "images": [
       "/photos/2021/20210709-Shanghai City walk/2021-08-09 12.07.20.JPG",
       "/photos/2021/20210709-Shanghai City walk/2021-08-09 12.10.20.JPG",
@@ -1867,6 +1981,7 @@
     "year": 2019,
     "date": "2019-02-13",
     "location": "Nanjing Museum",
+    "folder": "20190213-Nanjing Museum Part 5",
     "images": [
       "/photos/2019/20190213-Nanjing Museum Part 5/IMG_1740.JPG",
       "/photos/2019/20190213-Nanjing Museum Part 5/IMG_1748.JPG",
@@ -1882,6 +1997,7 @@
     "year": 2019,
     "date": "2019-02-13",
     "location": "Nanjing Museum",
+    "folder": "20190213-Nanjing Museum Part 4",
     "images": [
       "/photos/2019/20190213-Nanjing Museum Part 4/IMG_1695.JPG",
       "/photos/2019/20190213-Nanjing Museum Part 4/IMG_1705.JPG",
@@ -1896,6 +2012,7 @@
     "year": 2019,
     "date": "2019-02-13",
     "location": "Nanjing Museum",
+    "folder": "20190213-Nanjing Museum Part 3",
     "images": [
       "/photos/2019/20190213-Nanjing Museum Part 3/IMG_1656.JPG",
       "/photos/2019/20190213-Nanjing Museum Part 3/IMG_1657.JPG",
@@ -1913,6 +2030,7 @@
     "year": 2019,
     "date": "2019-02-13",
     "location": "Nanjing Museum",
+    "folder": "20190213-Nanjing Museum Part 2",
     "images": [
       "/photos/2019/20190213-Nanjing Museum Part 2/IMG_1607.JPG",
       "/photos/2019/20190213-Nanjing Museum Part 2/IMG_1608.JPG",
@@ -1930,6 +2048,7 @@
     "year": 2019,
     "date": "2019-02-13",
     "location": "Nanjing Museum",
+    "folder": "20190213-Nanjing Museum",
     "images": [
       "/photos/2019/20190213-Nanjing Museum/IMG_1588.JPG",
       "/photos/2019/20190213-Nanjing Museum/IMG_1590.JPG",
@@ -1947,6 +2066,7 @@
     "year": 2019,
     "date": "2019-02-05",
     "location": "Nanjing Imperial Examination Museum",
+    "folder": "20190205-Nanjing Imperial Examination Museum Part 5",
     "images": [
       "/photos/2019/20190205-Nanjing Imperial Examination Museum Part 5/IMG_1271.JPG",
       "/photos/2019/20190205-Nanjing Imperial Examination Museum Part 5/IMG_1315.JPG",
@@ -1961,6 +2081,7 @@
     "year": 2019,
     "date": "2019-02-05",
     "location": "Nanjing Imperial Examination Museum",
+    "folder": "20190205-Nanjing Imperial Examination Museum Part 4",
     "images": [
       "/photos/2019/20190205-Nanjing Imperial Examination Museum Part 4/IMG_1214.JPG",
       "/photos/2019/20190205-Nanjing Imperial Examination Museum Part 4/IMG_1217.JPG",
@@ -1975,6 +2096,7 @@
     "year": 2019,
     "date": "2019-02-05",
     "location": "Nanjing Imperial Examination Museum",
+    "folder": "20190205-Nanjing Imperial Examination Museum Part 3",
     "images": [
       "/photos/2019/20190205-Nanjing Imperial Examination Museum Part 3/IMG_1157.JPG",
       "/photos/2019/20190205-Nanjing Imperial Examination Museum Part 3/IMG_1162.JPG",
@@ -1992,6 +2114,7 @@
     "year": 2019,
     "date": "2019-02-05",
     "location": "Nanjing Imperial Examination Museum",
+    "folder": "20190205-Nanjing Imperial Examination Museum Part 2",
     "images": [
       "/photos/2019/20190205-Nanjing Imperial Examination Museum Part 2/IMG_1098.JPG",
       "/photos/2019/20190205-Nanjing Imperial Examination Museum Part 2/IMG_1100.JPG",
@@ -2009,6 +2132,7 @@
     "year": 2019,
     "date": "2019-02-05",
     "location": "Nanjing Imperial Examination Museum",
+    "folder": "20190205-Nanjing Imperial Examination Museum",
     "images": [
       "/photos/2019/20190205-Nanjing Imperial Examination Museum/10793119552_IMG_1570.JPG",
       "/photos/2019/20190205-Nanjing Imperial Examination Museum/IMG_1097.JPG",
@@ -2026,6 +2150,7 @@
     "year": 2018,
     "date": "2018-11-14",
     "location": "Shanghai Cafe",
+    "folder": "20181114-Shanghai Cafe",
     "images": [
       "/photos/2018/20181114-Shanghai Cafe/IMG_0320.JPG",
       "/photos/2018/20181114-Shanghai Cafe/IMG_0324.JPG",
@@ -2039,6 +2164,7 @@
     "year": 2015,
     "date": "2015-02-12",
     "location": "Baijing First Look",
+    "folder": "20150212-Baijing First Look",
     "images": [
       "/photos/2015/20150212-Baijing First Look/1427125619555.jpg",
       "/photos/2015/20150212-Baijing First Look/1427125843139.jpg",
@@ -2053,6 +2179,7 @@
     "year": 2014,
     "date": "2014-11-23",
     "location": "Nanjing Railway for Love",
+    "folder": "20141123-Nanjing Railway for Love",
     "images": [
       "/photos/2014/20141123-Nanjing Railway for Love/DSC05474.JPG",
       "/photos/2014/20141123-Nanjing Railway for Love/DSC05476.JPG",
@@ -2068,6 +2195,7 @@
     "year": 2013,
     "date": "2013-10-02",
     "location": "XuanWu Lake",
+    "folder": "20131002-XuanWu Lake",
     "images": [
       "/photos/2013/20131002-XuanWu Lake/DSC00047.JPG",
       "/photos/2013/20131002-XuanWu Lake/DSC00050.JPG",
@@ -2084,6 +2212,7 @@
     "year": 2010,
     "date": "2010-12-11",
     "location": "Nanjing Normal University",
+    "folder": "20101211-Nanjing Normal University",
     "images": [
       "/photos/2010/20101211-Nanjing Normal University/p_large_REpl_4a3b0000261d2d0e.jpg",
       "/photos/2010/20101211-Nanjing Normal University/p_large_TbJQ_2a86000091bd2d0d.jpg",

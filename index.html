@@ -758,7 +758,7 @@ fetch('/gallery/photos.json')
 
             container.innerHTML = images.map(img => `
                 <a href="/gallery/" class="photo-strip-item">
-                    <img src="${img}" alt="Photo" loading="lazy">
+                    <img src="${encodeURI(img)}" alt="Photo" loading="lazy">
                 </a>
             `).join('');
         }

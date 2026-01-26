@@ -570,9 +570,10 @@ function renderTimeline(photos) {
         // Photos in grid
         group.images.forEach((img, idx) => {
             const caption = group.captions && group.captions[idx] ? group.captions[idx] : '';
+            const encodedImg = encodeURI(img);
             html += `
-                <div class="photo-thumb" onclick="openLightbox('${img}', '${caption.replace(/'/g, "\\'")}')">
-                    <img src="${img}" alt="${group.location}" loading="lazy" onload="this.classList.add('loaded')">
+                <div class="photo-thumb" onclick="openLightbox('${encodedImg}', '${caption.replace(/'/g, "\\'")}')">
+                    <img src="${encodedImg}" alt="${group.location}" loading="lazy" onload="this.classList.add('loaded')">
                     ${caption ? `<div class="photo-caption">${caption}</div>` : ''}
                 </div>
             `;

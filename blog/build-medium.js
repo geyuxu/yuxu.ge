@@ -110,8 +110,14 @@ renderer.code = function({ text, lang }) {
 <p><em>Full code available in the <a href="https://github.com/geyuxu">GitHub repository</a>.</em></p>`;
     }
 
-    // Short code block - keep as-is
-    return `<pre><code class="language-${language}">${escapeHtml(code)}</code></pre>`;
+    // Short code block - use inline code format for Medium compatibility
+    if (lines.length === 1) {
+        // Single line: inline code
+        return `<p><code>${escapeHtml(code)}</code></p>`;
+    }
+    // Multi-line short code: use blockquote with code formatting
+    const formattedLines = lines.map(line => `<code>${escapeHtml(line)}</code>`).join('<br>\n');
+    return `<blockquote>${formattedLines}</blockquote>`;
 };
 
 // Convert tables to images

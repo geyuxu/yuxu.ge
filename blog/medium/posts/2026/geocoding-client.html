@@ -48,7 +48,7 @@
 <hr>
 <h2>Problem #2: The TIME_WAIT Storm</h2>
 <p>Every naive geocoding request creates a new TCP connection:</p>
-<pre><code class="language-text">connect() → send HTTP request → receive response → close()</code></pre><p>At 500 QPS, this creates 500 connections per second. Each closed connection enters TIME_WAIT state for 60 seconds (Linux default). Do the math: 500 × 60 = 30,000 sockets stuck in TIME_WAIT, competing for the ~28,000 ephemeral ports available on a typical system.</p>
+<p><code>connect() → send HTTP request → receive response → close()</code></p><p>At 500 QPS, this creates 500 connections per second. Each closed connection enters TIME_WAIT state for 60 seconds (Linux default). Do the math: 500 × 60 = 30,000 sockets stuck in TIME_WAIT, competing for the ~28,000 ephemeral ports available on a typical system.</p>
 <p>Result: <code>OSError: [Errno 99] Cannot assign requested address</code></p>
 <h3>The Solution: Connection Pooling + Exponential Backoff</h3>
 <p>Replace stateless requests with a persistent session that reuses TCP connections:</p>

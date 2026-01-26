@@ -370,10 +370,41 @@
                 padding: 2rem 1.5rem 1rem;
             }
 
-            .social-links { flex-direction: row; flex-wrap: wrap; justify-content: center; }
-            .social-links a, .social-links .orcid-link { width: auto; padding: 0.5rem; font-size: 0; gap: 0; }
-            .social-links svg { width: 24px; height: 24px; }
-            .social-links .hide-mobile { display: none; }
+            .sidebar-top {
+                gap: 0;
+            }
+
+            .contact-block {
+                margin-top: 1.5rem;
+            }
+
+            .social-links {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.75rem;
+            }
+
+            .social-links a,
+            .social-links .orcid-link {
+                width: auto;
+                padding: 0.5rem;
+                font-size: 0;
+                gap: 0;
+            }
+
+            .social-links svg {
+                width: 24px;
+                height: 24px;
+            }
+
+            .social-links .hide-mobile {
+                display: none;
+            }
+
+            .sidebar-footer {
+                margin-top: 1rem;
+            }
 
             .content {
                 margin-left: 0;
@@ -430,6 +461,33 @@
 
             .photo-grid {
                 grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                padding: 1.5rem 1rem 1rem;
+            }
+
+            .avatar {
+                width: 80px;
+                height: 80px;
+            }
+
+            h1 {
+                font-size: 1.4rem;
+            }
+
+            .title-role {
+                font-size: 0.8rem;
+            }
+
+            .content {
+                padding: 1.5rem 1rem;
+            }
+
+            .page-title {
+                font-size: 1.5rem;
             }
         }
     </style>

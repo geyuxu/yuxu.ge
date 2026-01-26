@@ -1,0 +1,1 @@
+Inside the Potala Palace. The Dalai Lamas' former winter residence holds centuries of Buddhist art and sacred relics.

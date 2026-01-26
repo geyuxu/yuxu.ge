@@ -1,0 +1,1 @@
+The Leshan Giant Buddha, the world's largest stone Buddha. Carved into a cliff face where three rivers meet, it has watched over the waters for 1,200 years.

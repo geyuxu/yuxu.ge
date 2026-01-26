@@ -1,0 +1,1 @@
+The Ming Xiaoling Sacred Way. Ancient stone guardians line the path to the imperial tomb, where elephants, camels, and mythical creatures stand watch for six centuries.

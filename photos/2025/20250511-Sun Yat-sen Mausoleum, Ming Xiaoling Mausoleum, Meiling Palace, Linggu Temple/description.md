@@ -1,0 +1,1 @@
+Nanjing's sacred mountain, Zijin Shan. The Sun Yat-sen Mausoleum honors the founding father of modern China, while the Ming Xiaoling Mausoleum marks the tomb of the dynasty's first emperor.

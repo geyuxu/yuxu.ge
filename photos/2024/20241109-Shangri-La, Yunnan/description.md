@@ -1,0 +1,1 @@
+Shangri-La, the legendary paradise on the Tibetan plateau. High-altitude monasteries and yak herders in a land that inspired James Hilton's novel.

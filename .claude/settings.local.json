@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(for dir in */*/)",
+      "Bash(do)",
+      "Bash(if [ ! -f \"$dirdescription.md\" ])",
+      "Bash(then)",
+      "Bash(echo:*)",
+      "Bash(fi)",
+      "Bash(done)"
+    ]
+  }
+}

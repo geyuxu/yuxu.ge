@@ -1,0 +1,1 @@
+Ancient Egypt comes to Shanghai. Mummies, hieroglyphics, and treasures from the Nile Valley in a special exhibition at Shanghai Museum.

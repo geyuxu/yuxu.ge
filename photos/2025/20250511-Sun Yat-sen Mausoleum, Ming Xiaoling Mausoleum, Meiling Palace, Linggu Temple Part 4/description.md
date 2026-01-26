@@ -1,0 +1,1 @@
+Final moments on Zijin Shan. The mountain's forested trails connect centuries of Chinese history, from Ming emperors to Republican revolutionaries.

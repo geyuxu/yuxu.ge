@@ -1,0 +1,1 @@
+The folk arts hall. Traditional crafts, shadow puppets, and the living heritage of Chinese culture.

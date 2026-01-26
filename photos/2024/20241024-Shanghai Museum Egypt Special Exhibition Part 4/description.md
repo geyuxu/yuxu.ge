@@ -1,0 +1,1 @@
+Daily life in ancient Egypt. Jewelry, cosmetics, and tools that reveal how ordinary people lived millennia ago.

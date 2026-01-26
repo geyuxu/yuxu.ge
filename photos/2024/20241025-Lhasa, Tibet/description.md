@@ -1,0 +1,1 @@
+Lhasa, the sacred city on the roof of the world. The Potala Palace rises above a land where spirituality permeates every aspect of life.

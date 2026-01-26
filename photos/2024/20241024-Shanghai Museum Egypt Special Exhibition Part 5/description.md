@@ -1,0 +1,1 @@
+The Book of the Dead and other papyri. Ancient spells meant to guide souls through the afterlife.

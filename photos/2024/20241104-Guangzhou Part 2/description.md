@@ -1,0 +1,1 @@
+The historic Shamian Island and Chen Clan Ancestral Hall. Colonial architecture and traditional Lingnan culture preserved in the city center.

@@ -1,0 +1,1 @@
+Gold masks and bronze trees. The sacred objects of a kingdom that vanished without a written record.

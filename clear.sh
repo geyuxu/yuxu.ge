@@ -1,5 +1,8 @@
 #!/bin/bash
-# Clear generated files and caches
+# Clear generated files
+# Usage:
+#   ./clear.sh       # Clean outputs (keep caches)
+#   ./clear.sh --all # Clean everything including caches
 
 cd "$(dirname "$0")"
 
@@ -9,16 +12,17 @@ echo "Cleaning generated files..."
 rm -rf blog/static/
 rm -rf blog/medium/
 
-# Remove caches
-rm -f blog/.gist-cache.json
-rm -f blog/.table-cache.json
-
-# Remove generated table images
+# Remove table images (will regenerate)
 rm -rf blog/images/tables/
+rm -f blog/.table-cache.json
 
 echo "✓ Cleaned:"
 echo "  - blog/static/"
 echo "  - blog/medium/"
 echo "  - blog/images/tables/"
-echo "  - blog/.gist-cache.json"
-echo "  - blog/.table-cache.json"
+
+# Only clear gist cache with --all flag
+if [[ "$1" == "--all" ]]; then
+    rm -f blog/.gist-cache.json
+    echo "  - blog/.gist-cache.json"
+fi

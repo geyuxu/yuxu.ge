@@ -9,5 +9,29 @@
       "geospatial"
     ],
     "description": "A deep dive into coordinate transformation (WGS84/GCJ02), connection pooling, rate limiting with token bucket, and retry strategies for geocoding APIs."
+  },
+  {
+    "slug": "posts/2026/hybrid-search-static-blog-zh",
+    "title": "静态博客的混合搜索方案：BM25 + 向量检索 + Cloudflare Workers",
+    "date": "2026-01-26",
+    "tags": [
+      "rag",
+      "search",
+      "cloudflare",
+      "javascript"
+    ],
+    "description": "为静态博客构建生产级混合搜索 - 结合 BM25 关键词搜索与 OpenAI 向量搜索，无需后端服务器。"
+  },
+  {
+    "slug": "posts/2026/hybrid-search-static-blog",
+    "title": "Building Hybrid Search for Static Blogs: BM25 + Vector Search with Cloudflare Workers",
+    "date": "2026-01-26",
+    "tags": [
+      "rag",
+      "search",
+      "cloudflare",
+      "javascript"
+    ],
+    "description": "Building a production-ready hybrid search for static blogs - combining BM25 keyword search with OpenAI embeddings, all without a backend server."
   }
 ]

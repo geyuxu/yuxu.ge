@@ -1,0 +1,128 @@
+{
+  "/blog/posts/2026/geocoding-client#0": {
+    "title": "Building a Production-Ready Geocoding Client: Coordinate Hacks, Connection Pools, and Rate Limiting",
+    "url": "/blog/posts/2026/geocoding-client",
+    "date": "2026-01-26",
+    "text": "Building a Production-Ready Geocoding Client: Coordinate Hacks, Connection Pools, and Rate Limiting\n\nGeocoding looks simple: send an address, get coor"
+  },
+  "/blog/posts/2026/geocoding-client#1": {
+    "title": "Building a Production-Ready Geocoding Client: Coordinate Hacks, Connection Pools, and Rate Limiting",
+    "url": "/blog/posts/2026/geocoding-client",
+    "date": "2026-01-26",
+    "text": "e seen each of these take down production systems. This article shows how to build a geocoding client that handles all three.\n\nArchitecture Overview\n\n"
+  },
+  "/blog/posts/2026/geocoding-client#2": {
+    "title": "Building a Production-Ready Geocoding Client: Coordinate Hacks, Connection Pools, and Rate Limiting",
+    "url": "/blog/posts/2026/geocoding-client",
+    "date": "2026-01-26",
+    "text": "—which applies a non-linear offset to every point. This isn't a simple translation; it's a deliberate obfuscation involving trigonometric functions th"
+  },
+  "/blog/posts/2026/geocoding-client#3": {
+    "title": "Building a Production-Ready Geocoding Client: Coordinate Hacks, Connection Pools, and Rate Limiting",
+    "url": "/blog/posts/2026/geocoding-client",
+    "date": "2026-01-26",
+    "text": "ap is wrong.\"\n\nThe Solution: Iterative Inversion\n\nThe GCJ-02 transformation has no closed-form inverse. We solve it numerically:\n\n1. Guess that WGS-84"
+  },
+  "/blog/posts/2026/geocoding-client#4": {
+    "title": "Building a Production-Ready Geocoding Client: Coordinate Hacks, Connection Pools, and Rate Limiting",
+    "url": "/blog/posts/2026/geocoding-client",
+    "date": "2026-01-26",
+    "text": "geocoding request creates a new TCP connection:\n\nAt 500 QPS, this creates 500 connections per second. Each closed connection enters TIME_WAIT state fo"
+  },
+  "/blog/posts/2026/geocoding-client#5": {
+    "title": "Building a Production-Ready Geocoding Client: Coordinate Hacks, Connection Pools, and Rate Limiting",
+    "url": "/blog/posts/2026/geocoding-client",
+    "date": "2026-01-26",
+    "text": "lution: Connection Pooling + Exponential Backoff\n\nReplace stateless requests with a persistent session that reuses TCP connections:\n\n**Connection pool"
+  },
+  "/blog/posts/2026/geocoding-client#6": {
+    "title": "Building a Production-Ready Geocoding Client: Coordinate Hacks, Connection Pools, and Rate Limiting",
+    "url": "/blog/posts/2026/geocoding-client",
+    "date": "2026-01-26",
+    "text": "es—then return HTTP 429 for the rest of the day.\n\nThe Solution: Token Bucket Rate Limiting\n\nThe token bucket algorithm enforces average rate while tol"
+  },
+  "/blog/posts/2026/geocoding-client#7": {
+    "title": "Building a Production-Ready Geocoding Client: Coordinate Hacks, Connection Pools, and Rate Limiting",
+    "url": "/blog/posts/2026/geocoding-client",
+    "date": "2026-01-26",
+    "text": "s. The code above handles all three.\n\nNext Steps\n\n- **Multi-provider failover**: Route to backup API on errors\n- **Response caching**: Addresses rarel"
+  },
+  "/blog/posts/2026/hybrid-search-static-blog-zh#0": {
+    "title": "静态博客的混合搜索方案：BM25 + 向量检索 + Cloudflare Workers",
+    "url": "/blog/posts/2026/hybrid-search-static-blog-zh",
+    "date": "2026-01-26",
+    "text": "静态博客的混合搜索方案：BM25 + 向量检索 + Cloudflare Workers\n\n静态网站生成器很好用，直到你需要搜索功能。大多数方案要么需要后端服务器，要么只能做简单的客户端文本匹配。本文介绍如何构建一个**混合搜索系统**——结合即时 BM25 关键词匹配和语义向量搜索，同时保持网站完"
+  },
+  "/blog/posts/2026/hybrid-search-static-blog-zh#1": {
+    "title": "静态博客的混合搜索方案：BM25 + 向量检索 + Cloudflare Workers",
+    "url": "/blog/posts/2026/hybrid-search-static-blog-zh",
+    "date": "2026-01-26",
+    "text": "过滤停用词\n- **中文**：字符单元 + 二元组（无需分词库）\n\n调用 OpenAI 获取向量\n\n**为什么选择 512 维？** OpenAI 的 text-embedding-3-small 支持降维。使用 512 而非 1536 维可以减少约 65% 的索引体积，质量损失极小。\n\n第二部分："
+  },
+  "/blog/posts/2026/hybrid-search-static-blog-zh#2": {
+    "title": "静态博客的混合搜索方案：BM25 + 向量检索 + Cloudflare Workers",
+    "url": "/blog/posts/2026/hybrid-search-static-blog-zh",
+    "date": "2026-01-26",
+    "text": "在浏览器端。我们并行运行两种搜索：\n\n为什么选择 Reciprocal Rank Fusion？\n\nRRF 简洁优雅：`score = Σ 1/(k + rank)`。它不需要分数归一化，能优雅地处理 BM25 分数和向量距离的不同量级。\n\n第四部分：渐进式用户体验\n\n关键洞察：**关键词搜索是即时"
+  },
+  "/blog/posts/2026/hybrid-search-static-blog-zh#3": {
+    "title": "静态博客的混合搜索方案：BM25 + 向量检索 + Cloudflare Workers",
+    "url": "/blog/posts/2026/hybrid-search-static-blog-zh",
+    "date": "2026-01-26",
+    "text": "_API_KEY=sk-xxx node scripts/index-builder.mjs`\n2. **部署 Worker**：配置 Cloudflare Worker 和路由映射\n3. **上传静态文件**：`search.dat`、`search-inverted.json`、`search-"
+  },
+  "/blog/posts/2026/hybrid-search-static-blog#0": {
+    "title": "Building Hybrid Search for Static Blogs: BM25 + Vector Search with Cloudflare Workers",
+    "url": "/blog/posts/2026/hybrid-search-static-blog",
+    "date": "2026-01-26",
+    "text": "Building Hybrid Search for Static Blogs: BM25 + Vector Search with Cloudflare Workers\n\nStatic site generators are great until you need search. Most so"
+  },
+  "/blog/posts/2026/hybrid-search-static-blog#1": {
+    "title": "Building Hybrid Search for Static Blogs: BM25 + Vector Search with Cloudflare Workers",
+    "url": "/blog/posts/2026/hybrid-search-static-blog",
+    "date": "2026-01-26",
+    "text": "tic.\n\nThe Architecture\n\n**Key design decisions:**\n- **No backend required** - everything runs in the browser or edge\n- **API key protection** - OpenAI"
+  },
+  "/blog/posts/2026/hybrid-search-static-blog#2": {
+    "title": "Building Hybrid Search for Static Blogs: BM25 + Vector Search with Cloudflare Workers",
+    "url": "/blog/posts/2026/hybrid-search-static-blog",
+    "date": "2026-01-26",
+    "text": "The bilingual tokenizer is crucial - it handles:\n- **English**: standard word tokenization with stopword removal\n- **Chinese**: character unigrams + b"
+  },
+  "/blog/posts/2026/hybrid-search-static-blog#3": {
+    "title": "Building Hybrid Search for Static Blogs: BM25 + Vector Search with Cloudflare Workers",
+    "url": "/blog/posts/2026/hybrid-search-static-blog",
+    "date": "2026-01-26",
+    "text": "mal quality loss.\n\nPart 2: The Cloudflare Worker\n\nThe Worker acts as a secure proxy, keeping your API key hidden from the browser.\n\n**Cloudflare setup"
+  },
+  "/blog/posts/2026/hybrid-search-static-blog#4": {
+    "title": "Building Hybrid Search for Static Blogs: BM25 + Vector Search with Cloudflare Workers",
+    "url": "/blog/posts/2026/hybrid-search-static-blog",
+    "date": "2026-01-26",
+    "text": "in the browser. We run two searches in parallel:\n\nWhy Reciprocal Rank Fusion?\n\nRRF is elegantly simple: `score = Σ 1/(k + rank)` for each retriever. I"
+  },
+  "/blog/posts/2026/hybrid-search-static-blog#5": {
+    "title": "Building Hybrid Search for Static Blogs: BM25 + Vector Search with Cloudflare Workers",
+    "url": "/blog/posts/2026/hybrid-search-static-blog",
+    "date": "2026-01-26",
+    "text": "iately, then merge in AI results with animation:\n\nThe CSS animations make the experience feel polished:\n\nEach result shows badges indicating its sourc"
+  },
+  "/blog/posts/2026/hybrid-search-static-blog#6": {
+    "title": "Building Hybrid Search for Static Blogs: BM25 + Vector Search with Cloudflare Workers",
+    "url": "/blog/posts/2026/hybrid-search-static-blog",
+    "date": "2026-01-26",
+    "text": "h (searching \"Docker\" finds \"Docker\" immediately)\n- **Semantic matches** via vectors (searching \"container security\" finds Docker articles)\n\nDeploymen"
+  },
+  "/blog/posts/2026/hybrid-search-static-blog#7": {
+    "title": "Building Hybrid Search for Static Blogs: BM25 + Vector Search with Cloudflare Workers",
+    "url": "/blog/posts/2026/hybrid-search-static-blog",
+    "date": "2026-01-26",
+    "text": "browser console, type in search box\n\nConclusion\n\nThis architecture proves you don't need a backend server for sophisticated search. By splitting the w"
+  },
+  "/blog/posts/2026/hybrid-search-static-blog#8": {
+    "title": "Building Hybrid Search for Static Blogs: BM25 + Vector Search with Cloudflare Workers",
+    "url": "/blog/posts/2026/hybrid-search-static-blog",
+    "date": "2026-01-26",
+    "text": "pay for actual search queries, not server uptime\n\nThe full source code is available at github.com/geyuxu/yuxu.ge.\n\n*Built with: OpenAI text-embedding-"
+  }
+}

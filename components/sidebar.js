@@ -1,11 +1,23 @@
 // Shared sidebar component
-// Usage: <div id="sidebar-placeholder"></div> + <script src="/components/sidebar.js"></script>
+// Usage: <div id="sidebar-content"></div> + <script src="/components/sidebar.js"></script>
 
 const sidebarHTML = `
 <div class="sidebar-top">
     <a href="/" class="avatar"><img src="/photo.jpg" alt="Yuxu Ge"></a>
     <div class="name-block"><h1>Yuxu Ge</h1></div>
     <div class="title-role">Senior AI Architect</div>
+
+    <!-- Global Semantic Search -->
+    <div class="sidebar-search" id="sidebar-search">
+        <div class="sidebar-search-box">
+            <svg class="sidebar-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.35-4.35"/>
+            </svg>
+            <input type="text" class="sidebar-search-input" id="semantic-search-input" placeholder="Search...">
+        </div>
+    </div>
+
     <div class="contact-block">
         <div class="social-links">
             <a href="mailto:me@yuxu.ge">
@@ -63,10 +75,471 @@ const sidebarHTML = `
 <div class="sidebar-footer">&copy; 2026 Yuxu Ge</div>
 `;
 
+// CSS for sidebar search
+const sidebarSearchCSS = `
+.sidebar-search {
+    width: 100%;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.sidebar-search-box {
+    position: relative;
+    width: 100%;
+}
+
+.sidebar-search-icon {
+    position: absolute;
+    left: 0.75rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: #666;
+    pointer-events: none;
+}
+
+.sidebar-search-input {
+    width: 100%;
+    padding: 0.6rem 0.75rem 0.6rem 2.25rem;
+    font-size: 0.85rem;
+    border: 1px solid #333;
+    border-radius: 6px;
+    background: #1a1a1a;
+    color: #f4f4f4;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.sidebar-search-input:focus {
+    border-color: #C41E3A;
+    box-shadow: 0 0 0 2px rgba(196, 30, 58, 0.2);
+}
+
+.sidebar-search-input::placeholder {
+    color: #666;
+}
+
+/* Search Results Overlay (displayed in content area) */
+.search-results-overlay {
+    position: fixed;
+    top: 0;
+    left: 320px;
+    right: 0;
+    bottom: 0;
+    background: #f4f4f4;
+    z-index: 100;
+    padding: 3rem 4rem;
+    overflow-y: auto;
+}
+
+.search-results-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid #ddd;
+}
+
+.search-results-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #111;
+}
+
+.search-results-close {
+    padding: 0.5rem 1rem;
+    font-size: 0.85rem;
+    background: #111;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.search-results-close:hover {
+    background: #C41E3A;
+}
+
+.search-results-list {
+    list-style: none;
+}
+
+.search-result-item {
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    background: #fff;
+    border: 1px solid #e5e5e5;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.search-result-item:hover {
+    border-color: #C41E3A;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.search-result-item a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+.search-result-item-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #111;
+    margin-bottom: 0.5rem;
+}
+
+.search-result-item:hover .search-result-item-title {
+    color: #C41E3A;
+}
+
+.search-result-item-text {
+    font-size: 0.9rem;
+    color: #666;
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+}
+
+.search-result-item-meta {
+    font-size: 0.8rem;
+    color: #888;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.search-result-sources {
+    display: flex;
+    gap: 0.35rem;
+}
+
+.search-source-badge {
+    font-size: 0.65rem;
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.search-source-badge.keyword {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.search-source-badge.semantic,
+.search-source-badge.ai {
+    background: #fce4ec;
+    color: #c2185b;
+}
+
+/* Animation for new items */
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.search-result-item.new {
+    animation: slideIn 0.3s ease-out;
+}
+
+.search-result-item.updated {
+    animation: pulse 0.3s ease-out;
+}
+
+@keyframes pulse {
+    0% { background: #fff; }
+    50% { background: #fef3c7; }
+    100% { background: #fff; }
+}
+
+/* AI search loading indicator */
+.search-ai-loading {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: #fef3c7;
+    border-radius: 6px;
+    margin-bottom: 1rem;
+    font-size: 0.85rem;
+    color: #92400e;
+}
+
+.search-ai-loading .spinner {
+    width: 14px;
+    height: 14px;
+    border: 2px solid #fbbf24;
+    border-top-color: #92400e;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+.search-loading,
+.search-empty,
+.search-error {
+    text-align: center;
+    padding: 3rem;
+    color: #888;
+    font-size: 1rem;
+}
+
+.search-error {
+    color: #C41E3A;
+}
+
+/* Mobile */
+@media (max-width: 900px) {
+    .search-results-overlay {
+        left: 0;
+        padding: 2rem 1rem;
+    }
+}
+`;
+
+// Store original content for restoration
+let originalContent = null;
+let searchClient = null;
+
 // Auto-inject if placeholder exists
 document.addEventListener('DOMContentLoaded', () => {
     const placeholder = document.getElementById('sidebar-content');
     if (placeholder) {
         placeholder.innerHTML = sidebarHTML;
+
+        // Inject CSS
+        const style = document.createElement('style');
+        style.textContent = sidebarSearchCSS;
+        document.head.appendChild(style);
+
+        // Initialize search
+        initGlobalSearch();
     }
 });
+
+// Initialize global hybrid search
+function initGlobalSearch() {
+    const input = document.getElementById('semantic-search-input');
+    if (!input) return;
+
+    let semanticAbort = null;
+    let currentQuery = '';
+
+    // Lazy load search client
+    async function getSearchClient() {
+        if (searchClient) return searchClient;
+        try {
+            const { SearchClient } = await import('/components/search-client.js');
+            searchClient = new SearchClient();
+            await searchClient.init();
+            return searchClient;
+        } catch (err) {
+            console.error('[Search] Init failed:', err);
+            return null;
+        }
+    }
+
+    // Escape HTML
+    function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // Create result item HTML
+    function createResultItem(r, isNew = false) {
+        const slug = r.url.replace('/blog/', '');
+        const href = `/blog/post.html?p=${slug}`;
+        const sources = r.sources || [];
+        const sourceBadges = sources.map(s =>
+            `<span class="search-source-badge ${s}">${s}</span>`
+        ).join('');
+        return `
+            <li class="search-result-item${isNew ? ' new' : ''}" data-url="${r.url}">
+                <a href="${href}">
+                    <div class="search-result-item-title">${escapeHtml(r.title)}</div>
+                    ${r.text ? `<div class="search-result-item-text">${escapeHtml(r.text)}...</div>` : ''}
+                    <div class="search-result-item-meta">
+                        <span>${r.date || ''}</span>
+                        <div class="search-result-sources">${sourceBadges}</div>
+                    </div>
+                </a>
+            </li>
+        `;
+    }
+
+    // Show search overlay with results
+    function showSearchOverlay(query, results, showAiLoading = false, error = null) {
+        let overlay = document.getElementById('search-results-overlay');
+
+        // Create overlay if doesn't exist
+        if (!overlay) {
+            overlay = document.createElement('div');
+            overlay.id = 'search-results-overlay';
+            overlay.className = 'search-results-overlay';
+            document.body.appendChild(overlay);
+        }
+
+        let content = '';
+
+        if (error) {
+            content = `<div class="search-error">${escapeHtml(error)}</div>`;
+        } else if (results.length === 0 && !showAiLoading) {
+            content = `<div class="search-empty">No results found for "${escapeHtml(query)}"</div>`;
+        } else {
+            const aiLoadingHtml = showAiLoading ? `
+                <div class="search-ai-loading" id="ai-loading">
+                    <div class="spinner"></div>
+                    <span>AI searching for related content...</span>
+                </div>
+            ` : '';
+
+            content = `
+                ${aiLoadingHtml}
+                <ul class="search-results-list" id="search-results-list">
+                    ${results.map(r => createResultItem(r, false)).join('')}
+                </ul>
+            `;
+        }
+
+        overlay.innerHTML = `
+            <div class="search-results-header">
+                <h2 class="search-results-title">Search: "${escapeHtml(query)}"</h2>
+                <button class="search-results-close" id="close-search">Close</button>
+            </div>
+            ${content}
+        `;
+
+        // Close button handler
+        document.getElementById('close-search')?.addEventListener('click', closeSearch);
+    }
+
+    // Merge semantic results with animation
+    function mergeSemanticResults(semanticResults, keywordUrls) {
+        const list = document.getElementById('search-results-list');
+        const aiLoading = document.getElementById('ai-loading');
+
+        // Remove AI loading indicator
+        if (aiLoading) {
+            aiLoading.remove();
+        }
+
+        if (!list) return;
+
+        // Find new results not in keyword results
+        const newResults = semanticResults.filter(r => !keywordUrls.has(r.url));
+
+        // Update existing items to show both badges
+        for (const r of semanticResults) {
+            if (keywordUrls.has(r.url)) {
+                const existingItem = list.querySelector(`[data-url="${r.url}"]`);
+                if (existingItem) {
+                    const sourcesDiv = existingItem.querySelector('.search-result-sources');
+                    if (sourcesDiv && !sourcesDiv.innerHTML.includes('ai')) {
+                        sourcesDiv.innerHTML += `<span class="search-source-badge ai">AI</span>`;
+                        existingItem.classList.add('updated');
+                    }
+                }
+            }
+        }
+
+        // Insert new semantic-only results with animation
+        // Insert after keyword results, sorted by rank
+        for (const r of newResults) {
+            r.sources = ['ai'];
+            const itemHtml = createResultItem(r, true);
+            list.insertAdjacentHTML('beforeend', itemHtml);
+        }
+    }
+
+    // Close search results
+    function closeSearch() {
+        const overlay = document.getElementById('search-results-overlay');
+        if (overlay) overlay.remove();
+        input.value = '';
+        currentQuery = '';
+        if (semanticAbort) {
+            semanticAbort = true;
+        }
+    }
+
+    // Handle progressive search
+    async function handleSearch(query) {
+        // Close if empty
+        if (!query || query.length < 1) {
+            const overlay = document.getElementById('search-results-overlay');
+            if (overlay) overlay.remove();
+            currentQuery = '';
+            return;
+        }
+
+        currentQuery = query;
+        semanticAbort = false;
+
+        // Get search client
+        const client = await getSearchClient();
+        if (!client) {
+            showSearchOverlay(query, [], false, 'Search unavailable');
+            return;
+        }
+
+        // 1. Show instant keyword results (no API call)
+        const keywordResults = client.searchKeywordOnly(query, 10);
+        const keywordUrls = new Set(keywordResults.map(r => r.url));
+
+        // Show keyword results immediately with AI loading indicator
+        showSearchOverlay(query, keywordResults, client.isSemanticReady(), null);
+
+        // 2. Run semantic search in background (needs API call)
+        if (client.isSemanticReady() && query.length >= 2) {
+            try {
+                const semanticResults = await client.semanticSearch(query, 10);
+
+                // Only merge if query hasn't changed
+                if (currentQuery === query && !semanticAbort) {
+                    mergeSemanticResults(semanticResults, keywordUrls);
+                }
+            } catch (err) {
+                console.warn('[Search] Semantic search failed:', err.message);
+                // Remove loading indicator on error
+                const aiLoading = document.getElementById('ai-loading');
+                if (aiLoading) aiLoading.remove();
+            }
+        }
+    }
+
+    // Input event listener - instant for keyword, debounced overall
+    let keywordTimer = null;
+
+    input.addEventListener('input', (e) => {
+        const query = e.target.value.trim();
+
+        // Instant keyword search on every keystroke
+        clearTimeout(keywordTimer);
+        keywordTimer = setTimeout(() => {
+            handleSearch(query);
+        }, 50); // Very short debounce for instant feel
+    });
+
+    // ESC to close
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeSearch();
+        }
+    });
+}

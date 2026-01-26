@@ -135,7 +135,10 @@
                 return r.text();
             })
             .then(md => {
-                document.getElementById('article').innerHTML = marked.parse(md);
+                // Strip YAML frontmatter (between --- markers)
+                const frontmatterMatch = md.match(/^---\n[\s\S]*?\n---\n/);
+                const content = frontmatterMatch ? md.slice(frontmatterMatch[0].length) : md;
+                document.getElementById('article').innerHTML = marked.parse(content);
                 // Update page title from first h1
                 const h1 = document.querySelector('article h1');
                 if (h1) document.title = h1.textContent + ' | Yuxu Ge';

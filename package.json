@@ -1,0 +1,19 @@
+{
+  "name": "yuxu.ge",
+  "version": "1.0.0",
+  "description": "Personal website with vector search",
+  "private": true,
+  "type": "commonjs",
+  "scripts": {
+    "build": "./build.sh",
+    "build:search": "node --experimental-wasm-modules scripts/index-builder.mjs",
+    "build:photos": "node gallery/build-photos-json.js"
+  },
+  "dependencies": {
+    "voy-search": "^0.6.3"
+  },
+  "devDependencies": {},
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

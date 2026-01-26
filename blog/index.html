@@ -189,42 +189,6 @@
             color: var(--black);
         }
 
-        .search-box {
-            position: relative;
-            width: 200px;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 0.4rem 0.75rem 0.4rem 2rem;
-            font-size: 0.85rem;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            background: white;
-            color: var(--black);
-            outline: none;
-            transition: border-color 0.2s;
-        }
-
-        .search-input:focus {
-            border-color: var(--vermilion);
-        }
-
-        .search-input::placeholder {
-            color: #aaa;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 0.6rem;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 14px;
-            height: 14px;
-            color: #888;
-            pointer-events: none;
-        }
-
         .page-desc {
             font-size: 0.9rem;
             color: var(--dark-grey);
@@ -458,10 +422,6 @@
                 gap: 0.75rem;
             }
 
-            .search-box {
-                width: 100%;
-            }
-
             .post-item {
                 flex-direction: column;
                 align-items: flex-start;
@@ -488,16 +448,7 @@
             <a href="/" class="back-link">← Back to Home</a>
 
             <header class="page-header">
-                <div class="page-header-top">
-                    <h2 class="page-title">Blog</h2>
-                    <div class="search-box">
-                        <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"/>
-                            <path d="m21 21-4.35-4.35"/>
-                        </svg>
-                        <input type="text" class="search-input" id="search-input" placeholder="Search posts...">
-                    </div>
-                </div>
+                <h2 class="page-title">Blog</h2>
                 <p class="page-desc">Technical writings on AI, Distributed Systems, and Engineering.</p>
             </header>
 
@@ -523,7 +474,6 @@ fetch('posts.json')
         const tagFilter = document.getElementById('tag-filter');
         const list = document.getElementById('post-list');
         const pagination = document.getElementById('pagination');
-        const searchInput = document.getElementById('search-input');
 
         let currentTag = '';
         let currentPage = 1;
@@ -626,17 +576,6 @@ fetch('posts.json')
             history.replaceState(null, '', url);
         }
 
-        // Search handler
-        let searchTimeout;
-        searchInput.addEventListener('input', (e) => {
-            clearTimeout(searchTimeout);
-            searchTimeout = setTimeout(() => {
-                searchQuery = e.target.value.trim();
-                currentPage = 1;
-                renderPosts();
-            }, 200);
-        });
-
         // Set tag filter
         function setTag(tag) {
             currentTag = tag;
@@ -666,7 +605,6 @@ fetch('posts.json')
         }
         if (urlQuery) {
             searchQuery = urlQuery;
-            searchInput.value = urlQuery;
         }
         currentPage = urlPage;
         renderPosts();

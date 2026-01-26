@@ -36,5 +36,15 @@ node blog/build-posts-json.js
 echo "=== Building Gallery ==="
 node gallery/build-photos-json.js
 
+# Build search index (optional, requires OPENAI_API_KEY)
+if [ -n "$OPENAI_API_KEY" ]; then
+    echo ""
+    echo "=== Building Search Index ==="
+    node --experimental-wasm-modules scripts/index-builder.mjs
+else
+    echo ""
+    echo "=== Skipping Search Index (OPENAI_API_KEY not set) ==="
+fi
+
 # Build static/medium
 cd blog && node build.js "$@"

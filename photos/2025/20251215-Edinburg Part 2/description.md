@@ -1,0 +1,1 @@
+More of Edinburgh's splendor. The Royal Mile descends from castle to palace, while the New Town's Georgian elegance unfolds below.

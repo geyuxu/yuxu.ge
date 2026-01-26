@@ -1,0 +1,1 @@
+Belfast continued. The Titanic Quarter's modern development stands where the great ship was built, a symbol of the city's transformation.

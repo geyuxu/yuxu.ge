@@ -43,7 +43,9 @@ function parseFolderName(folderName) {
     const [, year, month, day, location] = match;
     return {
         date: `${year}-${month}-${day}`,
-        location: location.replace(/_/g, ' ')  // Convert underscores to spaces
+        location: location
+            .replace(/_/g, ' ')           // Convert underscores to spaces
+            .replace(/ Part \d+$/i, '')   // Remove "Part N" suffix
     };
 }
 

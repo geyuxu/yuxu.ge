@@ -1,0 +1,1 @@
+Rural Wales at its finest. Stone walls crisscross green hillsides where farming traditions endure.

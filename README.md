@@ -63,23 +63,24 @@ photos/2026/20260120-Leeds/
 
 Run `./build.sh` to regenerate `gallery/photos.json`.
 
-### Convert HEIC to JPG
+### Convert HEIC/HIF/ARW to JPG
 
 ```bash
-./scripts/convert-heic.sh           # Convert all HEIC to JPG
+./scripts/convert-heic.sh           # Convert all HEIC/HIF/ARW to JPG
 ./scripts/convert-heic.sh --dry-run # Preview only
 ```
 
-Uses macOS `sips` (built-in) or ImageMagick.
+Uses macOS `sips` (built-in) or ImageMagick. ARW (Sony RAW) requires ImageMagick.
 
 ### Compress Photos
 
 ```bash
-./scripts/compress-photos.sh           # Compress all
+./scripts/compress-photos.sh           # Compress new photos (uses cache)
 ./scripts/compress-photos.sh --dry-run # Preview only
+./scripts/compress-photos.sh --force   # Ignore cache, reprocess all
 ```
 
-Requires ImageMagick: `brew install imagemagick`
+Uses cache file (`.compress-cache`) to skip already processed images. Requires ImageMagick: `brew install imagemagick`
 
 ## Blog Posts
 

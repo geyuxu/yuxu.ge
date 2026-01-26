@@ -1,0 +1,1 @@
+Saltburn-by-the-Sea, a Victorian resort town on the North Yorkshire coast. The historic pier and cliff lift stand as monuments to seaside elegance.

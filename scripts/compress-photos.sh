@@ -5,17 +5,25 @@
 # Usage:
 #   ./compress-photos.sh           # Compress all photos
 #   ./compress-photos.sh --dry-run # Preview without changes
+#   ./compress-photos.sh --force   # Ignore cache, reprocess all
 
 set -e
 
-PHOTOS_DIR="$(dirname "$0")/../photos"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PHOTOS_DIR="$(cd "$SCRIPT_DIR/../photos" && pwd)"
+CACHE_FILE="$PHOTOS_DIR/.compress-cache"
+TEMP_LIST="/tmp/compress-photos-list-$$.txt"
 MAX_WIDTH=2000
 QUALITY=85
 
 DRY_RUN=false
+FORCE=false
 if [ "$1" = "--dry-run" ]; then
     DRY_RUN=true
     echo "=== DRY RUN MODE ==="
+elif [ "$1" = "--force" ]; then
+    FORCE=true
+    echo "=== FORCE MODE (ignoring cache) ==="
 fi
 
 # Check ImageMagick
@@ -31,20 +39,52 @@ else
     CONVERT="convert"
 fi
 
+# Ensure cache file exists
+touch "$CACHE_FILE"
+
+# Load cache count
+if [ "$FORCE" = false ]; then
+    cache_count=$(wc -l < "$CACHE_FILE" | tr -d ' ')
+    echo "Loaded cache: $cache_count files"
+fi
+
 echo "Scanning photos in: $PHOTOS_DIR"
 echo "Settings: max ${MAX_WIDTH}px width, ${QUALITY}% quality"
 echo ""
 
-total_before=0
-total_after=0
-count=0
-
 # Find all images
-find "$PHOTOS_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) | while read -r img; do
-    # Skip already compressed files
-    if [[ "$img" == *"-thumb"* ]] || [[ "$img" == *"-compressed"* ]]; then
-        continue
-    fi
+find "$PHOTOS_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png" \) | grep -v "\-thumb" | grep -v "\-compressed" | sort > "$TEMP_LIST"
+
+total=$(wc -l < "$TEMP_LIST" | tr -d ' ')
+
+# Filter out cached files
+if [ "$FORCE" = false ]; then
+    # Create list of uncached files
+    new_list="/tmp/compress-photos-new-$$.txt"
+    > "$new_list"
+    while IFS= read -r img; do
+        if ! grep -qxF "$img" "$CACHE_FILE" 2>/dev/null; then
+            echo "$img" >> "$new_list"
+        fi
+    done < "$TEMP_LIST"
+    mv "$new_list" "$TEMP_LIST"
+fi
+
+new_count=$(wc -l < "$TEMP_LIST" | tr -d ' ')
+
+echo "Total images: $total, New/uncached: $new_count"
+echo ""
+
+if [ "$new_count" -eq 0 ]; then
+    echo "No new images to process."
+    rm -f "$TEMP_LIST"
+    echo "Done!"
+    exit 0
+fi
+
+# Process images
+while IFS= read -r img; do
+    [ -z "$img" ] && continue
 
     # Get original size
     size_before=$(stat -f%z "$img" 2>/dev/null || stat -c%s "$img" 2>/dev/null)
@@ -56,12 +96,14 @@ find "$PHOTOS_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png
 
     # Skip if already small enough and well compressed
     if [ "$width" -le "$MAX_WIDTH" ] && [ "$size_before_kb" -lt 500 ]; then
-        echo "✓ Skip (already optimized): $(basename "$img") (${size_before_kb}KB)"
+        echo "✓ Skip (optimized): $(basename "$img") (${size_before_kb}KB)"
+        # Add to cache
+        [ "$DRY_RUN" = false ] && echo "$img" >> "$CACHE_FILE"
         continue
     fi
 
     if [ "$DRY_RUN" = true ]; then
-        echo "Would compress: $img (${size_before_kb}KB, ${dimensions})"
+        echo "Would compress: $(basename "$img") (${size_before_kb}KB, ${dimensions})"
         continue
     fi
 
@@ -88,9 +130,13 @@ find "$PHOTOS_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png
         echo "✓ Compressed: $(basename "$img") ${size_before_kb}KB → ${size_after_kb}KB (-${saved}KB)"
     else
         rm "$tmp_file"
-        echo "✓ Skip (already optimal): $(basename "$img") (${size_before_kb}KB)"
+        echo "✓ Skip (optimal): $(basename "$img") (${size_before_kb}KB)"
     fi
-done
 
+    # Add to cache
+    echo "$img" >> "$CACHE_FILE"
+done < "$TEMP_LIST"
+
+rm -f "$TEMP_LIST"
 echo ""
 echo "Done!"

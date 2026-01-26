@@ -1,0 +1,1 @@
+The wild beauty of the Welsh coast. Dramatic cliffs, hidden coves, and the ever-changing Irish Sea.

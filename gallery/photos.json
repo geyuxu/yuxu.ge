@@ -105,6 +105,17 @@
     "date": "2025-12-19",
     "location": "Belfast",
     "images": [
+      "/photos/2025/20251219-Belfast Part 2/IMG_20251219111817971.jpg",
+      "/photos/2025/20251219-Belfast Part 2/IMG_20251219113438289.jpg",
+      "/photos/2025/20251219-Belfast Part 2/IMG_20251219113532853.jpg"
+    ],
+    "description": "Belfast continued. The Titanic Quarter's modern development stands where the great ship was built, a symbol of the city's transformation."
+  },
+  {
+    "year": 2025,
+    "date": "2025-12-19",
+    "location": "Belfast",
+    "images": [
       "/photos/2025/20251219-Belfast/IMG_20251217145728754.jpg",
       "/photos/2025/20251219-Belfast/IMG_20251218111906345.jpg",
       "/photos/2025/20251219-Belfast/IMG_20251218130656519.jpg",
@@ -113,12 +124,23 @@
       "/photos/2025/20251219-Belfast/IMG_20251218133009038.jpg",
       "/photos/2025/20251219-Belfast/IMG_20251219110145648.jpg",
       "/photos/2025/20251219-Belfast/IMG_20251219110613487.jpg",
-      "/photos/2025/20251219-Belfast/IMG_20251219111817971.jpg",
-      "/photos/2025/20251219-Belfast/IMG_20251219113438289.jpg",
-      "/photos/2025/20251219-Belfast/IMG_20251219113532853.jpg",
       "/photos/2025/20251219-Belfast/IMG_20251219113649528.jpg"
     ],
     "description": "Belfast, the capital of Northern Ireland, where Victorian architecture meets modern regeneration. The city's rich maritime heritage and complex history create a compelling urban landscape."
+  },
+  {
+    "year": 2025,
+    "date": "2025-12-15",
+    "location": "Edinburg",
+    "images": [
+      "/photos/2025/20251215-Edinburg Part 2/A7C09740.JPG",
+      "/photos/2025/20251215-Edinburg Part 2/A7C09750.JPG",
+      "/photos/2025/20251215-Edinburg Part 2/A7C09791.JPG",
+      "/photos/2025/20251215-Edinburg Part 2/A7C09797.JPG",
+      "/photos/2025/20251215-Edinburg Part 2/A7C09817.JPG",
+      "/photos/2025/20251215-Edinburg Part 2/A7C09819.JPG"
+    ],
+    "description": "More of Edinburgh's splendor. The Royal Mile descends from castle to palace, while the New Town's Georgian elegance unfolds below."
   },
   {
     "year": 2025,
@@ -133,12 +155,6 @@
       "/photos/2025/20251215-Edinburg/A7C09666.JPG",
       "/photos/2025/20251215-Edinburg/A7C09673.JPG",
       "/photos/2025/20251215-Edinburg/A7C09696.JPG",
-      "/photos/2025/20251215-Edinburg/A7C09740.JPG",
-      "/photos/2025/20251215-Edinburg/A7C09750.JPG",
-      "/photos/2025/20251215-Edinburg/A7C09791.JPG",
-      "/photos/2025/20251215-Edinburg/A7C09797.JPG",
-      "/photos/2025/20251215-Edinburg/A7C09817.JPG",
-      "/photos/2025/20251215-Edinburg/A7C09819.JPG",
       "/photos/2025/20251215-Edinburg/A7C09821.JPG"
     ],
     "description": "Edinburgh, Scotland's historic capital, where medieval Old Town and Georgian New Town create a dramatic cityscape. The castle perched on volcanic rock watches over centuries of architectural splendor."
@@ -156,5 +172,609 @@
       "/photos/2025/20251112-Manchester/A7C09542.JPG"
     ],
     "description": "Manchester, the heart of England's industrial revolution, now reinvented as a vibrant cultural hub. Red brick warehouses stand alongside modern architecture in this ever-evolving northern city."
+  },
+  {
+    "year": 2025,
+    "date": "2025-11-08",
+    "location": "Oxford",
+    "images": [
+      "/photos/2025/20251108-Oxford Part 2/IMG_0344.jpg",
+      "/photos/2025/20251108-Oxford Part 2/IMG_0362.jpg",
+      "/photos/2025/20251108-Oxford Part 2/IMG_0377.jpg",
+      "/photos/2025/20251108-Oxford Part 2/IMG_0379.jpg",
+      "/photos/2025/20251108-Oxford Part 2/IMG_0387.jpg",
+      "/photos/2025/20251108-Oxford Part 2/IMG_0389.jpg",
+      "/photos/2025/20251108-Oxford Part 2/IMG_0396.jpg"
+    ],
+    "description": "More of Oxford's treasures. The Bodleian Library, Radcliffe Camera, and the quiet quadrangles where great minds have walked for centuries."
+  },
+  {
+    "year": 2025,
+    "date": "2025-11-08",
+    "location": "Oxford",
+    "images": [
+      "/photos/2025/20251108-Oxford/A7C09271.JPG",
+      "/photos/2025/20251108-Oxford/A7C09282.JPG",
+      "/photos/2025/20251108-Oxford/A7C09303.JPG",
+      "/photos/2025/20251108-Oxford/A7C09339.JPG",
+      "/photos/2025/20251108-Oxford/A7C09370.JPG",
+      "/photos/2025/20251108-Oxford/A7C09398.JPG",
+      "/photos/2025/20251108-Oxford/IMG_0295.jpg",
+      "/photos/2025/20251108-Oxford/IMG_0306.jpg",
+      "/photos/2025/20251108-Oxford/IMG_0399.jpg"
+    ],
+    "description": "Oxford, the city of dreaming spires. Nearly a thousand years of scholarship have shaped this architectural wonder where ancient colleges line cobbled lanes."
+  },
+  {
+    "year": 2025,
+    "date": "2025-11-01",
+    "location": "Whitby",
+    "images": [
+      "/photos/2025/20251101-Whitby Part 2/A7C09236.JPG",
+      "/photos/2025/20251101-Whitby Part 2/A7C09239.JPG",
+      "/photos/2025/20251101-Whitby Part 2/A7C09240-1.JPG",
+      "/photos/2025/20251101-Whitby Part 2/A7C09241-1.JPG",
+      "/photos/2025/20251101-Whitby Part 2/A7C09243.JPG",
+      "/photos/2025/20251101-Whitby Part 2/IMG_0003.jpg"
+    ],
+    "description": "Whitby's 199 steps and beyond. From the abbey ruins to the fish and chips, this town captures the essence of the Yorkshire coast."
+  },
+  {
+    "year": 2025,
+    "date": "2025-11-01",
+    "location": "Whitby",
+    "images": [
+      "/photos/2025/20251101-Whitby/A7C09168.JPG",
+      "/photos/2025/20251101-Whitby/A7C09181.JPG",
+      "/photos/2025/20251101-Whitby/A7C09185.JPG",
+      "/photos/2025/20251101-Whitby/A7C09194.JPG",
+      "/photos/2025/20251101-Whitby/A7C09214.JPG",
+      "/photos/2025/20251101-Whitby/A7C09226.JPG",
+      "/photos/2025/20251101-Whitby/A7C09230.JPG",
+      "/photos/2025/20251101-Whitby/A7C09233.JPG",
+      "/photos/2025/20251101-Whitby/IMG_0010.jpg"
+    ],
+    "description": "Whitby, the atmospheric harbor town that inspired Bram Stoker's Dracula. The ruined abbey watches over fishing boats and winding streets of this North Yorkshire gem."
+  },
+  {
+    "year": 2025,
+    "date": "2025-11-01",
+    "location": "Saltburn-by-the-Sea",
+    "images": [
+      "/photos/2025/20251101-Saltburn-by-the-Sea Part 2/A7C09111.JPG",
+      "/photos/2025/20251101-Saltburn-by-the-Sea Part 2/A7C09115.JPG",
+      "/photos/2025/20251101-Saltburn-by-the-Sea Part 2/A7C09124.JPG"
+    ],
+    "description": "More of Saltburn's coastal charm. Dramatic cliffs meet golden sands in this unspoiled corner of England."
+  },
+  {
+    "year": 2025,
+    "date": "2025-11-01",
+    "location": "Saltburn-by-the-Sea",
+    "images": [
+      "/photos/2025/20251101-Saltburn-by-the-Sea/A7C09033-1.JPG",
+      "/photos/2025/20251101-Saltburn-by-the-Sea/A7C09044.JPG",
+      "/photos/2025/20251101-Saltburn-by-the-Sea/A7C09054.JPG",
+      "/photos/2025/20251101-Saltburn-by-the-Sea/A7C09055.JPG",
+      "/photos/2025/20251101-Saltburn-by-the-Sea/A7C09056-1.JPG",
+      "/photos/2025/20251101-Saltburn-by-the-Sea/A7C09060.JPG",
+      "/photos/2025/20251101-Saltburn-by-the-Sea/A7C09085.JPG",
+      "/photos/2025/20251101-Saltburn-by-the-Sea/A7C09097.JPG",
+      "/photos/2025/20251101-Saltburn-by-the-Sea/A7C09127.JPG"
+    ],
+    "description": "Saltburn-by-the-Sea, a Victorian resort town on the North Yorkshire coast. The historic pier and cliff lift stand as monuments to seaside elegance."
+  },
+  {
+    "year": 2025,
+    "date": "2025-10-28",
+    "location": "London British Museum",
+    "images": [
+      "/photos/2025/20251028-London British Museum/A7C08972.JPG",
+      "/photos/2025/20251028-London British Museum/A7C08973.JPG",
+      "/photos/2025/20251028-London British Museum/A7C08977.JPG",
+      "/photos/2025/20251028-London British Museum/A7C08978.JPG",
+      "/photos/2025/20251028-London British Museum/A7C08981.JPG",
+      "/photos/2025/20251028-London British Museum/A7C09005.JPG",
+      "/photos/2025/20251028-London British Museum/A7C09022.JPG",
+      "/photos/2025/20251028-London British Museum/A7C09023.JPG",
+      "/photos/2025/20251028-London British Museum/A7C09028.JPG"
+    ],
+    "description": "The British Museum, housing treasures from every corner of human civilization. From the Rosetta Stone to the Parthenon Marbles, history unfolds across continents and millennia."
+  },
+  {
+    "year": 2025,
+    "date": "2025-10-25",
+    "location": "London",
+    "images": [
+      "/photos/2025/20251025-London Part 5/IMG_9542.jpg",
+      "/photos/2025/20251025-London Part 5/IMG_9552.jpg",
+      "/photos/2025/20251025-London Part 5/IMG_9734.jpg",
+      "/photos/2025/20251025-London Part 5/IMG_9736.jpg",
+      "/photos/2025/20251025-London Part 5/IMG_9739.jpg",
+      "/photos/2025/20251025-London Part 5/IMG_9740.jpg"
+    ],
+    "description": "London at twilight. The city lights up as day turns to night along the Thames."
+  },
+  {
+    "year": 2025,
+    "date": "2025-10-25",
+    "location": "London",
+    "images": [
+      "/photos/2025/20251025-London Part 4/IMG_9258.jpg",
+      "/photos/2025/20251025-London Part 4/IMG_9261.jpg",
+      "/photos/2025/20251025-London Part 4/IMG_9262.jpg",
+      "/photos/2025/20251025-London Part 4/IMG_9270.jpg",
+      "/photos/2025/20251025-London Part 4/IMG_9291.jpg",
+      "/photos/2025/20251025-London Part 4/IMG_9292.jpg",
+      "/photos/2025/20251025-London Part 4/IMG_9539.jpg"
+    ],
+    "description": "London's neighborhoods and hidden gems. From Covent Garden's performers to Notting Hill's colorful houses."
+  },
+  {
+    "year": 2025,
+    "date": "2025-10-25",
+    "location": "London",
+    "images": [
+      "/photos/2025/20251025-London Part 3/IMG_9090.jpg",
+      "/photos/2025/20251025-London Part 3/IMG_9175.jpg",
+      "/photos/2025/20251025-London Part 3/IMG_9214.jpg",
+      "/photos/2025/20251025-London Part 3/IMG_9221.jpg",
+      "/photos/2025/20251025-London Part 3/IMG_9227.jpg",
+      "/photos/2025/20251025-London Part 3/IMG_9233.jpg",
+      "/photos/2025/20251025-London Part 3/IMG_9235.jpg",
+      "/photos/2025/20251025-London Part 3/IMG_9239.jpg",
+      "/photos/2025/20251025-London Part 3/IMG_9246.jpg"
+    ],
+    "description": "Historic London. Westminster's Gothic towers, Whitehall's government buildings, and the changing of the guard."
+  },
+  {
+    "year": 2025,
+    "date": "2025-10-25",
+    "location": "London",
+    "images": [
+      "/photos/2025/20251025-London Part 2/IMG_8996.jpg",
+      "/photos/2025/20251025-London Part 2/IMG_9027.jpg",
+      "/photos/2025/20251025-London Part 2/IMG_9058.jpg",
+      "/photos/2025/20251025-London Part 2/IMG_9060.jpg",
+      "/photos/2025/20251025-London Part 2/IMG_9068.jpg",
+      "/photos/2025/20251025-London Part 2/IMG_9070.jpg",
+      "/photos/2025/20251025-London Part 2/IMG_9077.jpg",
+      "/photos/2025/20251025-London Part 2/IMG_9078.jpg",
+      "/photos/2025/20251025-London Part 2/IMG_9081.jpg"
+    ],
+    "description": "The South Bank and beyond. Modern architecture along the Thames, with St Paul's dome watching from across the river."
+  },
+  {
+    "year": 2025,
+    "date": "2025-10-25",
+    "location": "London",
+    "images": [
+      "/photos/2025/20251025-London/IMG_20251030131934081.jpg",
+      "/photos/2025/20251025-London/IMG_20251030141553560.jpg",
+      "/photos/2025/20251025-London/IMG_20251030143855866.jpg",
+      "/photos/2025/20251025-London/IMG_20251030164653419.jpg",
+      "/photos/2025/20251025-London/IMG_8792.jpg",
+      "/photos/2025/20251025-London/IMG_8802.jpg",
+      "/photos/2025/20251025-London/IMG_8819.jpg",
+      "/photos/2025/20251025-London/IMG_8828.jpg",
+      "/photos/2025/20251025-London/IMG_9765.jpg"
+    ],
+    "description": "London, a world capital where centuries of history meet contemporary culture. From royal palaces to street markets, the city pulses with endless energy."
+  },
+  {
+    "year": 2025,
+    "date": "2025-10-18",
+    "location": "North Wales",
+    "images": [
+      "/photos/2025/20251018-North Wales Part 7/IMG_8343.jpg",
+      "/photos/2025/20251018-North Wales Part 7/IMG_8359.jpg",
+      "/photos/2025/20251018-North Wales Part 7/IMG_8362.jpg",
+      "/photos/2025/20251018-North Wales Part 7/IMG_8366.jpg",
+      "/photos/2025/20251018-North Wales Part 7/IMG_8381.jpg",
+      "/photos/2025/20251018-North Wales Part 7/IMG_8383.jpg",
+      "/photos/2025/20251018-North Wales Part 7/IMG_8392.jpg",
+      "/photos/2025/20251018-North Wales Part 7/IMG_8401.jpg",
+      "/photos/2025/20251018-North Wales Part 7/IMG_8403.jpg"
+    ],
+    "description": "Valleys and waterfalls. The raw power of Welsh nature carved into ancient rock."
+  },
+  {
+    "year": 2025,
+    "date": "2025-10-18",
+    "location": "North Wales",
+    "images": [
+      "/photos/2025/20251018-North Wales Part 6/IMG_8253.jpg",
+      "/photos/2025/20251018-North Wales Part 6/IMG_8255.jpg",
+      "/photos/2025/20251018-North Wales Part 6/IMG_8268.jpg",
+      "/photos/2025/20251018-North Wales Part 6/IMG_8278.jpg",
+      "/photos/2025/20251018-North Wales Part 6/IMG_8297.jpg",
+      "/photos/2025/20251018-North Wales Part 6/IMG_8304.jpg",
+      "/photos/2025/20251018-North Wales Part 6/IMG_8308.jpg",
+      "/photos/2025/20251018-North Wales Part 6/IMG_8324.jpg",
+      "/photos/2025/20251018-North Wales Part 6/IMG_8340.jpg"
+    ],
+    "description": "Rural Wales at its finest. Stone walls crisscross green hillsides where farming traditions endure."
+  },
+  {
+    "year": 2025,
+    "date": "2025-10-18",
+    "location": "North Wales",
+    "images": [
+      "/photos/2025/20251018-North Wales Part 5/IMG_8183.jpg",
+      "/photos/2025/20251018-North Wales Part 5/IMG_8191.jpg",
+      "/photos/2025/20251018-North Wales Part 5/IMG_8192.jpg",
+      "/photos/2025/20251018-North Wales Part 5/IMG_8203.jpg",
+      "/photos/2025/20251018-North Wales Part 5/IMG_8207.jpg",
+      "/photos/2025/20251018-North Wales Part 5/IMG_8208.jpg",
+      "/photos/2025/20251018-North Wales Part 5/IMG_8246.jpg",
+      "/photos/2025/20251018-North Wales Part 5/IMG_8249.jpg",
+      "/photos/2025/20251018-North Wales Part 5/IMG_8250.jpg"
+    ],
+    "description": "The wild beauty of the Welsh coast. Dramatic cliffs, hidden coves, and the ever-changing Irish Sea."
+  },
+  {
+    "year": 2025,
+    "date": "2025-10-18",
+    "location": "North Wales",
+    "images": [
+      "/photos/2025/20251018-North Wales Part 4/IMG_8138.jpg",
+      "/photos/2025/20251018-North Wales Part 4/IMG_8142.jpg",
+      "/photos/2025/20251018-North Wales Part 4/IMG_8152.jpg",
+      "/photos/2025/20251018-North Wales Part 4/IMG_8156.jpg",
+      "/photos/2025/20251018-North Wales Part 4/IMG_8175.jpg",
+      "/photos/2025/20251018-North Wales Part 4/IMG_8177.jpg",
+      "/photos/2025/20251018-North Wales Part 4/IMG_8179.jpg",
+      "/photos/2025/20251018-North Wales Part 4/IMG_8180.jpg",
+      "/photos/2025/20251018-North Wales Part 4/IMG_8182.jpg"
+    ],
+    "description": "Mountain railways and seaside towns. The heritage of Welsh industry meets Victorian resort elegance."
+  },
+  {
+    "year": 2025,
+    "date": "2025-10-18",
+    "location": "North Wales",
+    "images": [
+      "/photos/2025/20251018-North Wales Part 3/IMG_8123.jpg",
+      "/photos/2025/20251018-North Wales Part 3/IMG_8125.jpg",
+      "/photos/2025/20251018-North Wales Part 3/IMG_8127.jpg",
+      "/photos/2025/20251018-North Wales Part 3/IMG_8129.jpg",
+      "/photos/2025/20251018-North Wales Part 3/IMG_8130.jpg",
+      "/photos/2025/20251018-North Wales Part 3/IMG_8132.jpg",
+      "/photos/2025/20251018-North Wales Part 3/IMG_8133.jpg",
+      "/photos/2025/20251018-North Wales Part 3/IMG_8134.jpg",
+      "/photos/2025/20251018-North Wales Part 3/IMG_8135.jpg"
+    ],
+    "description": "Welsh castles and coastal villages. Edward I's iron ring of fortresses still guards the landscape after seven centuries."
+  },
+  {
+    "year": 2025,
+    "date": "2025-10-18",
+    "location": "North Wales",
+    "images": [
+      "/photos/2025/20251018-North Wales Part 2/IMG_8088.jpg",
+      "/photos/2025/20251018-North Wales Part 2/IMG_8103.jpg",
+      "/photos/2025/20251018-North Wales Part 2/IMG_8104.jpg",
+      "/photos/2025/20251018-North Wales Part 2/IMG_8110.jpg",
+      "/photos/2025/20251018-North Wales Part 2/IMG_8113.jpg",
+      "/photos/2025/20251018-North Wales Part 2/IMG_8115.jpg",
+      "/photos/2025/20251018-North Wales Part 2/IMG_8117.jpg",
+      "/photos/2025/20251018-North Wales Part 2/IMG_8119.jpg",
+      "/photos/2025/20251018-North Wales Part 2/IMG_8122.jpg"
+    ],
+    "description": "Exploring Snowdonia National Park. Rugged terrain where slate quarries and sheep farms dot the mountainsides."
+  },
+  {
+    "year": 2025,
+    "date": "2025-10-18",
+    "location": "North Wales",
+    "images": [
+      "/photos/2025/20251018-North Wales/A7C08689.JPG",
+      "/photos/2025/20251018-North Wales/A7C08704.JPG",
+      "/photos/2025/20251018-North Wales/A7C08706.JPG",
+      "/photos/2025/20251018-North Wales/A7C08709.JPG",
+      "/photos/2025/20251018-North Wales/A7C08711.JPG",
+      "/photos/2025/20251018-North Wales/A7C08717.JPG",
+      "/photos/2025/20251018-North Wales/A7C08718.JPG",
+      "/photos/2025/20251018-North Wales/A7C08726.JPG",
+      "/photos/2025/20251018-North Wales/IMG_8081.jpg"
+    ],
+    "description": "North Wales, a land of dramatic mountains, ancient castles, and the lyrical Welsh language. Snowdonia's peaks rise above valleys steeped in Celtic legend."
+  },
+  {
+    "year": 2025,
+    "date": "2025-10-04",
+    "location": "Chatsworth",
+    "images": [
+      "/photos/2025/20251004-Chatsworth Part 5/A7C06539.JPG",
+      "/photos/2025/20251004-Chatsworth Part 5/A7C06545.JPG",
+      "/photos/2025/20251004-Chatsworth Part 5/A7C06546.JPG",
+      "/photos/2025/20251004-Chatsworth Part 5/A7C06551.JPG",
+      "/photos/2025/20251004-Chatsworth Part 5/A7C06553.JPG"
+    ],
+    "description": "A final look at Chatsworth. The estate's timeless beauty captured in autumn's golden light."
+  },
+  {
+    "year": 2025,
+    "date": "2025-10-04",
+    "location": "Chatsworth",
+    "images": [
+      "/photos/2025/20251004-Chatsworth Part 4/A7C06477-1.JPG",
+      "/photos/2025/20251004-Chatsworth Part 4/A7C06495.JPG",
+      "/photos/2025/20251004-Chatsworth Part 4/A7C06512.JPG",
+      "/photos/2025/20251004-Chatsworth Part 4/A7C06515.JPG",
+      "/photos/2025/20251004-Chatsworth Part 4/A7C06527.JPG",
+      "/photos/2025/20251004-Chatsworth Part 4/A7C06530.JPG",
+      "/photos/2025/20251004-Chatsworth Part 4/A7C06534.JPG",
+      "/photos/2025/20251004-Chatsworth Part 4/A7C06535.JPG",
+      "/photos/2025/20251004-Chatsworth Part 4/A7C06537.JPG"
+    ],
+    "description": "Chatsworth's grounds and deer park. Wild fallow deer roam freely where nature and aristocratic taste have merged for generations."
+  },
+  {
+    "year": 2025,
+    "date": "2025-10-04",
+    "location": "Chatsworth",
+    "images": [
+      "/photos/2025/20251004-Chatsworth Part 3/A7C06451.JPG",
+      "/photos/2025/20251004-Chatsworth Part 3/A7C06455.JPG",
+      "/photos/2025/20251004-Chatsworth Part 3/A7C06456.JPG",
+      "/photos/2025/20251004-Chatsworth Part 3/A7C06459.JPG",
+      "/photos/2025/20251004-Chatsworth Part 3/A7C06462.JPG",
+      "/photos/2025/20251004-Chatsworth Part 3/A7C06465.JPG",
+      "/photos/2025/20251004-Chatsworth Part 3/A7C06467-1.JPG",
+      "/photos/2025/20251004-Chatsworth Part 3/A7C06473.JPG",
+      "/photos/2025/20251004-Chatsworth Part 3/A7C06474.JPG"
+    ],
+    "description": "The gardens of Chatsworth. Cascading fountains, ancient trees, and landscapes designed by Capability Brown."
+  },
+  {
+    "year": 2025,
+    "date": "2025-10-04",
+    "location": "Chatsworth",
+    "images": [
+      "/photos/2025/20251004-Chatsworth Part 2/A7C06414.JPG",
+      "/photos/2025/20251004-Chatsworth Part 2/A7C06424.JPG",
+      "/photos/2025/20251004-Chatsworth Part 2/A7C06426.JPG",
+      "/photos/2025/20251004-Chatsworth Part 2/A7C06434.JPG",
+      "/photos/2025/20251004-Chatsworth Part 2/A7C06437.JPG",
+      "/photos/2025/20251004-Chatsworth Part 2/A7C06438.JPG",
+      "/photos/2025/20251004-Chatsworth Part 2/A7C06444-1.JPG",
+      "/photos/2025/20251004-Chatsworth Part 2/A7C06445.JPG",
+      "/photos/2025/20251004-Chatsworth Part 2/A7C06449.JPG"
+    ],
+    "description": "Inside Chatsworth House. Painted ceilings, old master paintings, and rooms that have hosted royalty for centuries."
+  },
+  {
+    "year": 2025,
+    "date": "2025-10-04",
+    "location": "Chatsworth",
+    "images": [
+      "/photos/2025/20251004-Chatsworth/A7C06337.JPG",
+      "/photos/2025/20251004-Chatsworth/A7C06339.JPG",
+      "/photos/2025/20251004-Chatsworth/A7C06369.JPG",
+      "/photos/2025/20251004-Chatsworth/A7C06372.JPG",
+      "/photos/2025/20251004-Chatsworth/A7C06397.JPG",
+      "/photos/2025/20251004-Chatsworth/A7C06399.JPG",
+      "/photos/2025/20251004-Chatsworth/A7C06402.JPG",
+      "/photos/2025/20251004-Chatsworth/A7C06408.JPG",
+      "/photos/2025/20251004-Chatsworth/A7C06554.JPG"
+    ],
+    "description": "Chatsworth House, the magnificent Derbyshire estate of the Duke of Devonshire. Baroque grandeur set against the rolling hills of the Peak District."
+  },
+  {
+    "year": 2025,
+    "date": "2025-09-27",
+    "location": "Cambridge",
+    "images": [
+      "/photos/2025/20250927-Cambridge Part 2/A7C06186.JPG",
+      "/photos/2025/20250927-Cambridge Part 2/A7C06188.JPG",
+      "/photos/2025/20250927-Cambridge Part 2/A7C06200.JPG",
+      "/photos/2025/20250927-Cambridge Part 2/A7C06211.JPG",
+      "/photos/2025/20250927-Cambridge Part 2/A7C06223.JPG",
+      "/photos/2025/20250927-Cambridge Part 2/A7C06244.JPG",
+      "/photos/2025/20250927-Cambridge Part 2/A7C06254.JPG",
+      "/photos/2025/20250927-Cambridge Part 2/A7C06256.JPG",
+      "/photos/2025/20250927-Cambridge Part 2/A7C06272.JPG",
+      "/photos/2025/20250927-Cambridge Part 2/A7C06274.JPG",
+      "/photos/2025/20250927-Cambridge Part 2/A7C06285-1.JPG",
+      "/photos/2025/20250927-Cambridge Part 2/A7C06286.JPG"
+    ],
+    "description": "The colleges of Cambridge. King's College Chapel, Trinity's Great Court, and the quiet beauty of the Backs along the River Cam."
+  },
+  {
+    "year": 2025,
+    "date": "2025-09-27",
+    "location": "Cambridge",
+    "images": [
+      "/photos/2025/20250927-Cambridge/A7C06095.JPG",
+      "/photos/2025/20250927-Cambridge/A7C06097.JPG",
+      "/photos/2025/20250927-Cambridge/A7C06098.JPG",
+      "/photos/2025/20250927-Cambridge/A7C06119.JPG",
+      "/photos/2025/20250927-Cambridge/A7C06137.JPG",
+      "/photos/2025/20250927-Cambridge/A7C06155.JPG",
+      "/photos/2025/20250927-Cambridge/A7C06159.JPG",
+      "/photos/2025/20250927-Cambridge/A7C06175.JPG",
+      "/photos/2025/20250927-Cambridge/A7C06300.JPG"
+    ],
+    "description": "Cambridge, where eight centuries of academic excellence have shaped one of the world's most beautiful university towns. Punts glide beneath bridges as scholars cycle past ancient colleges."
+  },
+  {
+    "year": 2025,
+    "date": "2025-09-21",
+    "location": "York",
+    "images": [
+      "/photos/2025/20250921-York Part 5/A7C06021.jpg",
+      "/photos/2025/20250921-York Part 5/A7C06025.jpg",
+      "/photos/2025/20250921-York Part 5/A7C06030.jpg",
+      "/photos/2025/20250921-York Part 5/A7C06036.jpg",
+      "/photos/2025/20250921-York Part 5/A7C06039.jpg"
+    ],
+    "description": "Final moments in York. The city walls at sunset, offering panoramic views of this timeless English gem."
+  },
+  {
+    "year": 2025,
+    "date": "2025-09-21",
+    "location": "York",
+    "images": [
+      "/photos/2025/20250921-York Part 4/A7C06000.jpg",
+      "/photos/2025/20250921-York Part 4/A7C06001.jpg",
+      "/photos/2025/20250921-York Part 4/A7C06003.jpg",
+      "/photos/2025/20250921-York Part 4/A7C06007.jpg",
+      "/photos/2025/20250921-York Part 4/A7C06008.jpg",
+      "/photos/2025/20250921-York Part 4/A7C06010.jpg",
+      "/photos/2025/20250921-York Part 4/A7C06011.jpg",
+      "/photos/2025/20250921-York Part 4/A7C06012.jpg",
+      "/photos/2025/20250921-York Part 4/A7C06014.jpg"
+    ],
+    "description": "More treasures of York. Hidden courtyards, ancient pubs, and the gentle flow of the River Ouse through the city center."
+  },
+  {
+    "year": 2025,
+    "date": "2025-09-21",
+    "location": "York",
+    "images": [
+      "/photos/2025/20250921-York Part 3/A7C05932.jpg",
+      "/photos/2025/20250921-York Part 3/A7C05944.jpg",
+      "/photos/2025/20250921-York Part 3/A7C05958.jpg",
+      "/photos/2025/20250921-York Part 3/A7C05963.jpg",
+      "/photos/2025/20250921-York Part 3/A7C05980.jpg",
+      "/photos/2025/20250921-York Part 3/A7C05987.jpg",
+      "/photos/2025/20250921-York Part 3/A7C05994.jpg",
+      "/photos/2025/20250921-York Part 3/A7C05995.jpg",
+      "/photos/2025/20250921-York Part 3/A7C05996.jpg"
+    ],
+    "description": "York Minster and its surroundings. Gothic architecture reaching skyward, a testament to centuries of faith and craftsmanship."
+  },
+  {
+    "year": 2025,
+    "date": "2025-09-21",
+    "location": "York",
+    "images": [
+      "/photos/2025/20250921-York Part 2/A7C05877.jpg",
+      "/photos/2025/20250921-York Part 2/A7C05879.jpg",
+      "/photos/2025/20250921-York Part 2/A7C05888.jpg",
+      "/photos/2025/20250921-York Part 2/A7C05894.jpg",
+      "/photos/2025/20250921-York Part 2/A7C05908.jpg",
+      "/photos/2025/20250921-York Part 2/A7C05918.jpg",
+      "/photos/2025/20250921-York Part 2/A7C05922.jpg",
+      "/photos/2025/20250921-York Part 2/A7C05925.jpg",
+      "/photos/2025/20250921-York Part 2/A7C05927.jpg"
+    ],
+    "description": "Wandering through York's Shambles. This narrow medieval street, once home to butchers, now charms visitors with its leaning timber frames."
+  },
+  {
+    "year": 2025,
+    "date": "2025-09-21",
+    "location": "York",
+    "images": [
+      "/photos/2025/20250921-York/A7C05847.jpg",
+      "/photos/2025/20250921-York/A7C05848.jpg",
+      "/photos/2025/20250921-York/A7C05854.jpg",
+      "/photos/2025/20250921-York/A7C05855.jpg",
+      "/photos/2025/20250921-York/A7C05857.jpg",
+      "/photos/2025/20250921-York/A7C05862.jpg",
+      "/photos/2025/20250921-York/A7C05868.jpg",
+      "/photos/2025/20250921-York/A7C05872.jpg",
+      "/photos/2025/20250921-York/A7C06041.jpg"
+    ],
+    "description": "York, England's best-preserved medieval city. Ancient walls encircle a labyrinth of cobbled streets where history breathes in every stone."
+  },
+  {
+    "year": 2025,
+    "date": "2025-09-11",
+    "location": "Dubai",
+    "images": [
+      "/photos/2025/20250911-Dubai Part 3/IMG_3141.jpg",
+      "/photos/2025/20250911-Dubai Part 3/IMG_3143.jpg",
+      "/photos/2025/20250911-Dubai Part 3/img-20250911-162922-4f.jpg",
+      "/photos/2025/20250911-Dubai Part 3/img-20250911-163829-ee.jpg",
+      "/photos/2025/20250911-Dubai Part 3/img-20250911-163846-e7.jpg",
+      "/photos/2025/20250911-Dubai Part 3/img-20250911-172846-83.jpg",
+      "/photos/2025/20250911-Dubai Part 3/img-20250911-174617-e3.jpg",
+      "/photos/2025/20250911-Dubai Part 3/img-20250911-175643-f0.jpg",
+      "/photos/2025/20250911-Dubai Part 3/img-20250911-175757-24.jpg"
+    ],
+    "description": "Dubai after dark. The city transforms into a glittering spectacle of lights reflected in glass and water."
+  },
+  {
+    "year": 2025,
+    "date": "2025-09-11",
+    "location": "Dubai",
+    "images": [
+      "/photos/2025/20250911-Dubai Part 2/A7C05832.jpg",
+      "/photos/2025/20250911-Dubai Part 2/A7C05833.jpg",
+      "/photos/2025/20250911-Dubai Part 2/A7C05835.jpg",
+      "/photos/2025/20250911-Dubai Part 2/A7C05836.jpg",
+      "/photos/2025/20250911-Dubai Part 2/IMG_3082.jpg",
+      "/photos/2025/20250911-Dubai Part 2/IMG_3106.jpg",
+      "/photos/2025/20250911-Dubai Part 2/IMG_3126.jpg",
+      "/photos/2025/20250911-Dubai Part 2/IMG_3130.jpg",
+      "/photos/2025/20250911-Dubai Part 2/IMG_3132.jpg"
+    ],
+    "description": "Exploring Dubai's urban landscape. The contrast between gleaming towers and traditional souks tells the story of rapid transformation."
+  },
+  {
+    "year": 2025,
+    "date": "2025-09-11",
+    "location": "Dubai",
+    "images": [
+      "/photos/2025/20250911-Dubai/A7C05781.jpg",
+      "/photos/2025/20250911-Dubai/A7C05784.jpg",
+      "/photos/2025/20250911-Dubai/A7C05797.jpg",
+      "/photos/2025/20250911-Dubai/A7C05802.jpg",
+      "/photos/2025/20250911-Dubai/A7C05809.jpg",
+      "/photos/2025/20250911-Dubai/A7C05814.jpg",
+      "/photos/2025/20250911-Dubai/A7C05817.jpg",
+      "/photos/2025/20250911-Dubai/A7C05831.jpg",
+      "/photos/2025/20250911-Dubai/img-20250911-213333-cc.jpg"
+    ],
+    "description": "Dubai, where futuristic architecture rises from the desert. A city of superlatives pushing the boundaries of what's possible."
+  },
+  {
+    "year": 2025,
+    "date": "2025-08-04",
+    "location": "Shanghai China Joy",
+    "images": [
+      "/photos/2025/20250804-Shanghai China Joy Part 3/A7C05699.jpg",
+      "/photos/2025/20250804-Shanghai China Joy Part 3/A7C05719.jpg",
+      "/photos/2025/20250804-Shanghai China Joy Part 3/A7C05724.jpg",
+      "/photos/2025/20250804-Shanghai China Joy Part 3/A7C05751.jpg",
+      "/photos/2025/20250804-Shanghai China Joy Part 3/A7C05761.jpg"
+    ],
+    "description": "Final captures from ChinaJoy. The intersection of technology and art, where virtual worlds meet real-world enthusiasm."
+  },
+  {
+    "year": 2025,
+    "date": "2025-08-04",
+    "location": "Shanghai China Joy",
+    "images": [
+      "/photos/2025/20250804-Shanghai China Joy Part 2/A7C05634.jpg",
+      "/photos/2025/20250804-Shanghai China Joy Part 2/A7C05635.jpg",
+      "/photos/2025/20250804-Shanghai China Joy Part 2/A7C05640.jpg",
+      "/photos/2025/20250804-Shanghai China Joy Part 2/A7C05646.jpg",
+      "/photos/2025/20250804-Shanghai China Joy Part 2/A7C05653.jpg",
+      "/photos/2025/20250804-Shanghai China Joy Part 2/A7C05663.jpg",
+      "/photos/2025/20250804-Shanghai China Joy Part 2/A7C05665.jpg",
+      "/photos/2025/20250804-Shanghai China Joy Part 2/A7C05692.jpg",
+      "/photos/2025/20250804-Shanghai China Joy Part 2/A7C05694.jpg"
+    ],
+    "description": "More moments from ChinaJoy. Elaborate booth displays, passionate fans, and the creative energy that defines this annual gaming festival."
+  },
+  {
+    "year": 2025,
+    "date": "2025-08-04",
+    "location": "Shanghai China Joy",
+    "images": [
+      "/photos/2025/20250804-Shanghai China Joy/A7C05582.jpg",
+      "/photos/2025/20250804-Shanghai China Joy/A7C05592.jpg",
+      "/photos/2025/20250804-Shanghai China Joy/A7C05594.jpg",
+      "/photos/2025/20250804-Shanghai China Joy/A7C05598.jpg",
+      "/photos/2025/20250804-Shanghai China Joy/A7C05600.jpg",
+      "/photos/2025/20250804-Shanghai China Joy/A7C05602.jpg",
+      "/photos/2025/20250804-Shanghai China Joy/A7C05622.jpg",
+      "/photos/2025/20250804-Shanghai China Joy/A7C05623.jpg",
+      "/photos/2025/20250804-Shanghai China Joy/A7C05632.jpg"
+    ],
+    "description": "ChinaJoy, Asia's largest gaming and digital entertainment expo in Shanghai. A vibrant celebration of gaming culture, cosplay, and cutting-edge technology."
   }
 ]

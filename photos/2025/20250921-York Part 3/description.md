@@ -1,0 +1,1 @@
+York Minster and its surroundings. Gothic architecture reaching skyward, a testament to centuries of faith and craftsmanship.

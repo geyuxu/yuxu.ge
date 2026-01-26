@@ -354,39 +354,103 @@
                 position: relative;
                 width: 100%;
                 height: auto;
-                padding: 2rem 1.5rem;
+                padding: 2rem 1.5rem 1rem;
+            }
+
+            .sidebar-top {
+                gap: 0;
+            }
+
+            .contact-block {
+                margin-top: 1.5rem;
+            }
+
+            .social-links {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.75rem;
+            }
+
+            .social-links a,
+            .social-links .orcid-link {
+                width: auto;
+                padding: 0.5rem;
+                font-size: 0;
+                gap: 0;
+            }
+
+            .social-links svg {
+                width: 24px;
+                height: 24px;
+            }
+
+            .sidebar-footer {
+                margin-top: 1rem;
             }
 
             .content {
                 margin-left: 0;
-                padding: 2.5rem 1.5rem;
+                padding: 2rem 1rem;
+                max-width: 100%;
+                overflow-x: hidden;
+            }
+
+            .hero {
+                margin-bottom: 2.5rem;
             }
 
             .hero-subtitle {
-                font-size: 2rem;
+                font-size: 1.75rem;
+                word-wrap: break-word;
+            }
+
+            .hero-bio {
+                max-width: 100%;
+                font-size: 1rem;
             }
 
             .stack-grid {
                 grid-template-columns: 1fr;
             }
+
+            .work-item {
+                padding: 1rem;
+            }
         }
 
         @media (max-width: 480px) {
+            .sidebar {
+                padding: 1.5rem 1rem 1rem;
+            }
+
             .avatar {
-                width: 100px;
-                height: 100px;
+                width: 80px;
+                height: 80px;
             }
 
             h1 {
-                font-size: 1.5rem;
+                font-size: 1.4rem;
+            }
+
+            .title-role {
+                font-size: 0.8rem;
+            }
+
+            .content {
+                padding: 1.5rem 1rem;
             }
 
             .hero-subtitle {
-                font-size: 1.6rem;
+                font-size: 1.5rem;
             }
 
             .hero-bio {
-                font-size: 1rem;
+                font-size: 0.95rem;
+            }
+
+            .section-header {
+                font-size: 0.75rem;
             }
         }
     </style>

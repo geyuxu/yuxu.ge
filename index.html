@@ -424,6 +424,25 @@
         .photo-strip-link {
             font-size: 0.75rem;
             color: var(--dark-grey);
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .photo-strip-link svg {
+            width: 14px;
+            height: 14px;
+            animation: arrow-bounce 1.5s ease-in-out infinite;
+        }
+
+        .photo-strip-link:hover svg {
+            animation: none;
+            transform: translateX(3px);
+        }
+
+        @keyframes arrow-bounce {
+            0%, 100% { transform: translateX(0); }
+            50% { transform: translateX(4px); }
         }
 
         .photo-strip-scroll {
@@ -705,7 +724,12 @@
             <section class="photo-strip">
                 <div class="photo-strip-header">
                     <span class="photo-strip-title">Life Moments</span>
-                    <a href="/gallery/" class="photo-strip-link">View Gallery →</a>
+                    <a href="/gallery/" class="photo-strip-link">
+                        View Gallery
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                        </svg>
+                    </a>
                 </div>
                 <div class="photo-strip-scroll" id="photo-strip"></div>
             </section>

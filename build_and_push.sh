@@ -24,12 +24,8 @@ if git diff --quiet && git diff --cached --quiet; then
     exit 0
 fi
 
-# Commit message
-if [ -n "$1" ]; then
-    MSG="$1"
-else
-    MSG="build: update site $(date '+%Y-%m-%d %H:%M')"
-fi
+# Commit message (use parameter or default)
+MSG="${1:-build: update site $(date '+%Y-%m-%d %H:%M')}"
 
 echo ""
 echo "=== Committing ==="

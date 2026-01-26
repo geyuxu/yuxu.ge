@@ -2,27 +2,35 @@
 /**
  * Build Medium-friendly HTML
  * - Creates GitHub Gists for long code blocks (>15 lines)
- * - Converts tables to bullet lists
+ * - Converts tables to PNG images
  * Output: /blog/medium/{slug}.html
  * Run: GITHUB_TOKEN_CRTATE_GIST=xxx node build-medium.js
  */
 
 const fs = require('fs');
 const path = require('path');
+const crypto = require('crypto');
 const { marked } = require('marked');
+const { tableToImage } = require('./table-to-image');
 
 const POSTS_JSON = path.join(__dirname, 'posts.json');
 const OUTPUT_DIR = path.join(__dirname, 'medium');
 const GIST_CACHE_FILE = path.join(__dirname, '.gist-cache.json');
+const TABLE_CACHE_FILE = path.join(__dirname, '.table-cache.json');
 const MAX_CODE_LINES = 15;
 
 // GitHub API for Gist creation
 const GITHUB_TOKEN_CRTATE_GIST = process.env.GITHUB_TOKEN_CRTATE_GIST;
 
-// Load or initialize gist cache
+// Load or initialize caches
 let gistCache = {};
 if (fs.existsSync(GIST_CACHE_FILE)) {
     gistCache = JSON.parse(fs.readFileSync(GIST_CACHE_FILE, 'utf-8'));
+}
+
+let tableCache = {};
+if (fs.existsSync(TABLE_CACHE_FILE)) {
+    tableCache = JSON.parse(fs.readFileSync(TABLE_CACHE_FILE, 'utf-8'));
 }
 
 // Create a hash for code content to use as cache key
@@ -67,8 +75,9 @@ async function createGist(code, language, description) {
     return data.html_url;
 }
 
-// Store pending gists to create
+// Store pending gists and tables to create
 const pendingGists = [];
+const pendingTables = [];
 
 // Custom renderer for Medium compatibility
 const renderer = new marked.Renderer();
@@ -107,40 +116,46 @@ renderer.code = function({ text, lang }) {
     return `<pre><code class="language-${language}">${escapeHtml(code)}</code></pre>`;
 };
 
-// Convert tables to bullet lists
+// Convert tables to images
 renderer.table = function({ header, rows }) {
-    // Extract header text from tokens
-    const headers = header.map(h => {
-        if (h.tokens && h.tokens.length > 0) {
-            return h.tokens.map(t => t.text || t.raw || '').join('');
+    // Build HTML table for image rendering
+    const extractText = (cell) => {
+        if (cell.tokens && cell.tokens.length > 0) {
+            return cell.tokens.map(t => {
+                if (t.type === 'strong') return `<strong>${t.text}</strong>`;
+                if (t.type === 'codespan') return `<code>${t.text}</code>`;
+                return t.text || t.raw || '';
+            }).join('');
         }
-        return h.text || '';
-    });
+        return cell.text || '';
+    };
 
-    let result = '<p><strong>Summary:</strong></p>\n<ul>\n';
+    let tableHtml = '<table>\n<tr>';
+    header.forEach(h => {
+        tableHtml += `<th>${extractText(h)}</th>`;
+    });
+    tableHtml += '</tr>\n';
 
     rows.forEach(row => {
-        const cells = row.map(cell => {
-            if (cell.tokens && cell.tokens.length > 0) {
-                return cell.tokens.map(t => t.text || t.raw || '').join('');
-            }
-            return cell.text || '';
+        tableHtml += '<tr>';
+        row.forEach(cell => {
+            tableHtml += `<td>${extractText(cell)}</td>`;
         });
-
-        if (cells.length >= 2) {
-            // Format: "Header1: Cell1 — Header2: Cell2 — ..."
-            let item = cells.map((cell, i) => {
-                if (headers[i] && headers[i] !== cells[0]) {
-                    return `${headers[i]}: ${cell}`;
-                }
-                return cell;
-            }).join(' — ');
-            result += `  <li>${item}</li>\n`;
-        }
+        tableHtml += '</tr>\n';
     });
+    tableHtml += '</table>';
 
-    result += '</ul>';
-    return result;
+    // Generate hash for caching
+    const tableHash = crypto.createHash('md5').update(tableHtml).digest('hex').slice(0, 8);
+
+    // Check cache
+    if (tableCache[tableHash]) {
+        return `<p><img src="${tableCache[tableHash]}" alt="Table"></p>`;
+    }
+
+    // Queue for image generation
+    pendingTables.push({ html: tableHtml, hash: tableHash });
+    return `<p><img src="__TABLE_${tableHash}__" alt="Table"></p>`;
 };
 
 function escapeHtml(text) {
@@ -216,6 +231,26 @@ async function build() {
         postOutputs.push({ post, htmlContent, htmlPath });
     }
 
+    // Create table images
+    if (pendingTables.length > 0) {
+        console.log(`\n🖼️  Converting ${pendingTables.length} tables to images...`);
+
+        for (const table of pendingTables) {
+            try {
+                const imgPath = await tableToImage(table.html, `table-${table.hash}`);
+                const relativePath = '/blog/images/tables/' + path.basename(imgPath);
+                tableCache[table.hash] = relativePath;
+                console.log(`  ✓ Table image: ${relativePath}`);
+            } catch (err) {
+                console.log(`  ✗ Failed to create table image: ${err.message}`);
+            }
+        }
+
+        // Save cache
+        fs.writeFileSync(TABLE_CACHE_FILE, JSON.stringify(tableCache, null, 2));
+        console.log(`✓ Table cache saved to .table-cache.json`);
+    }
+
     // Create gists if we have pending ones and a token
     if (pendingGists.length > 0 && GITHUB_TOKEN_CRTATE_GIST) {
         const masked = GITHUB_TOKEN_CRTATE_GIST.slice(0, 4) + '...' + GITHUB_TOKEN_CRTATE_GIST.slice(-4);
@@ -239,13 +274,18 @@ async function build() {
         console.log('  Run with: GITHUB_TOKEN_CRTATE_GIST=xxx node build-medium.js');
     }
 
-    // Write HTML files (replace gist placeholders with actual URLs)
+    // Write HTML files (replace placeholders with actual URLs/paths)
     for (const { post, htmlContent, htmlPath } of postOutputs) {
         let finalHtml = htmlContent;
 
-        // Replace placeholders with cached gist URLs
+        // Replace gist placeholders
         for (const [hash, url] of Object.entries(gistCache)) {
             finalHtml = finalHtml.replace(new RegExp(`__GIST_${hash}__`, 'g'), url);
+        }
+
+        // Replace table placeholders
+        for (const [hash, imgPath] of Object.entries(tableCache)) {
+            finalHtml = finalHtml.replace(new RegExp(`__TABLE_${hash}__`, 'g'), imgPath);
         }
 
         const fullHtml = buildHtml(post.title, finalHtml);
@@ -261,7 +301,7 @@ async function build() {
     } else {
         console.log('Note: Long code blocks truncated (set GITHUB_TOKEN_CRTATE_GIST for Gist creation).');
     }
-    console.log('Note: Tables converted to bullet lists.');
+    console.log('Note: Tables converted to PNG images.');
 }
 
 build().catch(err => {

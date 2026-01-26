@@ -53,7 +53,7 @@ _EE = 0.00669342162296594323  # First eccentricity squared
 def _out_of_china(lng: float, lat: float) -&gt; bool:
     &quot;&quot;&quot;Check if point is outside China (skip transformation).&quot;&quot;&quot;
 # ... (64 more lines)</code></pre>
-<p><em>View full code: <a href="https://gist.github.com/geyuxu/99372e7849dd3e5ba85bb022d41fd0cd">GitHub Gist</a></em></p><p>The iteration converges in 2–3 steps for typical coordinates.</p>
+<p><em>View full code: <a href="https://gist.github.com/geyuxu/99372e7849dd3e5ba85bb022d41fd0cd">https://gist.github.com/geyuxu/99372e7849dd3e5ba85bb022d41fd0cd</a></em></p><p>The iteration converges in 2–3 steps for typical coordinates.</p>
 <hr>
 <h2>Problem #2: The TIME_WAIT Storm</h2>
 <p>Every naive geocoding request creates a new TCP connection:</p>
@@ -70,7 +70,7 @@ def create_resilient_session(pool_size: int = 50) -&gt; requests.Session:
     &quot;&quot;&quot;
     Create an HTTP session with connection pooling and retry logic.
 # ... (23 more lines)</code></pre>
-<p><em>View full code: <a href="https://gist.github.com/geyuxu/88630cfc07a06bea04aacc10d200b0bf">GitHub Gist</a></em></p><p><strong>Connection pool sizing</strong>: Use <code>pool_size = expected_QPS × average_latency</code>. At 500 QPS with 100ms latency, that&#39;s 50 connections.</p>
+<p><em>View full code: <a href="https://gist.github.com/geyuxu/88630cfc07a06bea04aacc10d200b0bf">https://gist.github.com/geyuxu/88630cfc07a06bea04aacc10d200b0bf</a></em></p><p><strong>Connection pool sizing</strong>: Use <code>pool_size = expected_QPS × average_latency</code>. At 500 QPS with 100ms latency, that&#39;s 50 connections.</p>
 <hr>
 <h2>Problem #3: Quota Burnout</h2>
 <p>Commercial geocoding APIs have strict rate limits. Without client-side throttling, a traffic spike can exhaust your daily quota in minutes—then return HTTP 429 for the rest of the day.</p>
@@ -85,7 +85,7 @@ from dataclasses import dataclass, field
 class TokenBucket:
     &quot;&quot;&quot;
 # ... (27 more lines)</code></pre>
-<p><em>View full code: <a href="https://gist.github.com/geyuxu/752a34964d1f4bb828ca0433d18d4b7b">GitHub Gist</a></em></p><p>Set <code>capacity = rate × 2</code> to allow 2 seconds of burst without risking quota exhaustion.</p>
+<p><em>View full code: <a href="https://gist.github.com/geyuxu/752a34964d1f4bb828ca0433d18d4b7b">https://gist.github.com/geyuxu/752a34964d1f4bb828ca0433d18d4b7b</a></em></p><p>Set <code>capacity = rate × 2</code> to allow 2 seconds of burst without risking quota exhaustion.</p>
 <hr>
 <h2>Complete Implementation</h2>
 <p>Here&#39;s everything combined into a production-ready class:</p>
@@ -98,14 +98,9 @@ from typing import Any
 import requests
 from requests.adapters import HTTPAdapter
 # ... (142 more lines)</code></pre>
-<p><em>View full code: <a href="https://gist.github.com/geyuxu/44c9c8fbca42fd3fa46c3101d03b2465">GitHub Gist</a></em></p><hr>
+<p><em>View full code: <a href="https://gist.github.com/geyuxu/44c9c8fbca42fd3fa46c3101d03b2465">https://gist.github.com/geyuxu/44c9c8fbca42fd3fa46c3101d03b2465</a></em></p><hr>
 <h2>Key Takeaways</h2>
-<p><strong>Summary:</strong></p>
-<ul>
-  <li>Layer: Data — Problem: Coordinate system mismatch — Solution: CRS transformation + iterative inversion</li>
-  <li>Layer: Network — Problem: Connection overhead, transient failures — Solution: Persistent pool + exponential backoff</li>
-  <li>Layer: System — Problem: Quota exhaustion — Solution: Token bucket rate limiting</li>
-</ul><p>Each layer is invisible until it fails. The code above handles all three.</p>
+<p><img src="/blog/images/tables/table-f01957d3.png" alt="Table"></p><p>Each layer is invisible until it fails. The code above handles all three.</p>
 <hr>
 <h2>Next Steps</h2>
 <ul>

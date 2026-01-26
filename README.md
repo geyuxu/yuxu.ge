@@ -20,16 +20,19 @@ Output: `blog/static/{slug}.html`
 
 ## Build for Medium
 
-Generate Medium-friendly HTML (auto Gist for long code, tables as lists):
+Generate Medium-friendly HTML (auto Gist for long code, tables as PNG):
 
 ```bash
-cd blog && node build-medium.js                    # Preview mode
-cd blog && GITHUB_TOKEN_CRTATE_GIST=xxx node build-medium.js   # Create Gists
+cd blog && node build-medium.js                              # Basic build
+cd blog && GITHUB_TOKEN_CRTATE_GIST=xxx node build-medium.js # With Gists
 ```
 
 Output: `blog/medium/{slug}.html`
 
-Gist URLs are cached in `.gist-cache.json` to avoid recreating.
+Features:
+- Long code blocks (>15 lines) → GitHub Gist links
+- Tables → PNG images (saved to `blog/images/tables/`)
+- Caches: `.gist-cache.json`, `.table-cache.json`
 
 ## SVG to PNG
 

@@ -1,9 +1,13 @@
 [
   {
     "slug": "posts/2026/geocoding-client",
-    "title": "Building a Production-Ready Geocoding Client",
+    "title": "Building a Production-Ready Geocoding Client: Coordinate Hacks, Connection Pools, and Rate Limiting",
     "date": "2026-01-26",
-    "tags": ["python", "backend", "geospatial"],
+    "tags": [
+      "python",
+      "backend",
+      "geospatial"
+    ],
     "description": "A deep dive into coordinate transformation (WGS84/GCJ02), connection pooling, rate limiting with token bucket, and retry strategies for geocoding APIs."
   }
 ]

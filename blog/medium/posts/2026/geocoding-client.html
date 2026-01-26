@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Building a Production-Ready Geocoding Client</title>
+    <title>Building a Production-Ready Geocoding Client: Coordinate Hacks, Connection Pools, and Rate Limiting</title>
     <style>
         body { font-family: Georgia, serif; max-width: 700px; margin: 2rem auto; padding: 0 1rem; line-height: 1.7; color: #333; }
         h1 { font-size: 2rem; margin-bottom: 0.5rem; }
@@ -19,6 +19,10 @@
     </style>
 </head>
 <body>
+<hr>
+<h2>date: 2026-01-26
+tags: [python, backend, geospatial]
+description: A deep dive into coordinate transformation (WGS84/GCJ02), connection pooling, rate limiting with token bucket, and retry strategies for geocoding APIs.</h2>
 <h1>Building a Production-Ready Geocoding Client: Coordinate Hacks, Connection Pools, and Rate Limiting</h1>
 <p>Geocoding looks simple: send an address, get coordinates back. But at scale, three hidden problems emerge that tutorials never mention:</p>
 <ol>

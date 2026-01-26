@@ -8,31 +8,25 @@ Personal website for Yuxu Ge.
 python3 -m http.server 8080
 ```
 
-## Build Static Blog
-
-Generate static HTML for crawlers:
+## Build Blog
 
 ```bash
-cd blog && node build.js
+./build.sh           # Build both static + medium
+./build.sh --static  # Static only
+./build.sh --medium  # Medium only
+
+./clear.sh           # Clean all generated files
 ```
 
-Output: `blog/static/{slug}.html`
-
-## Build for Medium
-
-Generate Medium-friendly HTML (auto Gist for long code, tables as PNG):
+With GitHub Gists:
 
 ```bash
-cd blog && node build-medium.js                              # Basic build
-cd blog && GITHUB_TOKEN_CRTATE_GIST=xxx node build-medium.js # With Gists
+GITHUB_TOKEN_CRTATE_GIST=xxx ./build.sh
 ```
 
-Output: `blog/medium/{slug}.html`
-
-Features:
-- Long code blocks (>15 lines) → GitHub Gist links
-- Tables → PNG images (saved to `blog/images/tables/`)
-- Caches: `.gist-cache.json`, `.table-cache.json`
+Output:
+- `blog/static/` - Static HTML for crawlers
+- `blog/medium/` - Medium-friendly HTML (Gist links, table images)
 
 ## SVG to PNG
 

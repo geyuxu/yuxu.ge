@@ -148,9 +148,12 @@ renderer.table = function({ header, rows }) {
     // Generate hash for caching
     const tableHash = crypto.createHash('md5').update(tableHtml).digest('hex').slice(0, 8);
 
-    // Check cache
+    // Check cache (and verify file exists)
     if (tableCache[tableHash]) {
-        return `<p><img src="${tableCache[tableHash]}" alt="Table"></p>`;
+        const cachedPath = path.join(__dirname, tableCache[tableHash].replace('/blog/', ''));
+        if (fs.existsSync(cachedPath)) {
+            return `<p><img src="${tableCache[tableHash]}" alt="Table"></p>`;
+        }
     }
 
     // Queue for image generation

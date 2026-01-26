@@ -44,15 +44,6 @@
 <li>Measure the error and adjust</li>
 <li>Repeat until error &lt; 10⁻⁶ degrees (~0.1 meter)</li>
 </ol>
-<pre><code class="language-python">import math
-
-_A = 6378245.0  # Semi-major axis
-_EE = 0.00669342162296594323  # First eccentricity squared
-
-
-def _out_of_china(lng: float, lat: float) -&gt; bool:
-    &quot;&quot;&quot;Check if point is outside China (skip transformation).&quot;&quot;&quot;
-# ... (64 more lines)</code></pre>
 <p><em>View full code: <a href="https://gist.github.com/geyuxu/e95d2434ac89d63562b063733d2cbacb">GitHub Gist</a></em></p><p>The iteration converges in 2–3 steps for typical coordinates.</p>
 <hr>
 <h2>Problem #2: The TIME_WAIT Storm</h2>
@@ -61,43 +52,16 @@ def _out_of_china(lng: float, lat: float) -&gt; bool:
 <p>Result: <code>OSError: [Errno 99] Cannot assign requested address</code></p>
 <h3>The Solution: Connection Pooling + Exponential Backoff</h3>
 <p>Replace stateless requests with a persistent session that reuses TCP connections:</p>
-<pre><code class="language-python">import requests
-from requests.adapters import HTTPAdapter
-from urllib3.util.retry import Retry
-
-
-def create_resilient_session(pool_size: int = 50) -&gt; requests.Session:
-    &quot;&quot;&quot;
-    Create an HTTP session with connection pooling and retry logic.
-# ... (23 more lines)</code></pre>
 <p><em>View full code: <a href="https://gist.github.com/geyuxu/e547b9e4d96624d83e1fa2e204a174a2">GitHub Gist</a></em></p><p><strong>Connection pool sizing</strong>: Use <code>pool_size = expected_QPS × average_latency</code>. At 500 QPS with 100ms latency, that&#39;s 50 connections.</p>
 <hr>
 <h2>Problem #3: Quota Burnout</h2>
 <p>Commercial geocoding APIs have strict rate limits. Without client-side throttling, a traffic spike can exhaust your daily quota in minutes—then return HTTP 429 for the rest of the day.</p>
 <h3>The Solution: Token Bucket Rate Limiting</h3>
 <p>The token bucket algorithm enforces average rate while tolerating short bursts:</p>
-<pre><code class="language-python">import threading
-import time
-from dataclasses import dataclass, field
-
-
-@dataclass
-class TokenBucket:
-    &quot;&quot;&quot;
-# ... (27 more lines)</code></pre>
 <p><em>View full code: <a href="https://gist.github.com/geyuxu/cdf8101406845469d1bd0b0de09dd71a">GitHub Gist</a></em></p><p>Set <code>capacity = rate × 2</code> to allow 2 seconds of burst without risking quota exhaustion.</p>
 <hr>
 <h2>Complete Implementation</h2>
 <p>Here&#39;s everything combined into a production-ready class:</p>
-<pre><code class="language-python">import math
-import threading
-import time
-from dataclasses import dataclass, field
-from typing import Any
-
-import requests
-from requests.adapters import HTTPAdapter
-# ... (142 more lines)</code></pre>
 <p><em>View full code: <a href="https://gist.github.com/geyuxu/2ee53759034c532a7b8795df70526b6a">GitHub Gist</a></em></p><hr>
 <h2>Key Takeaways</h2>
 <p><img src="/blog/images/tables/table-f01957d3.png" alt="Table"></p><p>Each layer is invisible until it fails. The code above handles all three.</p>

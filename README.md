@@ -23,6 +23,7 @@ Personal website for Yuxu Ge.
 ├── components/             # Shared components
 │   └── sidebar.js          # Sidebar (injected via JS)
 └── scripts/                # Build scripts
+    ├── convert-heic.sh     # HEIC to JPG conversion
     └── compress-photos.sh  # Image compression
 ```
 
@@ -35,9 +36,10 @@ python3 -m http.server 8080
 ## Build
 
 ```bash
-./build.sh           # Build all (posts.json + photos.json + static/medium)
+./build.sh           # Build all (convert + compress + posts.json + photos.json + static/medium)
 ./build.sh --static  # Static HTML only
 ./build.sh --medium  # Medium HTML only
+./build.sh --photos  # Process photos only (convert HEIC + compress)
 
 ./clear.sh           # Clean generated files
 ```
@@ -60,6 +62,15 @@ photos/2026/20260120-Leeds/
 ```
 
 Run `./build.sh` to regenerate `gallery/photos.json`.
+
+### Convert HEIC to JPG
+
+```bash
+./scripts/convert-heic.sh           # Convert all HEIC to JPG
+./scripts/convert-heic.sh --dry-run # Preview only
+```
+
+Uses macOS `sips` (built-in) or ImageMagick.
 
 ### Compress Photos
 

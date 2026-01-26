@@ -68,8 +68,9 @@ find "$PHOTOS_DIR" -type f \( -iname "*.jpg" -o -iname "*.jpeg" -o -iname "*.png
     # Create temp file
     tmp_file="${img}.tmp"
 
-    # Compress: resize if wider than MAX_WIDTH, apply quality
+    # Compress: auto-orient first (apply EXIF rotation), then resize and strip
     $CONVERT "$img" \
+        -auto-orient \
         -resize "${MAX_WIDTH}x>" \
         -quality "$QUALITY" \
         -strip \

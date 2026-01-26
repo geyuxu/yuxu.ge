@@ -2,40 +2,159 @@
   {
     "year": 2026,
     "date": "2026-01-20",
+    "location": "Leeds Royal Armouries Museum",
+    "images": [
+      "/photos/2026/20260120-Leeds Royal Armouries Museum/A7C00295.JPG",
+      "/photos/2026/20260120-Leeds Royal Armouries Museum/A7C00307.JPG",
+      "/photos/2026/20260120-Leeds Royal Armouries Museum/A7C00309.JPG",
+      "/photos/2026/20260120-Leeds Royal Armouries Museum/A7C00310.JPG",
+      "/photos/2026/20260120-Leeds Royal Armouries Museum/A7C00311.JPG",
+      "/photos/2026/20260120-Leeds Royal Armouries Museum/A7C00333.JPG"
+    ],
+    "description": "The Royal Armouries Museum in Leeds houses one of the world's most impressive collections of arms and armor. From medieval knights to samurai warriors, the exhibits span centuries of military history across cultures."
+  },
+  {
+    "year": 2026,
+    "date": "2026-01-20",
     "location": "Leeds",
     "images": [
       "/photos/2026/20260120-Leeds/A7C00267.JPG",
       "/photos/2026/20260120-Leeds/A7C00274.JPG",
-      "/photos/2026/20260120-Leeds/A7C00281.JPG"
+      "/photos/2026/20260120-Leeds/A7C00281.JPG",
+      "/photos/2026/20260120-Leeds/IMG_20260120152426964.jpg",
+      "/photos/2026/20260120-Leeds/IMG_4275.jpg",
+      "/photos/2026/20260120-Leeds/IMG_4315.jpg"
     ],
     "description": "A winter stroll through Leeds city centre. Victorian architecture meets modern commerce in this vibrant northern English city."
   },
   {
     "year": 2026,
     "date": "2026-01-12",
-    "location": "Nation Railway Museum",
+    "location": "York Nation Railway Museum",
     "images": [
-      "/photos/2026/20260112-Nation Railway Museum/A7C00228.JPG",
-      "/photos/2026/20260112-Nation Railway Museum/A7C00229.JPG",
-      "/photos/2026/20260112-Nation Railway Museum/A7C00230.JPG",
-      "/photos/2026/20260112-Nation Railway Museum/A7C00231.JPG",
-      "/photos/2026/20260112-Nation Railway Museum/A7C00233.JPG",
-      "/photos/2026/20260112-Nation Railway Museum/A7C00237.JPG"
+      "/photos/2026/20260112-York Nation Railway Museum/A7C00228.JPG",
+      "/photos/2026/20260112-York Nation Railway Museum/A7C00229.JPG",
+      "/photos/2026/20260112-York Nation Railway Museum/A7C00230.JPG",
+      "/photos/2026/20260112-York Nation Railway Museum/A7C00231.JPG",
+      "/photos/2026/20260112-York Nation Railway Museum/A7C00233.JPG",
+      "/photos/2026/20260112-York Nation Railway Museum/A7C00237.JPG"
     ],
     "description": "The National Railway Museum in York — one of the world's largest railway museums. From steam locomotives to modern high-speed trains, celebrating two centuries of British rail heritage."
   },
   {
     "year": 2026,
-    "date": "2026-01-02",
+    "date": "2026-01-05",
+    "location": "The heavy snow in Paris",
+    "images": [
+      "/photos/2026/20260105-The heavy snow in Paris/A7C00007.JPG",
+      "/photos/2026/20260105-The heavy snow in Paris/A7C00010.JPG",
+      "/photos/2026/20260105-The heavy snow in Paris/A7C00011.JPG",
+      "/photos/2026/20260105-The heavy snow in Paris/A7C00012.JPG",
+      "/photos/2026/20260105-The heavy snow in Paris/A7C00034.JPG",
+      "/photos/2026/20260105-The heavy snow in Paris/A7C00035.JPG",
+      "/photos/2026/20260105-The heavy snow in Paris/A7C00050.JPG",
+      "/photos/2026/20260105-The heavy snow in Paris/A7C00053.JPG",
+      "/photos/2026/20260105-The heavy snow in Paris/A7C00055.JPG"
+    ],
+    "description": "A rare heavy snowfall transformed Paris into a winter wonderland. The city's iconic streets and rooftops blanketed in white, creating scenes of quiet beauty amid the usual bustle."
+  },
+  {
+    "year": 2026,
+    "date": "2026-01-04",
+    "location": "Paris The Hôtel National des Invalides",
+    "images": [
+      "/photos/2026/20260104-Paris The Hôtel National des Invalides/A7C09943.JPG",
+      "/photos/2026/20260104-Paris The Hôtel National des Invalides/A7C09947.JPG",
+      "/photos/2026/20260104-Paris The Hôtel National des Invalides/A7C09955.JPG"
+    ],
+    "description": "The Hôtel National des Invalides, originally built as a hospital for wounded soldiers, now houses Napoleon's tomb and the Army Museum. Its golden dome stands as one of Paris's most recognizable landmarks."
+  },
+  {
+    "year": 2026,
+    "date": "2026-01-03",
     "location": "Paris The Louvre",
     "images": [
-      "/photos/2026/20260102-Paris The Louvre/A7C09822.JPG",
-      "/photos/2026/20260102-Paris The Louvre/A7C09826.JPG",
-      "/photos/2026/20260102-Paris The Louvre/A7C09828.JPG",
-      "/photos/2026/20260102-Paris The Louvre/A7C09833.JPG",
-      "/photos/2026/20260102-Paris The Louvre/A7C09838.JPG",
-      "/photos/2026/20260102-Paris The Louvre/A7C09853.JPG"
+      "/photos/2026/20260103-Paris The Louvre/A7C09822.JPG",
+      "/photos/2026/20260103-Paris The Louvre/A7C09826.JPG",
+      "/photos/2026/20260103-Paris The Louvre/A7C09828.JPG",
+      "/photos/2026/20260103-Paris The Louvre/A7C09833.JPG",
+      "/photos/2026/20260103-Paris The Louvre/A7C09845.JPG",
+      "/photos/2026/20260103-Paris The Louvre/A7C09848.JPG",
+      "/photos/2026/20260103-Paris The Louvre/A7C09853.JPG",
+      "/photos/2026/20260103-Paris The Louvre/A7C09911.JPG",
+      "/photos/2026/20260103-Paris The Louvre/A7C09939.JPG"
     ],
     "description": "The Louvre, Paris — home to the Mona Lisa and countless masterpieces. A treasure trove of art spanning millennia, from ancient Egyptian artifacts to Renaissance paintings."
+  },
+  {
+    "year": 2026,
+    "date": "2026-01-02",
+    "location": "Home at Paris",
+    "images": [
+      "/photos/2026/20260102-Home at Paris/A7C09979.JPG",
+      "/photos/2026/20260102-Home at Paris/A7C09986.JPG",
+      "/photos/2026/20260102-Home at Paris/A7C09993.JPG",
+      "/photos/2026/20260102-Home at Paris/A7C09997.JPG",
+      "/photos/2026/20260102-Home at Paris/A7C09998.JPG",
+      "/photos/2026/20260102-Home at Paris/A7C09999.JPG"
+    ],
+    "description": "Quiet moments at home in Paris. The warmth of indoor life contrasts with the winter city outside, capturing the simple pleasures of daily living in the City of Light."
+  },
+  {
+    "year": 2025,
+    "date": "2025-12-19",
+    "location": "Belfast",
+    "images": [
+      "/photos/2025/20251219-Belfast/IMG_20251217145728754.jpg",
+      "/photos/2025/20251219-Belfast/IMG_20251218111906345.jpg",
+      "/photos/2025/20251219-Belfast/IMG_20251218130656519.jpg",
+      "/photos/2025/20251219-Belfast/IMG_20251218131519727.jpg",
+      "/photos/2025/20251219-Belfast/IMG_20251218132813951.jpg",
+      "/photos/2025/20251219-Belfast/IMG_20251218133009038.jpg",
+      "/photos/2025/20251219-Belfast/IMG_20251219110145648.jpg",
+      "/photos/2025/20251219-Belfast/IMG_20251219110613487.jpg",
+      "/photos/2025/20251219-Belfast/IMG_20251219111817971.jpg",
+      "/photos/2025/20251219-Belfast/IMG_20251219113438289.jpg",
+      "/photos/2025/20251219-Belfast/IMG_20251219113532853.jpg",
+      "/photos/2025/20251219-Belfast/IMG_20251219113649528.jpg"
+    ],
+    "description": "Belfast, the capital of Northern Ireland, where Victorian architecture meets modern regeneration. The city's rich maritime heritage and complex history create a compelling urban landscape."
+  },
+  {
+    "year": 2025,
+    "date": "2025-12-15",
+    "location": "Edinburg",
+    "images": [
+      "/photos/2025/20251215-Edinburg/A7C09551.JPG",
+      "/photos/2025/20251215-Edinburg/A7C09590.JPG",
+      "/photos/2025/20251215-Edinburg/A7C09595.JPG",
+      "/photos/2025/20251215-Edinburg/A7C09600.JPG",
+      "/photos/2025/20251215-Edinburg/A7C09647.JPG",
+      "/photos/2025/20251215-Edinburg/A7C09666.JPG",
+      "/photos/2025/20251215-Edinburg/A7C09673.JPG",
+      "/photos/2025/20251215-Edinburg/A7C09696.JPG",
+      "/photos/2025/20251215-Edinburg/A7C09740.JPG",
+      "/photos/2025/20251215-Edinburg/A7C09750.JPG",
+      "/photos/2025/20251215-Edinburg/A7C09791.JPG",
+      "/photos/2025/20251215-Edinburg/A7C09797.JPG",
+      "/photos/2025/20251215-Edinburg/A7C09817.JPG",
+      "/photos/2025/20251215-Edinburg/A7C09819.JPG",
+      "/photos/2025/20251215-Edinburg/A7C09821.JPG"
+    ],
+    "description": "Edinburgh, Scotland's historic capital, where medieval Old Town and Georgian New Town create a dramatic cityscape. The castle perched on volcanic rock watches over centuries of architectural splendor."
+  },
+  {
+    "year": 2025,
+    "date": "2025-11-12",
+    "location": "Manchester",
+    "images": [
+      "/photos/2025/20251112-Manchester/A7C09508.JPG",
+      "/photos/2025/20251112-Manchester/A7C09513.JPG",
+      "/photos/2025/20251112-Manchester/A7C09517.JPG",
+      "/photos/2025/20251112-Manchester/A7C09523.JPG",
+      "/photos/2025/20251112-Manchester/A7C09531.JPG",
+      "/photos/2025/20251112-Manchester/A7C09542.JPG"
+    ],
+    "description": "Manchester, the heart of England's industrial revolution, now reinvented as a vibrant cultural hub. Red brick warehouses stand alongside modern architecture in this ever-evolving northern city."
   }
 ]

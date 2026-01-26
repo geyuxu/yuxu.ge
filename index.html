@@ -71,12 +71,19 @@
 
         /* Avatar */
         .avatar {
+            display: block;
             width: 120px;
             height: 120px;
             border-radius: 50%;
             border: 3px solid var(--vermilion);
             margin-bottom: 1.5rem;
             overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+
+        .avatar:hover {
+            opacity: 1;
+            transform: scale(1.05);
         }
 
         .avatar img {
@@ -266,9 +273,9 @@
 
         /* Selected Work */
         .work-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
         }
 
         .work-item {
@@ -338,6 +345,58 @@
 
         .work-link:hover svg {
             transform: translateX(3px);
+        }
+
+        /* Latest Blog */
+        .blog-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .blog-card {
+            display: block;
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 6px;
+            padding: 1.25rem;
+            transition: all 0.2s ease;
+        }
+
+        .blog-card:hover {
+            border-color: var(--vermilion);
+            opacity: 1;
+        }
+
+        .blog-card-title {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--black);
+            margin-bottom: 0.35rem;
+            line-height: 1.4;
+        }
+
+        .blog-card-meta {
+            font-size: 0.8rem;
+            color: #888;
+        }
+
+        .blog-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.85rem;
+            color: var(--vermilion);
+        }
+
+        .blog-more:hover {
+            opacity: 0.75;
+        }
+
+        .blog-more svg {
+            width: 14px;
+            height: 14px;
         }
 
         /* Footer */
@@ -410,7 +469,9 @@
                 font-size: 1rem;
             }
 
-            .stack-grid {
+            .stack-grid,
+            .blog-grid,
+            .work-list {
                 grid-template-columns: 1fr;
             }
 
@@ -463,9 +524,9 @@
         <aside class="sidebar">
             <div class="sidebar-top">
                 <!-- Avatar -->
-                <div class="avatar">
+                <a href="/" class="avatar">
                     <img src="photo.jpg" alt="Yuxu Ge">
-                </div>
+                </a>
 
                 <!-- Brand -->
                 <!-- <div class="brand">yuxu.ge</div> -->
@@ -514,6 +575,13 @@
                             </svg>
                             0009-0008-2990-4886
                         </a>
+                        <!-- Blog -->
+                        <a href="/blog/" class="blog-link">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/>
+                            </svg>
+                            Blog
+                        </a>
                     </div>
                 </div>
             </div>
@@ -536,6 +604,20 @@
                     <span class="greeting-horse">馬</span>
                     Wishing you a prosperous Year of the Horse 2026
                 </div>
+            </section>
+
+            <!-- Latest Blog -->
+            <section>
+                <h3 class="section-header">Latest Blog</h3>
+                <div class="blog-grid" id="latest-blog">
+                    <div class="blog-card"><div class="blog-card-title">Loading...</div></div>
+                </div>
+                <a href="/blog/" class="blog-more">
+                    View all posts
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
             </section>
 
             <!-- The Stack -->
@@ -610,6 +692,24 @@
         </main>
 
     </div>
+
+<script>
+fetch('/blog/posts.json')
+    .then(r => r.json())
+    .then(posts => {
+        const sorted = posts.sort((a, b) => b.date.localeCompare(a.date)).slice(0, 4);
+        const container = document.getElementById('latest-blog');
+        container.innerHTML = sorted.map(p => `
+            <a href="/blog/post.html?p=${p.slug}" class="blog-card">
+                <div class="blog-card-title">${p.title}</div>
+                <div class="blog-card-meta">${p.date}</div>
+            </a>
+        `).join('');
+    })
+    .catch(() => {
+        document.getElementById('latest-blog').innerHTML = '<div class="blog-card"><div class="blog-card-title">No posts yet.</div></div>';
+    });
+</script>
 
 </body>
 </html>

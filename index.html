@@ -399,6 +399,85 @@
             height: 14px;
         }
 
+        /* Photo Strip */
+        .photo-strip {
+            margin-top: 3rem;
+            padding: 1.5rem 0;
+            border-top: 1px solid #eee;
+        }
+
+        .photo-strip-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .photo-strip-title {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--dark-grey);
+        }
+
+        .photo-strip-link {
+            font-size: 0.75rem;
+            color: var(--dark-grey);
+        }
+
+        .photo-strip-scroll {
+            display: flex;
+            gap: 0.5rem;
+            overflow-x: auto;
+            padding-bottom: 0.5rem;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
+        }
+
+        .photo-strip-scroll::-webkit-scrollbar {
+            display: none;
+        }
+
+        .photo-strip-scroll::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .photo-strip-scroll::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .photo-strip-scroll::-webkit-scrollbar-thumb {
+            background: #ccc;
+            border-radius: 2px;
+        }
+
+        .photo-strip-item {
+            flex-shrink: 0;
+            width: 120px;
+            height: 80px;
+            border-radius: 4px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .photo-strip-item:hover {
+            transform: scale(1.05);
+        }
+
+        .photo-strip-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: grayscale(100%) contrast(1.1);
+            transition: filter 0.3s ease;
+        }
+
+        .photo-strip-item:hover img {
+            filter: grayscale(0%);
+        }
+
         /* Footer */
         .content-footer {
             padding-top: 2rem;
@@ -442,6 +521,10 @@
             .social-links svg {
                 width: 24px;
                 height: 24px;
+            }
+
+            .social-links .hide-mobile {
+                display: none;
             }
 
             .sidebar-footer {
@@ -618,6 +701,15 @@
                 </div>
             </section>
 
+            <!-- Photo Strip -->
+            <section class="photo-strip">
+                <div class="photo-strip-header">
+                    <span class="photo-strip-title">Life Moments</span>
+                    <a href="/gallery/" class="photo-strip-link">View Gallery →</a>
+                </div>
+                <div class="photo-strip-scroll" id="photo-strip"></div>
+            </section>
+
             <footer class="content-footer">
                 Built with precision. No frameworks, just standards.
             </footer>
@@ -642,6 +734,24 @@ fetch('/blog/posts.json')
     .catch(() => {
         document.getElementById('latest-blog').innerHTML = '<div class="blog-card"><div class="blog-card-title">No posts yet.</div></div>';
     });
+</script>
+
+<script>
+// Load latest photos for photo strip
+fetch('/gallery/photos.json')
+    .then(r => r.json())
+    .then(photos => {
+        if (!photos.length) return;
+        const latest = photos[0];
+        const images = latest.images.slice(0, 9); // Max 9 photos
+        const container = document.getElementById('photo-strip');
+        container.innerHTML = images.map(img => `
+            <a href="/gallery/" class="photo-strip-item">
+                <img src="${img}" alt="Photo" loading="lazy">
+            </a>
+        `).join('');
+    })
+    .catch(() => {});
 </script>
 
 </body>

@@ -448,27 +448,7 @@
         .photo-strip-scroll {
             display: flex;
             gap: 0.5rem;
-            overflow-x: auto;
-            padding-bottom: 0.5rem;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-
-        .photo-strip-scroll::-webkit-scrollbar {
-            display: none;
-        }
-
-        .photo-strip-scroll::-webkit-scrollbar {
-            height: 4px;
-        }
-
-        .photo-strip-scroll::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .photo-strip-scroll::-webkit-scrollbar-thumb {
-            background: #ccc;
-            border-radius: 2px;
+            justify-content: flex-start;
         }
 
         .photo-strip-item {
@@ -761,19 +741,34 @@ fetch('/blog/posts.json')
 </script>
 
 <script>
-// Load latest photos for photo strip
+// Load latest photos for photo strip - fill width dynamically
 fetch('/gallery/photos.json')
     .then(r => r.json())
     .then(photos => {
         if (!photos.length) return;
-        const latest = photos[0];
-        const images = latest.images.slice(0, 9); // Max 9 photos
         const container = document.getElementById('photo-strip');
-        container.innerHTML = images.map(img => `
-            <a href="/gallery/" class="photo-strip-item">
-                <img src="${img}" alt="Photo" loading="lazy">
-            </a>
-        `).join('');
+        const allImages = photos.flatMap(p => p.images);
+
+        function renderPhotos() {
+            const containerWidth = container.offsetWidth;
+            const itemWidth = 120;
+            const gap = 8;
+            const itemsNeeded = Math.floor((containerWidth + gap) / (itemWidth + gap));
+            const images = allImages.slice(0, itemsNeeded);
+
+            container.innerHTML = images.map(img => `
+                <a href="/gallery/" class="photo-strip-item">
+                    <img src="${img}" alt="Photo" loading="lazy">
+                </a>
+            `).join('');
+        }
+
+        renderPhotos();
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(renderPhotos, 150);
+        });
     })
     .catch(() => {});
 </script>

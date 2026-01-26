@@ -44,6 +44,15 @@
 <li>Measure the error and adjust</li>
 <li>Repeat until error &lt; 10⁻⁶ degrees (~0.1 meter)</li>
 </ol>
+<blockquote><code>import math</code><br>
+<code></code><br>
+<code>_A = 6378245.0  # Semi-major axis</code><br>
+<code>_EE = 0.00669342162296594323  # First eccentricity squared</code><br>
+<code></code><br>
+<code></code><br>
+<code>def _out_of_china(lng: float, lat: float) -&gt; bool:</code><br>
+<code>    &quot;&quot;&quot;Check if point is outside China (skip transformation).&quot;&quot;&quot;</code><br>
+<code># ... (64 more lines)</code></blockquote>
 <p><em>View full code: <a href="https://gist.github.com/geyuxu/e95d2434ac89d63562b063733d2cbacb">GitHub Gist</a></em></p><p>The iteration converges in 2–3 steps for typical coordinates.</p>
 <hr>
 <h2>Problem #2: The TIME_WAIT Storm</h2>
@@ -52,16 +61,43 @@
 <p>Result: <code>OSError: [Errno 99] Cannot assign requested address</code></p>
 <h3>The Solution: Connection Pooling + Exponential Backoff</h3>
 <p>Replace stateless requests with a persistent session that reuses TCP connections:</p>
+<blockquote><code>import requests</code><br>
+<code>from requests.adapters import HTTPAdapter</code><br>
+<code>from urllib3.util.retry import Retry</code><br>
+<code></code><br>
+<code></code><br>
+<code>def create_resilient_session(pool_size: int = 50) -&gt; requests.Session:</code><br>
+<code>    &quot;&quot;&quot;</code><br>
+<code>    Create an HTTP session with connection pooling and retry logic.</code><br>
+<code># ... (23 more lines)</code></blockquote>
 <p><em>View full code: <a href="https://gist.github.com/geyuxu/e547b9e4d96624d83e1fa2e204a174a2">GitHub Gist</a></em></p><p><strong>Connection pool sizing</strong>: Use <code>pool_size = expected_QPS × average_latency</code>. At 500 QPS with 100ms latency, that&#39;s 50 connections.</p>
 <hr>
 <h2>Problem #3: Quota Burnout</h2>
 <p>Commercial geocoding APIs have strict rate limits. Without client-side throttling, a traffic spike can exhaust your daily quota in minutes—then return HTTP 429 for the rest of the day.</p>
 <h3>The Solution: Token Bucket Rate Limiting</h3>
 <p>The token bucket algorithm enforces average rate while tolerating short bursts:</p>
+<blockquote><code>import threading</code><br>
+<code>import time</code><br>
+<code>from dataclasses import dataclass, field</code><br>
+<code></code><br>
+<code></code><br>
+<code>@dataclass</code><br>
+<code>class TokenBucket:</code><br>
+<code>    &quot;&quot;&quot;</code><br>
+<code># ... (27 more lines)</code></blockquote>
 <p><em>View full code: <a href="https://gist.github.com/geyuxu/cdf8101406845469d1bd0b0de09dd71a">GitHub Gist</a></em></p><p>Set <code>capacity = rate × 2</code> to allow 2 seconds of burst without risking quota exhaustion.</p>
 <hr>
 <h2>Complete Implementation</h2>
 <p>Here&#39;s everything combined into a production-ready class:</p>
+<blockquote><code>import math</code><br>
+<code>import threading</code><br>
+<code>import time</code><br>
+<code>from dataclasses import dataclass, field</code><br>
+<code>from typing import Any</code><br>
+<code></code><br>
+<code>import requests</code><br>
+<code>from requests.adapters import HTTPAdapter</code><br>
+<code># ... (142 more lines)</code></blockquote>
 <p><em>View full code: <a href="https://gist.github.com/geyuxu/2ee53759034c532a7b8795df70526b6a">GitHub Gist</a></em></p><hr>
 <h2>Key Takeaways</h2>
 <p><img src="/blog/images/tables/table-f01957d3.png" alt="Table"></p><p>Each layer is invisible until it fails. The code above handles all three.</p>

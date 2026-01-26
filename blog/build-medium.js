@@ -90,23 +90,27 @@ renderer.code = function({ text, lang }) {
 
     if (lines.length > MAX_CODE_LINES) {
         const codeHash = hashCode(code);
-        const preview = lines.slice(0, 8).join('\n');
+        const previewLines = lines.slice(0, 8);
+        const previewFormatted = previewLines.map(line => `<code>${escapeHtml(line)}</code>`).join('<br>\n');
+        const moreLines = lines.length - 8;
 
-        // Check cache for existing gist - just output Gist link (Medium auto-embeds)
+        // Check cache for existing gist - output preview + Gist link
         if (gistCache[codeHash]) {
-            return `<p><em>View full code: <a href="${gistCache[codeHash]}">GitHub Gist</a></em></p>`;
+            return `<blockquote>${previewFormatted}<br>\n<code># ... (${moreLines} more lines)</code></blockquote>
+<p><em>View full code: <a href="${gistCache[codeHash]}">GitHub Gist</a></em></p>`;
         }
 
         // Queue for gist creation (always track, create only if token available)
         pendingGists.push({ code, language, hash: codeHash, lines: lines.length });
 
         if (GITHUB_TOKEN_CRTATE_GIST) {
-            // Will replace placeholder with actual gist URL later - just output link
-            return `<p><em>View full code: <a href="__GIST_${codeHash}__">GitHub Gist</a></em></p>`;
+            // Will replace placeholder with actual gist URL later - output preview + link
+            return `<blockquote>${previewFormatted}<br>\n<code># ... (${moreLines} more lines)</code></blockquote>
+<p><em>View full code: <a href="__GIST_${codeHash}__">GitHub Gist</a></em></p>`;
         }
 
         // No token - fallback to repo link with code preview
-        return `<pre><code class="language-${language}">${escapeHtml(preview)}\n# ... (${lines.length - 8} more lines)</code></pre>
+        return `<blockquote>${previewFormatted}<br>\n<code># ... (${moreLines} more lines)</code></blockquote>
 <p><em>Full code available in the <a href="https://github.com/geyuxu">GitHub repository</a>.</em></p>`;
     }
 

@@ -10,13 +10,26 @@ python3 -m http.server 8080
 
 ## Build Static Blog
 
-Generate static HTML for crawlers/Medium:
+Generate static HTML for crawlers:
 
 ```bash
 cd blog && node build.js
 ```
 
 Output: `blog/static/{slug}.html`
+
+## Build for Medium
+
+Generate Medium-friendly HTML (auto Gist for long code, tables as lists):
+
+```bash
+cd blog && node build-medium.js                    # Preview mode
+cd blog && GITHUB_TOKEN_CRTATE_GIST=xxx node build-medium.js   # Create Gists
+```
+
+Output: `blog/medium/{slug}.html`
+
+Gist URLs are cached in `.gist-cache.json` to avoid recreating.
 
 ## SVG to PNG
 

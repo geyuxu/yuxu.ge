@@ -753,7 +753,7 @@ fetch('/gallery/photos.json')
             const containerWidth = container.offsetWidth;
             const itemWidth = 120;
             const gap = 8;
-            const itemsNeeded = Math.floor((containerWidth + gap) / (itemWidth + gap));
+            const itemsNeeded = Math.max(3, Math.floor((containerWidth + gap) / (itemWidth + gap)));
             const images = allImages.slice(0, itemsNeeded);
 
             container.innerHTML = images.map(img => `

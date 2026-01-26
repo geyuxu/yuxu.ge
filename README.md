@@ -80,6 +80,7 @@ Uses macOS `sips` (built-in) or ImageMagick. ARW (Sony RAW) requires ImageMagick
 ./scripts/compress-photos.sh --force   # Ignore cache, reprocess all
 ```
 
+
 Uses cache file (`.compress-cache`) to skip already processed images. Requires ImageMagick: `brew install imagemagick`
 
 ## Blog Posts

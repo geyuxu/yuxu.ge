@@ -10,6 +10,7 @@
 
 import fs from 'fs';
 import path from 'path';
+import crypto from 'crypto';
 import { fileURLToPath } from 'url';
 import { Voy } from 'voy-search/voy_search.js';
 
@@ -22,12 +23,50 @@ const CONFIG = {
     outputFile: path.join(__dirname, '..', 'public', 'search.dat'),
     metadataFile: path.join(__dirname, '..', 'public', 'search-metadata.json'),
     invertedIndexFile: path.join(__dirname, '..', 'public', 'search-inverted.json'),
+    embeddingCacheFile: path.join(__dirname, '..', '.cache', 'embeddings.json'),
     chunkSize: 500,        // Characters per chunk
     chunkOverlap: 50,      // Overlap between chunks
     dimensions: 512,       // Embedding dimensions (saves ~50% space vs 1536)
     model: 'text-embedding-3-small',
     batchSize: 20,         // Embeddings per API call
 };
+
+// ============================================================
+// CACHING UTILITIES
+// ============================================================
+
+/**
+ * Compute MD5 hash for content
+ */
+function contentHash(text) {
+    return crypto.createHash('md5').update(text).digest('hex');
+}
+
+/**
+ * Load embedding cache
+ * Format: { [chunkId]: { hash, embedding } }
+ */
+function loadEmbeddingCache() {
+    try {
+        if (fs.existsSync(CONFIG.embeddingCacheFile)) {
+            return JSON.parse(fs.readFileSync(CONFIG.embeddingCacheFile, 'utf-8'));
+        }
+    } catch (err) {
+        console.warn('  Warning: Could not load embedding cache:', err.message);
+    }
+    return {};
+}
+
+/**
+ * Save embedding cache
+ */
+function saveEmbeddingCache(cache) {
+    const cacheDir = path.dirname(CONFIG.embeddingCacheFile);
+    if (!fs.existsSync(cacheDir)) {
+        fs.mkdirSync(cacheDir, { recursive: true });
+    }
+    fs.writeFileSync(CONFIG.embeddingCacheFile, JSON.stringify(cache));
+}
 
 // ============================================================
 // INVERTED INDEX UTILITIES
@@ -347,12 +386,64 @@ async function buildIndex() {
         console.log(`  ✓ ${parsed.title} (${chunks.length} chunks)`);
     }
 
-    console.log(`\nTotal: ${documents.length} chunks to embed\n`);
+    console.log(`\nTotal: ${documents.length} chunks\n`);
 
-    // 3. Get embeddings from OpenAI
-    console.log('Generating embeddings...');
-    const textsToEmbed = documents.map(d => d.embeddingText);
-    const embeddings = await batchGetEmbeddings(textsToEmbed);
+    // 3. Get embeddings with caching
+    console.log('Loading embedding cache...');
+    const cache = loadEmbeddingCache();
+    const embeddings = [];
+    const toEmbed = [];       // { index, text, hash }
+    let cacheHits = 0;
+
+    // Check cache for each document
+    for (let i = 0; i < documents.length; i++) {
+        const doc = documents[i];
+        const hash = contentHash(doc.embeddingText);
+
+        if (cache[doc.id] && cache[doc.id].hash === hash) {
+            // Cache hit
+            embeddings[i] = cache[doc.id].embedding;
+            cacheHits++;
+        } else {
+            // Need to embed
+            toEmbed.push({ index: i, text: doc.embeddingText, hash, id: doc.id });
+            embeddings[i] = null;
+        }
+    }
+
+    console.log(`  Cache hits: ${cacheHits}/${documents.length}`);
+
+    // Generate embeddings only for new/changed chunks
+    if (toEmbed.length > 0) {
+        console.log(`  Generating ${toEmbed.length} new embeddings...`);
+        const newEmbeddings = await batchGetEmbeddings(toEmbed.map(t => t.text));
+
+        // Update embeddings array and cache
+        for (let i = 0; i < toEmbed.length; i++) {
+            const { index, hash, id } = toEmbed[i];
+            embeddings[index] = newEmbeddings[i];
+            cache[id] = { hash, embedding: newEmbeddings[i] };
+        }
+
+        // Clean up stale cache entries
+        const currentIds = new Set(documents.map(d => d.id));
+        let removed = 0;
+        for (const id of Object.keys(cache)) {
+            if (!currentIds.has(id)) {
+                delete cache[id];
+                removed++;
+            }
+        }
+        if (removed > 0) {
+            console.log(`  Removed ${removed} stale cache entries`);
+        }
+
+        // Save updated cache
+        saveEmbeddingCache(cache);
+        console.log(`  Cache saved: ${Object.keys(cache).length} entries`);
+    } else {
+        console.log('  All embeddings from cache, no API calls needed');
+    }
 
     // 4. Build Voy index
     console.log('\nBuilding Voy index...');

@@ -6,4 +6,5 @@
 # Node
 node_modules/
 
-__*
+__*/
+

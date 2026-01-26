@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CUDA 开发必备的 C/C++ 语法 | Yuxu Ge</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <style>
+        :root {
+            --black: #111;
+            --dark-grey: #444;
+            --off-white: #f4f4f4;
+            --vermilion: #C41E3A;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--black);
+            background-color: var(--off-white);
+        }
+
+        a { color: var(--vermilion); text-decoration: none; }
+        a:hover { opacity: 0.75; }
+
+        .layout { min-height: 100vh; }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed; top: 0; left: 0;
+            width: 320px; height: 100vh;
+            background: var(--black); color: var(--off-white);
+            padding: 3rem 2rem;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .sidebar-top { display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .avatar { display: block; width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--vermilion); margin-bottom: 1.5rem; overflow: hidden; transition: transform 0.2s ease; }
+        .avatar:hover { opacity: 1; transform: scale(1.05); }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .name-block { margin-bottom: 0.5rem; }
+        h1 { font-size: 1.8rem; font-weight: 700; letter-spacing: 1px; color: var(--off-white); }
+        .title-role { font-size: 0.9rem; color: #888; margin-top: 0.25rem; font-weight: 400; }
+        .contact-block { margin-top: 2.5rem; width: 100%; }
+        .social-links { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+        .social-links a { display: flex; align-items: center; gap: 0.75rem; width: 160px; color: var(--off-white); opacity: 0.7; padding: 0.5rem 0.75rem; border-radius: 4px; font-size: 0.9rem; transition: all 0.2s; }
+        .social-links a:hover { color: var(--vermilion); opacity: 1; background: rgba(255,255,255,0.05); }
+        .social-links svg { width: 20px; height: 20px; flex-shrink: 0; }
+        .social-links .orcid-link { font-size: 0.68rem; gap: 0.5rem; white-space: nowrap; }
+        .sidebar-footer { text-align: center; font-size: 0.75rem; color: #555; }
+
+        /* Content */
+        .content { margin-left: 320px; padding: 3rem 4rem; max-width: 900px; }
+        .back-link { display: inline-block; font-size: 0.85rem; margin-bottom: 2rem; color: var(--dark-grey); }
+        .back-link:hover { color: var(--vermilion); }
+
+        /* Article */
+        article h1 { font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.3; color: var(--black); }
+        article h2 { font-size: 1.4rem; font-weight: 600; margin: 2rem 0 1rem; color: var(--black); }
+        article h3 { font-size: 1.1rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--black); }
+        article p { margin-bottom: 1rem; color: var(--dark-grey); }
+        article ul, article ol { margin: 1rem 0 1rem 1.5rem; color: var(--dark-grey); }
+        article li { margin-bottom: 0.5rem; }
+        article strong { color: var(--black); }
+        article code { font-family: "SF Mono", Monaco, monospace; font-size: 0.9em; background: #e8e8e8; padding: 0.15em 0.4em; border-radius: 3px; }
+        article pre { margin: 1rem 0; border-radius: 6px; overflow-x: auto; background: #2d2d2d; padding: 1rem; }
+        article pre code { background: none; padding: 0; font-size: 0.75em; white-space: pre !important; counter-reset: line; display: block; color: #ccc; }
+        article pre code .line { counter-increment: line; }
+        article pre code .line::before { content: counter(line); display: inline-block; width: 2.5em; margin-right: 1em; text-align: right; color: #666; user-select: none; }
+        .code-toolbar { display: flex; justify-content: flex-start; padding: 0.35rem 0.5rem; background: #3a3a3a; border-radius: 6px 6px 0 0; }
+        .code-toolbar + pre { margin-top: 0; border-radius: 0 0 6px 6px; }
+        .copy-btn { padding: 0.2rem 0.5rem; font-size: 0.7rem; background: #555; color: #fff; border: none; border-radius: 3px; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover, .copy-btn:active { background: #777; }
+        .copy-btn.copied { background: #2a2; }
+        article blockquote { border-left: 3px solid var(--vermilion); padding-left: 1rem; margin: 1rem 0; color: #666; font-style: italic; }
+        article hr { border: none; border-top: 1px solid #ddd; margin: 2rem 0; }
+        article table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+        article th, article td { border: 1px solid #ddd; padding: 0.5rem 0.75rem; text-align: left; }
+        article th { background: #e8e8e8; font-weight: 600; }
+        article img { max-width: 100%; height: auto; display: block; margin: 1.5rem 0; border-radius: 6px; }
+
+        .loading { text-align: center; padding: 3rem; color: #888; }
+        .error { color: var(--vermilion); }
+
+        /* KaTeX math styles */
+        .katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.5rem 0; }
+        .katex { font-size: 1.1em; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .sidebar { position: relative; width: 100%; height: auto; padding: 2rem 1.5rem 1rem; }
+            .social-links { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+            .social-links a, .social-links .orcid-link { width: auto; padding: 0.5rem; font-size: 0; gap: 0; }
+            .social-links svg { width: 24px; height: 24px; }
+            .social-links .hide-mobile { display: none; }
+            .sidebar-footer { margin-top: 1rem; }
+            .content { margin-left: 0; padding: 2rem 1rem; }
+        }
+        @media (max-width: 480px) {
+            .sidebar { padding: 1.5rem 1rem 1rem; }
+            .avatar { width: 80px; height: 80px; }
+            h1 { font-size: 1.4rem; }
+            article h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar" id="sidebar-content"></aside>
+    <script src="/components/sidebar.js"></script>
+
+    <main class="content">
+        <a href="/blog/" class="back-link">← Back to Blog</a>
+        <article>
+<hr>
+<h2>date: 2025-05-08
+tags: [ai]
+legacy: true</h2>
+<h1>CUDA 开发必备的 C/C++ 语法</h1>
+<h2>数据类型与变量</h2>
+<p>C/C++ 提供了丰富的基本数据类型用于声明变量。常见的数据类型及用途包括：</p>
+<ul>
+<li><strong><code>int</code>：</strong> 整型，一般占用32位，用于循环计数、数组索引等。</li>
+<li><strong><code>float</code>：</strong> 单精度浮点数（32位），CUDA 中常用来表示GPU上的实数计算。</li>
+<li><strong><code>double</code>：</strong> 双精度浮点数（64位），在需要更高精度的计算时使用（注意某些GPU对其计算性能较低）。</li>
+<li><strong><code>char</code>：</strong> 字符类型（1字节），可用于存储字符或小整数。</li>
+<li><strong><code>bool</code>：</strong> 布尔类型，取值为<code>true</code>或<code>false</code>。</li>
+</ul>
+<p>在 C/C++ 中声明变量需要指定类型，例如：</p>
+<pre><code class="language-cpp"><span class="line">int a = 10;</span>
+<span class="line">float b = 3.14f;</span>
+<span class="line">double c = 3.14159;</span>
+<span class="line">char d = &#39;A&#39;;</span>
+<span class="line">bool flag = true;</span></code></pre>
+<p>上述代码定义了不同类型的变量并赋初值。在 CUDA 编程中，我们会经常看到诸如 <code>int N; float *x;</code> 等变量声明，用于设置数组大小 (<code>N</code>) 或定义指向数据的指针 (<code>x</code>) 等。例如，在编写内核函数参数时，需要指明类型（如 <code>int n, float a</code>），以让编译器知道数据的大小和含义。</p>
+<h2>指针与数组的关系，指针算术</h2>
+<p><strong>指针</strong> 是 C/C++ 中的独特概念，用于保存内存地址。数组与指针关系密切：在大多数表达式中，数组名为指向其第一个元素的指针。这意味着我们可以用指针来遍历或操作数组。</p>
+
+    </article>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
+<script>
+Prism.highlightAll();
+document.querySelectorAll('article pre').forEach(pre => {
+    const code = pre.querySelector('code');
+    if (!code) return;
+    const toolbar = document.createElement('div');
+    toolbar.className = 'code-toolbar';
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'Copy';
+    btn.onclick = () => {
+        navigator.clipboard.writeText(code.textContent).then(() => {
+            btn.textContent = 'Copied!';
+            btn.classList.add('copied');
+            setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+        });
+    };
+    toolbar.appendChild(btn);
+    pre.parentNode.insertBefore(toolbar, pre);
+});
+</script>
+</body>
+</html>

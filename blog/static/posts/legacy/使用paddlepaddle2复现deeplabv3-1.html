@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>使用 PaddlePaddle 2.x 复现 DeepLabV3+（1）：从构建到训练 | Yuxu Ge</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <style>
+        :root {
+            --black: #111;
+            --dark-grey: #444;
+            --off-white: #f4f4f4;
+            --vermilion: #C41E3A;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--black);
+            background-color: var(--off-white);
+        }
+
+        a { color: var(--vermilion); text-decoration: none; }
+        a:hover { opacity: 0.75; }
+
+        .layout { min-height: 100vh; }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed; top: 0; left: 0;
+            width: 320px; height: 100vh;
+            background: var(--black); color: var(--off-white);
+            padding: 3rem 2rem;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .sidebar-top { display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .avatar { display: block; width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--vermilion); margin-bottom: 1.5rem; overflow: hidden; transition: transform 0.2s ease; }
+        .avatar:hover { opacity: 1; transform: scale(1.05); }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .name-block { margin-bottom: 0.5rem; }
+        h1 { font-size: 1.8rem; font-weight: 700; letter-spacing: 1px; color: var(--off-white); }
+        .title-role { font-size: 0.9rem; color: #888; margin-top: 0.25rem; font-weight: 400; }
+        .contact-block { margin-top: 2.5rem; width: 100%; }
+        .social-links { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+        .social-links a { display: flex; align-items: center; gap: 0.75rem; width: 160px; color: var(--off-white); opacity: 0.7; padding: 0.5rem 0.75rem; border-radius: 4px; font-size: 0.9rem; transition: all 0.2s; }
+        .social-links a:hover { color: var(--vermilion); opacity: 1; background: rgba(255,255,255,0.05); }
+        .social-links svg { width: 20px; height: 20px; flex-shrink: 0; }
+        .social-links .orcid-link { font-size: 0.68rem; gap: 0.5rem; white-space: nowrap; }
+        .sidebar-footer { text-align: center; font-size: 0.75rem; color: #555; }
+
+        /* Content */
+        .content { margin-left: 320px; padding: 3rem 4rem; max-width: 900px; }
+        .back-link { display: inline-block; font-size: 0.85rem; margin-bottom: 2rem; color: var(--dark-grey); }
+        .back-link:hover { color: var(--vermilion); }
+
+        /* Article */
+        article h1 { font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.3; color: var(--black); }
+        article h2 { font-size: 1.4rem; font-weight: 600; margin: 2rem 0 1rem; color: var(--black); }
+        article h3 { font-size: 1.1rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--black); }
+        article p { margin-bottom: 1rem; color: var(--dark-grey); }
+        article ul, article ol { margin: 1rem 0 1rem 1.5rem; color: var(--dark-grey); }
+        article li { margin-bottom: 0.5rem; }
+        article strong { color: var(--black); }
+        article code { font-family: "SF Mono", Monaco, monospace; font-size: 0.9em; background: #e8e8e8; padding: 0.15em 0.4em; border-radius: 3px; }
+        article pre { margin: 1rem 0; border-radius: 6px; overflow-x: auto; background: #2d2d2d; padding: 1rem; }
+        article pre code { background: none; padding: 0; font-size: 0.75em; white-space: pre !important; counter-reset: line; display: block; color: #ccc; }
+        article pre code .line { counter-increment: line; }
+        article pre code .line::before { content: counter(line); display: inline-block; width: 2.5em; margin-right: 1em; text-align: right; color: #666; user-select: none; }
+        .code-toolbar { display: flex; justify-content: flex-start; padding: 0.35rem 0.5rem; background: #3a3a3a; border-radius: 6px 6px 0 0; }
+        .code-toolbar + pre { margin-top: 0; border-radius: 0 0 6px 6px; }
+        .copy-btn { padding: 0.2rem 0.5rem; font-size: 0.7rem; background: #555; color: #fff; border: none; border-radius: 3px; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover, .copy-btn:active { background: #777; }
+        .copy-btn.copied { background: #2a2; }
+        article blockquote { border-left: 3px solid var(--vermilion); padding-left: 1rem; margin: 1rem 0; color: #666; font-style: italic; }
+        article hr { border: none; border-top: 1px solid #ddd; margin: 2rem 0; }
+        article table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+        article th, article td { border: 1px solid #ddd; padding: 0.5rem 0.75rem; text-align: left; }
+        article th { background: #e8e8e8; font-weight: 600; }
+        article img { max-width: 100%; height: auto; display: block; margin: 1.5rem 0; border-radius: 6px; }
+
+        .loading { text-align: center; padding: 3rem; color: #888; }
+        .error { color: var(--vermilion); }
+
+        /* KaTeX math styles */
+        .katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.5rem 0; }
+        .katex { font-size: 1.1em; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .sidebar { position: relative; width: 100%; height: auto; padding: 2rem 1.5rem 1rem; }
+            .social-links { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+            .social-links a, .social-links .orcid-link { width: auto; padding: 0.5rem; font-size: 0; gap: 0; }
+            .social-links svg { width: 24px; height: 24px; }
+            .social-links .hide-mobile { display: none; }
+            .sidebar-footer { margin-top: 1rem; }
+            .content { margin-left: 0; padding: 2rem 1rem; }
+        }
+        @media (max-width: 480px) {
+            .sidebar { padding: 1.5rem 1rem 1rem; }
+            .avatar { width: 80px; height: 80px; }
+            h1 { font-size: 1.4rem; }
+            article h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar" id="sidebar-content"></aside>
+    <script src="/components/sidebar.js"></script>
+
+    <main class="content">
+        <a href="/blog/" class="back-link">← Back to Blog</a>
+        <article>
+<hr>
+<h2>date: 2025-04-03
+tags: [ai]
+legacy: true</h2>
+<h1>使用 PaddlePaddle 2.x 复现 DeepLabV3+（1）：从构建到训练</h1>
+<ul>
+<li>✅ 模块化重构 DeepLabV3+，包含 SeparableConv、ASPP、XceptionBlock</li>
+<li>✅ 兼容动态图与标准 Layer 接口</li>
+<li>✅ 编写训练脚本，可扩展至真实数据集</li>
+</ul>
+<hr>
+<h2>2. 模型构建：面向对象实现 DeepLabV3+</h2>
+<p>我们从头构建了一个名为 <code>DeepLabV3Plus</code> 的模型类，遵循 <code>paddle.nn.Layer</code> 设计接口。</p>
+<p><strong>核心模块包括：</strong></p>
+<ul>
+<li><code>SeparableConv2D</code>: 模拟深度可分离卷积（depthwise + pointwise）</li>
+<li><code>XceptionBlock</code>: 3 层堆叠的可分离卷积单元，可选残差连接</li>
+<li><code>ASPP</code>: 多尺度特征融合结构，膨胀卷积率为 6、12、18</li>
+<li><code>Decoder</code>: 结合浅层与深层特征，提升边界感知能力</li>
+</ul>
+<p>最终模型为典型的 encoder-decoder 结构，可直接输出等大小的分割图。</p>
+<p><strong>代码结构示例：</strong></p>
+<pre><code class="language-python"><span class="line">class DeepLabV3Plus(nn.Layer):</span>
+<span class="line">    def __init__(self, num_classes):</span>
+<span class="line">        super().__init__()</span>
+<span class="line">        self.entry = ...</span>
+<span class="line">        self.block1 = XceptionBlock(...)</span>
+<span class="line">        ...</span>
+<span class="line">        self.aspp = ASPP(...)</span>
+<span class="line">        self.decoder = ...</span>
+<span class="line">        self.final = ...</span>
+<span class="line"></span>
+<span class="line">    def forward(self, x):</span>
+<span class="line">        ... # 完整结构见文末源码</span></code></pre>
+<hr>
+<h2>3. 训练脚本：高效训练 + 模型保存</h2>
+<p>训练脚本使用 <code>paddle.io.DataLoader</code> 与标准 <code>nn.Layer</code> 接口完成：</p>
+<p><strong>特点：</strong></p>
+<ul>
+<li>动态创建模型实例与优化器</li>
+<li>支持 ignore_index 的自定义交叉熵损失函数</li>
+<li>自动保存模型参数（<code>.pdparams</code>）</li>
+</ul>
+<p><strong>示例结构：</strong></p>
+<pre><code class="language-python"><span class="line">model = DeepLabV3Plus(num_classes=21)</span>
+<span class="line">optimizer = paddle.optimizer.Adam(...)</span>
+<span class="line">criterion = CrossEntropyLossWithMask(ignore_index=255)</span>
+<span class="line"></span>
+<span class="line">for epoch in range(num_epochs):</span>
+<span class="line">    for imgs, labels in dataloader:</span>
+<span class="line">        preds = model(imgs)</span>
+<span class="line">        loss = criterion(preds, labels)</span>
+<span class="line">        loss.backward()</span>
+<span class="line">        optimizer.step()</span>
+<span class="line">        optimizer.clear_grad()</span></code></pre>
+<p>目前使用的是伪造数据集 <code>DummySegDataset</code>，可很方便地替换为 VOC、ADE20K 等真实数据集。</p>
+<hr>
+<p><em>未完待续：本文后续将补充验证阶段、评价指标与部署流程。</em></p>
+
+    </article>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
+<script>
+Prism.highlightAll();
+document.querySelectorAll('article pre').forEach(pre => {
+    const code = pre.querySelector('code');
+    if (!code) return;
+    const toolbar = document.createElement('div');
+    toolbar.className = 'code-toolbar';
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'Copy';
+    btn.onclick = () => {
+        navigator.clipboard.writeText(code.textContent).then(() => {
+            btn.textContent = 'Copied!';
+            btn.classList.add('copied');
+            setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+        });
+    };
+    toolbar.appendChild(btn);
+    pre.parentNode.insertBefore(toolbar, pre);
+});
+</script>
+</body>
+</html>

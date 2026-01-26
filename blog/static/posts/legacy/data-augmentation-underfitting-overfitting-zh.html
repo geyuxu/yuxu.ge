@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图像分类：数据稀缺、样本增强与欠拟合/过拟合 | Yuxu Ge</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <style>
+        :root {
+            --black: #111;
+            --dark-grey: #444;
+            --off-white: #f4f4f4;
+            --vermilion: #C41E3A;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--black);
+            background-color: var(--off-white);
+        }
+
+        a { color: var(--vermilion); text-decoration: none; }
+        a:hover { opacity: 0.75; }
+
+        .layout { min-height: 100vh; }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed; top: 0; left: 0;
+            width: 320px; height: 100vh;
+            background: var(--black); color: var(--off-white);
+            padding: 3rem 2rem;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .sidebar-top { display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .avatar { display: block; width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--vermilion); margin-bottom: 1.5rem; overflow: hidden; transition: transform 0.2s ease; }
+        .avatar:hover { opacity: 1; transform: scale(1.05); }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .name-block { margin-bottom: 0.5rem; }
+        h1 { font-size: 1.8rem; font-weight: 700; letter-spacing: 1px; color: var(--off-white); }
+        .title-role { font-size: 0.9rem; color: #888; margin-top: 0.25rem; font-weight: 400; }
+        .contact-block { margin-top: 2.5rem; width: 100%; }
+        .social-links { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+        .social-links a { display: flex; align-items: center; gap: 0.75rem; width: 160px; color: var(--off-white); opacity: 0.7; padding: 0.5rem 0.75rem; border-radius: 4px; font-size: 0.9rem; transition: all 0.2s; }
+        .social-links a:hover { color: var(--vermilion); opacity: 1; background: rgba(255,255,255,0.05); }
+        .social-links svg { width: 20px; height: 20px; flex-shrink: 0; }
+        .social-links .orcid-link { font-size: 0.68rem; gap: 0.5rem; white-space: nowrap; }
+        .sidebar-footer { text-align: center; font-size: 0.75rem; color: #555; }
+
+        /* Content */
+        .content { margin-left: 320px; padding: 3rem 4rem; max-width: 900px; }
+        .back-link { display: inline-block; font-size: 0.85rem; margin-bottom: 2rem; color: var(--dark-grey); }
+        .back-link:hover { color: var(--vermilion); }
+
+        /* Article */
+        article h1 { font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.3; color: var(--black); }
+        article h2 { font-size: 1.4rem; font-weight: 600; margin: 2rem 0 1rem; color: var(--black); }
+        article h3 { font-size: 1.1rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--black); }
+        article p { margin-bottom: 1rem; color: var(--dark-grey); }
+        article ul, article ol { margin: 1rem 0 1rem 1.5rem; color: var(--dark-grey); }
+        article li { margin-bottom: 0.5rem; }
+        article strong { color: var(--black); }
+        article code { font-family: "SF Mono", Monaco, monospace; font-size: 0.9em; background: #e8e8e8; padding: 0.15em 0.4em; border-radius: 3px; }
+        article pre { margin: 1rem 0; border-radius: 6px; overflow-x: auto; background: #2d2d2d; padding: 1rem; }
+        article pre code { background: none; padding: 0; font-size: 0.75em; white-space: pre !important; counter-reset: line; display: block; color: #ccc; }
+        article pre code .line { counter-increment: line; }
+        article pre code .line::before { content: counter(line); display: inline-block; width: 2.5em; margin-right: 1em; text-align: right; color: #666; user-select: none; }
+        .code-toolbar { display: flex; justify-content: flex-start; padding: 0.35rem 0.5rem; background: #3a3a3a; border-radius: 6px 6px 0 0; }
+        .code-toolbar + pre { margin-top: 0; border-radius: 0 0 6px 6px; }
+        .copy-btn { padding: 0.2rem 0.5rem; font-size: 0.7rem; background: #555; color: #fff; border: none; border-radius: 3px; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover, .copy-btn:active { background: #777; }
+        .copy-btn.copied { background: #2a2; }
+        article blockquote { border-left: 3px solid var(--vermilion); padding-left: 1rem; margin: 1rem 0; color: #666; font-style: italic; }
+        article hr { border: none; border-top: 1px solid #ddd; margin: 2rem 0; }
+        article table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+        article th, article td { border: 1px solid #ddd; padding: 0.5rem 0.75rem; text-align: left; }
+        article th { background: #e8e8e8; font-weight: 600; }
+        article img { max-width: 100%; height: auto; display: block; margin: 1.5rem 0; border-radius: 6px; }
+
+        .loading { text-align: center; padding: 3rem; color: #888; }
+        .error { color: var(--vermilion); }
+
+        /* KaTeX math styles */
+        .katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.5rem 0; }
+        .katex { font-size: 1.1em; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .sidebar { position: relative; width: 100%; height: auto; padding: 2rem 1.5rem 1rem; }
+            .social-links { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+            .social-links a, .social-links .orcid-link { width: auto; padding: 0.5rem; font-size: 0; gap: 0; }
+            .social-links svg { width: 24px; height: 24px; }
+            .social-links .hide-mobile { display: none; }
+            .sidebar-footer { margin-top: 1rem; }
+            .content { margin-left: 0; padding: 2rem 1rem; }
+        }
+        @media (max-width: 480px) {
+            .sidebar { padding: 1.5rem 1rem 1rem; }
+            .avatar { width: 80px; height: 80px; }
+            h1 { font-size: 1.4rem; }
+            article h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar" id="sidebar-content"></aside>
+    <script src="/components/sidebar.js"></script>
+
+    <main class="content">
+        <a href="/blog/" class="back-link">← Back to Blog</a>
+        <article>
+<hr>
+<h2>date: 2024-01-01
+tags: [ai, 图像分类, 数据增强, 过拟合, 欠拟合, pytorch]
+legacy: true</h2>
+<h1>图像分类：数据稀缺、样本增强与欠拟合/过拟合</h1>
+<table>
+<thead>
+<tr>
+<th align="left">维度</th>
+<th align="left">欠拟合</th>
+<th align="left">过拟合</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>定义</strong></td>
+<td align="left">模型未捕获数据内在规律，表现为高偏差 (High Bias)。</td>
+<td align="left">模型将训练数据中的噪声也当作规律来学习，表现为高方差 (High Variance)。</td>
+</tr>
+<tr>
+<td align="left"><strong>训练曲线</strong></td>
+<td align="left">训练集和验证集的损失（Loss）都比较高，且很早就收敛不再下降。</td>
+<td align="left">训练集损失持续降低，但验证集损失在下降到某个点后开始回升，形成一个明显的“剪刀差”。</td>
+</tr>
+<tr>
+<td align="left"><strong>直观比喻</strong></td>
+<td align="left">试图用一条直线去拟合一条复杂的“S”形曲线。</td>
+<td align="left">试图用一条曲线精确地穿过每一个训练数据点，形成一个“马蜂窝”状的复杂路径。</td>
+</tr>
+<tr>
+<td align="left"><strong>触发条件</strong></td>
+<td align="left">数据本身的复杂度远超模型的表达能力。</td>
+<td align="left">模型的容量（复杂度）远超训练数据所包含的信息量。</td>
+</tr>
+<tr>
+<td align="left"><strong>诊断方法</strong></td>
+<td align="left">学习曲线平行上移；无论如何调参，模型的偏差（bias）都无法有效降低。</td>
+<td align="left">训练集与验证集的准确率差距（Training/Validation Gap）通常大于5-10个百分点；模型对错误预测的置信度（confidence）异常高。</td>
+</tr>
+<tr>
+<td align="left"><strong>缓解方案</strong></td>
+<td align="left">① 增大模型容量（更深或更宽的网络）或增加特征。 <br> ② 延长训练时间或优化学习率等超参数。 <br> ③ 减少正则化强度。</td>
+<td align="left">① <strong>数据增强</strong>或扩充数据集。 <br> ② 使用正则化（L1/L2、Dropout、早停）。 <br> ③ 简化模型结构。 <br> ④ 模型集成（Ensemble）或知识蒸馏（Distillation）。</td>
+</tr>
+</tbody></table>
+<h3>3. 数据稀缺下的样本增强</h3>
+<p>在所有解决过拟合的策略中，数据增强是最直接、最有效的方法之一。它通过对现有训练数据进行一系列随机变换，创造出更多样的、模型“未曾见过”的样本，从而在不增加标注成本的情况下，扩充了数据的信息量。</p>
+<h4>3.1 几何变换</h4>
+<p>这类变换模拟了物体在真实世界中可能出现的姿态、大小和位置变化。常用操作包括：随机旋转 (±15° to ±30°)、随机缩放 (0.8× to 1.2×) 和随机平移 (≤10% of image dimensions)。更复杂的变换如弹性扭曲 (Elastic Distortion) 和透视变换 (Perspective Transformation) 也能提供更强的泛化能力。</p>
+<h4>3.2 像素级扰动</h4>
+<p>这类变换旨在提高模型对图像质量变化的鲁棒性。例如，向图像中加入高斯噪声 (Gaussian Noise, e.g., σ=0.01-0.05 × 255) 或椒盐噪声 (Salt-and-Pepper Noise, e.g., ratio=0.3-0.5%)，以及应用高斯模糊 (GaussianBlur, kernel size=3 or 5) 或运动模糊 (MotionBlur)。</p>
+<h4>3.3 颜色空间变换</h4>
+<p>颜色空间的变换可以增强模型对光照、对比度和色彩变化的适应性。<code>ColorJitter</code> 是一个常用工具，它可以随机调整图像的亮度 (brightness)、对比度 (contrast) 和饱和度 (saturation)（例如，在 0.8-1.2 倍之间）。将图像转为灰度图再复制回三个通道，也是一种强制模型关注形状而非颜色的有效技巧。</p>
+<h4>3.4 合成/混合方法</h4>
+<p>近年来，将多张图片信息混合的增强方法变得非常流行，它们能创造出在真实世界中不存在但对模型正则化非常有益的样本。</p>
+<table>
+<thead>
+<tr>
+<th align="left">方法</th>
+<th align="left">核心思路</th>
+<th align="left">推荐触发概率 (p)</th>
+<th align="left">备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Cutout/GridMask</strong></td>
+<td align="left">在图像上随机挖去一个或多个矩形区域进行遮挡。</td>
+<td align="left"><code>p=0.3</code></td>
+<td align="left">在目标检测/分割任务中，需要注意避免遮挡到关键目标。</td>
+</tr>
+<tr>
+<td align="left"><strong>Mixup</strong></td>
+<td align="left">将两张图片的输入和标签按一个从Beta分布中采样的比例 (λ) 进行线性插值。</td>
+<td align="left"><code>1.0</code> (作为一个独立的epoch)</td>
+<td align="left">α=0.2 是一个常用的超参数。</td>
+</tr>
+<tr>
+<td align="left"><strong>CutMix</strong></td>
+<td align="left">从一张图片中随机剪下一个区域，粘贴到另一张图片上，并根据区域面积比例调整标签权重。</td>
+<td align="left"><code>p=0.5</code></td>
+<td align="left">α=1.0 是一个常用的超参数。</td>
+</tr>
+</tbody></table>
+<h4>3.5 自动增强</h4>
+<p>手动设计增强策略组合费时费力，因此自动增强应运而生。<strong>RandAugment</strong> 是一种简单高效的方法，它从一个预设的变换池中随机挑选 N 种变换，并以一个统一的强度 M 应用。对于小数据集，它通常能带来显著收益（如 N=2, M=9）。更复杂的 <strong>AutoAugment</strong> 使用强化学习来搜索最佳策略组合，但计算成本高昂。</p>
+<h3>4. 实践落地步骤 (PyTorch 示例)</h3>
+<p>下面我们展示如何在 PyTorch 中构建一个包含多种增强策略的 <code>transform</code> 流水线，并实现一个可插拔的 Mixup 功能。</p>
+<h4>4.1 变换流水线</h4>
+<pre><code class="language-python"><span class="line">import torchvision.transforms as T</span>
+<span class="line">import torch</span>
+<span class="line">import numpy as np</span>
+<span class="line"></span>
+<span class="line"># 自定义一个椒盐噪声类</span>
+<span class="line">class SaltPepperNoise:</span>
+<span class="line">    def __init__(self, ratio=0.003):</span>
+<span class="line">        self.ratio = ratio</span>
+<span class="line">    def __call__(self, img):</span>
+<span class="line">        # ... (实现细节省略)</span>
+<span class="line">        return img</span>
+<span class="line"></span>
+<span class="line">train_tf = T.Compose([</span>
+<span class="line">    T.RandomResizedCrop(224, scale=(0.8, 1.0)),</span>
+<span class="line">    T.RandomHorizontalFlip(p=0.5),</span>
+<span class="line">    T.RandomRotation(20),</span>
+<span class="line">    T.ColorJitter(brightness=0.2, contrast=0.2, saturation=0.2, hue=0.1),</span>
+<span class="line">    T.GaussianBlur(kernel_size=5, sigma=(0.1, 2.0)),</span>
+<span class="line">    # SaltPepperNoise(0.003), # 自定义变换</span>
+<span class="line">    T.ToTensor(),</span>
+<span class="line">    T.Normalize(mean=[0.485, 0.456, 0.406],</span>
+<span class="line">                std=[0.229, 0.224, 0.225])</span>
+<span class="line">])</span></code></pre>
+<p>这个流水线整合了多种几何和颜色变换。注意，<code>Normalize</code> 步骤通常放在最后，且其均值和标准差应基于预训练模型所使用的数据集（如 ImageNet）来设定。</p>
+<h4>4.2 可插拔的 Mixup/CutMix</h4>
+<pre><code class="language-python"><span class="line">def mixup_data(x, y, alpha=0.2, use_cuda=True):</span>
+<span class="line">    &#39;&#39;&#39;Returns mixed inputs, pairs of targets, and lambda&#39;&#39;&#39;</span>
+<span class="line">    if alpha &gt; 0:</span>
+<span class="line">        lam = np.random.beta(alpha, alpha)</span>
+<span class="line">    else:</span>
+<span class="line">        lam = 1</span>
+<span class="line"></span>
+<span class="line">    batch_size = x.size()[0]</span>
+<span class="line">    if use_cuda:</span>
+<span class="line">        index = torch.randperm(batch_size).cuda()</span>
+<span class="line">    else:</span>
+<span class="line">        index = torch.randperm(batch_size)</span>
+<span class="line"></span>
+<span class="line">    mixed_x = lam * x + (1 - lam) * x[index, :]</span>
+<span class="line">    y_a, y_b = y, y[index]</span>
+<span class="line">    return mixed_x, y_a, y_b, lam</span>
+<span class="line"></span>
+<span class="line">def mixup_criterion(criterion, pred, y_a, y_b, lam):</span>
+<span class="line">    return lam * criterion(pred, y_a) + (1 - lam) * criterion(pred, y_b)</span></code></pre>
+<p>在训练循环中，你可以从 DataLoader 中取出 <code>inputs</code> 和 <code>targets</code>，调用 <code>mixup_data</code> 生成混合数据，然后用 <code>mixup_criterion</code> 计算混合后的损失。</p>
+<h4>4.3 学习曲线监控</h4>
+<p>在整个训练过程中，必须持续监控训练集和验证集的准确率与损失曲线。一个关键的实践是<strong>早停 (Early Stopping)</strong>：当验证集损失连续 N 个周期（epoch）不再下降反而上升时，就应停止训练，并保存之前验证性能最好的模型权重。这能有效防止模型在训练后期陷入过拟合。</p>
+<h3>5. 综合调优流程</h3>
+<p>一个系统性的调优流程可以帮助你最大化数据增强的效果：</p>
+<ol>
+<li><strong>建立基线</strong>: 首先在没有任何数据增强的情况下训练模型，记录其准确率和损失作为基准。</li>
+<li><strong>阶段一</strong>: 加入基础的几何和颜色变换，学习率可以保持不变或适当调大。</li>
+<li><strong>阶段二</strong>: 引入 Mixup 或 CutMix，通常需要配合标签平滑 (Label Smoothing) 来获得更好效果。</li>
+<li><strong>阶段三</strong>: 如果计算资源允许，尝试使用 RandAugment 或 AutoAugment 来自动搜索最佳的增强策略组合。</li>
+<li><strong>阶段四</strong>: 最后，根据增强后的数据分布，微调模型的容量（如网络深度）和正则化参数（如 Dropout 率、权重衰减 weight decay）。</li>
+</ol>
+<h3>6. 常见坑 &amp; 实用 Tips</h3>
+<ul>
+<li><strong>过度增强</strong>: 过强的增强可能会使训练集分布与真实测试集分布产生严重漂移，反而损害性能。建议从一个较小的应用概率（如 <code>p=0.3</code>）开始试水。</li>
+<li><strong>标签同步</strong>: 在目标检测或语义分割任务中，对图像进行几何变换时，必须对边界框 (bounding box) 或掩码 (mask) 执行完全相同的变换。</li>
+<li><strong>验证集纯净度</strong>: 验证集应尽可能保持“干净”，以真实反映模型在原始数据分布上的性能。通常只对其进行必要的缩放 (Resize) 和中心裁剪 (Center Crop)，不做“重口味”的增强。</li>
+<li><strong>小批量 Mixup</strong>: 在批量大小 (batch size) 很小的情况下使用 Mixup，可能会过度稀释原始信号。此时应考虑适当增大批量或调整学习率。</li>
+</ul>
+<h3>7. 结语与延伸</h3>
+<p>面对数据稀缺的挑战，我们的核心目标是通过数据增强来<strong>扩充数据的多样性</strong>，而不仅仅是增加数量。欠拟合与过拟合的斗争，本质上是在模型的<strong>容量</strong>与数据的<strong>信息量</strong>之间寻找一个精妙的平衡点。</p>
+<p>本文所介绍的策略是解决这一问题的经典起点。在此基础上，你还可以进一步探索更前沿的方向，例如：利用无标签数据进行自监督预训练 (Self-supervised Pre-training)、使用生成模型（如 Diffusion Models）或 3D 渲染来合成新数据、以及应用半监督学习 (Semi-supervised Learning) 等技术。</p>
+
+    </article>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
+<script>
+Prism.highlightAll();
+document.querySelectorAll('article pre').forEach(pre => {
+    const code = pre.querySelector('code');
+    if (!code) return;
+    const toolbar = document.createElement('div');
+    toolbar.className = 'code-toolbar';
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'Copy';
+    btn.onclick = () => {
+        navigator.clipboard.writeText(code.textContent).then(() => {
+            btn.textContent = 'Copied!';
+            btn.classList.add('copied');
+            setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+        });
+    };
+    toolbar.appendChild(btn);
+    pre.parentNode.insertBefore(toolbar, pre);
+});
+</script>
+</body>
+</html>

@@ -138,6 +138,39 @@ async function getEmbeddings(texts) {
 
 **Why 512 dimensions?** OpenAI's text-embedding-3-small supports dimension reduction. Using 512 instead of 1536 cuts index size by ~65% with minimal quality loss.
 
+### Embedding Cache for Incremental Updates
+
+Calling OpenAI API on every rebuild is slow and expensive. Content hashing enables incremental updates:
+
+```javascript
+import crypto from 'crypto';
+
+// Compute content hash
+function contentHash(text) {
+    return crypto.createHash('md5').update(text).digest('hex');
+}
+
+// Cache format: { [chunkId]: { hash, embedding } }
+const cache = loadCache('.cache/embeddings.json');
+
+for (const doc of documents) {
+    const hash = contentHash(doc.embeddingText);
+
+    if (cache[doc.id]?.hash === hash) {
+        // Cache hit - skip API call
+        embeddings[i] = cache[doc.id].embedding;
+    } else {
+        // Content changed - needs re-embedding
+        toEmbed.push({ index: i, text: doc.embeddingText, hash, id: doc.id });
+    }
+}
+
+// Only call API for new/changed documents
+const newEmbeddings = await batchGetEmbeddings(toEmbed.map(t => t.text));
+```
+
+**Result**: First build requires full embedding (~93 batches), but subsequent updates only process changed articles. Adding one new post needs just 1-2 API calls instead of re-processing all 135 articles.
+
 ## Part 2: The Cloudflare Worker
 
 The Worker acts as a secure proxy, keeping your API key hidden from the browser.

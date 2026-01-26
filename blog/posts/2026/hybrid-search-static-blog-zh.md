@@ -138,6 +138,39 @@ async function getEmbeddings(texts) {
 
 **为什么选择 512 维？** OpenAI 的 text-embedding-3-small 支持降维。使用 512 而非 1536 维可以减少约 65% 的索引体积，质量损失极小。
 
+### Embedding 缓存机制
+
+每次重建索引都调用 OpenAI API 既慢又费钱。通过内容哈希实现增量更新：
+
+```javascript
+import crypto from 'crypto';
+
+// 计算内容哈希
+function contentHash(text) {
+    return crypto.createHash('md5').update(text).digest('hex');
+}
+
+// 缓存格式: { [chunkId]: { hash, embedding } }
+const cache = loadCache('.cache/embeddings.json');
+
+for (const doc of documents) {
+    const hash = contentHash(doc.embeddingText);
+
+    if (cache[doc.id]?.hash === hash) {
+        // 缓存命中，跳过 API 调用
+        embeddings[i] = cache[doc.id].embedding;
+    } else {
+        // 内容变化，需要重新生成
+        toEmbed.push({ index: i, text: doc.embeddingText, hash, id: doc.id });
+    }
+}
+
+// 只对新增/修改的文档调用 API
+const newEmbeddings = await batchGetEmbeddings(toEmbed.map(t => t.text));
+```
+
+**效果**：首次构建需要完整 embedding（约 93 批次），后续增量更新只处理变化的文章。添加一篇新文章只需 1-2 次 API 调用，而非重新处理全部 135 篇。
+
 ## 第二部分：Cloudflare Worker
 
 Worker 作为安全代理，将 API 密钥隐藏在浏览器之外。

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>静态博客的混合搜索方案：BM25 + 向量检索 + Cloudflare Workers | Yuxu Ge</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
     <style>
         :root {
             --black: #111;
@@ -87,6 +88,10 @@
 
         .loading { text-align: center; padding: 3rem; color: #888; }
         .error { color: var(--vermilion); }
+
+        /* KaTeX math styles */
+        .katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.5rem 0; }
+        .katex { font-size: 1.1em; }
 
         /* Responsive */
         @media (max-width: 900px) {

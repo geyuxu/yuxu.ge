@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebGL 3D坦克大战游戏开发实践：现代WebGL技术应用 | Yuxu Ge</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <style>
+        :root {
+            --black: #111;
+            --dark-grey: #444;
+            --off-white: #f4f4f4;
+            --vermilion: #C41E3A;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--black);
+            background-color: var(--off-white);
+        }
+
+        a { color: var(--vermilion); text-decoration: none; }
+        a:hover { opacity: 0.75; }
+
+        .layout { min-height: 100vh; }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed; top: 0; left: 0;
+            width: 320px; height: 100vh;
+            background: var(--black); color: var(--off-white);
+            padding: 3rem 2rem;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .sidebar-top { display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .avatar { display: block; width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--vermilion); margin-bottom: 1.5rem; overflow: hidden; transition: transform 0.2s ease; }
+        .avatar:hover { opacity: 1; transform: scale(1.05); }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .name-block { margin-bottom: 0.5rem; }
+        h1 { font-size: 1.8rem; font-weight: 700; letter-spacing: 1px; color: var(--off-white); }
+        .title-role { font-size: 0.9rem; color: #888; margin-top: 0.25rem; font-weight: 400; }
+        .contact-block { margin-top: 2.5rem; width: 100%; }
+        .social-links { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+        .social-links a { display: flex; align-items: center; gap: 0.75rem; width: 160px; color: var(--off-white); opacity: 0.7; padding: 0.5rem 0.75rem; border-radius: 4px; font-size: 0.9rem; transition: all 0.2s; }
+        .social-links a:hover { color: var(--vermilion); opacity: 1; background: rgba(255,255,255,0.05); }
+        .social-links svg { width: 20px; height: 20px; flex-shrink: 0; }
+        .social-links .orcid-link { font-size: 0.68rem; gap: 0.5rem; white-space: nowrap; }
+        .sidebar-footer { text-align: center; font-size: 0.75rem; color: #555; }
+
+        /* Content */
+        .content { margin-left: 320px; padding: 3rem 4rem; max-width: 900px; }
+        .back-link { display: inline-block; font-size: 0.85rem; margin-bottom: 2rem; color: var(--dark-grey); }
+        .back-link:hover { color: var(--vermilion); }
+
+        /* Article */
+        article h1 { font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.3; color: var(--black); }
+        article h2 { font-size: 1.4rem; font-weight: 600; margin: 2rem 0 1rem; color: var(--black); }
+        article h3 { font-size: 1.1rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--black); }
+        article p { margin-bottom: 1rem; color: var(--dark-grey); }
+        article ul, article ol { margin: 1rem 0 1rem 1.5rem; color: var(--dark-grey); }
+        article li { margin-bottom: 0.5rem; }
+        article strong { color: var(--black); }
+        article code { font-family: "SF Mono", Monaco, monospace; font-size: 0.9em; background: #e8e8e8; padding: 0.15em 0.4em; border-radius: 3px; }
+        article pre { margin: 1rem 0; border-radius: 6px; overflow-x: auto; background: #2d2d2d; padding: 1rem; }
+        article pre code { background: none; padding: 0; font-size: 0.75em; white-space: pre !important; counter-reset: line; display: block; color: #ccc; }
+        article pre code .line { counter-increment: line; }
+        article pre code .line::before { content: counter(line); display: inline-block; width: 2.5em; margin-right: 1em; text-align: right; color: #666; user-select: none; }
+        .code-toolbar { display: flex; justify-content: flex-start; padding: 0.35rem 0.5rem; background: #3a3a3a; border-radius: 6px 6px 0 0; }
+        .code-toolbar + pre { margin-top: 0; border-radius: 0 0 6px 6px; }
+        .copy-btn { padding: 0.2rem 0.5rem; font-size: 0.7rem; background: #555; color: #fff; border: none; border-radius: 3px; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover, .copy-btn:active { background: #777; }
+        .copy-btn.copied { background: #2a2; }
+        article blockquote { border-left: 3px solid var(--vermilion); padding-left: 1rem; margin: 1rem 0; color: #666; font-style: italic; }
+        article hr { border: none; border-top: 1px solid #ddd; margin: 2rem 0; }
+        article table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+        article th, article td { border: 1px solid #ddd; padding: 0.5rem 0.75rem; text-align: left; }
+        article th { background: #e8e8e8; font-weight: 600; }
+        article img { max-width: 100%; height: auto; display: block; margin: 1.5rem 0; border-radius: 6px; }
+
+        .loading { text-align: center; padding: 3rem; color: #888; }
+        .error { color: var(--vermilion); }
+
+        /* KaTeX math styles */
+        .katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.5rem 0; }
+        .katex { font-size: 1.1em; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .sidebar { position: relative; width: 100%; height: auto; padding: 2rem 1.5rem 1rem; }
+            .social-links { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+            .social-links a, .social-links .orcid-link { width: auto; padding: 0.5rem; font-size: 0; gap: 0; }
+            .social-links svg { width: 24px; height: 24px; }
+            .social-links .hide-mobile { display: none; }
+            .sidebar-footer { margin-top: 1rem; }
+            .content { margin-left: 0; padding: 2rem 1rem; }
+        }
+        @media (max-width: 480px) {
+            .sidebar { padding: 1.5rem 1rem 1rem; }
+            .avatar { width: 80px; height: 80px; }
+            h1 { font-size: 1.4rem; }
+            article h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar" id="sidebar-content"></aside>
+    <script src="/components/sidebar.js"></script>
+
+    <main class="content">
+        <a href="/blog/" class="back-link">← Back to Blog</a>
+        <article>
+<hr>
+<h2>date: 2025-07-21
+tags: [frontend]
+legacy: true</h2>
+<h1>WebGL 3D坦克大战游戏开发实践：现代WebGL技术应用</h1>
+<h3>核心技术栈</h3>
+<ul>
+<li><strong>WebGL 2.0</strong>: 3D图形渲染</li>
+<li><strong>GLSL</strong>: 着色器编程语言</li>
+<li><strong>JavaScript ES6+</strong>: 游戏逻辑实现</li>
+<li><strong>Web Audio API</strong>: 音效系统</li>
+<li><strong>Canvas 2D API</strong>: UI界面绘制</li>
+<li><strong>WebGL Matrix</strong>: 3D数学计算库</li>
+</ul>
+<h3>系统架构设计</h3>
+<pre><code><span class="line">WebGL 3D Tank Game</span>
+<span class="line">├── 渲染引擎 (Rendering Engine)</span>
+<span class="line">│   ├── 着色器管理 (Shader Manager)</span>
+<span class="line">│   ├── 纹理系统 (Texture System)</span>
+<span class="line">│   ├── 模型加载器 (Model Loader)</span>
+<span class="line">│   └── 场景渲染器 (Scene Renderer)</span>
+<span class="line">├── 物理系统 (Physics Engine)</span>
+<span class="line">│   ├── 碰撞检测 (Collision Detection)</span>
+<span class="line">│   ├── 刚体动力学 (Rigid Body Dynamics)</span>
+<span class="line">│   └── 空间分割 (Spatial Partitioning)</span>
+<span class="line">├── AI系统 (AI Engine)</span>
+<span class="line">│   ├── 路径规划 (Pathfinding)</span>
+<span class="line">│   ├── 行为树 (Behavior Tree)</span>
+<span class="line">│   └── 决策系统 (Decision System)</span>
+<span class="line">├── 音效系统 (Audio System)</span>
+<span class="line">├── 用户界面 (User Interface)</span>
+<span class="line">└── 游戏循环 (Game Loop)</span></code></pre>
+<h2>渲染引擎实现</h2>
+<h3>WebGL渲染管道</h3>
+<pre><code class="language-javascript"><span class="line">class RenderEngine {</span>
+<span class="line">    constructor(canvas) {</span>
+<span class="line">        this.canvas = canvas;</span>
+<span class="line">        this.gl = canvas.getContext(&#39;webgl2&#39;);</span>
+<span class="line">        this.shaderPrograms = new Map();</span>
+<span class="line">        this.textures = new Map();</span>
+<span class="line">        this.models = new Map();</span>
+<span class="line">        </span>
+<span class="line">        this.initWebGL();</span>
+<span class="line">        this.loadShaders();</span>
+<span class="line">        this.setupBuffers();</span>
+<span class="line">    }</span>
+<span class="line"></span>
+<span class="line">    initWebGL() {</span>
+<span class="line">        const gl = this.gl;</span>
+<span class="line">        </span>
+<span class="line">        // 启用深度测试</span>
+<span class="line">        gl.enable(gl.DEPTH_TEST);</span>
+<span class="line">        gl.depthFunc(gl.LEQUAL);</span>
+<span class="line">        </span>
+<span class="line">        // 启用背面剔除</span>
+<span class="line">        gl.enable(gl.CULL_FACE);</span>
+<span class="line">        gl.cullFace(gl.BACK);</span>
+<span class="line">        </span>
+<span class="line">        // 设置视口</span>
+<span class="line">        gl.viewport(0, 0, this.canvas.width, this.canvas.height);</span>
+<span class="line">        </span>
+<span class="line">        // 清除颜色设置</span>
+<span class="line">        gl.clearColor(0.2, 0.3, 0.3, 1.0);</span>
+<span class="line">    }</span>
+<span class="line"></span>
+<span class="line">    // 编译着色器</span>
+<span class="line">    compileShader(source, type) {</span>
+<span class="line">        const gl = this.gl;</span>
+<span class="line">        const shader = gl.createShader(type);</span>
+<span class="line">        </span>
+<span class="line">        gl.shaderSource(shader, source);</span>
+<span class="line">        gl.compileShader(shader);</span>
+<span class="line">        </span>
+<span class="line">        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {</span>
+<span class="line">            console.error(&#39;着色器编译错误:&#39;, gl.getShaderInfoLog(shader));</span>
+<span class="line">            gl.deleteShader(shader);</span>
+<span class="line">            return null;</span>
+<span class="line">        }</span>
+<span class="line">        </span>
+<span class="line">        return shader;</span>
+<span class="line">    }</span>
+<span class="line"></span>
+<span class="line">    // 创建着色器程序</span>
+<span class="line">    createShaderProgram(vertexSource, fragmentSource) {</span>
+<span class="line">        const gl = this.gl;</span>
+<span class="line">        const vertexShader = this.compileShader(vertexSource, gl.VERTEX_SHADER);</span>
+<span class="line">        const fragmentShader = this.compileShader(fragmentSource, gl.FRAGMENT_SHADER);</span>
+<span class="line">        </span>
+<span class="line">        const program = gl.createProgram();</span>
+<span class="line">        gl.attachShader(program, vertexShader);</span>
+<span class="line">        gl.attachShader(program, fragmentShader);</span>
+<span class="line">        gl.linkProgram(program);</span>
+<span class="line">        </span>
+<span class="line">        if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {</span>
+<span class="line">            console.error(&#39;着色器程序链接错误:&#39;, gl.getProgramInfoLog(program));</span>
+<span class="line">            return null;</span>
+<span class="line">        }</span>
+<span class="line">        </span>
+<span class="line">        return program;</span>
+<span class="line">    }</span>
+<span class="line"></span>
+<span class="line">    // 渲染场景</span>
+<span class="line">    render(scene, camera) {</span>
+<span class="line">        const gl = this.gl;</span>
+<span class="line">        </span>
+<span class="line">        // 清除缓冲区</span>
+<span class="line">        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);</span>
+<span class="line">        </span>
+<span class="line">        // 计算视图矩阵和投影矩阵</span>
+<span class="line">        const viewMatrix = camera.getViewMatrix();</span>
+<span class="line">        const projMatrix = camera.getProjectionMatrix();</span>
+<span class="line">        </span>
+<span class="line">        // 渲染所有游戏对象</span>
+<span class="line">        scene.objects.forEach(obj =&gt; {</span>
+<span class="line">            this.renderObject(obj, viewMatrix, projMatrix);</span>
+<span class="line">        });</span>
+<span class="line">    }</span>
+<span class="line"></span>
+<span class="line">    renderObject(object, viewMatrix, projMatrix) {</span>
+<span class="line">        const gl = this.gl;</span>
+<span class="line">        const program = this.shaderPrograms.get(object.material.shader);</span>
+<span class="line">        </span>
+<span class="line">        gl.useProgram(program);</span>
+<span class="line">        </span>
+<span class="line">        // 设置矩阵uniform</span>
+<span class="line">        const modelMatrix = object.getModelMatrix();</span>
+<span class="line">        const mvpMatrix = mat4.multiply(projMatrix, viewMatrix, modelMatrix);</span>
+<span class="line">        </span>
+<span class="line">        gl.uniformMatrix4fv(gl.getUniformLocation(program, &#39;u_mvpMatrix&#39;), false, mvpMatrix);</span>
+<span class="line">        gl.uniformMatrix4fv(gl.getUniformLocation(program, &#39;u_modelMatrix&#39;), false, modelMatrix);</span>
+<span class="line">        </span>
+<span class="line">        // 绑定纹理</span>
+<span class="line">        if (object.material.diffuseTexture) {</span>
+<span class="line">            gl.activeTexture(gl.TEXTURE0);</span>
+<span class="line">            gl.bindTexture(gl.TEXTURE_2D, object.material.diffuseTexture);</span>
+<span class="line">            gl.uniform1i(gl.getUniformLocation(program, &#39;u_diffuseTexture&#39;), 0);</span>
+<span class="line">        }</span>
+<span class="line">        </span>
+<span class="line">        // 绑定顶点数据并绘制</span>
+<span class="line">        this.bindVertexData(object.mesh);</span>
+<span class="line">        gl.drawElements(gl.TRIANGLES, object.mesh.indices.length, gl.UNSIGNED_SHORT, 0);</span>
+<span class="line">    }</span>
+<span class="line">}</span></code></pre>
+<h3>着色器系统</h3>
+<pre><code class="language-glsl"><span class="line">// 顶点着色器 (vertex shader)</span>
+<span class="line">#version 300 es</span>
+<span class="line">precision highp float;</span>
+<span class="line"></span>
+<span class="line">in vec3 a_position;</span>
+<span class="line">in vec3 a_normal;</span>
+<span class="line">in vec2 a_texCoord;</span>
+<span class="line"></span>
+<span class="line">uniform mat4 u_mvpMatrix;</span>
+<span class="line">uniform mat4 u_modelMatrix;</span>
+<span class="line">uniform mat4 u_normalMatrix;</span>
+<span class="line"></span>
+<span class="line">out vec3 v_worldPos;</span>
+<span class="line">out vec3 v_normal;</span>
+<span class="line">out vec2 v_texCoord;</span>
+<span class="line"></span>
+<span class="line">void main() {</span>
+<span class="line">    vec4 worldPos = u_modelMatrix * vec4(a_position, 1.0);</span>
+<span class="line">    v_worldPos = worldPos.xyz;</span>
+<span class="line">    </span>
+<span class="line">    v_normal = normalize((u_normalMatrix * vec4(a_normal, 0.0)).xyz);</span>
+<span class="line">    v_texCoord = a_texCoord;</span>
+<span class="line">    </span>
+<span class="line">    gl_Position = u_mvpMatrix * vec4(a_position, 1.0);</span>
+<span class="line">}</span></code></pre>
+<pre><code class="language-glsl"><span class="line">// 片段着色器 (fragment shader)</span>
+<span class="line">#version 300 es</span>
+<span class="line">precision highp float;</span>
+<span class="line"></span>
+<span class="line">in vec3 v_worldPos;</span>
+<span class="line">in vec3 v_normal;</span>
+<span class="line">in vec2 v_texCoord;</span>
+<span class="line"></span>
+<span class="line">uniform sampler2D u_diffuseTexture;</span>
+<span class="line">uniform vec3 u_lightPos;</span>
+<span class="line">uniform vec3 u_lightColor;</span>
+<span class="line">uniform vec3 u_viewPos;</span>
+<span class="line"></span>
+<span class="line">out vec4 fragColor;</span>
+<span class="line"></span>
+<span class="line">void main() {</span>
+<span class="line">    // 采样纹理</span>
+<span class="line">    vec3 texColor = texture(u_diffuseTexture, v_texCoord).rgb;</span>
+<span class="line">    </span>
+<span class="line">    // 计算光照</span>
+<span class="line">    vec3 lightDir = normalize(u_lightPos - v_worldPos);</span>
+<span class="line">    vec3 normal = normalize(v_normal);</span>
+<span class="line">    </span>
+<span class="line">    // 环境光</span>
+<span class="line">    float ambientStrength = 0.3;</span>
+<span class="line">    vec3 ambient = ambientStrength * u_lightColor;</span>
+<span class="line">    </span>
+<span class="line">    // 漫反射</span>
+<span class="line">    float diff = max(dot(normal, lightDir), 0.0);</span>
+<span class="line">    vec3 diffuse = diff * u_lightColor;</span>
+<span class="line">    </span>
+<span class="line">    // 镜面反射</span>
+<span class="line">    float specularStrength = 0.8;</span>
+<span class="line">    vec3 viewDir = normalize(u_viewPos - v_worldPos);</span>
+<span class="line">    vec3 reflectDir = reflect(-lightDir, normal);</span>
+<span class="line">    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 64.0);</span>
+<span class="line">    vec3 specular = specularStrength * spec * u_lightColor;</span>
+<span class="line">    </span>
+<span class="line">    vec3 result = (ambient + diffuse + specular) * texColor;</span>
+<span class="line">    fragColor = vec4(result, 1.0);</span>
+<span class="line">}</span></code></pre>
+<h2>物理系统设计</h2>
+<h3>碰撞检测系统</h3>
+<pre><code class="language-javascript"><span class="line">class PhysicsEngine {</span>
+<span class="line">    constructor() {</span>
+<span class="line">        this.bodies = [];</span>
+<span class="line">        this.gravity = { x: 0, y: -9.81, z: 0 };</span>
+<span class="line">        this.spatialGrid = new SpatialGrid(50); // 50x50网格</span>
+<span class="line">    }</span>
+<span class="line"></span>
+<span class="line">    // 碰撞检测</span>
+<span class="line">    checkCollisions() {</span>
+<span class="line">        // 使用空间分割优化碰撞检测</span>
+<span class="line">        const potentialPairs = this.spatialGrid.getPotentialCollisions();</span>
+<span class="line">        </span>
+<span class="line">        potentialPairs.forEach(pair =&gt; {</span>
+<span class="line">            const [bodyA, bodyB] = pair;</span>
+<span class="line">            </span>
+<span class="line">            if (this.detectCollision(bodyA, bodyB)) {</span>
+<span class="line">                this.resolveCollision(bodyA, bodyB);</span>
+<span class="line">            }</span>
+<span class="line">        });</span>
+<span class="line">    }</span>
+<span class="line"></span>
+<span class="line">    // AABB碰撞检测</span>
+<span class="line">    detectAABBCollision(boxA, boxB) {</span>
+<span class="line">        return (</span>
+<span class="line">            boxA.min.x &lt;= boxB.max.x &amp;&amp; boxA.max.x &gt;= boxB.min.x &amp;&amp;</span>
+<span class="line">            boxA.min.y &lt;= boxB.max.y &amp;&amp; boxA.max.y &gt;= boxB.min.y &amp;&amp;</span>
+<span class="line">            boxA.min.z &lt;= boxB.max.z &amp;&amp; boxA.max.z &gt;= boxB.min.z</span>
+<span class="line">        );</span>
+<span class="line">    }</span>
+<span class="line"></span>
+<span class="line">    // 球体碰撞检测</span>
+<span class="line">    detectSphereCollision(sphereA, sphereB) {</span>
+<span class="line">        const distance = vec3.distance(sphereA.center, sphereB.center);</span>
+<span class="line">        return distance &lt;= (sphereA.radius + sphereB.radius);</span>
+<span class="line">    }</span>
+<span class="line"></span>
+<span class="line">    // 碰撞响应</span>
+<span class="line">    resolveCollision(bodyA, bodyB) {</span>
+<span class="line">        // 计算碰撞法向量</span>
+<span class="line">        const normal = vec3.normalize(vec3.subtract(bodyB.position, bodyA.position));</span>
+<span class="line">        </span>
+<span class="line">        // 计算相对速度</span>
+<span class="line">        const relativeVelocity = vec3.subtract(bodyB.velocity, bodyA.velocity);</span>
+<span class="line">        const velocityAlongNormal = vec3.dot(relativeVelocity, normal);</span>
+<span class="line">        </span>
+<span class="line">        // 如果物体正在分离，不处理碰撞</span>
+<span class="line">        if (velocityAlongNormal &gt; 0) return;</span>
+<span class="line">        </span>
+<span class="line">        // 计算恢复系数</span>
+<span class="line">        const restitution = Math.min(bodyA.restitution, bodyB.restitution);</span>
+<span class="line">        </span>
+<span class="line">        // 计算冲量</span>
+<span class="line">        const impulse = -(1 + restitution) * velocityAlongNormal;</span>
+<span class="line">        const impulseVector = vec3.scale(normal, impulse);</span>
+<span class="line">        </span>
+<span class="line">        // 应用冲量</span>
+<span class="line">        bodyA.velocity = vec3.subtract(bodyA.velocity, vec3.scale(impulseVector, 1 / bodyA.mass));</span>
+<span class="line">        bodyB.velocity = vec3.add(bodyB.velocity, vec3.scale(impulseVector, 1 / bodyB.mass));</span>
+<span class="line">    }</span>
+<span class="line"></span>
+<span class="line">    // 物理更新</span>
+<span class="line">    update(deltaTime) {</span>
+<span class="line">        this.bodies.forEach(body =&gt; {</span>
+<span class="line">            // 应用重力</span>
+<span class="line">            if (!body.isStatic) {</span>
+<span class="line">                body.velocity = vec3.add(body.velocity, vec3.scale(this.gravity, deltaTime));</span>
+<span class="line">            }</span>
+<span class="line">            </span>
+<span class="line">            // 更新位置</span>
+<span class="line">            body.position = vec3.add(body.position, vec3.scale(body.velocity, deltaTime));</span>
+<span class="line">            </span>
+<span class="line">            // 更新包围盒</span>
+<span class="line">            body.updateBoundingBox();</span>
+<span class="line">        });</span>
+<span class="line">        </span>
+<span class="line">        // 检测碰撞</span>
+<span class="line">        this.checkCollisions();</span>
+<span class="line">    }</span>
+<span class="line">}</span></code></pre>
+<h2>AI系统实现</h2>
+<h3>敌方坦克AI</h3>
+<pre><code class="language-javascript"><span class="line">class TankAI {</span>
+<span class="line">    constructor(tank) {</span>
+<span class="line">        this.tank = tank;</span>
+<span class="line">        this.state = &#39;patrol&#39;;</span>
+<span class="line">        this.target = null;</span>
+<span class="line">        this.pathfinder = new Pathfinder();</span>
+<span class="line">        this.behaviorTree = new BehaviorTree();</span>
+<span class="line">        this.setupBehaviorTree();</span>
+<span class="line">    }</span>
+<span class="line"></span>
+<span class="line">    setupBehaviorTree() {</span>
+<span class="line">        // 构建行为树</span>
+<span class="line">        const root = new Selector([</span>
+<span class="line">            new Sequence([</span>
+<span class="line">                new Condition(() =&gt; this.hasTarget()),</span>
+<span class="line">                new Selector([</span>
+<span class="line">                    new Action(() =&gt; this.attack()),</span>
+<span class="line">                    new Action(() =&gt; this.chase())</span>
+<span class="line">                ])</span>
+<span class="line">            ]),</span>
+<span class="line">            new Action(() =&gt; this.patrol())</span>
+<span class="line">        ]);</span>
+<span class="line">        </span>
+<span class="line">        this.behaviorTree.setRoot(root);</span>
+<span class="line">    }</span>
+<span class="line"></span>
+<span class="line">    update(deltaTime, gameState) {</span>
+<span class="line">        // 更新感知系统</span>
+<span class="line">        this.updatePerception(gameState);</span>
+<span class="line">        </span>
+<span class="line">        // 执行行为树</span>
+<span class="line">        this.behaviorTree.execute(deltaTime);</span>
+<span class="line">        </span>
+<span class="line">        // 更新坦克控制</span>
+<span class="line">        this.updateTankControls(deltaTime);</span>
+<span class="line">    }</span>
+<span class="line"></span>
+<span class="line">    updatePerception(gameState) {</span>
+<span class="line">        const playerTank = gameState.playerTank;</span>
+<span class="line">        const distance = vec3.distance(this.tank.position, playerTank.position);</span>
+<span class="line">        </span>
+<span class="line">        // 视野检测</span>
+<span class="line">        if (distance &lt;= this.tank.viewDistance) {</span>
+<span class="line">            // 检查是否在视野角度内</span>
+<span class="line">            const dirToPlayer = vec3.normalize(vec3.subtract(playerTank.position, this.tank.position));</span>
+<span class="line">            const angle = vec3.angle(this.tank.forward, dirToPlayer);</span>
+<span class="line">            </span>
+<span class="line">            if (angle &lt;= this.tank.viewAngle) {</span>
+<span class="line">                // 射线检测遮挡</span>
+<span class="line">                if (!this.isObstructed(this.tank.position, playerTank.position, gameState.obstacles)) {</span>
+<span class="line">                    this.target = playerTank;</span>
+<span class="line">                }</span>
+<span class="line">            }</span>
+<span class="line">        }</span>
+<span class="line">    }</span>
+<span class="line"></span>
+<span class="line">    attack() {</span>
+<span class="line">        if (!this.target) return false;</span>
+<span class="line">        </span>
+<span class="line">        // 瞄准目标</span>
+<span class="line">        const dirToTarget = vec3.normalize(vec3.subtract(this.target.position, this.tank.position));</span>
+<span class="line">        this.tank.turretRotation = Math.atan2(dirToTarget.x, dirToTarget.z);</span>
+<span class="line">        </span>
+<span class="line">        // 射击</span>
+<span class="line">        if (this.isAimed() &amp;&amp; this.tank.canFire()) {</span>
+<span class="line">            this.tank.fire();</span>
+<span class="line">            return true;</span>
+<span class="line">        }</span>
+<span class="line">        </span>
+<span class="line">        return false;</span>
+<span class="line">    }</span>
+<span class="line"></span>
+<span class="line">    chase() {</span>
+<span class="line">        if (!this.target) return false;</span>
+<span class="line">        </span>
+<span class="line">        // 使用A*算法规划路径</span>
+<span class="line">        const path = this.pathfinder.findPath(</span>
+<span class="line">            this.tank.position, </span>
+<span class="line">            this.target.position, </span>
+<span class="line">            gameState.obstacles</span>
+<span class="line">        );</span>
+<span class="line">        </span>
+<span class="line">        if (path.length &gt; 1) {</span>
+<span class="line">            const nextWaypoint = path[1];</span>
+<span class="line">            this.moveTowards(nextWaypoint);</span>
+<span class="line">            return true;</span>
+<span class="line">        }</span>
+<span class="line">        </span>
+<span class="line">        return false;</span>
+<span class="line">    }</span>
+<span class="line"></span>
+<span class="line">    patrol() {</span>
+<span class="line">        // 巡逻行为</span>
+<span class="line">        if (!this.patrolTarget || vec3.distance(this.tank.position, this.patrolTarget) &lt; 2.0) {</span>
+<span class="line">            this.patrolTarget = this.getRandomPatrolPoint();</span>
+<span class="line">        }</span>
+<span class="line">        </span>
+<span class="line">        this.moveTowards(this.patrolTarget);</span>
+<span class="line">        return true;</span>
+<span class="line">    }</span>
+<span class="line"></span>
+<span class="line">    moveTowards(target) {</span>
+<span class="line">        const direction = vec3.normalize(vec3.subtract(target, this.tank.position));</span>
+<span class="line">        </span>
+<span class="line">        // 转向目标</span>
+<span class="line">        const targetRotation = Math.atan2(direction.x, direction.z);</span>
+<span class="line">        this.tank.rotation = this.lerp(this.tank.rotation, targetRotation, 0.1);</span>
+<span class="line">        </span>
+<span class="line">        // 前进</span>
+<span class="line">        this.tank.moveForward();</span>
+<span class="line">    }</span>
+<span class="line">}</span></code></pre>
+<h2>游戏系统集成</h2>
+<h3>主游戏循环</h3>
+<pre><code class="language-javascript"><span class="line">class TankWarGame {</span>
+<span class="line">    constructor(canvas) {</span>
+<span class="line">        this.canvas = canvas;</span>
+<span class="line">        this.renderEngine = new RenderEngine(canvas);</span>
+<span class="line">        this.physicsEngine = new PhysicsEngine();</span>
+<span class="line">        this.audioSystem = new AudioSystem();</span>
+<span class="line">        this.inputManager = new InputManager();</span>
+<span class="line">        </span>
+<span class="line">        this.scene = new Scene();</span>
+<span class="line">        this.camera = new Camera();</span>
+<span class="line">        this.gameState = &#39;playing&#39;;</span>
+<span class="line">        </span>
+<span class="line">        this.playerTank = new Tank(TankType.PLAYER);</span>
+<span class="line">        this.enemyTanks = [];</span>
+<span class="line">        </span>
+<span class="line">        this.initGame();</span>
+<span class="line">        this.startGameLoop();</span>
+<span class="line">    }</span>
+<span class="line"></span>
+<span class="line">    initGame() {</span>
+<span class="line">        // 创建地形</span>
+<span class="line">        this.createTerrain();</span>
+<span class="line">        </span>
+<span class="line">        // 创建敌方坦克</span>
+<span class="line">        this.spawnEnemyTanks(5);</span>
+<span class="line">        </span>
+<span class="line">        // 设置相机跟随</span>
+<span class="line">        this.camera.setTarget(this.playerTank);</span>
+<span class="line">        </span>
+<span class="line">        // 加载音效</span>
+<span class="line">        this.audioSystem.loadSounds({</span>
+<span class="line">            fire: &#39;sounds/tank_fire.ogg&#39;,</span>
+<span class="line">            explosion: &#39;sounds/explosion.ogg&#39;,</span>
+<span class="line">            engine: &#39;sounds/tank_engine.ogg&#39;</span>
+<span class="line">        });</span>
+<span class="line">    }</span>
+<span class="line"></span>
+<span class="line">    startGameLoop() {</span>
+<span class="line">        let lastTime = 0;</span>
+<span class="line">        </span>
+<span class="line">        const gameLoop = (currentTime) =&gt; {</span>
+<span class="line">            const deltaTime = (currentTime - lastTime) / 1000.0;</span>
+<span class="line">            lastTime = currentTime;</span>
+<span class="line">            </span>
+<span class="line">            this.update(deltaTime);</span>
+<span class="line">            this.render();</span>
+<span class="line">            </span>
+<span class="line">            requestAnimationFrame(gameLoop);</span>
+<span class="line">        };</span>
+<span class="line">        </span>
+<span class="line">        requestAnimationFrame(gameLoop);</span>
+<span class="line">    }</span>
+<span class="line"></span>
+<span class="line">    update(deltaTime) {</span>
+<span class="line">        // 更新输入</span>
+<span class="line">        this.inputManager.update();</span>
+<span class="line">        </span>
+<span class="line">        // 更新玩家坦克</span>
+<span class="line">        this.updatePlayerTank(deltaTime);</span>
+<span class="line">        </span>
+<span class="line">        // 更新敌方坦克AI</span>
+<span class="line">        this.enemyTanks.forEach(tank =&gt; {</span>
+<span class="line">            tank.ai.update(deltaTime, this.getGameState());</span>
+<span class="line">        });</span>
+<span class="line">        </span>
+<span class="line">        // 更新物理系统</span>
+<span class="line">        this.physicsEngine.update(deltaTime);</span>
+<span class="line">        </span>
+<span class="line">        // 更新相机</span>
+<span class="line">        this.camera.update(deltaTime);</span>
+<span class="line">        </span>
+<span class="line">        // 检查游戏结束条件</span>
+<span class="line">        this.checkGameOver();</span>
+<span class="line">    }</span>
+<span class="line"></span>
+<span class="line">    render() {</span>
+<span class="line">        // 渲染3D场景</span>
+<span class="line">        this.renderEngine.render(this.scene, this.camera);</span>
+<span class="line">        </span>
+<span class="line">        // 渲染UI</span>
+<span class="line">        this.renderUI();</span>
+<span class="line">    }</span>
+<span class="line"></span>
+<span class="line">    renderUI() {</span>
+<span class="line">        const ctx = this.canvas.getContext(&#39;2d&#39;);</span>
+<span class="line">        </span>
+<span class="line">        // 绘制血量条</span>
+<span class="line">        this.drawHealthBar(ctx, this.playerTank.health);</span>
+<span class="line">        </span>
+<span class="line">        // 绘制弹药数</span>
+<span class="line">        this.drawAmmoCounter(ctx, this.playerTank.ammo);</span>
+<span class="line">        </span>
+<span class="line">        // 绘制小地图</span>
+<span class="line">        this.drawMiniMap(ctx);</span>
+<span class="line">    }</span>
+<span class="line">}</span></code></pre>
+<h2>性能优化策略</h2>
+<h3>1. 渲染优化</h3>
+<ul>
+<li><strong>视锥剔除</strong>: 只渲染相机视野内的对象</li>
+<li><strong>LOD系统</strong>: 根据距离使用不同详细度的模型</li>
+<li><strong>实例化渲染</strong>: 批量渲染相同的对象</li>
+<li><strong>纹理合并</strong>: 减少纹理切换</li>
+</ul>
+<h3>2. 物理优化</h3>
+<ul>
+<li><strong>空间分割</strong>: 使用空间网格加速碰撞检测</li>
+<li><strong>睡眠系统</strong>: 静止物体不参与物理计算</li>
+<li><strong>简化碰撞体</strong>: 使用简单形状代替复杂模型</li>
+</ul>
+<h3>3. AI优化</h3>
+<ul>
+<li><strong>行为缓存</strong>: 缓存AI决策结果</li>
+<li><strong>分帧更新</strong>: AI在不同帧更新，分散计算负载</li>
+<li><strong>层次化决策</strong>: 粗略决策 + 精细调整</li>
+</ul>
+<h2>项目特色与创新</h2>
+<h3>1. 现代WebGL技术应用</h3>
+<ul>
+<li>使用WebGL 2.0的高级特性</li>
+<li>自定义着色器实现复杂光照效果</li>
+<li>PBR(物理基础渲染)材质系统</li>
+</ul>
+<h3>2. 完整的游戏架构</h3>
+<ul>
+<li>模块化的引擎设计</li>
+<li>可扩展的组件系统</li>
+<li>数据驱动的游戏逻辑</li>
+</ul>
+<h3>3. 智能AI系统</h3>
+<ul>
+<li>行为树驱动的AI逻辑</li>
+<li>A*路径规划算法</li>
+<li>真实的感知和决策系统</li>
+</ul>
+<h3>4. 沉浸式游戏体验</h3>
+<ul>
+<li>真实的物理模拟</li>
+<li>立体声音效系统</li>
+<li>流畅的相机控制</li>
+</ul>
+<h2>技术收获与思考</h2>
+<h3>WebGL深度应用</h3>
+<ul>
+<li>掌握了现代3D图形编程技术</li>
+<li>理解了GPU渲染管线的工作原理</li>
+<li>学会了着色器编程和优化技巧</li>
+</ul>
+<h3>游戏引擎架构</h3>
+<ul>
+<li>设计了可扩展的引擎架构</li>
+<li>实现了高效的系统间通信</li>
+<li>建立了完整的资源管理体系</li>
+</ul>
+<h3>性能优化实践</h3>
+<ul>
+<li>学会了多种性能分析方法</li>
+<li>实施了有效的优化策略</li>
+<li>平衡了功能复杂度与性能表现</li>
+</ul>
+<h2>未来发展方向</h2>
+<ol>
+<li><strong>多人在线</strong>: WebSocket实现实时对战</li>
+<li><strong>地形编辑器</strong>: 可视化关卡编辑工具</li>
+<li><strong>粒子系统</strong>: 更丰富的视觉效果</li>
+<li><strong>VR支持</strong>: WebXR实现虚拟现实体验</li>
+<li><strong>移动端适配</strong>: 触屏操作和性能优化</li>
+</ol>
+<h2>总结</h2>
+<p>这个WebGL 3D坦克大战游戏项目成功展示了现代Web技术在复杂3D游戏开发中的应用潜力。通过自研引擎架构、智能AI系统和精细的性能优化，实现了媲美原生游戏的体验效果。</p>
+<p>项目不仅是技术能力的体现，更是对现代游戏开发工程实践的完整演练，为后续更复杂的3D应用开发积累了宝贵经验。</p>
+
+    </article>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
+<script>
+Prism.highlightAll();
+document.querySelectorAll('article pre').forEach(pre => {
+    const code = pre.querySelector('code');
+    if (!code) return;
+    const toolbar = document.createElement('div');
+    toolbar.className = 'code-toolbar';
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'Copy';
+    btn.onclick = () => {
+        navigator.clipboard.writeText(code.textContent).then(() => {
+            btn.textContent = 'Copied!';
+            btn.classList.add('copied');
+            setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+        });
+    };
+    toolbar.appendChild(btn);
+    pre.parentNode.insertBefore(toolbar, pre);
+});
+</script>
+</body>
+</html>

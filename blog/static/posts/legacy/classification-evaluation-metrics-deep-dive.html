@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>分类模型评估指标权威指南：从混淆矩阵到AUC与F1分数 | Yuxu Ge</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <style>
+        :root {
+            --black: #111;
+            --dark-grey: #444;
+            --off-white: #f4f4f4;
+            --vermilion: #C41E3A;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--black);
+            background-color: var(--off-white);
+        }
+
+        a { color: var(--vermilion); text-decoration: none; }
+        a:hover { opacity: 0.75; }
+
+        .layout { min-height: 100vh; }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed; top: 0; left: 0;
+            width: 320px; height: 100vh;
+            background: var(--black); color: var(--off-white);
+            padding: 3rem 2rem;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .sidebar-top { display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .avatar { display: block; width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--vermilion); margin-bottom: 1.5rem; overflow: hidden; transition: transform 0.2s ease; }
+        .avatar:hover { opacity: 1; transform: scale(1.05); }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .name-block { margin-bottom: 0.5rem; }
+        h1 { font-size: 1.8rem; font-weight: 700; letter-spacing: 1px; color: var(--off-white); }
+        .title-role { font-size: 0.9rem; color: #888; margin-top: 0.25rem; font-weight: 400; }
+        .contact-block { margin-top: 2.5rem; width: 100%; }
+        .social-links { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+        .social-links a { display: flex; align-items: center; gap: 0.75rem; width: 160px; color: var(--off-white); opacity: 0.7; padding: 0.5rem 0.75rem; border-radius: 4px; font-size: 0.9rem; transition: all 0.2s; }
+        .social-links a:hover { color: var(--vermilion); opacity: 1; background: rgba(255,255,255,0.05); }
+        .social-links svg { width: 20px; height: 20px; flex-shrink: 0; }
+        .social-links .orcid-link { font-size: 0.68rem; gap: 0.5rem; white-space: nowrap; }
+        .sidebar-footer { text-align: center; font-size: 0.75rem; color: #555; }
+
+        /* Content */
+        .content { margin-left: 320px; padding: 3rem 4rem; max-width: 900px; }
+        .back-link { display: inline-block; font-size: 0.85rem; margin-bottom: 2rem; color: var(--dark-grey); }
+        .back-link:hover { color: var(--vermilion); }
+
+        /* Article */
+        article h1 { font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.3; color: var(--black); }
+        article h2 { font-size: 1.4rem; font-weight: 600; margin: 2rem 0 1rem; color: var(--black); }
+        article h3 { font-size: 1.1rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--black); }
+        article p { margin-bottom: 1rem; color: var(--dark-grey); }
+        article ul, article ol { margin: 1rem 0 1rem 1.5rem; color: var(--dark-grey); }
+        article li { margin-bottom: 0.5rem; }
+        article strong { color: var(--black); }
+        article code { font-family: "SF Mono", Monaco, monospace; font-size: 0.9em; background: #e8e8e8; padding: 0.15em 0.4em; border-radius: 3px; }
+        article pre { margin: 1rem 0; border-radius: 6px; overflow-x: auto; background: #2d2d2d; padding: 1rem; }
+        article pre code { background: none; padding: 0; font-size: 0.75em; white-space: pre !important; counter-reset: line; display: block; color: #ccc; }
+        article pre code .line { counter-increment: line; }
+        article pre code .line::before { content: counter(line); display: inline-block; width: 2.5em; margin-right: 1em; text-align: right; color: #666; user-select: none; }
+        .code-toolbar { display: flex; justify-content: flex-start; padding: 0.35rem 0.5rem; background: #3a3a3a; border-radius: 6px 6px 0 0; }
+        .code-toolbar + pre { margin-top: 0; border-radius: 0 0 6px 6px; }
+        .copy-btn { padding: 0.2rem 0.5rem; font-size: 0.7rem; background: #555; color: #fff; border: none; border-radius: 3px; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover, .copy-btn:active { background: #777; }
+        .copy-btn.copied { background: #2a2; }
+        article blockquote { border-left: 3px solid var(--vermilion); padding-left: 1rem; margin: 1rem 0; color: #666; font-style: italic; }
+        article hr { border: none; border-top: 1px solid #ddd; margin: 2rem 0; }
+        article table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+        article th, article td { border: 1px solid #ddd; padding: 0.5rem 0.75rem; text-align: left; }
+        article th { background: #e8e8e8; font-weight: 600; }
+        article img { max-width: 100%; height: auto; display: block; margin: 1.5rem 0; border-radius: 6px; }
+
+        .loading { text-align: center; padding: 3rem; color: #888; }
+        .error { color: var(--vermilion); }
+
+        /* KaTeX math styles */
+        .katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.5rem 0; }
+        .katex { font-size: 1.1em; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .sidebar { position: relative; width: 100%; height: auto; padding: 2rem 1.5rem 1rem; }
+            .social-links { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+            .social-links a, .social-links .orcid-link { width: auto; padding: 0.5rem; font-size: 0; gap: 0; }
+            .social-links svg { width: 24px; height: 24px; }
+            .social-links .hide-mobile { display: none; }
+            .sidebar-footer { margin-top: 1rem; }
+            .content { margin-left: 0; padding: 2rem 1rem; }
+        }
+        @media (max-width: 480px) {
+            .sidebar { padding: 1.5rem 1rem 1rem; }
+            .avatar { width: 80px; height: 80px; }
+            h1 { font-size: 1.4rem; }
+            article h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar" id="sidebar-content"></aside>
+    <script src="/components/sidebar.js"></script>
+
+    <main class="content">
+        <a href="/blog/" class="back-link">← Back to Blog</a>
+        <article>
+<hr>
+<h2>date: 2024-01-01
+tags: [ai, machine learning, classification, metrics, python]
+legacy: true</h2>
+<h1>分类模型评估指标权威指南：从混淆矩阵到AUC与F1分数</h1>
+<table>
+<thead>
+<tr>
+<th align="left"></th>
+<th align="left">预测为正 (Predicted Positive)</th>
+<th align="left">预测为负 (Predicted Negative)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>真实为正 (Actual Positive)</strong></td>
+<td align="left">TP (True Positive)</td>
+<td align="left">FN (False Negative)</td>
+</tr>
+<tr>
+<td align="left"><strong>真实为负 (Actual Negative)</strong></td>
+<td align="left">FP (False Positive)</td>
+<td align="left">TN (True Negative)</td>
+</tr>
+</tbody></table>
+<ul>
+<li><strong>TP (真正例)</strong>: 真实为正，预测也为正。</li>
+<li><strong>FN (假负例)</strong>: 真实为正，但预测为负（第 I 类错误）。</li>
+<li><strong>FP (假正例)</strong>: 真实为负，但预测为正（第 II 类错误）。</li>
+<li><strong>TN (真负例)</strong>: 真实为负，预测也为负。</li>
+</ul>
+<p>几乎所有后续的分类指标，都是基于这四个基础统计量计算得出的。</p>
+<h3>2. 点值型核心指标 (Threshold-Dependent)</h3>
+<p>这类指标的计算依赖于一个确定的分类阈值（通常默认为 0.5）。</p>
+<table>
+<thead>
+<tr>
+<th align="left">指标</th>
+<th align="left">公式</th>
+<th align="left">直觉解读</th>
+<th align="left">适用场景</th>
+<th align="left">注意事项</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Accuracy (准确率)</strong></td>
+<td align="left">$\frac{TP+TN}{TP+FP+FN+TN}$</td>
+<td align="left">“总对率”，预测正确的样本占总样本的比例。</td>
+<td align="left">类别均衡且两类错误成本相近的场景。</td>
+<td align="left">在极度不均衡数据中极易失真。</td>
+</tr>
+<tr>
+<td align="left"><strong>Precision (精确率/查准率)</strong></td>
+<td align="left">$\frac{TP}{TP+FP}$</td>
+<td align="left">在所有被预测为正的样本中，有多大比例是真的正例。</td>
+<td align="left">垃圾邮件过滤、医学诊断（确诊阶段），即“宁可放过，不可杀错”。</td>
+<td align="left">忽视了 FN；受阈值影响大。</td>
+</tr>
+<tr>
+<td align="left"><strong>Recall (召回率/查全率)</strong></td>
+<td align="left">$\frac{TP}{TP+FN}$</td>
+<td align="left">在所有真实为正的样本中，有多大比例被模型成功“召回”。</td>
+<td align="left">疾病筛查、金融欺诈检测，即“宁可错杀，不可放过”。</td>
+<td align="left">忽视了 FP；单看 Recall 无法评估误报成本。</td>
+</tr>
+<tr>
+<td align="left"><strong>Specificity (特异性)</strong></td>
+<td align="left">$\frac{TN}{TN+FP}$</td>
+<td align="left">在所有真实为负的样本中，有多大比例被模型正确识别。</td>
+<td align="left">信贷风控（避免错误拒绝优质客户）。</td>
+<td align="left">与 Recall (TPR) 共同构成 ROC 曲线。</td>
+</tr>
+<tr>
+<td align="left"><strong>F1-Score</strong></td>
+<td align="left">$2 \cdot \frac{\text{Precision} \cdot \text{Recall}}{\text{Precision} + \text{Recall}}$</td>
+<td align="left">Precision 和 Recall 的调和平均数。</td>
+<td align="left">当 P 和 R 同等重要时，作为综合性指标。</td>
+<td align="left">对每个类别计算可得 Macro-F1。</td>
+</tr>
+<tr>
+<td align="left"><strong>Fβ-Score</strong></td>
+<td align="left">$(1+\beta^2) \frac{\text{P} \cdot \text{R}}{\beta^2 P + R}$</td>
+<td align="left">F1 的泛化形式，通过 β 调节 P/R 的权重。</td>
+<td align="left">当 Recall 比 Precision 更重要时（如 β=2），或反之（如 β=0.5）。</td>
+<td align="left">β 的选择需要基于业务场景的先验知识。</td>
+</tr>
+<tr>
+<td align="left"><strong>Balanced Accuracy</strong></td>
+<td align="left">$\frac{\text{Recall} + \text{Specificity}}{2}$</td>
+<td align="left">宏观 Recall，对不均衡数据友好。</td>
+<td align="left">欺诈检测、罕见病识别。</td>
+<td align="left">仍然依赖于固定的分类阈值。</td>
+</tr>
+<tr>
+<td align="left"><strong>MCC (马修斯相关系数)</strong></td>
+<td align="left">$\frac{TP \cdot TN - FP \cdot FN}{\sqrt{(TP+FP)(TP+FN)(TN+FP)(TN+FN)}}$</td>
+<td align="left">一个介于 -1 到 1 之间的相关系数。</td>
+<td align="left">极度不均衡的二分类任务。</td>
+<td align="left">全面利用四格信息，被认为是更均衡的指标。</td>
+</tr>
+</tbody></table>
+<h3>3. 阈值曲线类指标 (Threshold-Independent)</h3>
+<p>这类指标通过改变分类阈值来评估模型在所有可能阈值下的整体性能。</p>
+<table>
+<thead>
+<tr>
+<th align="left">指标</th>
+<th align="left">构造方式</th>
+<th align="left">何时优先使用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>ROC 曲线 &amp; AUC</strong></td>
+<td align="left">以 (FPR, TPR) 即 (1-Specificity, Recall) 为坐标，随阈值从 1 到 0 变化绘制曲线。AUC 是曲线下面积。</td>
+<td align="left">类别相对均衡；需要评估模型整体的排序能力；分类阈值待定或成本未知时。</td>
+</tr>
+<tr>
+<td align="left"><strong>PR 曲线 &amp; AUPRC</strong></td>
+<td align="left">以 (Recall, Precision) 为坐标绘制曲线。AUPRC (或 AP) 是曲线下面积。</td>
+<td align="left">正样本非常稀少（如广告点击率预测）；更关注假正例（FP）带来的影响时。</td>
+</tr>
+</tbody></table>
+<p><strong>核心建议</strong>：在处理不均衡数据时，<strong>PR 曲线及其 AUPRC</strong> 比 ROC-AUC 更能真实地反映模型的性能，因为 ROC-AUC 在海量负样本（TN）存在时，其值可能虚高，给人以模型性能很好的错觉。</p>
+<h3>4. 概率质量指标</h3>
+<p>这类指标直接评估模型输出概率的质量，而非最终的分类标签。</p>
+<table>
+<thead>
+<tr>
+<th align="left">指标</th>
+<th align="left">含义</th>
+<th align="left">适用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Log Loss (对数损失)</strong></td>
+<td align="left">也称交叉熵损失。对预测概率与真实标签的差异进行对数惩罚，越小越好。</td>
+<td align="left">模型训练和调优时的核心损失函数。</td>
+</tr>
+<tr>
+<td align="left"><strong>Brier Score (布里尔分数)</strong></td>
+<td align="left">预测概率与真实结果（0或1）之间均方误差，越小越好。</td>
+<td align="left">天气预报、体育比赛预测等需要评估概率准确性的场景。</td>
+</tr>
+<tr>
+<td align="left"><strong>ECE / MCE</strong></td>
+<td align="left">期望/最大校准误差。衡量预测概率与真实频率的一致性。</td>
+<td align="left">当需要模型的置信度高度可信时，如在 AutoML 或风险决策系统中。</td>
+</tr>
+</tbody></table>
+<h3>5. 多分类与不均衡的加权方式</h3>
+<p>在多分类任务中，我们需要将每个类别的指标汇集成一个总分。</p>
+<ul>
+<li><strong>Micro 平均 (Micro Average)</strong>：将所有类别的 TP, FP, FN, TN 汇总后，再计算单一指标。它给予每个<strong>样本</strong>相同的权重，适合评估模型的整体性能。</li>
+<li><strong>Macro 平均 (Macro Average)</strong>：先为每个类别计算指标，然后取算术平均。它给予每个<strong>类别</strong>相同的权重，能更好地反映模型在稀有类别上的表现。</li>
+<li><strong>Weighted 平均 (Weighted Average)</strong>：在 Macro 平均的基础上，按每个类别的样本数量进行加权。是前两者的一种折中。</li>
+</ul>
+<p><strong>建议</strong>：先绘制类别分布图。如果数据长尾分布严重，应同时报告 <strong>Macro-F1</strong> 和 <strong>Micro-F1</strong>，以全面了解模型在多数类和少数类上的表现。</p>
+<h3>6. 常见误区与排雷</h3>
+<ol>
+<li><strong>高 Accuracy ≠ 好模型</strong>：在 99:1 的数据上，一个把所有样本都预测为负类的“傻瓜模型”也能达到 99% 的准确率。</li>
+<li><strong>混淆 Precision 和 Recall</strong>：请记住，Recall (召回率) 关心的是 FN (漏报)，而 Precision (精确率) 关心的是 FP (误报)。</li>
+<li><strong>F1 不是万金油</strong>：如果业务场景更在乎召回（如癌症筛查），应使用 F2-Score；如果更在乎精确（如法务文档检索），则使用 F0.5-Score。</li>
+<li><strong>跨数据集比较 AUC</strong>：不同测试集的正负样本比例和难度不同，会导致 ROC/PR 曲线形态变化，因此 AUC 值不应直接跨数据集进行横向比较。</li>
+<li><strong>混淆分类能力与概率校准</strong>：一个模型的 ROC-AUC 可能很高（排序能力强），但其输出的概率可能严重失准。在生产环境中，需要同时关注 LogLoss 或 ECE。</li>
+</ol>
+<h3>7. Python 快速实战模板</h3>
+<p>下面是一个使用 <code>scikit-learn</code> 在一个（不均衡的）多分类数据集上计算多种指标的模板。</p>
+<pre><code class="language-python"><span class="line">import numpy as np</span>
+<span class="line">from sklearn.metrics import (accuracy_score, precision_recall_fscore_support,</span>
+<span class="line">                             roc_auc_score, average_precision_score,</span>
+<span class="line">                             log_loss, brier_score_loss, confusion_matrix, matthews_corrcoef)</span>
+<span class="line">from sklearn.datasets import make_classification</span>
+<span class="line">from sklearn.model_selection import train_test_split</span>
+<span class="line">from sklearn.linear_model import LogisticRegression</span>
+<span class="line"></span>
+<span class="line"># 1. 生成一个不均衡的多分类数据集</span>
+<span class="line">X, y = make_classification(n_samples=3000, n_classes=3,</span>
+<span class="line">                           weights=[0.7, 0.25, 0.05], # 类别权重不均衡</span>
+<span class="line">                           n_informative=5, n_redundant=2,</span>
+<span class="line">                           flip_y=0.03, random_state=42)</span>
+<span class="line">X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, stratify=y, random_state=42)</span>
+<span class="line"></span>
+<span class="line"># 2. 训练一个简单的逻辑回归模型</span>
+<span class="line">model = LogisticRegression(max_iter=1000, multi_class=&quot;ovr&quot;, random_state=42)</span>
+<span class="line">model.fit(X_train, y_train)</span>
+<span class="line">y_proba = model.predict_proba(X_test)</span>
+<span class="line">y_pred = model.predict(X_test)</span>
+<span class="line"></span>
+<span class="line"># 3. 计算各类指标</span>
+<span class="line">print(&quot;--- Classification Metrics ---&quot;)</span>
+<span class="line"></span>
+<span class="line"># 点值指标 (加权平均)</span>
+<span class="line">acc = accuracy_score(y_test, y_pred)</span>
+<span class="line">prec, rec, f1, _ = precision_recall_fscore_support(y_test, y_pred, average=&#39;weighted&#39;)</span>
+<span class="line">mcc = matthews_corrcoef(y_test, y_pred)</span>
+<span class="line"></span>
+<span class="line">print(f&quot;Accuracy (Weighted) : {acc:.4f}&quot;)</span>
+<span class="line">print(f&quot;Precision (Weighted): {prec:.4f}&quot;)</span>
+<span class="line">print(f&quot;Recall (Weighted)   : {rec:.4f}&quot;)</span>
+<span class="line">print(f&quot;F1-Score (Weighted) : {f1:.4f}&quot;)</span>
+<span class="line">print(f&quot;Matthews Corr Coef  : {mcc:.4f}\n&quot;)</span>
+<span class="line"></span>
+<span class="line"># 宏平均指标 (更能反映小类性能)</span>
+<span class="line">macro_prec, macro_rec, macro_f1, _ = precision_recall_fscore_support(y_test, y_pred, average=&#39;macro&#39;)</span>
+<span class="line">print(f&quot;Precision (Macro)   : {macro_prec:.4f}&quot;)</span>
+<span class="line">print(f&quot;Recall (Macro)      : {macro_rec:.4f}&quot;)</span>
+<span class="line">print(f&quot;F1-Score (Macro)    : {macro_f1:.4f}\n&quot;)</span>
+<span class="line"></span>
+<span class="line"></span>
+<span class="line"># 概率质量指标</span>
+<span class="line">logloss = log_loss(y_test, y_proba)</span>
+<span class="line"># Brier Score 需要对每个类分别计算后平均</span>
+<span class="line">brier = np.mean([brier_score_loss((y_test == k), y_proba[:, k]) for k in np.unique(y_test)])</span>
+<span class="line"></span>
+<span class="line">print(f&quot;LogLoss             : {logloss:.4f}&quot;)</span>
+<span class="line">print(f&quot;Brier Score (Avg)   : {brier:.4f}&quot;)</span></code></pre>
+<p><strong>输出示例</strong>:</p>
+<pre><code><span class="line">--- Classification Metrics ---</span>
+<span class="line">Accuracy (Weighted) : 0.8944</span>
+<span class="line">Precision (Weighted): 0.8861</span>
+<span class="line">Recall (Weighted)   : 0.8944</span>
+<span class="line">F1-Score (Weighted) : 0.8862</span>
+<span class="line">Matthews Corr Coef  : 0.7183</span>
+<span class="line"></span>
+<span class="line">Precision (Macro)   : 0.7989</span>
+<span class="line">Recall (Macro)      : 0.7311</span>
+<span class="line">F1-Score (Macro)    : 0.7552</span>
+<span class="line"></span>
+<span class="line">LogLoss             : 0.2819</span>
+<span class="line">Brier Score (Avg)   : 0.0542</span></code></pre>
+<p>观察到 Macro-F1 (0.755) 明显低于 Weighted-F1 (0.886)，这揭示了模型在稀有类别上的性能较差，这是仅看总体准确率时容易忽略的。</p>
+<h3>8. 选指标的小流程</h3>
+<ol>
+<li><strong>明确业务目标</strong>：定义 FP 和 FN 的业务成本。哪个错误更“贵”？</li>
+<li><strong>选择点值指标</strong>：如果成本已知，可以优化分类阈值并重点关注 Precision, Recall, 或 Fβ-Score。如果未知或同等重要，F1-Score 是一个好的起点。</li>
+<li><strong>评估概率质量</strong>：在模型上线前，务必检查其概率输出是否校准。使用 LogLoss 作为训练损失，并用 ECE 或 Brier Score 进行验证。</li>
+<li><strong>监控整体性能</strong>：在模型迭代或 A/B 测试中，使用 AUPRC (不均衡数据) 或 ROC-AUC (均衡数据) 来评估模型的整体排序能力。</li>
+<li><strong>处理不均衡问题</strong>：如果 Macro-F1 远低于 Micro-F1，分析混淆矩阵，找出模型在哪些小类上表现不佳。考虑使用重采样技术、代价敏感学习或 Focal Loss 等方法来提升模型在少数类上的性能。</li>
+</ol>
+
+    </article>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
+<script>
+Prism.highlightAll();
+document.querySelectorAll('article pre').forEach(pre => {
+    const code = pre.querySelector('code');
+    if (!code) return;
+    const toolbar = document.createElement('div');
+    toolbar.className = 'code-toolbar';
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'Copy';
+    btn.onclick = () => {
+        navigator.clipboard.writeText(code.textContent).then(() => {
+            btn.textContent = 'Copied!';
+            btn.classList.add('copied');
+            setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+        });
+    };
+    toolbar.appendChild(btn);
+    pre.parentNode.insertBefore(toolbar, pre);
+});
+</script>
+</body>
+</html>

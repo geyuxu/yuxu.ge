@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>基于摘要认证的第三方接口调用方案 | Yuxu Ge</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <style>
+        :root {
+            --black: #111;
+            --dark-grey: #444;
+            --off-white: #f4f4f4;
+            --vermilion: #C41E3A;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--black);
+            background-color: var(--off-white);
+        }
+
+        a { color: var(--vermilion); text-decoration: none; }
+        a:hover { opacity: 0.75; }
+
+        .layout { min-height: 100vh; }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed; top: 0; left: 0;
+            width: 320px; height: 100vh;
+            background: var(--black); color: var(--off-white);
+            padding: 3rem 2rem;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .sidebar-top { display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .avatar { display: block; width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--vermilion); margin-bottom: 1.5rem; overflow: hidden; transition: transform 0.2s ease; }
+        .avatar:hover { opacity: 1; transform: scale(1.05); }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .name-block { margin-bottom: 0.5rem; }
+        h1 { font-size: 1.8rem; font-weight: 700; letter-spacing: 1px; color: var(--off-white); }
+        .title-role { font-size: 0.9rem; color: #888; margin-top: 0.25rem; font-weight: 400; }
+        .contact-block { margin-top: 2.5rem; width: 100%; }
+        .social-links { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+        .social-links a { display: flex; align-items: center; gap: 0.75rem; width: 160px; color: var(--off-white); opacity: 0.7; padding: 0.5rem 0.75rem; border-radius: 4px; font-size: 0.9rem; transition: all 0.2s; }
+        .social-links a:hover { color: var(--vermilion); opacity: 1; background: rgba(255,255,255,0.05); }
+        .social-links svg { width: 20px; height: 20px; flex-shrink: 0; }
+        .social-links .orcid-link { font-size: 0.68rem; gap: 0.5rem; white-space: nowrap; }
+        .sidebar-footer { text-align: center; font-size: 0.75rem; color: #555; }
+
+        /* Content */
+        .content { margin-left: 320px; padding: 3rem 4rem; max-width: 900px; }
+        .back-link { display: inline-block; font-size: 0.85rem; margin-bottom: 2rem; color: var(--dark-grey); }
+        .back-link:hover { color: var(--vermilion); }
+
+        /* Article */
+        article h1 { font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.3; color: var(--black); }
+        article h2 { font-size: 1.4rem; font-weight: 600; margin: 2rem 0 1rem; color: var(--black); }
+        article h3 { font-size: 1.1rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--black); }
+        article p { margin-bottom: 1rem; color: var(--dark-grey); }
+        article ul, article ol { margin: 1rem 0 1rem 1.5rem; color: var(--dark-grey); }
+        article li { margin-bottom: 0.5rem; }
+        article strong { color: var(--black); }
+        article code { font-family: "SF Mono", Monaco, monospace; font-size: 0.9em; background: #e8e8e8; padding: 0.15em 0.4em; border-radius: 3px; }
+        article pre { margin: 1rem 0; border-radius: 6px; overflow-x: auto; background: #2d2d2d; padding: 1rem; }
+        article pre code { background: none; padding: 0; font-size: 0.75em; white-space: pre !important; counter-reset: line; display: block; color: #ccc; }
+        article pre code .line { counter-increment: line; }
+        article pre code .line::before { content: counter(line); display: inline-block; width: 2.5em; margin-right: 1em; text-align: right; color: #666; user-select: none; }
+        .code-toolbar { display: flex; justify-content: flex-start; padding: 0.35rem 0.5rem; background: #3a3a3a; border-radius: 6px 6px 0 0; }
+        .code-toolbar + pre { margin-top: 0; border-radius: 0 0 6px 6px; }
+        .copy-btn { padding: 0.2rem 0.5rem; font-size: 0.7rem; background: #555; color: #fff; border: none; border-radius: 3px; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover, .copy-btn:active { background: #777; }
+        .copy-btn.copied { background: #2a2; }
+        article blockquote { border-left: 3px solid var(--vermilion); padding-left: 1rem; margin: 1rem 0; color: #666; font-style: italic; }
+        article hr { border: none; border-top: 1px solid #ddd; margin: 2rem 0; }
+        article table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+        article th, article td { border: 1px solid #ddd; padding: 0.5rem 0.75rem; text-align: left; }
+        article th { background: #e8e8e8; font-weight: 600; }
+        article img { max-width: 100%; height: auto; display: block; margin: 1.5rem 0; border-radius: 6px; }
+
+        .loading { text-align: center; padding: 3rem; color: #888; }
+        .error { color: var(--vermilion); }
+
+        /* KaTeX math styles */
+        .katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.5rem 0; }
+        .katex { font-size: 1.1em; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .sidebar { position: relative; width: 100%; height: auto; padding: 2rem 1.5rem 1rem; }
+            .social-links { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+            .social-links a, .social-links .orcid-link { width: auto; padding: 0.5rem; font-size: 0; gap: 0; }
+            .social-links svg { width: 24px; height: 24px; }
+            .social-links .hide-mobile { display: none; }
+            .sidebar-footer { margin-top: 1rem; }
+            .content { margin-left: 0; padding: 2rem 1rem; }
+        }
+        @media (max-width: 480px) {
+            .sidebar { padding: 1.5rem 1rem 1rem; }
+            .avatar { width: 80px; height: 80px; }
+            h1 { font-size: 1.4rem; }
+            article h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar" id="sidebar-content"></aside>
+    <script src="/components/sidebar.js"></script>
+
+    <main class="content">
+        <a href="/blog/" class="back-link">← Back to Blog</a>
+        <article>
+<hr>
+<h2>date: 2022-01-05
+tags: [service_governance]
+legacy: true</h2>
+<h1>基于摘要认证的第三方接口调用方案</h1>
+<pre><code class="language-json"><span class="line">{</span>
+<span class="line">    &quot;credential&quot;: &quot;key:46d47e6c6d8e0c826e214447f80627b6e527c0bfa52323332adb6479c639b5ee=version:v1&quot;,</span>
+<span class="line">    &quot;page_size&quot;: 10,</span>
+<span class="line">    &quot;page&quot;: 1</span>
+<span class="line">}</span></code></pre>
+<p>上述请求体中的 <code>credential</code> 字段即为摘要凭证，其中 <code>key:...=version:v1</code> 由两部分组成：<code>key</code> 后紧跟的一长串十六进制字符串是通过 SHA-256 算法计算的 client_id 摘要值（即哈希值），<code>version:v1</code> 表示认证方案版本1。<code>key</code>和<code>version</code>之间用等号隔开。服务器端据此可以识别认证版本并采用对应的校验逻辑。</p>
+<ul>
+<li>工作流程概括：<ul>
+<li>注册阶段：服务平台为每个第三方系统分配唯一的 client_id （可看作共享密钥），并在数据库中保存该第三方的身份标识以及其被授权的接口权限列表。</li>
+<li>请求阶段：第三方系统调用任意受保护的API时，在请求数据中加入按照规定算法生成的 <code>credential</code> 字段。</li>
+<li>校验阶段：服务器根据 <code>credential</code> 中标明的版本选择对应的验证算法（如 v1 版本采用 SHA-256 摘要比对）。若提供的摘要与某个已注册 client_id 的摘要匹配，则说明请求者身份有效。</li>
+<li>授权阶段：服务器查验调用方的权限配置。如果身份与权限均满足，则允许执行后续业务逻辑；否则拒绝请求。</li>
+</ul>
+</li>
+</ul>
+<p>通过以上流程，实现了对第三方接口调用的身份验证和权限控制。整个方案设计轻量简洁，只需一次摘要计算和比对即可确认身份，同时支持在数据库中灵活添加新的第三方及其权限配置，具备良好的动态扩展性。</p>
+<h2>认证字段生成方法</h2>
+<pre><code class="language-python"><span class="line">import hashlib</span>
+<span class="line"></span>
+<span class="line">client_id = &quot;alpha_secret&quot;  # 示例客户端密钥</span>
+<span class="line">digest = hashlib.sha256(client_id.encode(&#39;utf-8&#39;)).hexdigest()</span>
+<span class="line">credential = f&quot;key:{digest}=version:v1&quot;</span>
+<span class="line"></span>
+<span class="line">print(credential)</span></code></pre>
+<h2>服务器端认证与授权流程</h2>
+<pre><code class="language-python"><span class="line">import hashlib</span>
+<span class="line"></span>
+<span class="line">clients_db = {</span>
+<span class="line">    &quot;alpha_system&quot;: {</span>
+<span class="line">        &quot;secret&quot;: &quot;alpha_secret&quot;,</span>
+<span class="line">        &quot;permissions&quot;: [&quot;service:getUserContact&quot;, &quot;data:listRecords&quot;]</span>
+<span class="line">    }</span>
+<span class="line">}</span>
+<span class="line"></span>
+<span class="line">def check_credential(credential_str, required_permission):</span>
+<span class="line">    try:</span>
+<span class="line">        hash_part, version_part = credential_str.split(&#39;=&#39;, 1)</span>
+<span class="line">        version = version_part.split(&#39;:&#39;, 1)[1]</span>
+<span class="line">        provided_hash = hash_part.split(&#39;:&#39;, 1)[1]</span>
+<span class="line">    except Exception:</span>
+<span class="line">        return False, &quot;格式错误&quot;</span>
+<span class="line"></span>
+<span class="line">    if version != &quot;v1&quot;:</span>
+<span class="line">        return False, &quot;版本不支持&quot;</span>
+<span class="line"></span>
+<span class="line">    for name, info in clients_db.items():</span>
+<span class="line">        expected_hash = hashlib.sha256(info[&quot;secret&quot;].encode()).hexdigest()</span>
+<span class="line">        if expected_hash == provided_hash:</span>
+<span class="line">            if required_permission in info[&quot;permissions&quot;]:</span>
+<span class="line">                return True, f&quot;授权成功:{name}&quot;</span>
+<span class="line">            return False, &quot;无权限&quot;</span>
+<span class="line">    return False, &quot;身份无效&quot;</span></code></pre>
+<h2>安全性分析</h2>
+<ul>
+<li><p>优点  </p>
+<ul>
+<li>摘要算法不可逆，隐藏调用方标识  </li>
+<li>实现简单，性能开销低  </li>
+<li>版本号可扩展</li>
+</ul>
+</li>
+<li><p>风险  </p>
+<ul>
+<li>容易遭受重放攻击  </li>
+<li>不涵盖请求完整性  </li>
+<li>密钥弱或泄露风险</li>
+</ul>
+</li>
+</ul>
+<h2>后续改进</h2>
+<ul>
+<li>引入时间戳 / nonce 防重放  </li>
+<li>采用 HMAC 或签名算法覆盖请求关键字段  </li>
+<li>引入 RBAC / ABAC 提升权限管理  </li>
+<li>区分公开ID与私密密钥  </li>
+<li>定期轮换密钥并全程使用 TLS</li>
+</ul>
+<h2>总结</h2>
+<p>该摘要认证方案以最小代价满足了基础身份验证和授权需求，适用于对性能和集成成本敏感、受信环境相对可控的接口调用场景。如需更高安全性，可按需引入时间戳、HMAC、签名以及细粒度权限模型等防护措施。</p>
+
+    </article>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
+<script>
+Prism.highlightAll();
+document.querySelectorAll('article pre').forEach(pre => {
+    const code = pre.querySelector('code');
+    if (!code) return;
+    const toolbar = document.createElement('div');
+    toolbar.className = 'code-toolbar';
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'Copy';
+    btn.onclick = () => {
+        navigator.clipboard.writeText(code.textContent).then(() => {
+            btn.textContent = 'Copied!';
+            btn.classList.add('copied');
+            setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+        });
+    };
+    toolbar.appendChild(btn);
+    pre.parentNode.insertBefore(toolbar, pre);
+});
+</script>
+</body>
+</html>

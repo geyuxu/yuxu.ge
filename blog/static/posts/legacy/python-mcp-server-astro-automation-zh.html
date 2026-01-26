@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>用Python脚本快速实现MCP服务器：Astro博客自动化实践 | Yuxu Ge</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <style>
+        :root {
+            --black: #111;
+            --dark-grey: #444;
+            --off-white: #f4f4f4;
+            --vermilion: #C41E3A;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--black);
+            background-color: var(--off-white);
+        }
+
+        a { color: var(--vermilion); text-decoration: none; }
+        a:hover { opacity: 0.75; }
+
+        .layout { min-height: 100vh; }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed; top: 0; left: 0;
+            width: 320px; height: 100vh;
+            background: var(--black); color: var(--off-white);
+            padding: 3rem 2rem;
+            display: flex; flex-direction: column; justify-content: space-between;
+        }
+        .sidebar-top { display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .avatar { display: block; width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--vermilion); margin-bottom: 1.5rem; overflow: hidden; transition: transform 0.2s ease; }
+        .avatar:hover { opacity: 1; transform: scale(1.05); }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .name-block { margin-bottom: 0.5rem; }
+        h1 { font-size: 1.8rem; font-weight: 700; letter-spacing: 1px; color: var(--off-white); }
+        .title-role { font-size: 0.9rem; color: #888; margin-top: 0.25rem; font-weight: 400; }
+        .contact-block { margin-top: 2.5rem; width: 100%; }
+        .social-links { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+        .social-links a { display: flex; align-items: center; gap: 0.75rem; width: 160px; color: var(--off-white); opacity: 0.7; padding: 0.5rem 0.75rem; border-radius: 4px; font-size: 0.9rem; transition: all 0.2s; }
+        .social-links a:hover { color: var(--vermilion); opacity: 1; background: rgba(255,255,255,0.05); }
+        .social-links svg { width: 20px; height: 20px; flex-shrink: 0; }
+        .social-links .orcid-link { font-size: 0.68rem; gap: 0.5rem; white-space: nowrap; }
+        .sidebar-footer { text-align: center; font-size: 0.75rem; color: #555; }
+
+        /* Content */
+        .content { margin-left: 320px; padding: 3rem 4rem; max-width: 900px; }
+        .back-link { display: inline-block; font-size: 0.85rem; margin-bottom: 2rem; color: var(--dark-grey); }
+        .back-link:hover { color: var(--vermilion); }
+
+        /* Article */
+        article h1 { font-size: 2rem; font-weight: 700; margin-bottom: 1.5rem; line-height: 1.3; color: var(--black); }
+        article h2 { font-size: 1.4rem; font-weight: 600; margin: 2rem 0 1rem; color: var(--black); }
+        article h3 { font-size: 1.1rem; font-weight: 600; margin: 1.5rem 0 0.75rem; color: var(--black); }
+        article p { margin-bottom: 1rem; color: var(--dark-grey); }
+        article ul, article ol { margin: 1rem 0 1rem 1.5rem; color: var(--dark-grey); }
+        article li { margin-bottom: 0.5rem; }
+        article strong { color: var(--black); }
+        article code { font-family: "SF Mono", Monaco, monospace; font-size: 0.9em; background: #e8e8e8; padding: 0.15em 0.4em; border-radius: 3px; }
+        article pre { margin: 1rem 0; border-radius: 6px; overflow-x: auto; background: #2d2d2d; padding: 1rem; }
+        article pre code { background: none; padding: 0; font-size: 0.75em; white-space: pre !important; counter-reset: line; display: block; color: #ccc; }
+        article pre code .line { counter-increment: line; }
+        article pre code .line::before { content: counter(line); display: inline-block; width: 2.5em; margin-right: 1em; text-align: right; color: #666; user-select: none; }
+        .code-toolbar { display: flex; justify-content: flex-start; padding: 0.35rem 0.5rem; background: #3a3a3a; border-radius: 6px 6px 0 0; }
+        .code-toolbar + pre { margin-top: 0; border-radius: 0 0 6px 6px; }
+        .copy-btn { padding: 0.2rem 0.5rem; font-size: 0.7rem; background: #555; color: #fff; border: none; border-radius: 3px; cursor: pointer; transition: all 0.2s; }
+        .copy-btn:hover, .copy-btn:active { background: #777; }
+        .copy-btn.copied { background: #2a2; }
+        article blockquote { border-left: 3px solid var(--vermilion); padding-left: 1rem; margin: 1rem 0; color: #666; font-style: italic; }
+        article hr { border: none; border-top: 1px solid #ddd; margin: 2rem 0; }
+        article table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+        article th, article td { border: 1px solid #ddd; padding: 0.5rem 0.75rem; text-align: left; }
+        article th { background: #e8e8e8; font-weight: 600; }
+        article img { max-width: 100%; height: auto; display: block; margin: 1.5rem 0; border-radius: 6px; }
+
+        .loading { text-align: center; padding: 3rem; color: #888; }
+        .error { color: var(--vermilion); }
+
+        /* KaTeX math styles */
+        .katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.5rem 0; }
+        .katex { font-size: 1.1em; }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .sidebar { position: relative; width: 100%; height: auto; padding: 2rem 1.5rem 1rem; }
+            .social-links { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+            .social-links a, .social-links .orcid-link { width: auto; padding: 0.5rem; font-size: 0; gap: 0; }
+            .social-links svg { width: 24px; height: 24px; }
+            .social-links .hide-mobile { display: none; }
+            .sidebar-footer { margin-top: 1rem; }
+            .content { margin-left: 0; padding: 2rem 1rem; }
+        }
+        @media (max-width: 480px) {
+            .sidebar { padding: 1.5rem 1rem 1rem; }
+            .avatar { width: 80px; height: 80px; }
+            h1 { font-size: 1.4rem; }
+            article h1 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="layout">
+    <aside class="sidebar" id="sidebar-content"></aside>
+    <script src="/components/sidebar.js"></script>
+
+    <main class="content">
+        <a href="/blog/" class="back-link">← Back to Blog</a>
+        <article>
+<hr>
+<h2>date: 2025-07-27
+tags: [devops, mcp, python, astro, 自动化, fastmcp]
+legacy: true</h2>
+<h1>用Python脚本快速实现MCP服务器：Astro博客自动化实践</h1>
+<p>在深入代码之前，我们先来认识一下核心库 <code>fastmcp</code>。你可以把它想象成一根魔法棒，只要对着一个普通的Python函数挥舞一下（即使用一个装饰器），这个函数就能立刻被封装成一个符合MCP协议标准的工具，可供AI客户端调用。</p>
+<p><code>FastMCP</code> 的设计哲学是&quot;简约而不简单&quot;。它为你处理了所有与MCP协议相关的底层细节，如JSON-RPC通信、工具发现和异步执行。开发者唯一需要做的，就是专注于编写工具函数的业务逻辑。</p>
+<p>在我们的脚本中，<code>FastMCP</code> 的使用体现在以下两行核心代码上：</p>
+<pre><code class="language-python"><span class="line"># 1. 初始化一个MCP应用实例</span>
+<span class="line">app = FastMCP(</span>
+<span class="line">    name=&quot;Astro Deployment MCP Server&quot;,</span>
+<span class="line">    instructions=&quot;Exposes publish_article and commit_code tools for an Astro blog&quot;,</span>
+<span class="line">)</span>
+<span class="line"></span>
+<span class="line"># 2. 使用 @app.tool() 装饰器将函数注册为工具</span>
+<span class="line">@app.tool()</span>
+<span class="line">async def my_tool_function():</span>
+<span class="line">    # ... tool logic ...</span>
+<span class="line">    return &quot;Tool execution result&quot;</span></code></pre>
+<p><code>name</code> 和 <code>instructions</code> 字段是元数据，它们会告诉MCP客户端这个服务器的用途和它所提供的能力，非常有助于AI理解上下文。而 <code>@app.tool()</code> 装饰器则是这一切的核心，它自动将任何被其装饰的 <code>async</code> 函数注册为可供远程调用的工具。</p>
+<h2>目标：自动化Astro博客的工作流</h2>
+<p>我们的目标非常明确：让AI能够独立完成发布一篇新博客文章的完整流程。这个流程可以分解为三个核心动作：</p>
+<ol>
+<li><strong>保存文章</strong>：将AI生成的Markdown内容保存到Astro项目指定的目录中。</li>
+<li><strong>提交代码</strong>：将新添加的文章文件通过Git进行暂存（add）、提交（commit）和推送（push）。</li>
+<li><strong>发布网站</strong>：执行部署命令，将最新的博客内容发布到线上服务器。</li>
+</ol>
+<p>接下来，我们将逐一分析实现这三个动作的工具函数。</p>
+<h2>代码实现详解</h2>
+<p>我们的MCP服务器是一个独立的Python脚本 <code>astro_mcp_server.py</code>。让我们看看它的构成。</p>
+<h3>1. 环境配置与辅助函数</h3>
+<p>脚本首先要做的是确定Astro博客项目的根目录。通过读取环境变量 <code>ASTRO_DIR</code>，我们实现了配置的灵活性，同时提供了一个默认值 <code>./astro</code>。这里巧妙地使用了 <code>pathlib</code> 库，它是现代Python中处理文件路径的最佳实践。</p>
+<pre><code class="language-python"><span class="line">import os</span>
+<span class="line">import pathlib</span>
+<span class="line"></span>
+<span class="line"># 配置</span>
+<span class="line">ASTRO_DIR = pathlib.Path(os.getenv(&quot;ASTRO_DIR&quot;, &quot;./astro&quot;)).expanduser().resolve()</span>
+<span class="line">if not ASTRO_DIR.is_dir():</span>
+<span class="line">    raise RuntimeError(</span>
+<span class="line">        f&quot;ASTRO_DIR {ASTRO_DIR} does not exist or is not a directory&quot;</span>
+<span class="line">    )</span></code></pre>
+<p>为了避免在每个工具函数中重复编写执行命令行指令的代码，我们定义了一个辅助函数 <code>_run</code>。它使用 <code>subprocess.run</code> 在指定的 <code>ASTRO_DIR</code> 目录中执行命令，并捕获其标准输出和错误流。返回的日志中包含了执行的命令本身，这对于调试和追踪非常有帮助。</p>
+<pre><code class="language-python"><span class="line">import subprocess</span>
+<span class="line">from typing import List</span>
+<span class="line"></span>
+<span class="line">def _run(cmd: List[str]) -&gt; str:</span>
+<span class="line">    &quot;&quot;&quot;在ASTRO_DIR中运行命令并返回输出&quot;&quot;&quot;</span>
+<span class="line">    proc = subprocess.run(cmd, cwd=ASTRO_DIR, capture_output=True, text=True)</span>
+<span class="line">    banner = f&quot;$ {&#39; &#39;.join(cmd)}\n&quot;</span>
+<span class="line">    return banner + proc.stdout + proc.stderr</span></code></pre>
+<h3>2. 工具一：<code>save_article</code> - 智能保存文章</h3>
+<p>这是最核心的工具之一。它接收目录、文件名和文章内容作为参数，并将其写入文件。</p>
+<pre><code class="language-python"><span class="line">@app.tool()</span>
+<span class="line">async def save_article(directory: str, content: str, filename: str) -&gt; str:</span>
+<span class="line">    &quot;&quot;&quot;Save article content to a file in the specified directory within ASTRO_DIR.&quot;&quot;&quot;</span>
+<span class="line">    import datetime</span>
+<span class="line">    </span>
+<span class="line">    target_dir = ASTRO_DIR / directory</span>
+<span class="line">    target_dir.mkdir(parents=True, exist_ok=True)</span>
+<span class="line">    </span>
+<span class="line">    file_path = target_dir / filename</span>
+<span class="line">    </span>
+<span class="line">    # 为Markdown文件添加frontmatter</span>
+<span class="line">    if filename.endswith((&#39;.md&#39;, &#39;.mdx&#39;)) and not content.startswith(&#39;---&#39;):</span>
+<span class="line">        title = filename.replace(&#39;.md&#39;, &#39;&#39;).replace(&#39;.mdx&#39;, &#39;&#39;).replace(&#39;-&#39;, &#39; &#39;).title()</span>
+<span class="line">        lines = content.split(&#39;\n&#39;)</span>
+<span class="line">        for line in lines[:5]:</span>
+<span class="line">            if line.startswith(&#39;# &#39;):</span>
+<span class="line">                title = line[2:].strip()</span>
+<span class="line">                break</span>
+<span class="line">        </span>
+<span class="line">        frontmatter = f&quot;&quot;&quot;---</span>
+<span class="line">title: &quot;{title}&quot;</span>
+<span class="line">pubDate: {datetime.date.today().isoformat()}</span>
+<span class="line">description: &quot;Article published via MCP&quot;</span>
+<span class="line">author: &quot;AI Assistant&quot;</span>
+<span class="line">---</span>
+<span class="line"></span>
+<span class="line">&quot;&quot;&quot;</span>
+<span class="line">        content = frontmatter + content</span>
+<span class="line">    </span>
+<span class="line">    file_path.write_text(content, encoding=&#39;utf-8&#39;)</span>
+<span class="line">    return f&quot;Successfully saved article to: {file_path}&quot;</span></code></pre>
+<p>这个函数最亮眼的部分是它<strong>智能添加Frontmatter</strong>的逻辑。Frontmatter是静态网站生成器（如Astro, Hugo, Jekyll）用来定义页面元数据（如标题、发布日期）的块。此脚本的逻辑是：</p>
+<ol>
+<li>检查文件是否为Markdown (<code>.md</code> 或 <code>.mdx</code>)。</li>
+<li>检查内容是否已经包含Frontmatter (<code>---</code>)。</li>
+<li>如果需要添加，它会智能地推断文章标题：优先使用文件名，但如果文章开头几行内找到了一个H1标题（<code># </code>），则会使用该H1标题。</li>
+<li>自动生成包含标题、当前日期、描述和作者的Frontmatter，并将其添加到文章内容的最前面。</li>
+</ol>
+<p>这个小小的功能极大地提升了AI生成文章的规范性，无需AI客户端操心Frontmatter的格式细节。</p>
+<h3>3. 工具二：<code>commit_code</code> - 自动化版本控制</h3>
+<p>文章保存后，下一步就是将其纳入版本控制。<code>commit_code</code> 工具封装了标准的Git工作流。</p>
+<pre><code class="language-python"><span class="line">@app.tool()</span>
+<span class="line">async def commit_code(message: str = &quot;chore: automated commit&quot;) -&gt; str:</span>
+<span class="line">    &quot;&quot;&quot;Stage, commit, and push code changes in ASTRO_DIR.&quot;&quot;&quot;</span>
+<span class="line">    outputs: List[str] = []</span>
+<span class="line">    </span>
+<span class="line">    outputs.append(_run([&quot;git&quot;, &quot;add&quot;, &quot;-A&quot;]))</span>
+<span class="line">    </span>
+<span class="line">    commit_result = _run([&quot;git&quot;, &quot;commit&quot;, &quot;-m&quot;, message])</span>
+<span class="line">    outputs.append(commit_result)</span>
+<span class="line">    </span>
+<span class="line">    if &quot;nothing to commit&quot; not in commit_result:</span>
+<span class="line">        outputs.append(_run([&quot;git&quot;, &quot;push&quot;]))</span>
+<span class="line">    else:</span>
+<span class="line">        outputs.append(&quot;No changes to push.\n&quot;)</span>
+<span class="line">    </span>
+<span class="line">    return &quot;\n&quot;.join(outputs)</span></code></pre>
+<p>这个函数按顺序执行 <code>git add -A</code>、<code>git commit</code> 和 <code>git push</code>。它还包含一个实用的检查：只有当 <code>git commit</code> 成功创建了一个新的提交时（即输出中不包含 &quot;nothing to commit&quot;），它才会执行 <code>git push</code>，避免了不必要的推送操作。函数的返回值是所有Git命令的完整输出，便于AI客户端了解每一步的执行情况。</p>
+<h3>4. 工具三：<code>publish_article</code> - 一键发布</h3>
+<p>这是最简单但也是最终临门一脚的工具。它只做一件事：执行部署命令。</p>
+<pre><code class="language-python"><span class="line">@app.tool()</span>
+<span class="line">async def publish_article() -&gt; str:</span>
+<span class="line">    &quot;&quot;&quot;Deploy the Astro blog to production by running npm run deploy.&quot;&quot;&quot;</span>
+<span class="line">    return _run([&quot;npm&quot;, &quot;run&quot;, &quot;deploy&quot;])</span></code></pre>
+<p>该工具假设你的Astro项目 <code>package.json</code> 文件中已经定义了一个名为 <code>deploy</code> 的脚本，该脚本负责处理所有构建和部署到生产环境的逻辑（例如，推送到Vercel、Netlify或你自己的服务器）。这种设计将部署的复杂性与MCP服务器本身解耦，非常灵活。</p>
+<h2>如何运行与使用</h2>
+<p>现在我们已经拥有了全套工具，如何让它工作起来呢？</p>
+<h3>1. 准备工作</h3>
+<ul>
+<li>确保你的系统安装了Python 3。</li>
+<li>安装 <code>fastmcp</code> 库：<code>pip install fastmcp</code>。</li>
+<li>准备一个Astro博客项目，并确保它是一个Git仓库。</li>
+<li>在Astro项目的 <code>package.json</code> 中，添加一个 <code>deploy</code> 脚本。例如：<pre><code class="language-json"><span class="line">&quot;scripts&quot;: {</span>
+<span class="line">  &quot;dev&quot;: &quot;astro dev&quot;,</span>
+<span class="line">  &quot;start&quot;: &quot;astro dev&quot;,</span>
+<span class="line">  &quot;build&quot;: &quot;astro build&quot;,</span>
+<span class="line">  &quot;preview&quot;: &quot;astro preview&quot;,</span>
+<span class="line">  &quot;deploy&quot;: &quot;astro build &amp;&amp; gh-pages -d dist --branch gh-pages&quot;</span>
+<span class="line">}</span></code></pre>
+</li>
+</ul>
+<h3>2. 运行MCP服务器</h3>
+<ul>
+<li>将 <code>astro_mcp_server.py</code> 脚本放置在你的工作区。</li>
+<li>在终端中，设置 <code>ASTRO_DIR</code> 环境变量，指向你的博客项目根目录：<pre><code class="language-bash"><span class="line">export ASTRO_DIR=&quot;/path/to/your/astro-blog&quot;</span></code></pre>
+</li>
+<li>运行脚本：<pre><code class="language-bash"><span class="line">python3 astro_mcp_server.py</span></code></pre>
+</li>
+</ul>
+<p>执行后，脚本不会有任何输出，它会静默地在后台等待来自标准输入的MCP指令。</p>
+<h3>3. 与MCP客户端交互</h3>
+<p>这个脚本本身是一个&quot;服务器&quot;，它需要一个&quot;客户端&quot;来与之对话。这个客户端通常是AI智能体所在的执行环境。客户端会启动 <code>astro_mcp_server.py</code> 作为一个子进程，然后通过该进程的标准输入（stdin）发送JSON-RPC格式的请求，并从其标准输出（stdout）读取结果。</p>
+<p>例如，一个AI客户端想调用 <code>save_article</code> 工具时，可能会向脚本的stdin写入类似下面这样的JSON数据：</p>
+<pre><code class="language-json"><span class="line">{</span>
+<span class="line">  &quot;jsonrpc&quot;: &quot;2.0&quot;, </span>
+<span class="line">  &quot;method&quot;: &quot;save_article&quot;, </span>
+<span class="line">  &quot;params&quot;: {</span>
+<span class="line">    &quot;directory&quot;: &quot;src/content/blog&quot;, </span>
+<span class="line">    &quot;filename&quot;: &quot;new-ai-article.md&quot;, </span>
+<span class="line">    &quot;content&quot;: &quot;# A New Beginning\n\nThis is my first article written by AI!&quot;</span>
+<span class="line">  }, </span>
+<span class="line">  &quot;id&quot;: 1</span>
+<span class="line">}</span></code></pre>
+<p>脚本在收到指令后，会执行对应的 <code>save_article</code> 函数，并将执行结果（成功信息或错误）以JSON-RPC响应的格式写回stdout，供客户端解析。</p>
+<h2>总结</h2>
+<p>我们通过一个不到100行的Python脚本，成功地为Astro博客构建了一个功能强大的自动化MCP服务器。这个案例完美地诠释了&quot;小而美&quot;的工程哲学：</p>
+<ul>
+<li><strong>简单直接</strong>：纯Python脚本，无复杂的框架或配置。</li>
+<li><strong>职责单一</strong>：专注于提供与博客交互的工具，不处理其他无关逻辑。</li>
+<li><strong>善用现有工具</strong>：通过 <code>subprocess</code> 巧妙地封装了 <code>git</code> 和 <code>npm</code> 等成熟的命令行工具，而不是在Python中重新发明轮子。</li>
+<li><strong>高度可扩展</strong>：需要新功能？只需添加一个新的 <code>@app.tool()</code> 装饰的函数即可。</li>
+</ul>
+<p>这种模式不仅限于Astro博客，你可以轻松地将其改造，用于自动化任何可以通过命令行或脚本操作的工作流——无论是管理云服务、操作数据库，还是控制本地的物联网设备。MCP和 <code>FastMCP</code> 为我们打开了一扇门，让AI能够更深入、更无缝地融入我们的数字生活和工作中。</p>
+
+    </article>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
+<script>
+Prism.highlightAll();
+document.querySelectorAll('article pre').forEach(pre => {
+    const code = pre.querySelector('code');
+    if (!code) return;
+    const toolbar = document.createElement('div');
+    toolbar.className = 'code-toolbar';
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'Copy';
+    btn.onclick = () => {
+        navigator.clipboard.writeText(code.textContent).then(() => {
+            btn.textContent = 'Copied!';
+            btn.classList.add('copied');
+            setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+        });
+    };
+    toolbar.appendChild(btn);
+    pre.parentNode.insertBefore(toolbar, pre);
+});
+</script>
+</body>
+</html>

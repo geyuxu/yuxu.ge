@@ -2,31 +2,90 @@
 
 Personal website for Yuxu Ge.
 
+## Structure
+
+```
+├── index.html              # Home page
+├── blog/                   # Blog system
+│   ├── index.html          # Blog list
+│   ├── post.html           # Dynamic post viewer
+│   ├── posts.json          # Post metadata (generated)
+│   ├── posts/              # Markdown posts
+│   ├── static/             # Static HTML (generated)
+│   └── medium/             # Medium-friendly HTML (generated)
+├── gallery/                # Photo gallery
+│   ├── index.html          # Gallery with timeline
+│   └── photos.json         # Album metadata (generated)
+├── photos/                 # Photo albums
+│   └── YYYY/YYYYMMDD-Location/
+│       ├── *.JPG
+│       └── description.md  # Album description (optional)
+├── components/             # Shared components
+│   └── sidebar.js          # Sidebar (injected via JS)
+└── scripts/                # Build scripts
+    └── compress-photos.sh  # Image compression
+```
+
 ## Development
 
 ```bash
 python3 -m http.server 8080
 ```
 
-## Build Blog
+## Build
 
 ```bash
-./build.sh           # Build both static + medium
-./build.sh --static  # Static only
-./build.sh --medium  # Medium only
+./build.sh           # Build all (posts.json + photos.json + static/medium)
+./build.sh --static  # Static HTML only
+./build.sh --medium  # Medium HTML only
 
-./clear.sh           # Clean all generated files
+./clear.sh           # Clean generated files
 ```
 
-With GitHub Gists:
+With GitHub Gists for code blocks:
 
 ```bash
 GITHUB_TOKEN_CRTATE_GIST=xxx ./build.sh
 ```
 
-Output:
-- `blog/static/` - Static HTML for crawlers
-- `blog/medium/` - Medium-friendly HTML (Gist links, table images)
+## Gallery
+
+Photo albums are organized by date:
+
+```
+photos/2026/20260120-Leeds/
+├── A7C00267.JPG
+├── A7C00274.JPG
+└── description.md    # Optional album description
+```
+
+Run `./build.sh` to regenerate `gallery/photos.json`.
+
+### Compress Photos
+
+```bash
+./scripts/compress-photos.sh           # Compress all
+./scripts/compress-photos.sh --dry-run # Preview only
+```
+
+Requires ImageMagick: `brew install imagemagick`
+
+## Blog Posts
+
+Create posts in `blog/posts/YYYY/` with YAML frontmatter:
+
+```markdown
+---
+date: 2026-01-26
+tags: [python, backend]
+description: Optional description
+---
+# Post Title
+
+Content...
+```
+
+Run `./build.sh` to regenerate `blog/posts.json`.
 
 ## SVG to PNG
 
@@ -36,16 +95,10 @@ magick input.svg output.png
 magick -density 300 input.svg -resize 512x512 output.png
 
 # Inkscape
-inkscape input.svg -o output.png
 inkscape input.svg -o output.png -w 512
 
 # librsvg
-rsvg-convert input.svg -o output.png
 rsvg-convert -w 512 -h 512 input.svg -o output.png
 ```
 
-Install (macOS):
-
-```bash
-brew install imagemagick inkscape librsvg
-```
+Install: `brew install imagemagick inkscape librsvg`

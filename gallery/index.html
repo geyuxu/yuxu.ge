@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery | Yuxu Ge</title>
+    <meta name="description" content="Photo gallery - moments captured through the lens.">
+    <style>
+        :root {
+            --black: #111;
+            --dark-grey: #444;
+            --off-white: #f4f4f4;
+            --vermilion: #C41E3A;
+            --sketch-color: #555;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--black);
+            background-color: var(--off-white);
+        }
+
+        a {
+            color: var(--vermilion);
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+        }
+
+        a:hover {
+            opacity: 0.75;
+        }
+
+        /* Layout */
+        .layout {
+            min-height: 100vh;
+        }
+
+        /* Sidebar styles */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 320px;
+            height: 100vh;
+            background: var(--black);
+            color: var(--off-white);
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .sidebar-top { display: flex; flex-direction: column; align-items: center; text-align: center; }
+        .avatar { display: block; width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--vermilion); margin-bottom: 1.5rem; overflow: hidden; transition: transform 0.2s ease; }
+        .avatar:hover { opacity: 1; transform: scale(1.05); }
+        .avatar img { width: 100%; height: 100%; object-fit: cover; }
+        .name-block { display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+        h1 { font-size: 1.8rem; font-weight: 700; letter-spacing: 1px; color: var(--off-white); }
+        .title-role { font-size: 0.9rem; color: #888; margin-top: 0.25rem; font-weight: 400; }
+        .contact-block { margin-top: 2.5rem; width: 100%; }
+        .social-links { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+        .social-links a { display: flex; align-items: center; gap: 0.75rem; width: 160px; color: var(--off-white); opacity: 0.7; transition: all 0.2s ease; padding: 0.5rem 0.75rem; border-radius: 4px; font-size: 0.9rem; }
+        .social-links a:hover { color: var(--vermilion); opacity: 1; background: rgba(255,255,255,0.05); }
+        .social-links svg { width: 20px; height: 20px; flex-shrink: 0; }
+        .social-links .orcid-link { font-size: 0.68rem; width: 160px; gap: 0.5rem; white-space: nowrap; }
+        .sidebar-footer { text-align: center; font-size: 0.75rem; color: #555; }
+
+        /* Content */
+        .content {
+            margin-left: 320px;
+            padding: 3rem 4rem;
+            min-height: 100vh;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            color: var(--dark-grey);
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-desc {
+            color: var(--dark-grey);
+            margin-bottom: 3rem;
+        }
+
+        /* Timeline Container */
+        .timeline {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Center line - hand-drawn style */
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 3px;
+            height: 100%;
+            background: repeating-linear-gradient(
+                to bottom,
+                var(--sketch-color) 0px,
+                var(--sketch-color) 8px,
+                transparent 8px,
+                transparent 12px
+            );
+            filter: url(#sketch-filter);
+        }
+
+        /* Year marker */
+        .year-marker {
+            position: relative;
+            width: 100%;
+            text-align: center;
+            margin: 2rem 0 1rem;
+            z-index: 2;
+        }
+
+        .year-marker span {
+            background: var(--off-white);
+            padding: 0.5rem 1.5rem;
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--sketch-color);
+            font-family: "Caveat", "Comic Sans MS", cursive;
+            letter-spacing: 2px;
+        }
+
+        /* Album section */
+        .album-section {
+            position: relative;
+            display: flex;
+            margin-bottom: 3rem;
+        }
+
+        .album-section.left {
+            flex-direction: row;
+        }
+
+        .album-section.right {
+            flex-direction: row-reverse;
+        }
+
+        /* Album content (photos grid) */
+        .album-content {
+            width: calc(50% - 40px);
+            padding: 0 1rem;
+        }
+
+        .album-section.left .album-content {
+            text-align: right;
+        }
+
+        .album-section.right .album-content {
+            text-align: left;
+        }
+
+        /* Timeline spacer */
+        .timeline-spacer {
+            width: 80px;
+            position: relative;
+            display: flex;
+            justify-content: center;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            top: 1rem;
+            width: 16px;
+            height: 16px;
+            background: var(--off-white);
+            border: 3px solid var(--sketch-color);
+            border-radius: 50%;
+            filter: url(#sketch-filter);
+        }
+
+        .timeline-line {
+            position: absolute;
+            top: 1.4rem;
+            width: 30px;
+            height: 2px;
+            background: var(--sketch-color);
+            filter: url(#sketch-filter);
+        }
+
+        .album-section.left .timeline-line {
+            right: 48px;
+        }
+
+        .album-section.right .timeline-line {
+            left: 48px;
+        }
+
+        /* Album header */
+        .album-header {
+            margin-bottom: 0.75rem;
+        }
+
+        .album-date {
+            font-size: 0.8rem;
+            color: var(--dark-grey);
+            font-family: "SF Mono", Monaco, monospace;
+        }
+
+        .album-location {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        /* Photo grid */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 0.5rem;
+        }
+
+        /* Photo thumbnail */
+        .photo-thumb {
+            position: relative;
+            border-radius: 6px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+        }
+
+        .photo-thumb:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+        }
+
+        .photo-thumb img {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            display: block;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .photo-thumb img.loaded {
+            opacity: 1;
+        }
+
+        .photo-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 0.4rem 0.5rem;
+            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            color: white;
+            font-size: 0.7rem;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .photo-thumb:hover .photo-caption {
+            opacity: 1;
+        }
+
+        /* Album description (opposite side) */
+        .album-desc {
+            width: calc(50% - 40px);
+            padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .album-section.left .album-desc {
+            text-align: left;
+        }
+
+        .album-section.right .album-desc {
+            text-align: right;
+        }
+
+        .album-desc-content {
+            font-size: 0.95rem;
+            color: var(--dark-grey);
+            line-height: 1.8;
+        }
+
+        .album-desc-content p {
+            margin-bottom: 0.75rem;
+        }
+
+        .album-desc-content p:last-child {
+            margin-bottom: 0;
+        }
+
+        /* Lightbox */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.95);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            color: white;
+            font-size: 2rem;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+
+        .lightbox-close:hover {
+            opacity: 1;
+        }
+
+        .lightbox-caption {
+            position: absolute;
+            bottom: 3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+            max-width: 80%;
+            padding: 0.5rem 1rem;
+            background: rgba(0,0,0,0.5);
+            border-radius: 4px;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                padding: 2rem 1.5rem 1rem;
+            }
+
+            .social-links { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+            .social-links a, .social-links .orcid-link { width: auto; padding: 0.5rem; font-size: 0; gap: 0; }
+            .social-links svg { width: 24px; height: 24px; }
+
+            .content {
+                margin-left: 0;
+                padding: 2rem 1rem;
+            }
+
+            /* Single column timeline on mobile */
+            .timeline::before {
+                left: 20px;
+            }
+
+            .album-section,
+            .album-section.left,
+            .album-section.right {
+                flex-direction: column;
+            }
+
+            .album-content,
+            .album-desc {
+                width: 100%;
+                padding-left: 50px;
+            }
+
+            .album-desc {
+                margin-top: 1rem;
+            }
+
+            .album-section.left .album-desc,
+            .album-section.right .album-desc {
+                text-align: left;
+            }
+
+            .album-section.left .album-content,
+            .album-section.right .album-content {
+                text-align: left;
+            }
+
+            .timeline-spacer {
+                position: absolute;
+                left: 0;
+                width: 40px;
+                height: 100%;
+            }
+
+            .timeline-dot {
+                left: 12px;
+            }
+
+            .timeline-line {
+                left: 28px !important;
+                right: auto !important;
+                width: 15px;
+            }
+
+            .photo-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+    <!-- Google Font for hand-drawn text -->
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- SVG Filter for hand-drawn effect -->
+<svg style="position: absolute; width: 0; height: 0;">
+    <defs>
+        <filter id="sketch-filter">
+            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="3" result="noise"/>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="1" xChannelSelector="R" yChannelSelector="G"/>
+        </filter>
+    </defs>
+</svg>
+
+<div class="layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar-content"></aside>
+    <script src="/components/sidebar.js"></script>
+
+    <!-- Content -->
+    <main class="content">
+        <a href="/" class="back-link">&larr; Back to Home</a>
+
+        <h2 class="page-title">Gallery</h2>
+        <p class="page-desc">Moments captured through the lens.</p>
+
+        <div class="timeline" id="timeline">
+            <!-- Photos will be loaded here -->
+        </div>
+    </main>
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+    <span class="lightbox-close">&times;</span>
+    <img src="" alt="">
+    <div class="lightbox-caption"></div>
+</div>
+
+<script>
+// Load photos from generated JSON
+fetch('/gallery/photos.json')
+    .then(r => r.json())
+    .then(photos => {
+        renderTimeline(photos);
+    })
+    .catch(() => {
+        document.getElementById('timeline').innerHTML = '<p>No photos yet.</p>';
+    });
+
+// Render timeline
+function renderTimeline(photos) {
+    const timeline = document.getElementById('timeline');
+    let html = '';
+    let currentYear = null;
+    let side = 'left';
+
+    photos.forEach(group => {
+        // Year marker
+        if (group.year !== currentYear) {
+            html += `<div class="year-marker"><span>${group.year}</span></div>`;
+            currentYear = group.year;
+        }
+
+        // Album section
+        html += `
+            <div class="album-section ${side}">
+                <div class="album-content">
+                    <div class="album-header">
+                        <div class="album-date">${group.date}</div>
+                        <div class="album-location">${group.location}</div>
+                    </div>
+                    <div class="photo-grid">
+        `;
+
+        // Photos in grid
+        group.images.forEach((img, idx) => {
+            const caption = group.captions && group.captions[idx] ? group.captions[idx] : '';
+            html += `
+                <div class="photo-thumb" onclick="openLightbox('${img}', '${caption.replace(/'/g, "\\'")}')">
+                    <img src="${img}" alt="${group.location}" loading="lazy" onload="this.classList.add('loaded')">
+                    ${caption ? `<div class="photo-caption">${caption}</div>` : ''}
+                </div>
+            `;
+        });
+
+        const desc = group.description || '';
+        html += `
+                    </div>
+                </div>
+                <div class="timeline-spacer">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-line"></div>
+                </div>
+                <div class="album-desc">
+                    <div class="album-desc-content">${desc}</div>
+                </div>
+            </div>
+        `;
+
+        side = side === 'left' ? 'right' : 'left';
+    });
+
+    timeline.innerHTML = html;
+}
+
+// Lightbox
+function openLightbox(src, caption) {
+    const lightbox = document.getElementById('lightbox');
+    lightbox.querySelector('img').src = src;
+    const captionEl = lightbox.querySelector('.lightbox-caption');
+    if (captionEl) {
+        captionEl.textContent = caption || '';
+        captionEl.style.display = caption ? 'block' : 'none';
+    }
+    lightbox.classList.add('active');
+}
+
+document.getElementById('lightbox').addEventListener('click', function(e) {
+    if (e.target === this || e.target.classList.contains('lightbox-close')) {
+        this.classList.remove('active');
+    }
+});
+
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        document.getElementById('lightbox').classList.remove('active');
+    }
+});
+
+</script>
+
+</body>
+</html>

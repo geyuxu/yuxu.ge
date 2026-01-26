@@ -1,14 +1,17 @@
 #!/bin/bash
-# Build blog (static + medium)
+# Build site
 # Usage:
-#   ./build.sh           # Build both
+#   ./build.sh           # Build all
 #   ./build.sh --static  # Static only
 #   ./build.sh --medium  # Medium only
 
-cd "$(dirname "$0")/blog"
+cd "$(dirname "$0")"
 
 # Generate posts.json from markdown frontmatter
-node build-posts-json.js
+node blog/build-posts-json.js
+
+# Generate photos.json from folder structure
+node gallery/build-photos-json.js
 
 # Build static/medium
-node build.js "$@"
+cd blog && node build.js "$@"

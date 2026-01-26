@@ -1,0 +1,41 @@
+[
+  {
+    "year": 2026,
+    "date": "2026-01-20",
+    "location": "Leeds",
+    "images": [
+      "/photos/2026/20260120-Leeds/A7C00267.JPG",
+      "/photos/2026/20260120-Leeds/A7C00274.JPG",
+      "/photos/2026/20260120-Leeds/A7C00281.JPG"
+    ],
+    "description": "A winter stroll through Leeds city centre. Victorian architecture meets modern commerce in this vibrant northern English city."
+  },
+  {
+    "year": 2026,
+    "date": "2026-01-12",
+    "location": "Nation Railway Museum",
+    "images": [
+      "/photos/2026/20260112-Nation Railway Museum/A7C00228.JPG",
+      "/photos/2026/20260112-Nation Railway Museum/A7C00229.JPG",
+      "/photos/2026/20260112-Nation Railway Museum/A7C00230.JPG",
+      "/photos/2026/20260112-Nation Railway Museum/A7C00231.JPG",
+      "/photos/2026/20260112-Nation Railway Museum/A7C00233.JPG",
+      "/photos/2026/20260112-Nation Railway Museum/A7C00237.JPG"
+    ],
+    "description": "The National Railway Museum in York — one of the world's largest railway museums. From steam locomotives to modern high-speed trains, celebrating two centuries of British rail heritage."
+  },
+  {
+    "year": 2026,
+    "date": "2026-01-02",
+    "location": "Paris The Louvre",
+    "images": [
+      "/photos/2026/20260102-Paris The Louvre/A7C09822.JPG",
+      "/photos/2026/20260102-Paris The Louvre/A7C09826.JPG",
+      "/photos/2026/20260102-Paris The Louvre/A7C09828.JPG",
+      "/photos/2026/20260102-Paris The Louvre/A7C09833.JPG",
+      "/photos/2026/20260102-Paris The Louvre/A7C09838.JPG",
+      "/photos/2026/20260102-Paris The Louvre/A7C09853.JPG"
+    ],
+    "description": "The Louvre, Paris — home to the Mona Lisa and countless masterpieces. A treasure trove of art spanning millennia, from ancient Egyptian artifacts to Renaissance paintings."
+  }
+]

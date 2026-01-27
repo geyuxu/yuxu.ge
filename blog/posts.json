@@ -48,12 +48,6 @@
     ]
   },
   {
-    "slug": "posts/Slide Draft",
-    "title": "Slide Draft",
-    "date": "2025-11-12",
-    "type": "powerpoint"
-  },
-  {
     "slug": "posts/legacy/ai-assisted-development-lessons-learned-zh",
     "title": "我的AI编程伙伴差点让项目翻车：一个惨痛的教训",
     "date": "2025-07-27",

@@ -442,35 +442,47 @@
         }
     }
 
-    // Render PowerPoint file (using Office Online viewer or download)
-    function renderPowerPoint(pptxUrl, title, baseUrl) {
+    // Render PowerPoint file - with PDF preview if available
+    async function renderPowerPoint(postName, title, article) {
         const downloadSvg = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
         </svg>`;
 
-        // Check if running locally - Office Online needs public URL
-        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const pptxUrl = `${postName}.pptx`;
+        const pdfUrl = `${postName}.pdf`;
 
-        if (isLocal) {
-            return `<div class="ppt-container">
-                <h1>${escapeHtml(title)}</h1>
-                <a href="${pptxUrl}" download class="doc-download">${downloadSvg} Download PowerPoint (.pptx)</a>
-                <div style="background: #f5f5f5; border: 1px solid #ddd; border-radius: 6px; padding: 3rem; text-align: center; color: #666;">
-                    <p style="margin-bottom: 1rem;">PowerPoint preview requires a public URL.</p>
-                    <p style="font-size: 0.85rem;">Preview will be available after deployment. Please download to view locally.</p>
-                </div>
-            </div>`;
-        }
+        // Check if PDF preview exists
+        try {
+            const pdfResponse = await fetch(pdfUrl, { method: 'HEAD' });
+            if (pdfResponse.ok) {
+                // PDF exists - show PDF preview with both download options
+                article.innerHTML = `<div class="ppt-container">
+                    <h1>${escapeHtml(title)}</h1>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <a href="${pdfUrl}" download class="doc-download">${downloadSvg} Download PDF</a>
+                        <a href="${pptxUrl}" download class="doc-download" style="background: #D24726;">${downloadSvg} Download PPTX</a>
+                    </div>
+                    <iframe class="pdf-viewer" src="${pdfUrl}" type="application/pdf"></iframe>
+                </div>`;
+                return;
+            }
+        } catch (e) {}
 
-        // Try to use Office Online viewer (works for public URLs)
-        const fullUrl = new URL(pptxUrl, baseUrl).href;
-        const viewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(fullUrl)}`;
+        // No PDF - show download only
+        const pptIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" style="width: 80px; height: 80px; margin-bottom: 1rem;">
+            <rect x="16" y="8" width="64" height="80" rx="4" fill="#D24726"/>
+            <rect x="24" y="20" width="48" height="56" rx="2" fill="white"/>
+            <text x="48" y="56" text-anchor="middle" font-size="20" font-weight="bold" fill="#D24726">PPT</text>
+        </svg>`;
 
-        return `<div class="ppt-container">
+        article.innerHTML = `<div class="ppt-container">
             <h1>${escapeHtml(title)}</h1>
             <a href="${pptxUrl}" download class="doc-download">${downloadSvg} Download PowerPoint (.pptx)</a>
-            <iframe class="ppt-viewer" src="${viewerUrl}" frameborder="0"></iframe>
-            <p style="color: #888; font-size: 0.85rem; margin-top: 0.5rem;">If preview doesn't load, please download the file.</p>
+            <div style="background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px; padding: 3rem; text-align: center; min-height: 300px; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                ${pptIcon}
+                <p style="color: #666; margin-bottom: 0.5rem;">PowerPoint presentations cannot be previewed in browser.</p>
+                <p style="color: #888; font-size: 0.85rem;">Please download the file to view it.</p>
+            </div>
         </div>`;
     }
 
@@ -512,7 +524,7 @@
     }
 
     if (postName) {
-        // Try different file types in order: md -> ipynb -> pdf -> txt -> docx -> xlsx -> pptx
+        // Try different file types in order: md -> ipynb -> pptx -> pdf -> txt -> docx -> xlsx -> csv
         const article = document.getElementById('article');
         const filename = postName.split('/').pop();
         const title = titleFromFilename(filename);
@@ -537,7 +549,16 @@
                 if (h1) document.title = h1.textContent + ' | Yuxu Ge';
                 postProcessArticle();
             })
-            .catch(() => fetch(`${postName}.pdf`, { method: 'HEAD' }))
+            .catch(() => fetch(`${postName}.pptx`, { method: 'HEAD' }))
+            .then(async r => {
+                if (r && r.ok) {
+                    await renderPowerPoint(postName, title, article);
+                    document.title = title + ' | Yuxu Ge';
+                    throw new Error('done');
+                }
+                throw new Error('not found');
+            })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.pdf`, { method: 'HEAD' }); })
             .then(r => {
                 if (r && r.ok) {
                     article.innerHTML = renderPdf(`${postName}.pdf`, title);
@@ -566,15 +587,6 @@
             .then(async r => {
                 if (r && r.ok) {
                     await renderExcel(`${postName}.xlsx`, title, article);
-                    document.title = title + ' | Yuxu Ge';
-                    throw new Error('done');
-                }
-                throw new Error('not found');
-            })
-            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.pptx`, { method: 'HEAD' }); })
-            .then(r => {
-                if (r && r.ok) {
-                    article.innerHTML = renderPowerPoint(`${postName}.pptx`, title, window.location.origin);
                     document.title = title + ' | Yuxu Ge';
                     throw new Error('done');
                 }

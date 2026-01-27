@@ -2,15 +2,37 @@
 
 Personal website for Yuxu Ge.
 
+## Quick Start
+
+```bash
+# One-click setup (installs dependencies)
+./setup.sh
+
+# Start local server
+python3 -m http.server 8080
+
+# Build site
+./build.sh
+```
+
+## Features
+
+- **Multi-format Blog**: Supports Markdown, Jupyter Notebooks, PDF, Word, Excel, PowerPoint, TXT, CSV
+- **Vector Search**: Hybrid search with semantic + full-text capabilities
+- **Photo Gallery**: Timeline-based gallery with album support
+- **Client-side Rendering**: No server required, works on any static hosting
+
 ## Structure
 
 ```
 ├── index.html              # Home page
 ├── blog/                   # Blog system
-│   ├── index.html          # Blog list
-│   ├── post.html           # Dynamic post viewer
+│   ├── index.html          # Blog list with search
+│   ├── post.html           # Dynamic post viewer (multi-format)
 │   ├── posts.json          # Post metadata (generated)
-│   ├── posts/              # Markdown posts
+│   ├── posts/              # Post files (any supported format)
+│   ├── build-posts-json.js # Generate posts.json
+│   ├── build-pptx-pdf.js   # Convert PPTX to PDF
 │   ├── static/             # Static HTML (generated)
 │   └── medium/             # Medium-friendly HTML (generated)
 ├── gallery/                # Photo gallery
@@ -22,9 +44,10 @@ Personal website for Yuxu Ge.
 │       └── description.md  # Album description (optional)
 ├── components/             # Shared components
 │   └── sidebar.js          # Sidebar (injected via JS)
-└── scripts/                # Build scripts
-    ├── convert-heic.sh     # HEIC to JPG conversion
-    └── compress-photos.sh  # Image compression
+├── scripts/                # Build scripts
+│   ├── convert-heic.sh     # HEIC to JPG conversion
+│   └── compress-photos.sh  # Image compression
+└── setup.sh                # One-click setup script
 ```
 
 ## Development
@@ -36,7 +59,7 @@ python3 -m http.server 8080
 ## Build
 
 ```bash
-./build.sh           # Build all (convert + compress + posts.json + photos.json + static/medium)
+./build.sh           # Build all (photos + blog + gallery + search index)
 ./build.sh --static  # Static HTML only
 ./build.sh --medium  # Medium HTML only
 ./build.sh --photos  # Process photos only (convert HEIC + compress)
@@ -44,10 +67,22 @@ python3 -m http.server 8080
 ./clear.sh           # Clean generated files
 ```
 
-With GitHub Gists for code blocks:
+### npm Scripts
 
 ```bash
-GITHUB_TOKEN_CRTATE_GIST=xxx ./build.sh
+npm run build          # Full build (same as ./build.sh)
+npm run build:blog     # Build blog (PPTX conversion + posts.json)
+npm run build:pptx     # Convert PPTX to PDF only
+npm run build:posts    # Generate posts.json only
+npm run build:photos   # Generate photos.json only
+npm run build:search   # Build vector search index
+```
+
+### Environment Variables
+
+```bash
+OPENAI_API_KEY=xxx ./build.sh           # Enable vector search
+GITHUB_TOKEN_CREATE_GIST=xxx ./build.sh # Enable code gists
 ```
 
 ## Gallery
@@ -85,7 +120,22 @@ Uses cache file (`.compress-cache`) to skip already processed images. Requires I
 
 ## Blog Posts
 
-Create posts in `blog/posts/YYYY/` with YAML frontmatter:
+### Supported Formats
+
+| Format | Extension | Rendering |
+|--------|-----------|-----------|
+| Markdown | `.md` | marked.js + Prism.js + KaTeX |
+| Jupyter Notebook | `.ipynb` | Native renderer with code cells |
+| PDF | `.pdf` | Native browser viewer |
+| Word | `.docx` | mammoth.js |
+| Excel | `.xlsx` | SheetJS (xlsx) |
+| PowerPoint | `.pptx` | PDF preview (via LibreOffice) |
+| CSV | `.csv` | SheetJS table view |
+| Text | `.txt` | Plain text |
+
+### Creating Posts
+
+**Markdown** - Create in `blog/posts/YYYY/` with YAML frontmatter:
 
 ```markdown
 ---
@@ -98,7 +148,56 @@ description: Optional description
 Content...
 ```
 
+**Other formats** - Use date prefix in filename: `YYYYMMDD-title.ext`
+
+```
+blog/posts/2026/
+├── my-post.md              # Requires date in frontmatter
+├── 20260126-slides.pptx    # Date from filename
+└── 20260126-data.xlsx      # Date from filename
+```
+
+### PowerPoint Preview
+
+PowerPoint files are converted to PDF for browser preview:
+
+```bash
+# Manual conversion
+npm run build:pptx
+
+# Requires LibreOffice (one-time install)
+# macOS:  brew install --cask libreoffice
+# Linux:  sudo apt install libreoffice
+```
+
+When both `.pptx` and `.pdf` exist, the PDF is used for preview and PPTX for download.
+
 Run `./build.sh` to regenerate `blog/posts.json`.
+
+## Dependencies
+
+### Required
+
+- **Node.js** >= 18.0.0
+- **npm** packages (auto-installed):
+  - `voy-search` - Vector search engine
+
+### Optional (for full functionality)
+
+| Tool | Purpose | Install |
+|------|---------|---------|
+| LibreOffice | PPTX to PDF conversion | `brew install --cask libreoffice` |
+| ImageMagick | Photo compression & RAW conversion | `brew install imagemagick` |
+| OpenAI API | Vector search embeddings | Set `OPENAI_API_KEY` |
+| GitHub Token | Code gists in static HTML | Set `GITHUB_TOKEN_CREATE_GIST` |
+
+### CDN Libraries (loaded at runtime)
+
+- marked.js - Markdown rendering
+- Prism.js - Code syntax highlighting
+- KaTeX - Math rendering
+- mammoth.js - Word document rendering
+- SheetJS (xlsx) - Excel/CSV rendering
 
 ## SVG to PNG
 

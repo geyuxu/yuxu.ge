@@ -69,6 +69,13 @@ function findPostFiles(dir, files = []) {
         if (entry.isDirectory()) {
             findPostFiles(fullPath, files);
         } else if (SUPPORTED_EXTENSIONS.some(ext => entry.name.endsWith(ext))) {
+            // Skip PPTX if same-name PDF exists (PDF will be used for preview)
+            if (entry.name.endsWith('.pptx')) {
+                const pdfPath = fullPath.replace(/\.pptx$/, '.pdf');
+                if (fs.existsSync(pdfPath)) {
+                    continue;
+                }
+            }
             files.push(fullPath);
         }
     }
@@ -246,6 +253,28 @@ function main() {
             date: postDate,
             type: fileType
         };
+
+        // Check if this PDF has a corresponding PPTX (for PowerPoint preview)
+        if (fileType === 'pdf') {
+            const pptxPath = filePath.replace(/\.pdf$/, '.pptx');
+            if (fs.existsSync(pptxPath)) {
+                post.type = 'powerpoint';
+                post.pdfPreview = true; // Flag to indicate PDF is available for preview
+
+                // Use PPTX date instead of PDF date (PDF is generated, PPTX is original)
+                const pptxBasename = path.basename(pptxPath, '.pptx');
+                const pptxFilenameParsed = parseDateFromFilename(pptxBasename);
+                if (pptxFilenameParsed) {
+                    post.date = pptxFilenameParsed.date;
+                    post.title = pptxFilenameParsed.name.replace(/-/g, ' ');
+                    console.log(`  (powerpoint with PDF preview, date from pptx filename: ${post.date})`);
+                } else {
+                    post.date = getFileCreationDate(pptxPath);
+                    post.title = pptxBasename.replace(/-/g, ' ');
+                    console.log(`  (powerpoint with PDF preview, date from pptx creation: ${post.date})`);
+                }
+            }
+        }
 
         // Optional fields from frontmatter
         if (frontmatter.tags) {

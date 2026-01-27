@@ -7,7 +7,10 @@
   "scripts": {
     "build": "./build.sh",
     "build:search": "node --experimental-wasm-modules scripts/index-builder.mjs",
-    "build:photos": "node gallery/build-photos-json.js"
+    "build:photos": "node gallery/build-photos-json.js",
+    "build:pptx": "node blog/build-pptx-pdf.js",
+    "build:posts": "node blog/build-posts-json.js",
+    "build:blog": "npm run build:pptx && npm run build:posts"
   },
   "dependencies": {
     "voy-search": "^0.6.3"

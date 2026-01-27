@@ -653,18 +653,6 @@
     "date": "2024-01-30",
     "text": "ray 的操作更加便捷。例如，如果需要把 NumPy 数组传给纯 Python 代码处理，可以用 .tolist() 转换。如果需要逐元素地处理数组（尽管一般应避免 Python 层面的循环），.flat 提供了方便的遍历手段。而对复数数组进行运算时，.real 和 .imag 则可以轻松地分离出实"
   },
-  "/blog/posts/legacy/01-overview#0": {
-    "title": "RAG — Overview",
-    "url": "/blog/posts/legacy/01-overview",
-    "date": "2025-11-30",
-    "text": "RAG — Overview\n\nCore\nRAG pipeline (high level):\n1) Ingest docs → chunk → embed → index  \n2) Query → retrieve top-k chunks  \n3) (Optional) rerank/filte"
-  },
-  "/blog/posts/legacy/01-overview#1": {
-    "title": "RAG — Overview",
-    "url": "/blog/posts/legacy/01-overview",
-    "date": "2025-11-30",
-    "text": "garbage out”: poor docs / bad chunking dominates.\n- Over-retrieval: too many chunks → model ignores evidence.\n- Evaluation illusion: looks good on dem"
-  },
   "/blog/posts/legacy/01-pandas-basics#0": {
     "title": "Pandas Basics: Core Objects & Common Operations",
     "url": "/blog/posts/legacy/01-pandas-basics",

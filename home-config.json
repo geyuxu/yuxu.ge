@@ -56,14 +56,6 @@
                 {
                     "label": "RAG Pipelines",
                     "value": "Hybrid search & hallucination mitigation"
-                },
-                {
-                    "label": "Reinforcement Learning",
-                    "value": "Policy optimization & Sim2Real transfer"
-                },
-                {
-                    "label": "RAG Pipelines",
-                    "value": "Hybrid search & hallucination mitigation"
                 }
             ]
         }

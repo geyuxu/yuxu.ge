@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -57,20 +58,106 @@
             justify-content: space-between;
         }
 
-        .sidebar-top { display: flex; flex-direction: column; align-items: center; text-align: center; }
-        .avatar { display: block; width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--vermilion); margin-bottom: 1.5rem; overflow: hidden; transition: transform 0.2s ease; }
-        .avatar:hover { opacity: 1; transform: scale(1.05); }
-        .avatar img { width: 100%; height: 100%; object-fit: cover; }
-        .name-block { display: flex; align-items: center; justify-content: center; gap: 0.75rem; margin-bottom: 0.5rem; }
-        h1 { font-size: 1.8rem; font-weight: 700; letter-spacing: 1px; color: var(--off-white); }
-        .title-role { font-size: 0.9rem; color: #888; margin-top: 0.25rem; font-weight: 400; }
-        .contact-block { margin-top: 2.5rem; width: 100%; }
-        .social-links { display: flex; flex-direction: column; align-items: center; gap: 0.75rem; }
-        .social-links a { display: flex; align-items: center; gap: 0.75rem; width: 160px; color: var(--off-white); opacity: 0.7; transition: all 0.2s ease; padding: 0.5rem 0.75rem; border-radius: 4px; font-size: 0.9rem; }
-        .social-links a:hover { color: var(--vermilion); opacity: 1; background: rgba(255,255,255,0.05); }
-        .social-links svg { width: 20px; height: 20px; flex-shrink: 0; }
-        .social-links .orcid-link { font-size: 0.68rem; width: 160px; gap: 0.5rem; white-space: nowrap; }
-        .sidebar-footer { text-align: center; font-size: 0.75rem; color: #555; }
+        .sidebar-top {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .avatar {
+            display: block;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid var(--vermilion);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+
+        .avatar:hover {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .name-block {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--off-white);
+        }
+
+        .title-role {
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: 0.25rem;
+            font-weight: 400;
+        }
+
+        .contact-block {
+            margin-top: 2.5rem;
+            width: 100%;
+        }
+
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            width: 160px;
+            color: var(--off-white);
+            opacity: 0.7;
+            transition: all 0.2s ease;
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .social-links a:hover {
+            color: var(--vermilion);
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .social-links svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .social-links .orcid-link {
+            font-size: 0.68rem;
+            width: 160px;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .sidebar-footer {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #555;
+        }
 
         /* Content */
         .content {
@@ -237,7 +324,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
         }
 
         .float-nav-toggle:hover {
@@ -256,7 +343,7 @@
             background: var(--off-white);
             border: 2px solid var(--sketch-color);
             border-radius: 12px;
-            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
             transition: all 0.3s ease;
             opacity: 0;
             filter: url(#sketch-filter);
@@ -320,13 +407,11 @@
             transform: translateX(-50%);
             width: 3px;
             height: 100%;
-            background: repeating-linear-gradient(
-                to bottom,
-                var(--sketch-color) 0px,
-                var(--sketch-color) 8px,
-                transparent 8px,
-                transparent 12px
-            );
+            background: repeating-linear-gradient(to bottom,
+                    var(--sketch-color) 0px,
+                    var(--sketch-color) 8px,
+                    transparent 8px,
+                    transparent 12px);
             filter: url(#sketch-filter);
         }
 
@@ -340,6 +425,7 @@
             pointer-events: none;
             opacity: 0.4;
         }
+
         .footprint svg {
             width: 100%;
             height: 100%;
@@ -350,9 +436,11 @@
             stroke-linejoin: round;
             filter: url(#sketch-filter);
         }
+
         .footprint.left {
             transform: translateX(-28px) rotate(-15deg);
         }
+
         .footprint.right {
             transform: translateX(14px) rotate(15deg) scaleX(-1);
         }
@@ -471,14 +559,14 @@
             border-radius: 6px;
             overflow: hidden;
             background: white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             cursor: pointer;
         }
 
         .photo-thumb:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
         }
 
         .photo-thumb img {
@@ -500,7 +588,7 @@
             left: 0;
             right: 0;
             padding: 0.4rem 0.5rem;
-            background: linear-gradient(transparent, rgba(0,0,0,0.7));
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.7));
             color: white;
             font-size: 0.7rem;
             opacity: 0;
@@ -550,7 +638,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.95);
+            background: rgba(0, 0, 0, 0.95);
             z-index: 1000;
             justify-content: center;
             align-items: center;
@@ -592,7 +680,7 @@
             text-align: center;
             max-width: 80%;
             padding: 0.5rem 1rem;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             border-radius: 4px;
         }
 
@@ -784,105 +872,133 @@
     <!-- Google Font for hand-drawn text -->
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&display=swap" rel="stylesheet">
 </head>
+
 <body>
 
-<!-- SVG Filter for hand-drawn effect -->
-<svg style="position: absolute; width: 0; height: 0;">
-    <defs>
-        <filter id="sketch-filter">
-            <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="3" result="noise"/>
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="1" xChannelSelector="R" yChannelSelector="G"/>
-        </filter>
-    </defs>
-</svg>
+    <!-- SVG Filter for hand-drawn effect -->
+    <svg style="position: absolute; width: 0; height: 0;">
+        <defs>
+            <filter id="sketch-filter">
+                <feTurbulence type="turbulence" baseFrequency="0.02" numOctaves="3" result="noise" />
+                <feDisplacementMap in="SourceGraphic" in2="noise" scale="1" xChannelSelector="R" yChannelSelector="G" />
+            </filter>
+        </defs>
+    </svg>
 
-<div class="layout">
-    <!-- Sidebar -->
-    <aside class="sidebar" id="sidebar-content"></aside>
-    <script src="/components/sidebar.js"></script>
+    <div class="layout">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar-content"></aside>
+        <script src="/components/sidebar.js"></script>
 
-    <!-- Content -->
-    <main class="content">
-        <a href="/" class="back-link">&larr; Back to Home</a>
+        <!-- Content -->
+        <main class="content">
+            <a href="/" class="back-link">&larr; Back to Home</a>
 
-        <h2 class="page-title">Gallery</h2>
-        <p class="page-desc">Moments captured through the lens.</p>
+            <h2 class="page-title">Gallery</h2>
+            <p class="page-desc">Moments captured through the lens.</p>
 
-        <div class="gallery-nav" id="gallery-nav">
-            <!-- Navigation will be generated here -->
-        </div>
+            <div class="gallery-nav" id="gallery-nav">
+                <!-- Navigation will be generated here -->
+            </div>
 
-        <div class="timeline" id="timeline">
-            <!-- Photos will be loaded here -->
-        </div>
-    </main>
-</div>
-
-<!-- Floating Navigation -->
-<div class="float-nav" id="float-nav">
-    <div class="float-nav-panel" id="float-nav-panel">
-        <!-- Navigation buttons will be generated here -->
+            <div class="timeline" id="timeline">
+                <!-- Photos will be loaded here -->
+            </div>
+        </main>
     </div>
-    <button class="float-nav-toggle" onclick="scrollToTop()" title="Back to top">↑</button>
-</div>
 
-<!-- Lightbox -->
-<div class="lightbox" id="lightbox">
-    <span class="lightbox-close">&times;</span>
-    <img src="" alt="">
-    <div class="lightbox-caption"></div>
-</div>
+    <!-- Floating Navigation -->
+    <div class="float-nav" id="float-nav">
+        <div class="float-nav-panel" id="float-nav-panel">
+            <!-- Navigation buttons will be generated here -->
+        </div>
+        <button class="float-nav-toggle" onclick="scrollToTop()" title="Back to top">↑</button>
+    </div>
 
-<script>
-// Random colors for navigation buttons
-const navColors = [
-    '#E74C3C', '#3498DB', '#2ECC71', '#9B59B6', '#F39C12',
-    '#1ABC9C', '#E91E63', '#00BCD4', '#FF5722', '#673AB7',
-    '#4CAF50', '#FF9800', '#795548', '#607D8B', '#8BC34A'
-];
+    <!-- Lightbox -->
+    <div class="lightbox" id="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img src="" alt="">
+        <div class="lightbox-caption"></div>
+    </div>
 
-function getColor(index) {
-    return navColors[index % navColors.length];
-}
+    <script>
+        // Random colors for navigation buttons
+        const navColors = [
+            '#E74C3C', '#3498DB', '#2ECC71', '#9B59B6', '#F39C12',
+            '#1ABC9C', '#E91E63', '#00BCD4', '#FF5722', '#673AB7',
+            '#4CAF50', '#FF9800', '#795548', '#607D8B', '#8BC34A'
+        ];
 
-// Load photos from generated JSON
-fetch('/gallery/photos.json')
-    .then(r => r.json())
-    .then(photos => {
-        renderGalleryNav(photos);
-        renderTimeline(photos);
-        renderFloatNav(photos);
-    })
-    .catch(() => {
-        document.getElementById('timeline').innerHTML = '<p>No photos yet.</p>';
-    });
-
-// Render gallery navigation (years + locations)
-function renderGalleryNav(photos) {
-    const nav = document.getElementById('gallery-nav');
-    const years = [...new Set(photos.map(p => p.year))];
-
-    // Extract unique base locations (remove "Part N" for grouping)
-    const locationMap = new Map();
-    photos.forEach(p => {
-        const baseLocation = p.location;
-        if (!locationMap.has(baseLocation)) {
-            locationMap.set(baseLocation, p.folder);
+        function getColor(index) {
+            return navColors[index % navColors.length];
         }
-    });
-    const locations = Array.from(locationMap.entries());
 
-    let html = `
+        // Load photos from generated JSON
+        fetch('/gallery/photos.json')
+            .then(r => r.json())
+            .then(photos => {
+                renderGalleryNav(photos);
+                renderTimeline(photos);
+                renderFloatNav(photos);
+                checkDeepLink(photos); // Check for deep link query params
+            })
+            .catch(() => {
+                document.getElementById('timeline').innerHTML = '<p>No photos yet.</p>';
+            });
+
+        // Check for deep link ?photo=URL
+        function checkDeepLink(photos) {
+            const params = new URLSearchParams(window.location.search);
+            const photoUrl = params.get('photo');
+            if (photoUrl) {
+                // Find caption if possible
+                let caption = '';
+                for (const group of photos) {
+                    const idx = group.images.indexOf(photoUrl);
+                    if (idx !== -1) {
+                        if (group.captions && group.captions[idx]) {
+                            caption = group.captions[idx];
+                        }
+                        // Also scroll to this album
+                        const albumId = `album-${group.folder.replace(/[^a-zA-Z0-9]/g, '-')}`;
+                        scrollToAlbum(albumId);
+                        break;
+                    }
+                }
+
+                // Open lightbox
+                // We decode it because the param might be encoded
+                openLightbox(decodeURIComponent(photoUrl), caption);
+            }
+        }
+
+        // Render gallery navigation (years + locations)
+        function renderGalleryNav(photos) {
+            const nav = document.getElementById('gallery-nav');
+            const years = [...new Set(photos.map(p => p.year))];
+
+            // Extract unique base locations (remove "Part N" for grouping)
+            const locationMap = new Map();
+            photos.forEach(p => {
+                const baseLocation = p.location;
+                if (!locationMap.has(baseLocation)) {
+                    locationMap.set(baseLocation, p.folder);
+                }
+            });
+            const locations = Array.from(locationMap.entries());
+
+            let html = `
         <div class="nav-section">
             <div class="nav-label">By Year</div>
             <div class="nav-buttons">
                 ${years.map((year, idx) => {
-                    const color = getColor(idx);
-                    return `<button class="nav-btn year-btn" style="border-color: ${color}; color: ${color};"
+                const color = getColor(idx);
+                return `<button class="nav-btn year-btn" style="border-color: ${color}; color: ${color};"
                             onmouseover="this.style.background='${color}'; this.style.color='white';"
                             onmouseout="this.style.background='transparent'; this.style.color='${color}';"
                             onclick="scrollToYear('${year}')">${year}</button>`;
-                }).join('')}
+            }).join('')}
             </div>
         </div>
         <div class="nav-section">
@@ -892,65 +1008,65 @@ function renderGalleryNav(photos) {
             </div>
             <div class="nav-buttons location-nav" id="location-nav">
                 ${locations.map(([loc, folder], idx) => {
-                    const color = getColor(idx + years.length);
-                    const albumId = 'album-' + folder.replace(/[^a-zA-Z0-9]/g, '-');
-                    return `<button class="nav-btn" style="border-color: ${color}; color: ${color};"
+                const color = getColor(idx + years.length);
+                const albumId = 'album-' + folder.replace(/[^a-zA-Z0-9]/g, '-');
+                return `<button class="nav-btn" style="border-color: ${color}; color: ${color};"
                             onmouseover="this.style.background='${color}'; this.style.color='white';"
                             onmouseout="this.style.background='transparent'; this.style.color='${color}';"
                             onclick="scrollToAlbum('${albumId}')">${loc}</button>`;
-                }).join('')}
+            }).join('')}
             </div>
         </div>
     `;
-    nav.innerHTML = html;
-}
-
-// Toggle location navigation
-function toggleLocationNav() {
-    const nav = document.getElementById('location-nav');
-    const toggle = document.getElementById('location-toggle');
-    nav.classList.toggle('expanded');
-    toggle.classList.toggle('expanded');
-}
-
-// Scroll to year
-function scrollToYear(year) {
-    const target = document.getElementById('year-' + year);
-    if (target) {
-        const offset = 20;
-        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
-        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
-    }
-}
-
-// Scroll to album
-function scrollToAlbum(albumId) {
-    const target = document.getElementById(albumId);
-    if (target) {
-        const offset = 20;
-        const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
-        window.scrollTo({ top: targetPosition, behavior: 'smooth' });
-    }
-}
-
-// Render timeline
-function renderTimeline(photos) {
-    const timeline = document.getElementById('timeline');
-    let html = '';
-    let currentYear = null;
-    let side = 'left';
-    let albumIndex = 0;
-
-    photos.forEach(group => {
-        // Year marker with anchor
-        if (group.year !== currentYear) {
-            html += `<div class="year-marker" id="year-${group.year}"><span>${group.year}</span></div>`;
-            currentYear = group.year;
+            nav.innerHTML = html;
         }
 
-        // Album section with anchor
-        const albumId = `album-${group.folder.replace(/[^a-zA-Z0-9]/g, '-')}`;
-        html += `
+        // Toggle location navigation
+        function toggleLocationNav() {
+            const nav = document.getElementById('location-nav');
+            const toggle = document.getElementById('location-toggle');
+            nav.classList.toggle('expanded');
+            toggle.classList.toggle('expanded');
+        }
+
+        // Scroll to year
+        function scrollToYear(year) {
+            const target = document.getElementById('year-' + year);
+            if (target) {
+                const offset = 20;
+                const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+            }
+        }
+
+        // Scroll to album
+        function scrollToAlbum(albumId) {
+            const target = document.getElementById(albumId);
+            if (target) {
+                const offset = 20;
+                const targetPosition = target.getBoundingClientRect().top + window.pageYOffset - offset;
+                window.scrollTo({ top: targetPosition, behavior: 'smooth' });
+            }
+        }
+
+        // Render timeline
+        function renderTimeline(photos) {
+            const timeline = document.getElementById('timeline');
+            let html = '';
+            let currentYear = null;
+            let side = 'left';
+            let albumIndex = 0;
+
+            photos.forEach(group => {
+                // Year marker with anchor
+                if (group.year !== currentYear) {
+                    html += `<div class="year-marker" id="year-${group.year}"><span>${group.year}</span></div>`;
+                    currentYear = group.year;
+                }
+
+                // Album section with anchor
+                const albumId = `album-${group.folder.replace(/[^a-zA-Z0-9]/g, '-')}`;
+                html += `
             <div class="album-section ${side}" id="${albumId}">
                 <div class="album-content">
                     <div class="album-header">
@@ -960,20 +1076,20 @@ function renderTimeline(photos) {
                     <div class="photo-grid">
         `;
 
-        // Photos in grid
-        group.images.forEach((img, idx) => {
-            const caption = group.captions && group.captions[idx] ? group.captions[idx] : '';
-            const encodedImg = encodeURI(img);
-            html += `
+                // Photos in grid
+                group.images.forEach((img, idx) => {
+                    const caption = group.captions && group.captions[idx] ? group.captions[idx] : '';
+                    const encodedImg = encodeURI(img);
+                    html += `
                 <div class="photo-thumb" onclick="openLightbox('${encodedImg}', '${caption.replace(/'/g, "\\'")}')">
                     <img src="${encodedImg}" alt="${group.location}" loading="lazy" onload="this.classList.add('loaded')">
                     ${caption ? `<div class="photo-caption">${caption}</div>` : ''}
                 </div>
             `;
-        });
+                });
 
-        const desc = group.description || '';
-        html += `
+                const desc = group.description || '';
+                html += `
                     </div>
                 </div>
                 <div class="timeline-spacer">
@@ -986,25 +1102,25 @@ function renderTimeline(photos) {
             </div>
         `;
 
-        side = side === 'left' ? 'right' : 'left';
-        albumIndex++;
-    });
+                side = side === 'left' ? 'right' : 'left';
+                albumIndex++;
+            });
 
-    timeline.innerHTML = html;
+            timeline.innerHTML = html;
 
-    // Add footprints along the timeline
-    addFootprints();
-}
+            // Add footprints along the timeline
+            addFootprints();
+        }
 
-// Add footprints along the timeline - pencil sketch SVG style
-function addFootprints() {
-    const timeline = document.getElementById('timeline');
-    const timelineHeight = timeline.scrollHeight;
-    const stepSpacing = 60; // pixels between each step
-    const numSteps = Math.floor(timelineHeight / stepSpacing);
+        // Add footprints along the timeline - pencil sketch SVG style
+        function addFootprints() {
+            const timeline = document.getElementById('timeline');
+            const timelineHeight = timeline.scrollHeight;
+            const stepSpacing = 60; // pixels between each step
+            const numSteps = Math.floor(timelineHeight / stepSpacing);
 
-    // SVG footprint path - simple pencil sketch style
-    const footprintSVG = `
+            // SVG footprint path - simple pencil sketch style
+            const footprintSVG = `
         <svg viewBox="0 0 14 22" xmlns="http://www.w3.org/2000/svg">
             <!-- Heel (elongated oval) -->
             <ellipse cx="7" cy="15" rx="5" ry="6"/>
@@ -1017,80 +1133,81 @@ function addFootprints() {
         </svg>
     `;
 
-    for (let i = 0; i < numSteps; i++) {
-        const topPosition = 80 + i * stepSpacing;
-        const isLeft = i % 2 === 0;
+            for (let i = 0; i < numSteps; i++) {
+                const topPosition = 80 + i * stepSpacing;
+                const isLeft = i % 2 === 0;
 
-        const foot = document.createElement('div');
-        foot.className = `footprint ${isLeft ? 'left' : 'right'}`;
-        foot.style.top = topPosition + 'px';
-        foot.innerHTML = footprintSVG;
-        timeline.appendChild(foot);
-    }
-}
+                const foot = document.createElement('div');
+                foot.className = `footprint ${isLeft ? 'left' : 'right'}`;
+                foot.style.top = topPosition + 'px';
+                foot.innerHTML = footprintSVG;
+                timeline.appendChild(foot);
+            }
+        }
 
-// Lightbox
-function openLightbox(src, caption) {
-    const lightbox = document.getElementById('lightbox');
-    lightbox.querySelector('img').src = src;
-    const captionEl = lightbox.querySelector('.lightbox-caption');
-    if (captionEl) {
-        captionEl.textContent = caption || '';
-        captionEl.style.display = caption ? 'block' : 'none';
-    }
-    lightbox.classList.add('active');
-}
+        // Lightbox
+        function openLightbox(src, caption) {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.querySelector('img').src = src;
+            const captionEl = lightbox.querySelector('.lightbox-caption');
+            if (captionEl) {
+                captionEl.textContent = caption || '';
+                captionEl.style.display = caption ? 'block' : 'none';
+            }
+            lightbox.classList.add('active');
+        }
 
-document.getElementById('lightbox').addEventListener('click', function(e) {
-    if (e.target === this || e.target.classList.contains('lightbox-close')) {
-        this.classList.remove('active');
-    }
-});
+        document.getElementById('lightbox').addEventListener('click', function (e) {
+            if (e.target === this || e.target.classList.contains('lightbox-close')) {
+                this.classList.remove('active');
+            }
+        });
 
-document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') {
-        document.getElementById('lightbox').classList.remove('active');
-    }
-});
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                document.getElementById('lightbox').classList.remove('active');
+            }
+        });
 
-// Floating navigation
-const floatNav = document.getElementById('float-nav');
+        // Floating navigation
+        const floatNav = document.getElementById('float-nav');
 
-window.addEventListener('scroll', function() {
-    if (window.pageYOffset > 400) {
-        floatNav.classList.add('visible');
-    } else {
-        floatNav.classList.remove('visible');
-    }
-});
+        window.addEventListener('scroll', function () {
+            if (window.pageYOffset > 400) {
+                floatNav.classList.add('visible');
+            } else {
+                floatNav.classList.remove('visible');
+            }
+        });
 
-function scrollToTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-}
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
 
-// Render floating nav panel (years only)
-function renderFloatNav(photos) {
-    const panel = document.getElementById('float-nav-panel');
-    const years = [...new Set(photos.map(p => p.year))];
+        // Render floating nav panel (years only)
+        function renderFloatNav(photos) {
+            const panel = document.getElementById('float-nav-panel');
+            const years = [...new Set(photos.map(p => p.year))];
 
-    let html = `
+            let html = `
         <div class="float-nav-section">
             <div class="float-nav-label">By Year</div>
             <div class="float-nav-buttons">
                 ${years.map((year, idx) => {
-                    const color = getColor(idx);
-                    return `<button class="float-nav-btn year" style="border-color: ${color}; color: ${color};"
+                const color = getColor(idx);
+                return `<button class="float-nav-btn year" style="border-color: ${color}; color: ${color};"
                             onmouseover="this.style.background='${color}'; this.style.color='white';"
                             onmouseout="this.style.background='transparent'; this.style.color='${color}';"
                             onclick="scrollToYear('${year}')">${year}</button>`;
-                }).join('')}
+            }).join('')}
             </div>
         </div>
     `;
-    panel.innerHTML = html;
-}
+            panel.innerHTML = html;
+        }
 
-</script>
+    </script>
 
 </body>
+
 </html>

@@ -1,6 +1,6 @@
 ---
 date: 2024-01-30
-tags: [numpy, #numpy #python #data]
+tags: [numpy, python, data]
 legacy: true
 ---
 

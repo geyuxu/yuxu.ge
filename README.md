@@ -132,6 +132,15 @@ Uses cache file (`.compress-cache`) to skip already processed images. Requires I
 | PowerPoint | `.pptx` | PDF preview (via LibreOffice) |
 | CSV | `.csv` | SheetJS table view |
 | Text | `.txt` | Plain text |
+| **Images** | `.jpg`, `.png`, `.gif`, `.webp`, `.svg` | Native `<img>` |
+| **Video** | `.mp4`, `.webm` | HTML5 `<video>` |
+| **Audio** | `.mp3`, `.wav`, `.ogg` | HTML5 `<audio>` |
+| **JSON** | `.json` | Syntax highlighted |
+| **HTML** | `.html` | iframe embed |
+| **Code** | `.py`, `.js`, `.ts`, `.go`, `.java`, `.rs`, `.cpp`, `.c`, `.rb`, `.php`, `.sh` | Prism.js syntax highlighting |
+| **XML/YAML** | `.xml`, `.yaml`, `.yml` | Syntax highlighted |
+| **LaTeX** | `.tex` | Source view with highlighting |
+| **RTF** | `.rtf` | Download only |
 
 ### Creating Posts
 

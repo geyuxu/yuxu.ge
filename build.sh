@@ -28,9 +28,14 @@ echo "=== Compressing Photos ==="
 ./scripts/compress-photos.sh
 echo ""
 
-# Convert PPTX to PDF (if LibreOffice available)
-echo "=== Converting PPTX to PDF ==="
-node blog/build-pptx-pdf.js
+# Convert Office documents to PDF (PPTX, RTF, ODT, ODS, ODP - if LibreOffice available)
+echo "=== Converting Office Docs to PDF ==="
+node blog/build-office-pdf.js
+echo ""
+
+# Convert LaTeX to PDF (if pdflatex available)
+echo "=== Converting LaTeX to PDF ==="
+node blog/build-tex-pdf.js
 
 # Generate posts.json from markdown frontmatter
 echo ""

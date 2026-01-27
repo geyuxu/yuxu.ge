@@ -137,36 +137,6 @@
     "date": "2026-01-26",
     "text": "code is available at github.com/geyuxu/yuxu.ge.\n\n*Built with: OpenAI text-embedding-3-small, Voy WASM, Cloudflare Workers, vanilla JavaScript*"
   },
-  "/blog/posts/legacy/#0": {
-    "title": "GYX News - 2025/06/27",
-    "url": "/blog/posts/legacy/",
-    "date": "2025-06-27",
-    "text": "GYX News - 2025/06/27\n\n1. **Claude Code CLI 2 天前强制要求 ≥ v1.0.24，否则停止工作 — GitHub issue reveals mandatory update** \n2. **Anthropic 报告：仅 2.9 % 用户向 Claude "
-  },
-  "/blog/posts/legacy/#1": {
-    "title": "GYX News - 2025/06/27",
-    "url": "/blog/posts/legacy/",
-    "date": "2025-06-27",
-    "text": "Copilot” 动作 — KB5060829 adds Copilot action** \n6. **Gartner：到 2027 年超 40 % Agentic AI 项目将被砍 — 40 % of agentic AI projects scrapped** \n7. **NVIDIA 股价再创"
-  },
-  "/blog/posts/legacy/#2": {
-    "title": "GYX News - 2025/06/27",
-    "url": "/blog/posts/legacy/",
-    "date": "2025-06-27",
-    "text": "plodingTopics roundup** \n\n**国际 International**\n\n1. **伊朗停火后转向国内严打，库区成高压重点 — Iran intensifies crackdown after cease-fire** \n2. **乌克兰与欧洲委员会正式签署“侵略罪特别法庭”协"
-  },
-  "/blog/posts/legacy/#3": {
-    "title": "GYX News - 2025/06/27",
-    "url": "/blog/posts/legacy/",
-    "date": "2025-06-27",
-    "text": "成稀土出口加速协议，缓解供应链风险 — US-China rare-earth deal** \n7. **美国退出印尼 200 亿美元 JETP 煤转清洁计划，影响有限 — US exits Indonesia JETP** \n8. **塞内加尔将 2025 赤字预估上调至 GDP 7.82 % —"
-  },
-  "/blog/posts/legacy/#4": {
-    "title": "GYX News - 2025/06/27",
-    "url": "/blog/posts/legacy/",
-    "date": "2025-06-27",
-    "text": "lobal stocks surge, dollar slumps** \n3. **布伦特微涨 0.8 %，止跌反弹 — Brent edges higher** \n4. **但仍料周线下跌，供应风险溢价回吐 — Oil set for weekly loss** \n5. **波士顿联储 Colli"
-  },
   "/blog/posts/legacy/00-windows-11-下两种-cuda-开发环境配置-wsl-本地工具链#0": {
     "title": "Windows 11 下两种 CUDA 开发环境配置（wsl & 本地工具链）",
     "url": "/blog/posts/legacy/00-windows-11-下两种-cuda-开发环境配置-wsl-本地工具链",
@@ -11152,5 +11122,113 @@
     "url": "/blog/posts/legacy/项目管理的范式革命-渐进式开发与用户参与的ai项目实施策略",
     "date": "2025-07-24",
     "text": "他们明白自己的角色不仅是需求方，更是项目成功的关键合作伙伴。这能极大地提升他们的参与感和责任感。\n\n结论：从执行者到价值共创者\n\n渐进式开发与用户参与（PD-UP）模型，远不止是一个更快的编码技巧或流程。**它是一种将开发者和用户从传统的\"甲乙方\"关系，转变为\"价值共创伙伴\"关系的管理哲学。**\n\n"
+  },
+  "/blog/posts/notebooks/R_001_sanity_check#0": {
+    "title": "R_001 — Environment Sanity Check",
+    "url": "/blog/posts/notebooks/R_001_sanity_check",
+    "date": "2025-11-30",
+    "text": "R_001 — Environment Sanity Check\n\nPurpose: verify the repo environment is runnable and basics work.  \nOutputs: package versions + a simple plot.\n\nimpo"
+  },
+  "/blog/posts/notebooks/R_001_sanity_check#1": {
+    "title": "R_001 — Environment Sanity Check",
+    "url": "/blog/posts/notebooks/R_001_sanity_check",
+    "date": "2025-11-30",
+    "text": "_)\n\ndf = pd.DataFrame({\n    \"x\": [1, 2, 3, 4, 5],\n    \"y\": [1, 4, 9, 16, 25],\n})\ndf\n\nplt.figure()\nplt.plot(df[\"x\"], df[\"y\"], marker=\"o\")\nplt.title(\"Sa"
+  },
+  "/blog/posts/notebooks/R_001_sanity_check#2": {
+    "title": "R_001 — Environment Sanity Check",
+    "url": "/blog/posts/notebooks/R_001_sanity_check",
+    "date": "2025-11-30",
+    "text": "))\n\nfrom LABS.src.text_chunker import chunk_text\n\nsample = \"Hello world! \" * 80\nchunks = chunk_text(sample, chunk_size=60, overlap=10)\nlen(chunks), ch"
+  },
+  "/blog/posts/notebooks/R_002_minimal_retrieval#0": {
+    "title": "R_002 - Minimal Retrieval (TF-IDF)",
+    "url": "/blog/posts/notebooks/R_002_minimal_retrieval",
+    "date": "2025-11-30",
+    "text": "R_002 - Minimal Retrieval (TF-IDF)\n\nGoal: build a tiny retrieval pipeline (chunk → index → query → top-k evidence).  \nNo LLM. Focus on reproducibility"
+  },
+  "/blog/posts/notebooks/R_002_minimal_retrieval#1": {
+    "title": "R_002 - Minimal Retrieval (TF-IDF)",
+    "url": "/blog/posts/notebooks/R_002_minimal_retrieval",
+    "date": "2025-11-30",
+    "text": ".src.text_chunker import chunk_text\nfrom LABS.src.retrieval_tfidf import TfidfRetriever\n\ndocs = {\n    \"doc_york_ai\": \"\"\"\nUniversity of York offers an "
+  },
+  "/blog/posts/notebooks/R_002_minimal_retrieval#2": {
+    "title": "R_002 - Minimal Retrieval (TF-IDF)",
+    "url": "/blog/posts/notebooks/R_002_minimal_retrieval",
+    "date": "2025-11-30",
+    "text": "cuments\nand injecting them into a model's context. Typical components include chunking, retrieval, reranking,\nand evaluation for faithfulness.\n\"\"\",\n  "
+  },
+  "/blog/posts/notebooks/R_002_minimal_retrieval#3": {
+    "title": "R_002 - Minimal Retrieval (TF-IDF)",
+    "url": "/blog/posts/notebooks/R_002_minimal_retrieval",
+    "date": "2025-11-30",
+    "text": "etrics like precision@k, recall@k, MRR, and nDCG.\nFor RAG, you also care about citation faithfulness and answer correctness on held-out queries.\n\"\"\".s"
+  },
+  "/blog/posts/notebooks/R_002_minimal_retrieval#4": {
+    "title": "R_002 - Minimal Retrieval (TF-IDF)",
+    "url": "/blog/posts/notebooks/R_002_minimal_retrieval",
+    "date": "2025-11-30",
+    "text": "s)\n\ndef show_results(query: str, top_k: int = 5):\n    print(\"Query:\", query)\n    results = retriever.search(query, top_k=top_k)\n    for r in results:\n"
+  },
+  "/blog/posts/notebooks/R_002_minimal_retrieval#5": {
+    "title": "R_002 - Minimal Retrieval (TF-IDF)",
+    "url": "/blog/posts/notebooks/R_002_minimal_retrieval",
+    "date": "2025-11-30",
+    "text": "(\"rag components chunking retrieval\", \"doc_rag\"),\n    (\"self attention transformer backbone\", \"doc_transformer\"),\n    (\"precision recall mrr ndcg eval"
+  },
+  "/blog/posts/notebooks/R_002_minimal_retrieval#6": {
+    "title": "R_002 - Minimal Retrieval (TF-IDF)",
+    "url": "/blog/posts/notebooks/R_002_minimal_retrieval",
+    "date": "2025-11-30",
+    "text": "print(\"recall@\", k, \"=\", recall_at_k(k))\n\nNotes\n- This is a minimal baseline (TF-IDF cosine).\n- Next step: add a tiny evaluation set + compute recall@"
+  },
+  "/blog/posts/notebooks/R_010_numpy_basics#0": {
+    "title": "R_010 — NumPy Basics (Reproducible)",
+    "url": "/blog/posts/notebooks/R_010_numpy_basics",
+    "date": "2025-11-30",
+    "text": "R_010 — NumPy Basics (Reproducible)\n\nPurpose: reproduce key NumPy operations from the note.  \nOutputs: small arrays + sanity prints (shape/dtype) + si"
+  },
+  "/blog/posts/notebooks/R_010_numpy_basics#1": {
+    "title": "R_010 — NumPy Basics (Reproducible)",
+    "url": "/blog/posts/notebooks/R_010_numpy_basics",
+    "date": "2025-11-30",
+    "text": "= np.zeros((2, 3))\nones = np.ones((2, 3))\nar = np.arange(0, 10, 2)\n\nprint(\"zeros:\\n\", zeros)\nprint(\"ones:\\n\", ones)\nprint(\"arange:\", ar)\n\nx = np.arang"
+  },
+  "/blog/posts/notebooks/R_010_numpy_basics#2": {
+    "title": "R_010 — NumPy Basics (Reproducible)",
+    "url": "/blog/posts/notebooks/R_010_numpy_basics",
+    "date": "2025-11-30",
+    "text": "[1, 10, 100, 1000])\n\nout = m + v\nprint(\"m:\\n\", m)\nprint(\"v:\", v)\nprint(\"m + v:\\n\", out)\n\nt = np.linspace(0, 2*np.pi, 200)\ns = np.sin(t)\n\nplt.figure()\n"
+  },
+  "/blog/posts/notebooks/R_020_pandas_basics#0": {
+    "title": "Pandas Basics: Core Objects & Common Operations",
+    "url": "/blog/posts/notebooks/R_020_pandas_basics",
+    "date": "2025-11-30",
+    "text": "Pandas Basics: Core Objects & Common Operations\n\n**Purpose**: Demonstrate the basic usage of Pandas Series and DataFrame, including creation, indexing"
+  },
+  "/blog/posts/notebooks/R_020_pandas_basics#1": {
+    "title": "Pandas Basics: Core Objects & Common Operations",
+    "url": "/blog/posts/notebooks/R_020_pandas_basics",
+    "date": "2025-11-30",
+    "text": "30, 40])\nprint(\"s1 (default index):\")\nprint(s1)\n\nFrom list with index\ns2 = pd.Series([100, 98, 67, 23], index=['zs', 'ls', 'ww', 'sl'])\nprint(\"\\ns2 (c"
+  },
+  "/blog/posts/notebooks/R_020_pandas_basics#2": {
+    "title": "Pandas Basics: Core Objects & Common Operations",
+    "url": "/blog/posts/notebooks/R_020_pandas_basics",
+    "date": "2025-11-30",
+    "text": "me(data)\nprint(\"DataFrame from dict:\")\nprint(df)\n\nFrom dict of Series (alignment)\ndata2 = {\n    'Name': pd.Series(['Tom', 'Jerry', 'Jack', 'Rose'], in"
+  },
+  "/blog/posts/notebooks/R_020_pandas_basics#3": {
+    "title": "Pandas Basics: Core Objects & Common Operations",
+    "url": "/blog/posts/notebooks/R_020_pandas_basics",
+    "date": "2025-11-30",
+    "text": "print(\"\\n--- loc (label based) ---\")\nprint(\"df2.loc['a']:\")\nprint(df2.loc['a'])\n\nprint(\"\\n--- iloc (position based) ---\")\nprint(\"df2.iloc[0]:\")\nprint("
+  },
+  "/blog/posts/notebooks/R_020_pandas_basics#4": {
+    "title": "Pandas Basics: Core Objects & Common Operations",
+    "url": "/blog/posts/notebooks/R_020_pandas_basics",
+    "date": "2025-11-30",
+    "text": "nModified Math column:\")\nprint(df)\n\nDelete column\ndf.drop(['Math'], axis=1, inplace=True)\nprint(\"\\nDropped Math column:\")\nprint(df)\n\n5. CSV I/O\nCreate"
   }
 }

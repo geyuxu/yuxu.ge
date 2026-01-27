@@ -4,6 +4,7 @@
     "title": "Building a Production-Ready Geocoding Client: Coordinate Hacks, Connection Pools, and Rate Limiting",
     "date": "2026-01-26",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "python",
       "backend",
@@ -16,6 +17,7 @@
     "title": "静态博客的混合搜索方案：BM25 + 向量检索 + Cloudflare Workers",
     "date": "2026-01-26",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "rag",
       "search",
@@ -29,6 +31,7 @@
     "title": "Building Hybrid Search for Static Blogs: BM25 + Vector Search with Cloudflare Workers",
     "date": "2026-01-26",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "rag",
       "search",
@@ -42,16 +45,46 @@
     "title": "RAG — Overview",
     "date": "2025-11-30",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "rag",
       "#rag #llm #retrieval"
     ]
   },
   {
+    "slug": "posts/notebooks/R_001_sanity_check",
+    "title": "R_001 — Environment Sanity Check",
+    "date": "2025-11-30",
+    "type": "notebook",
+    "ext": "ipynb"
+  },
+  {
+    "slug": "posts/notebooks/R_002_minimal_retrieval",
+    "title": "R_002 - Minimal Retrieval (TF-IDF)",
+    "date": "2025-11-30",
+    "type": "notebook",
+    "ext": "ipynb"
+  },
+  {
+    "slug": "posts/notebooks/R_010_numpy_basics",
+    "title": "R_010 — NumPy Basics (Reproducible)",
+    "date": "2025-11-30",
+    "type": "notebook",
+    "ext": "ipynb"
+  },
+  {
+    "slug": "posts/notebooks/R_020_pandas_basics",
+    "title": "Pandas Basics: Core Objects & Common Operations",
+    "date": "2025-11-30",
+    "type": "notebook",
+    "ext": "ipynb"
+  },
+  {
     "slug": "posts/legacy/ai-assisted-development-lessons-learned-zh",
     "title": "我的AI编程伙伴差点让项目翻车：一个惨痛的教训",
     "date": "2025-07-27",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "ai",
@@ -67,6 +100,7 @@
     "title": "My AI Coding Partner Almost Drove My Project Off a Cliff: A Cautionary Tale",
     "date": "2025-07-27",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "ai",
@@ -82,6 +116,7 @@
     "title": "Automating an Astro Blog with a Python MCP Server: A Hands-On Guide",
     "date": "2025-07-27",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "devops",
       "mcp",
@@ -96,6 +131,7 @@
     "title": "用Python脚本快速实现MCP服务器：Astro博客自动化实践",
     "date": "2025-07-27",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "devops",
       "mcp",
@@ -110,6 +146,7 @@
     "title": "EchoDraft Project Plan: The Intelligent Content Refiner for Audio and Video",
     "date": "2025-07-25",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "general_notes"
     ]
@@ -119,6 +156,7 @@
     "title": "A Project Management Paradigm Revolution Progressive Development and User-Participatory AI Project Implementation Strategy",
     "date": "2025-07-24",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "manage"
     ]
@@ -128,6 +166,7 @@
     "title": "AutoGen Multi-Agent System Practice Reflection From Heavy-Weight Contextual Programming to Lightweight AI Assistant",
     "date": "2025-07-24",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -137,6 +176,7 @@
     "title": "AutoGen多智能体实践反思：从\"上下文编程\"的重装上阵到轻量级AI助手的回归",
     "date": "2025-07-24",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -146,6 +186,7 @@
     "title": "ChatGPT + Claude Code 混合开发工作流：一种兼顾规划、敏捷与质量的AI编程新范式",
     "date": "2025-07-24",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "manage"
     ]
@@ -155,6 +196,7 @@
     "title": "Claude Code Pricing Analysis: Subscription vs API - How to Choose?",
     "date": "2025-07-24",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "claude",
@@ -169,6 +211,7 @@
     "title": "Claude Code付费模式深度解析：订阅制 vs API 如何选择？",
     "date": "2025-07-24",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "claude",
@@ -183,6 +226,7 @@
     "title": "Deconstructing the University of York's Dual-Track System: An In-depth Guide to Academic Engagement and Visa Compliance",
     "date": "2025-07-24",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "manage"
     ]
@@ -192,6 +236,7 @@
     "title": "解构约克大学双轨制：学术参与与签证合规深度指南",
     "date": "2025-07-24",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "manage"
     ]
@@ -201,6 +246,7 @@
     "title": "项目管理的范式革命：渐进式开发与用户参与的AI项目实施策略",
     "date": "2025-07-24",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "manage"
     ]
@@ -210,6 +256,7 @@
     "title": "Building Agent Long-term Memory System with Claude Code, Graphiti, and Neo4j",
     "date": "2025-07-23",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -219,6 +266,7 @@
     "title": "StudentCRUD：基于Swift和SwiftUI的macOS学生管理系统开发实践",
     "date": "2025-07-23",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -228,6 +276,7 @@
     "title": "结合 Claude Code、Graphiti 和 Neo4j 构建 Agent 长记忆系统",
     "date": "2025-07-23",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -237,6 +286,7 @@
     "title": "Java Static Blog Converter Development Practice and Technical Summary",
     "date": "2025-07-22",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "backend"
     ]
@@ -246,6 +296,7 @@
     "title": "Java静态博客转换器开发实践与技术总结",
     "date": "2025-07-22",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "backend"
     ]
@@ -255,6 +306,7 @@
     "title": "Full-Stack Todo List Application Development Practice: Front-End and Back-End Separation Architecture",
     "date": "2025-07-21",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "backend"
     ]
@@ -264,6 +316,7 @@
     "title": "Todo List全栈应用开发实践：前后端分离架构设计",
     "date": "2025-07-21",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "backend"
     ]
@@ -273,6 +326,7 @@
     "title": "WebGL 3D Tank Battle Game Development Practice: Modern WebGL Technology Application",
     "date": "2025-07-21",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "frontend"
     ]
@@ -282,6 +336,7 @@
     "title": "WebGL 3D坦克大战游戏开发实践：现代WebGL技术应用",
     "date": "2025-07-21",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "frontend"
     ]
@@ -291,6 +346,7 @@
     "title": "HTML5 Canvas Classic Tank Battle Game Development: Single-File Game Architecture Practice",
     "date": "2025-07-20",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "frontend"
     ]
@@ -300,17 +356,9 @@
     "title": "HTML5 Canvas经典坦克大战游戏开发：单文件游戏架构实践",
     "date": "2025-07-20",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "frontend"
-    ]
-  },
-  {
-    "slug": "posts/legacy/",
-    "title": "GYX News - 2025/06/27",
-    "date": "2025-06-27",
-    "type": "markdown",
-    "tags": [
-      "general_notes"
     ]
   },
   {
@@ -318,6 +366,7 @@
     "title": "项目管理基础知识（第五课）学习笔记：如何制定和管理项目进度",
     "date": "2025-06-13",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "manage"
     ]
@@ -327,6 +376,7 @@
     "title": "项目管理基础知识学习笔记L4",
     "date": "2025-06-12",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "manage"
     ]
@@ -336,6 +386,7 @@
     "title": "项目管理基础知识学习笔记L3",
     "date": "2025-06-11",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "manage"
     ]
@@ -345,6 +396,7 @@
     "title": "项目管理基础知识学习笔记L2",
     "date": "2025-06-10",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "manage"
     ]
@@ -354,6 +406,7 @@
     "title": "项目管理基础知识学习笔记L1",
     "date": "2025-06-09",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "manage"
     ]
@@ -363,6 +416,7 @@
     "title": "CUDA 开发必备的 C/C++ 语法",
     "date": "2025-05-08",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -372,6 +426,7 @@
     "title": "扬帆起航：深度学习工程师的cuda远征",
     "date": "2025-05-07",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -381,6 +436,7 @@
     "title": "Windows 11 下两种 CUDA 开发环境配置（wsl & 本地工具链）",
     "date": "2025-05-06",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -390,6 +446,7 @@
     "title": "Java RAG 开发环境准备",
     "date": "2025-04-30",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -399,6 +456,7 @@
     "title": "使用 Spring AI 构建 RAG 搜索服务设计",
     "date": "2025-04-29",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -408,6 +466,7 @@
     "title": "OpenAI O3 与 O4-mini 模型详解",
     "date": "2025-04-28",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -417,6 +476,7 @@
     "title": "多线程锁实现：原理剖析与工程实践指南",
     "date": "2025-04-28",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "backend"
     ]
@@ -426,6 +486,7 @@
     "title": "Astro 官方模版集成 KaTeX 实现 LaTeX 公式渲染",
     "date": "2025-04-24",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "frontend"
     ]
@@ -435,6 +496,7 @@
     "title": "2025年主流大模型厂商大模型一览",
     "date": "2025-04-22",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -444,6 +506,7 @@
     "title": "神经网络与深度学习入门书籍整理",
     "date": "2025-04-22",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -453,6 +516,7 @@
     "title": "OpenAI、Deepseek模型横向对比",
     "date": "2025-04-21",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -462,6 +526,7 @@
     "title": "使用 PaddlePaddle 2.x 复现 DeepLabV3+（1）：从构建到训练",
     "date": "2025-04-03",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -471,6 +536,7 @@
     "title": "使用 Astro 构建并部署个人博客到 GitHub Pages全流程指南",
     "date": "2025-04-02",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "frontend"
     ]
@@ -480,6 +546,7 @@
     "title": "从传统图像处理到深度学习：车牌识别系统演进实践",
     "date": "2025-04-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -489,6 +556,7 @@
     "title": "图像增强在 OCR 中的实战作用",
     "date": "2025-04-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -498,6 +566,7 @@
     "title": "理解和使用字符实体：从基础到实践",
     "date": "2025-03-27",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "frontend"
     ]
@@ -507,6 +576,7 @@
     "title": "结合RPG Maker与OpenAI API，打造创意十足的动态角色扮演游戏",
     "date": "2025-02-28",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -516,6 +586,7 @@
     "title": "Technical Research on Using Claude for Automated Updates to Notion, Obsidian, and Heptabase",
     "date": "2025-01-24",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -525,6 +596,7 @@
     "title": "使用 Claude 自动更新知识管理平台的技术方案调研",
     "date": "2025-01-24",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -534,6 +606,7 @@
     "title": "A Deeper Dive into Probability: From Convergence to Core Concepts",
     "date": "2025-01-24",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -543,6 +616,7 @@
     "title": "深入探索概率论：从收敛性到核心概念",
     "date": "2025-01-24",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -552,6 +626,7 @@
     "title": "统计推断基础：从数据到决策",
     "date": "2025-01-24",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -561,6 +636,7 @@
     "title": "RAG 系统中的敏感词防护策略：从前置检测到即时拦截的全链路实践",
     "date": "2024-10-19",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -570,6 +646,7 @@
     "title": "微调：用领域数据提升大模型任务表现",
     "date": "2024-10-14",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -579,6 +656,7 @@
     "title": "多语言智能客服术语翻译解决方案",
     "date": "2024-10-11",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -588,6 +666,7 @@
     "title": "一次微调训练失败案例解析：从 Qwen2.5 的损失曲线看问题与优化",
     "date": "2024-10-09",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -597,6 +676,7 @@
     "title": "大语言模型是如何“思考”的：从分词到推理的全过程揭秘",
     "date": "2024-10-07",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -606,6 +686,7 @@
     "title": "复杂结构文档解析：Keynote 转换与自定义 Reader 双路径实践",
     "date": "2024-10-06",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -615,6 +696,7 @@
     "title": "法律咨询场景中的大模型微调前评估",
     "date": "2024-10-05",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -624,6 +706,7 @@
     "title": "构建多智能体营销系统：从角色划分到调度协同的实践",
     "date": "2024-10-03",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -633,6 +716,7 @@
     "title": "防范 AI 幻觉：在医疗、法律与教育场景中的应用安全实践",
     "date": "2024-10-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -642,6 +726,7 @@
     "title": "使用R-Tree实现2D点去重与可视化优化",
     "date": "2024-09-30",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "backend"
     ]
@@ -651,6 +736,7 @@
     "title": "构建闭环智能会议助手：从语音转写到语音摘要播报的技术实践",
     "date": "2024-07-21",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -660,6 +746,7 @@
     "title": "Python高德定位实践：逆地理编码与顺地理编码详解",
     "date": "2024-06-23",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "backend"
     ]
@@ -669,6 +756,7 @@
     "title": "结合原理与实践，全面解析Elasticsearch中常见版本冲突问题及工程化解决方案",
     "date": "2024-05-28",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "search"
     ]
@@ -678,6 +766,7 @@
     "title": "打造具备行动力的智能客服：用 Agent 让大模型接入真实系统",
     "date": "2024-03-11",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -687,6 +776,7 @@
     "title": "NumPy 基础与实战入门",
     "date": "2024-01-30",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "numpy",
       "#numpy #python #data"
@@ -697,6 +787,7 @@
     "title": "matplotlib学习笔记",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "matplotlib"
     ]
@@ -706,6 +797,7 @@
     "title": "The Ultimate Guide to A/B Testing: From Statistical Principles to ML Applications",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "a/b testing",
@@ -719,6 +811,7 @@
     "title": "A/B测试核心指南：从统计原理到机器学习应用",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "a/b testing",
@@ -732,6 +825,7 @@
     "title": "Astro-News-Bot: Building an AI-Driven Automated News Aggregation and Publishing System",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -741,6 +835,7 @@
     "title": "Astro-News-Bot：构建 AI 驱动的自动化新闻聚合与发布系统",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -750,6 +845,7 @@
     "title": "Building an Intelligent Content Management Pipeline from Obsidian to Notion: A Three-Layer Architecture for Knowledge Automation",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "general_notes"
     ]
@@ -759,6 +855,7 @@
     "title": "ChatGPT + Claude Code Hybrid Development Workflow: A New AI Programming Paradigm Balancing Planning, Agility, and Quality",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "manage"
     ]
@@ -768,6 +865,7 @@
     "title": "The Ultimate Guide to Classification Model Evaluation Metrics",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "machine learning",
@@ -781,6 +879,7 @@
     "title": "分类模型评估指标权威指南：从混淆矩阵到AUC与F1分数",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "machine learning",
@@ -794,6 +893,7 @@
     "title": "2025 Claude Max / Opus 4 vs. ChatGPT Plus / o-Series: The Ultimate Comparison Guide",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -803,6 +903,7 @@
     "title": "Connect Claude Code to Notion MCP with a Single Command",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "claude",
@@ -818,6 +919,7 @@
     "title": "Image Classification: Data Scarcity, Augmentation, and Underfitting/Overfitting",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "image classification",
@@ -832,6 +934,7 @@
     "title": "图像分类：数据稀缺、样本增强与欠拟合/过拟合",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "图像分类",
@@ -846,6 +949,7 @@
     "title": "EchoDraft项目计划：音视频内容智能提炼利器",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "general_notes"
     ]
@@ -855,6 +959,7 @@
     "title": "特征归一化完整指南：从概念到代码的全面解析",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "machine learning",
@@ -869,6 +974,7 @@
     "title": "From 404 to 200: A Deep Dive into Solving Missing CSS on Astro with GitHub Pages",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "devops"
     ]
@@ -878,6 +984,7 @@
     "title": "通过AI助手、笔记工具与番茄工作法进行高效学习",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "general_notes"
     ]
@@ -887,6 +994,7 @@
     "title": "Gemini CLI 对接 Graphiti MCP：实战指南",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -896,6 +1004,7 @@
     "title": "A Comprehensive Guide to Hyperparameter Tuning in Machine Learning: From Theory to Practice",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "machine learning",
@@ -911,6 +1020,7 @@
     "title": "机器学习超参数调优：从理论到实践的全面指南",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "machine learning",
@@ -926,6 +1036,7 @@
     "title": "MCP-Blog: One-Command Astro Blog Deployment to GitHub Pages",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "devops",
       "mcp",
@@ -940,6 +1051,7 @@
     "title": "MCP-Blog：一键搞定 Astro 博客发布，告别繁琐流程",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "devops",
       "mcp",
@@ -954,6 +1066,7 @@
     "title": "从混乱到清晰：一次MCP服务器开发的反思与总结",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "devops",
       "mcp",
@@ -968,6 +1081,7 @@
     "title": "Beyond Death: How Nighthawks v2.0 Achieves Digital Life Immortality Through Knowledge Graphs",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "ai",
@@ -984,6 +1098,7 @@
     "title": "超越死亡的AI：Nighthawks v2.0如何用知识图谱实现数字生命的永恒传承",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "ai",
@@ -1000,6 +1115,7 @@
     "title": "Nighthawk项目完整解析：一个自我进化Agent OS的宏大愿景与技术核心",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "ai",
@@ -1016,6 +1132,7 @@
     "title": "Project Nighthawk Complete Guide: A Self-Evolving Agent OS's Grand Vision and Technical Core",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "ai",
@@ -1032,6 +1149,7 @@
     "title": "Unveiling Project Nighthawks: Building the Next-Generation AI-Powered Task Scheduler",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "ai",
@@ -1047,6 +1165,7 @@
     "title": "Nighthawks项目揭秘：构建下一代AI智能任务调度系统",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "ai",
@@ -1062,6 +1181,7 @@
     "title": "A Deep Dive into Regression Evaluation Metrics: From MAE to R², Choosing the Right Tool for the Job",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "machine learning",
@@ -1075,6 +1195,7 @@
     "title": "回归模型评估指标深度解析：从MAE到R²，选对指标才能优化模型",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "machine learning",
@@ -1088,6 +1209,7 @@
     "title": "AI同传眼镜 vs. 专业翻译App：真实场景下的效果对决",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "ai",
@@ -1103,6 +1225,7 @@
     "title": "Supervised vs. Unsupervised Learning: Concepts, Algorithms, and Practice",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "machine learning",
@@ -1116,6 +1239,7 @@
     "title": "监督学习 vs 非监督学习：概念、算法与实践",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "机器学习",
@@ -1129,6 +1253,7 @@
     "title": "Todo List Multi-User Application Development Practice: Complete Upgrade from Single-User to Cross-Platform Architecture",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "backend"
     ]
@@ -1138,6 +1263,7 @@
     "title": "Todo List多用户应用开发实践：从单用户到跨平台架构的完整升级之路",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "backend"
     ]
@@ -1147,6 +1273,7 @@
     "title": "从 404 到 200：记一次 Astro + GitHub Pages 样式丢失问题的深度排查",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "devops"
     ]
@@ -1156,6 +1283,7 @@
     "title": "使用一条命令把 Claude Code 接入 Notion MCP",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai",
       "claude",
@@ -1171,6 +1299,7 @@
     "title": "极空间 NAS 部署 Tailscale 指南",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "快速笔记"
     ]
@@ -1180,6 +1309,7 @@
     "title": "构建Obsidian到Notion的智能内容管理流水线：三层架构实现知识自动化处理",
     "date": "2024-01-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "general_notes"
     ]
@@ -1189,6 +1319,7 @@
     "title": "腾讯、高德和百度地图坐标系转换详解与工程实践",
     "date": "2023-04-28",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "backend"
     ]
@@ -1198,6 +1329,7 @@
     "title": "机器学习中的数据预处理",
     "date": "2023-04-27",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "ai"
     ]
@@ -1207,6 +1339,7 @@
     "title": "Pandas Basics: Core Objects & Common Operations",
     "date": "2023-04-23",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "pandas",
       "data-analysis",
@@ -1218,6 +1351,7 @@
     "title": "一次状态同步缺陷引发的技术反思",
     "date": "2022-04-25",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "general_notes"
     ]
@@ -1227,6 +1361,7 @@
     "title": "Cassandra 索引重建实践",
     "date": "2022-04-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "search"
     ]
@@ -1236,6 +1371,7 @@
     "title": "电商搜索店铺评分加权实践",
     "date": "2022-04-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "search"
     ]
@@ -1245,6 +1381,7 @@
     "title": "Python应用日志采集到ELK排查实录",
     "date": "2022-03-25",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "devops"
     ]
@@ -1254,6 +1391,7 @@
     "title": "SQL视图优化API查询性能实战",
     "date": "2022-03-24",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "search"
     ]
@@ -1263,6 +1401,7 @@
     "title": "应用服务接口性能优化实践",
     "date": "2022-03-24",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "service_governance"
     ]
@@ -1272,6 +1411,7 @@
     "title": "从离线部署到K8s流水线发布：一线工程师的实战总结",
     "date": "2022-03-10",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "devops"
     ]
@@ -1281,6 +1421,7 @@
     "title": "Cassandra 数据清理实战",
     "date": "2022-02-24",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "search"
     ]
@@ -1290,6 +1431,7 @@
     "title": "基于 Cassandra、SolrCloud、Zookeeper、Kafka 和 Python 微服务的搜索系统搭建实践",
     "date": "2022-02-14",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "search"
     ]
@@ -1299,6 +1441,7 @@
     "title": "面向内容检索平台的预发布环境搭建",
     "date": "2022-02-14",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "search"
     ]
@@ -1308,6 +1451,7 @@
     "title": "基于摘要认证的第三方接口调用方案",
     "date": "2022-01-05",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "service_governance"
     ]
@@ -1317,6 +1461,7 @@
     "title": "积分商城用户数据加密改造实战技术博客",
     "date": "2021-11-19",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "service_governance"
     ]
@@ -1326,6 +1471,7 @@
     "title": "电商商品媒资同步服务迁移至 Apollo 配置中心实践",
     "date": "2021-11-12",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "service_governance"
     ]
@@ -1335,6 +1481,7 @@
     "title": "批量行政区代码更新脚本实战笔记",
     "date": "2021-10-12",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "general_notes"
     ]
@@ -1344,6 +1491,7 @@
     "title": "批量处理证照图片的实战笔记：加水印、上传与批量SQL生成",
     "date": "2021-01-25",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "devops"
     ]
@@ -1353,6 +1501,7 @@
     "title": "基于地理保护区与多因子排序的系统设计实践",
     "date": "2020-11-27",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "search"
     ]
@@ -1362,6 +1511,7 @@
     "title": "线性代数学习笔记1：行列式和七个性质",
     "date": "2020-10-01",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "math"
     ]
@@ -1371,6 +1521,7 @@
     "title": "内容检索平台的 Solr 监控实践与可观测性优化",
     "date": "2019-10-24",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "search"
     ]
@@ -1380,6 +1531,7 @@
     "title": "深入理解Git子模块更新失败问题与Java环境排查实践",
     "date": "2019-03-05",
     "type": "markdown",
+    "ext": "md",
     "tags": [
       "general_notes"
     ]

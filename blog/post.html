@@ -515,6 +515,334 @@
         }
     }
 
+    // Render Image
+    function renderImage(imageUrl, title, article) {
+        const downloadSvg = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>`;
+        article.innerHTML = `<div class="image-container">
+            <h1>${escapeHtml(title)}</h1>
+            <a href="${imageUrl}" download class="doc-download">${downloadSvg} Download Image</a>
+            <img src="${imageUrl}" alt="${escapeHtml(title)}" style="max-width: 100%; height: auto; border-radius: 6px; margin-top: 1rem;">
+        </div>`;
+    }
+
+    // Render Video
+    function renderVideo(videoUrl, title, article) {
+        const downloadSvg = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>`;
+        article.innerHTML = `<div class="video-container">
+            <h1>${escapeHtml(title)}</h1>
+            <a href="${videoUrl}" download class="doc-download">${downloadSvg} Download Video</a>
+            <video controls style="max-width: 100%; border-radius: 6px; margin-top: 1rem;">
+                <source src="${videoUrl}" type="video/${videoUrl.split('.').pop()}">
+                Your browser does not support the video tag.
+            </video>
+        </div>`;
+    }
+
+    // Render Audio
+    function renderAudio(audioUrl, title, article) {
+        const downloadSvg = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>`;
+        const audioIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" style="width: 80px; height: 80px; color: #9C27B0; margin-bottom: 1rem;">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+        </svg>`;
+        article.innerHTML = `<div class="audio-container" style="text-align: center; padding: 2rem;">
+            <h1>${escapeHtml(title)}</h1>
+            <a href="${audioUrl}" download class="doc-download">${downloadSvg} Download Audio</a>
+            <div style="margin: 2rem 0;">${audioIcon}</div>
+            <audio controls style="width: 100%; max-width: 500px;">
+                <source src="${audioUrl}" type="audio/${audioUrl.split('.').pop().replace('mp3', 'mpeg')}">
+                Your browser does not support the audio tag.
+            </audio>
+        </div>`;
+    }
+
+    // Render JSON with syntax highlighting
+    async function renderJson(jsonUrl, title, article) {
+        const downloadSvg = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>`;
+        try {
+            const response = await fetch(jsonUrl);
+            const json = await response.json();
+            const formatted = JSON.stringify(json, null, 2);
+            article.innerHTML = `<div class="code-container">
+                <h1>${escapeHtml(title)}</h1>
+                <a href="${jsonUrl}" download class="doc-download">${downloadSvg} Download JSON</a>
+                <pre><code class="language-json">${escapeHtml(formatted)}</code></pre>
+            </div>`;
+            Prism.highlightAll();
+        } catch (err) {
+            article.innerHTML = `<div class="text-container">
+                <h1>${escapeHtml(title)}</h1>
+                <a href="${jsonUrl}" download class="doc-download">${downloadSvg} Download JSON</a>
+                <p style="color: #666; margin-top: 1rem;">Unable to preview this JSON. Please download to view.</p>
+            </div>`;
+        }
+    }
+
+    // Render HTML in iframe
+    function renderHtml(htmlUrl, title, article) {
+        const downloadSvg = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>`;
+        article.innerHTML = `<div class="html-container">
+            <h1>${escapeHtml(title)}</h1>
+            <a href="${htmlUrl}" download class="doc-download">${downloadSvg} Download HTML</a>
+            <a href="${htmlUrl}" target="_blank" class="doc-download" style="background: #E91E63; margin-left: 0.5rem;">Open in New Tab</a>
+            <iframe src="${htmlUrl}" style="width: 100%; height: 80vh; border: 1px solid #ddd; border-radius: 6px; margin-top: 1rem; background: white;"></iframe>
+        </div>`;
+    }
+
+    // Render Code file with syntax highlighting
+    async function renderCode(codeUrl, title, article, ext) {
+        const downloadSvg = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>`;
+        // Map extensions to Prism language classes
+        const langMap = {
+            'py': 'python', 'js': 'javascript', 'ts': 'typescript', 'go': 'go', 'java': 'java',
+            'rs': 'rust', 'cpp': 'cpp', 'c': 'c', 'h': 'c', 'hpp': 'cpp',
+            'rb': 'ruby', 'php': 'php', 'sh': 'bash', 'bash': 'bash', 'zsh': 'bash',
+            'xml': 'xml', 'yaml': 'yaml', 'yml': 'yaml'
+        };
+        const lang = langMap[ext] || ext;
+        try {
+            const response = await fetch(codeUrl);
+            const code = await response.text();
+            article.innerHTML = `<div class="code-container">
+                <h1>${escapeHtml(title)}</h1>
+                <a href="${codeUrl}" download class="doc-download">${downloadSvg} Download ${ext.toUpperCase()}</a>
+                <pre><code class="language-${lang}">${escapeHtml(code)}</code></pre>
+            </div>`;
+            Prism.highlightAll();
+        } catch (err) {
+            article.innerHTML = `<div class="text-container">
+                <h1>${escapeHtml(title)}</h1>
+                <a href="${codeUrl}" download class="doc-download">${downloadSvg} Download ${ext.toUpperCase()}</a>
+                <p style="color: #666; margin-top: 1rem;">Unable to preview this file. Please download to view.</p>
+            </div>`;
+        }
+    }
+
+    // Render LaTeX - with PDF preview if available
+    async function renderLatex(postName, title, article) {
+        const downloadSvg = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>`;
+
+        const texUrl = `${postName}.tex`;
+        const pdfUrl = `${postName}.pdf`;
+
+        // Check if PDF preview exists
+        try {
+            const pdfResponse = await fetch(pdfUrl, { method: 'HEAD' });
+            if (pdfResponse.ok) {
+                // PDF exists - show PDF preview with both download options
+                article.innerHTML = `<div class="latex-container">
+                    <h1>${escapeHtml(title)}</h1>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <a href="${pdfUrl}" download class="doc-download">${downloadSvg} Download PDF</a>
+                        <a href="${texUrl}" download class="doc-download" style="background: #009688;">${downloadSvg} Download LaTeX (.tex)</a>
+                    </div>
+                    <iframe class="pdf-viewer" src="${pdfUrl}" type="application/pdf"></iframe>
+                </div>`;
+                return;
+            }
+        } catch (e) {}
+
+        // No PDF - show source code with syntax highlighting
+        try {
+            const response = await fetch(texUrl);
+            const tex = await response.text();
+            article.innerHTML = `<div class="latex-container">
+                <h1>${escapeHtml(title)}</h1>
+                <a href="${texUrl}" download class="doc-download">${downloadSvg} Download LaTeX (.tex)</a>
+                <pre><code class="language-latex">${escapeHtml(tex)}</code></pre>
+            </div>`;
+            Prism.highlightAll();
+        } catch (err) {
+            article.innerHTML = `<div class="text-container">
+                <h1>${escapeHtml(title)}</h1>
+                <a href="${texUrl}" download class="doc-download">${downloadSvg} Download LaTeX (.tex)</a>
+                <p style="color: #666; margin-top: 1rem;">Unable to preview this file. Please download to view.</p>
+            </div>`;
+        }
+    }
+
+    // Render RTF - with PDF preview if available
+    async function renderRtf(postName, title, article) {
+        const downloadSvg = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>`;
+
+        const rtfUrl = `${postName}.rtf`;
+        const pdfUrl = `${postName}.pdf`;
+
+        // Check if PDF preview exists
+        try {
+            const pdfResponse = await fetch(pdfUrl, { method: 'HEAD' });
+            if (pdfResponse.ok) {
+                // PDF exists - show PDF preview with both download options
+                article.innerHTML = `<div class="rtf-container">
+                    <h1>${escapeHtml(title)}</h1>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <a href="${pdfUrl}" download class="doc-download">${downloadSvg} Download PDF</a>
+                        <a href="${rtfUrl}" download class="doc-download" style="background: #5C6BC0;">${downloadSvg} Download RTF</a>
+                    </div>
+                    <iframe class="pdf-viewer" src="${pdfUrl}" type="application/pdf"></iframe>
+                </div>`;
+                return;
+            }
+        } catch (e) {}
+
+        // No PDF - show download only
+        const rtfIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" style="width: 80px; height: 80px; margin-bottom: 1rem;">
+            <rect x="16" y="8" width="64" height="80" rx="4" fill="#5C6BC0"/>
+            <rect x="24" y="20" width="48" height="56" rx="2" fill="white"/>
+            <text x="48" y="56" text-anchor="middle" font-size="16" font-weight="bold" fill="#5C6BC0">RTF</text>
+        </svg>`;
+        article.innerHTML = `<div class="rtf-container" style="text-align: center; padding: 2rem;">
+            <h1>${escapeHtml(title)}</h1>
+            <a href="${rtfUrl}" download class="doc-download">${downloadSvg} Download RTF</a>
+            <div style="background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px; padding: 3rem; margin-top: 1rem; display: flex; flex-direction: column; align-items: center;">
+                ${rtfIcon}
+                <p style="color: #666; margin-bottom: 0.5rem;">RTF files cannot be previewed in browser.</p>
+                <p style="color: #888; font-size: 0.85rem;">Please download to view in a word processor.</p>
+            </div>
+        </div>`;
+    }
+
+    // Render OpenDocument Text (ODT) - with PDF preview if available
+    async function renderOdt(postName, title, article) {
+        const downloadSvg = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>`;
+
+        const odtUrl = `${postName}.odt`;
+        const pdfUrl = `${postName}.pdf`;
+
+        // Check if PDF preview exists
+        try {
+            const pdfResponse = await fetch(pdfUrl, { method: 'HEAD' });
+            if (pdfResponse.ok) {
+                article.innerHTML = `<div class="odt-container">
+                    <h1>${escapeHtml(title)}</h1>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <a href="${pdfUrl}" download class="doc-download">${downloadSvg} Download PDF</a>
+                        <a href="${odtUrl}" download class="doc-download" style="background: #2196F3;">${downloadSvg} Download ODT</a>
+                    </div>
+                    <iframe class="pdf-viewer" src="${pdfUrl}" type="application/pdf"></iframe>
+                </div>`;
+                return;
+            }
+        } catch (e) {}
+
+        // No PDF - show download only
+        const odtIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" style="width: 80px; height: 80px; margin-bottom: 1rem;">
+            <rect x="16" y="8" width="64" height="80" rx="4" fill="#2196F3"/>
+            <rect x="24" y="20" width="48" height="56" rx="2" fill="white"/>
+            <text x="48" y="56" text-anchor="middle" font-size="14" font-weight="bold" fill="#2196F3">ODT</text>
+        </svg>`;
+        article.innerHTML = `<div class="odt-container" style="text-align: center; padding: 2rem;">
+            <h1>${escapeHtml(title)}</h1>
+            <a href="${odtUrl}" download class="doc-download">${downloadSvg} Download ODT</a>
+            <div style="background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px; padding: 3rem; margin-top: 1rem; display: flex; flex-direction: column; align-items: center;">
+                ${odtIcon}
+                <p style="color: #666; margin-bottom: 0.5rem;">OpenDocument Text files cannot be previewed in browser.</p>
+                <p style="color: #888; font-size: 0.85rem;">Please download to view in LibreOffice or compatible software.</p>
+            </div>
+        </div>`;
+    }
+
+    // Render OpenDocument Spreadsheet (ODS) - with PDF preview if available
+    async function renderOds(postName, title, article) {
+        const downloadSvg = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>`;
+
+        const odsUrl = `${postName}.ods`;
+        const pdfUrl = `${postName}.pdf`;
+
+        // Check if PDF preview exists
+        try {
+            const pdfResponse = await fetch(pdfUrl, { method: 'HEAD' });
+            if (pdfResponse.ok) {
+                article.innerHTML = `<div class="ods-container">
+                    <h1>${escapeHtml(title)}</h1>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <a href="${pdfUrl}" download class="doc-download">${downloadSvg} Download PDF</a>
+                        <a href="${odsUrl}" download class="doc-download" style="background: #4CAF50;">${downloadSvg} Download ODS</a>
+                    </div>
+                    <iframe class="pdf-viewer" src="${pdfUrl}" type="application/pdf"></iframe>
+                </div>`;
+                return;
+            }
+        } catch (e) {}
+
+        // No PDF - show download only
+        const odsIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" style="width: 80px; height: 80px; margin-bottom: 1rem;">
+            <rect x="16" y="8" width="64" height="80" rx="4" fill="#4CAF50"/>
+            <rect x="24" y="20" width="48" height="56" rx="2" fill="white"/>
+            <text x="48" y="56" text-anchor="middle" font-size="14" font-weight="bold" fill="#4CAF50">ODS</text>
+        </svg>`;
+        article.innerHTML = `<div class="ods-container" style="text-align: center; padding: 2rem;">
+            <h1>${escapeHtml(title)}</h1>
+            <a href="${odsUrl}" download class="doc-download">${downloadSvg} Download ODS</a>
+            <div style="background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px; padding: 3rem; margin-top: 1rem; display: flex; flex-direction: column; align-items: center;">
+                ${odsIcon}
+                <p style="color: #666; margin-bottom: 0.5rem;">OpenDocument Spreadsheet files cannot be previewed in browser.</p>
+                <p style="color: #888; font-size: 0.85rem;">Please download to view in LibreOffice or compatible software.</p>
+            </div>
+        </div>`;
+    }
+
+    // Render OpenDocument Presentation (ODP) - with PDF preview if available
+    async function renderOdp(postName, title, article) {
+        const downloadSvg = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>`;
+
+        const odpUrl = `${postName}.odp`;
+        const pdfUrl = `${postName}.pdf`;
+
+        // Check if PDF preview exists
+        try {
+            const pdfResponse = await fetch(pdfUrl, { method: 'HEAD' });
+            if (pdfResponse.ok) {
+                article.innerHTML = `<div class="odp-container">
+                    <h1>${escapeHtml(title)}</h1>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <a href="${pdfUrl}" download class="doc-download">${downloadSvg} Download PDF</a>
+                        <a href="${odpUrl}" download class="doc-download" style="background: #FF9800;">${downloadSvg} Download ODP</a>
+                    </div>
+                    <iframe class="pdf-viewer" src="${pdfUrl}" type="application/pdf"></iframe>
+                </div>`;
+                return;
+            }
+        } catch (e) {}
+
+        // No PDF - show download only
+        const odpIcon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" style="width: 80px; height: 80px; margin-bottom: 1rem;">
+            <rect x="16" y="8" width="64" height="80" rx="4" fill="#FF9800"/>
+            <rect x="24" y="20" width="48" height="56" rx="2" fill="white"/>
+            <text x="48" y="56" text-anchor="middle" font-size="14" font-weight="bold" fill="#FF9800">ODP</text>
+        </svg>`;
+        article.innerHTML = `<div class="odp-container" style="text-align: center; padding: 2rem;">
+            <h1>${escapeHtml(title)}</h1>
+            <a href="${odpUrl}" download class="doc-download">${downloadSvg} Download ODP</a>
+            <div style="background: #f9f9f9; border: 1px solid #ddd; border-radius: 6px; padding: 3rem; margin-top: 1rem; display: flex; flex-direction: column; align-items: center;">
+                ${odpIcon}
+                <p style="color: #666; margin-bottom: 0.5rem;">OpenDocument Presentation files cannot be previewed in browser.</p>
+                <p style="color: #888; font-size: 0.85rem;">Please download to view in LibreOffice or compatible software.</p>
+            </div>
+        </div>`;
+    }
+
     // Extract title from filename
     function titleFromFilename(filename) {
         // Remove date prefix if present (yyyyMMdd-)
@@ -524,7 +852,7 @@
     }
 
     if (postName) {
-        // Try different file types in order: md -> ipynb -> pptx -> pdf -> txt -> docx -> xlsx -> csv
+        // Try different file types in order: md -> ipynb -> pptx -> rtf -> odt -> ods -> odp -> tex -> pdf -> txt -> docx -> xlsx -> csv -> images -> video -> audio -> json -> html -> code -> xml/yaml
         const article = document.getElementById('article');
         const filename = postName.split('/').pop();
         const title = titleFromFilename(filename);
@@ -558,6 +886,20 @@
                 }
                 throw new Error('not found');
             })
+            // RTF (before PDF to enable dual download)
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.rtf`, { method: 'HEAD' }); })
+            .then(async r => { if (r && r.ok) { await renderRtf(postName, title, article); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            // OpenDocument formats (before PDF to enable dual download)
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.odt`, { method: 'HEAD' }); })
+            .then(async r => { if (r && r.ok) { await renderOdt(postName, title, article); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.ods`, { method: 'HEAD' }); })
+            .then(async r => { if (r && r.ok) { await renderOds(postName, title, article); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.odp`, { method: 'HEAD' }); })
+            .then(async r => { if (r && r.ok) { await renderOdp(postName, title, article); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            // LaTeX (before PDF to enable dual download)
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.tex`, { method: 'HEAD' }); })
+            .then(async r => { if (r && r.ok) { await renderLatex(postName, title, article); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            // PDF (standalone, without source file)
             .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.pdf`, { method: 'HEAD' }); })
             .then(r => {
                 if (r && r.ok) {
@@ -601,6 +943,68 @@
                 }
                 throw new Error('not found');
             })
+            // Images
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.jpg`, { method: 'HEAD' }); })
+            .then(r => { if (r && r.ok) { renderImage(`${postName}.jpg`, title, article); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.jpeg`, { method: 'HEAD' }); })
+            .then(r => { if (r && r.ok) { renderImage(`${postName}.jpeg`, title, article); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.png`, { method: 'HEAD' }); })
+            .then(r => { if (r && r.ok) { renderImage(`${postName}.png`, title, article); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.gif`, { method: 'HEAD' }); })
+            .then(r => { if (r && r.ok) { renderImage(`${postName}.gif`, title, article); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.webp`, { method: 'HEAD' }); })
+            .then(r => { if (r && r.ok) { renderImage(`${postName}.webp`, title, article); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.svg`, { method: 'HEAD' }); })
+            .then(r => { if (r && r.ok) { renderImage(`${postName}.svg`, title, article); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            // Video
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.mp4`, { method: 'HEAD' }); })
+            .then(r => { if (r && r.ok) { renderVideo(`${postName}.mp4`, title, article); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.webm`, { method: 'HEAD' }); })
+            .then(r => { if (r && r.ok) { renderVideo(`${postName}.webm`, title, article); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            // Audio
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.mp3`, { method: 'HEAD' }); })
+            .then(r => { if (r && r.ok) { renderAudio(`${postName}.mp3`, title, article); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.wav`, { method: 'HEAD' }); })
+            .then(r => { if (r && r.ok) { renderAudio(`${postName}.wav`, title, article); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.ogg`, { method: 'HEAD' }); })
+            .then(r => { if (r && r.ok) { renderAudio(`${postName}.ogg`, title, article); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            // JSON
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.json`, { method: 'HEAD' }); })
+            .then(async r => { if (r && r.ok) { await renderJson(`${postName}.json`, title, article); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            // HTML
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.html`, { method: 'HEAD' }); })
+            .then(r => { if (r && r.ok) { renderHtml(`${postName}.html`, title, article); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            // Code files
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.py`, { method: 'HEAD' }); })
+            .then(async r => { if (r && r.ok) { await renderCode(`${postName}.py`, title, article, 'py'); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.js`, { method: 'HEAD' }); })
+            .then(async r => { if (r && r.ok) { await renderCode(`${postName}.js`, title, article, 'js'); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.ts`, { method: 'HEAD' }); })
+            .then(async r => { if (r && r.ok) { await renderCode(`${postName}.ts`, title, article, 'ts'); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.go`, { method: 'HEAD' }); })
+            .then(async r => { if (r && r.ok) { await renderCode(`${postName}.go`, title, article, 'go'); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.java`, { method: 'HEAD' }); })
+            .then(async r => { if (r && r.ok) { await renderCode(`${postName}.java`, title, article, 'java'); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.rs`, { method: 'HEAD' }); })
+            .then(async r => { if (r && r.ok) { await renderCode(`${postName}.rs`, title, article, 'rs'); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.cpp`, { method: 'HEAD' }); })
+            .then(async r => { if (r && r.ok) { await renderCode(`${postName}.cpp`, title, article, 'cpp'); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.c`, { method: 'HEAD' }); })
+            .then(async r => { if (r && r.ok) { await renderCode(`${postName}.c`, title, article, 'c'); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.rb`, { method: 'HEAD' }); })
+            .then(async r => { if (r && r.ok) { await renderCode(`${postName}.rb`, title, article, 'rb'); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.php`, { method: 'HEAD' }); })
+            .then(async r => { if (r && r.ok) { await renderCode(`${postName}.php`, title, article, 'php'); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.sh`, { method: 'HEAD' }); })
+            .then(async r => { if (r && r.ok) { await renderCode(`${postName}.sh`, title, article, 'sh'); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            // XML/YAML
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.xml`, { method: 'HEAD' }); })
+            .then(async r => { if (r && r.ok) { await renderCode(`${postName}.xml`, title, article, 'xml'); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.yaml`, { method: 'HEAD' }); })
+            .then(async r => { if (r && r.ok) { await renderCode(`${postName}.yaml`, title, article, 'yaml'); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.yml`, { method: 'HEAD' }); })
+            .then(async r => { if (r && r.ok) { await renderCode(`${postName}.yml`, title, article, 'yml'); document.title = title + ' | Yuxu Ge'; throw new Error('done'); } throw new Error('not found'); })
+            // Final catch
             .catch(e => {
                 if (e.message !== 'done' && article.innerHTML.includes('Loading')) {
                     article.innerHTML = '<p class="error">Post not found.</p>';

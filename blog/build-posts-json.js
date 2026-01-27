@@ -58,7 +58,25 @@ function extractTitle(body) {
 }
 
 // Supported file extensions
-const SUPPORTED_EXTENSIONS = ['.md', '.ipynb', '.pdf', '.docx', '.txt', '.xlsx', '.pptx', '.csv'];
+const SUPPORTED_EXTENSIONS = [
+    '.md', '.ipynb', '.pdf', '.docx', '.txt', '.xlsx', '.pptx', '.csv',
+    // Images
+    '.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg',
+    // Video
+    '.mp4', '.webm',
+    // Audio
+    '.mp3', '.wav', '.ogg',
+    // Code & Data
+    '.json', '.html', '.xml', '.yaml', '.yml',
+    '.py', '.js', '.ts', '.go', '.java', '.rs', '.cpp', '.c', '.h', '.hpp', '.rb', '.php', '.sh', '.bash', '.zsh',
+    // LaTeX & RTF
+    '.tex', '.rtf',
+    // OpenDocument
+    '.odt', '.ods', '.odp'
+];
+
+// Extensions that can be converted to PDF for preview
+const PDF_CONVERTIBLE = ['.pptx', '.rtf', '.tex', '.odt', '.ods', '.odp'];
 
 // Recursively find all supported files
 function findPostFiles(dir, files = []) {
@@ -69,11 +87,15 @@ function findPostFiles(dir, files = []) {
         if (entry.isDirectory()) {
             findPostFiles(fullPath, files);
         } else if (SUPPORTED_EXTENSIONS.some(ext => entry.name.endsWith(ext))) {
-            // Skip PPTX if same-name PDF exists (PDF will be used for preview)
-            if (entry.name.endsWith('.pptx')) {
-                const pdfPath = fullPath.replace(/\.pptx$/, '.pdf');
-                if (fs.existsSync(pdfPath)) {
-                    continue;
+            const ext = path.extname(entry.name).toLowerCase();
+            // Skip PDF if a source file exists (source file will be listed with pdfPreview flag)
+            if (ext === '.pdf') {
+                const hasSource = PDF_CONVERTIBLE.some(srcExt => {
+                    const srcPath = fullPath.replace(/\.pdf$/i, srcExt);
+                    return fs.existsSync(srcPath);
+                });
+                if (hasSource) {
+                    continue; // Skip PDF, source file will be listed instead
                 }
             }
             files.push(fullPath);
@@ -101,15 +123,39 @@ function parseDateFromFilename(filename) {
 
 // Get file type from extension
 function getFileType(filePath) {
-    if (filePath.endsWith('.md')) return 'markdown';
-    if (filePath.endsWith('.ipynb')) return 'notebook';
-    if (filePath.endsWith('.pdf')) return 'pdf';
-    if (filePath.endsWith('.docx')) return 'word';
-    if (filePath.endsWith('.txt')) return 'text';
-    if (filePath.endsWith('.xlsx')) return 'excel';
-    if (filePath.endsWith('.pptx')) return 'powerpoint';
-    if (filePath.endsWith('.csv')) return 'csv';
-    return 'unknown';
+    const ext = path.extname(filePath).toLowerCase();
+    const typeMap = {
+        '.md': 'markdown',
+        '.ipynb': 'notebook',
+        '.pdf': 'pdf',
+        '.docx': 'word',
+        '.txt': 'text',
+        '.xlsx': 'excel',
+        '.pptx': 'powerpoint',
+        '.csv': 'csv',
+        // Images
+        '.jpg': 'image', '.jpeg': 'image', '.png': 'image', '.gif': 'image', '.webp': 'image', '.svg': 'image',
+        // Video
+        '.mp4': 'video', '.webm': 'video',
+        // Audio
+        '.mp3': 'audio', '.wav': 'audio', '.ogg': 'audio',
+        // Code & Data
+        '.json': 'json',
+        '.html': 'html',
+        '.xml': 'xml',
+        '.yaml': 'yaml', '.yml': 'yaml',
+        '.py': 'code', '.js': 'code', '.ts': 'code', '.go': 'code', '.java': 'code',
+        '.rs': 'code', '.cpp': 'code', '.c': 'code', '.h': 'code', '.hpp': 'code',
+        '.rb': 'code', '.php': 'code', '.sh': 'code', '.bash': 'code', '.zsh': 'code',
+        // LaTeX & RTF
+        '.tex': 'latex',
+        '.rtf': 'rtf',
+        // OpenDocument
+        '.odt': 'opendocument-text',
+        '.ods': 'opendocument-spreadsheet',
+        '.odp': 'opendocument-presentation'
+    };
+    return typeMap[ext] || 'unknown';
 }
 
 // Parse Jupyter notebook metadata
@@ -243,36 +289,24 @@ function main() {
             }
         }
 
-        // Generate slug from path
+        // Generate slug from path (remove extension)
         const relativePath = path.relative(__dirname, filePath);
-        const slug = relativePath.replace(/\.(md|ipynb|pdf|docx|txt|xlsx|pptx|csv)$/, '');
+        const slug = relativePath.replace(/\.[^.]+$/, '');
 
         const post = {
             slug,
             title,
             date: postDate,
-            type: fileType
+            type: fileType,
+            ext: ext.slice(1) // Store extension without dot for code files
         };
 
-        // Check if this PDF has a corresponding PPTX (for PowerPoint preview)
-        if (fileType === 'pdf') {
-            const pptxPath = filePath.replace(/\.pdf$/, '.pptx');
-            if (fs.existsSync(pptxPath)) {
-                post.type = 'powerpoint';
+        // Check if this source file has a corresponding PDF (for preview with dual download)
+        if (PDF_CONVERTIBLE.includes(ext)) {
+            const pdfPath = filePath.replace(new RegExp(`\\${ext}$`, 'i'), '.pdf');
+            if (fs.existsSync(pdfPath)) {
                 post.pdfPreview = true; // Flag to indicate PDF is available for preview
-
-                // Use PPTX date instead of PDF date (PDF is generated, PPTX is original)
-                const pptxBasename = path.basename(pptxPath, '.pptx');
-                const pptxFilenameParsed = parseDateFromFilename(pptxBasename);
-                if (pptxFilenameParsed) {
-                    post.date = pptxFilenameParsed.date;
-                    post.title = pptxFilenameParsed.name.replace(/-/g, ' ');
-                    console.log(`  (powerpoint with PDF preview, date from pptx filename: ${post.date})`);
-                } else {
-                    post.date = getFileCreationDate(pptxPath);
-                    post.title = pptxBasename.replace(/-/g, ' ');
-                    console.log(`  (powerpoint with PDF preview, date from pptx creation: ${post.date})`);
-                }
+                console.log(`  (${fileType} with PDF preview)`);
             }
         }
 

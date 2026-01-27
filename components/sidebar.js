@@ -502,8 +502,9 @@ function initGlobalSearch() {
         const keywordResults = client.searchKeywordOnly(query, 10);
         const keywordUrls = new Set(keywordResults.map(r => r.url));
 
-        // Show keyword results immediately with AI loading indicator
-        showSearchOverlay(query, keywordResults, client.isSemanticReady(), null);
+        // Show keyword results immediately with AI loading indicator (only for 2+ char queries)
+        const shouldShowAiLoading = client.isSemanticReady() && query.length >= 2;
+        showSearchOverlay(query, keywordResults, shouldShowAiLoading, null);
 
         // 2. Run semantic search in background (needs API call)
         if (client.isSemanticReady() && query.length >= 2) {

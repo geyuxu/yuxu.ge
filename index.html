@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Yuxu Ge | Senior AI Architect</title>
-    <meta name="description" content="Yuxu Ge - Senior Software Architect (12y+) transitioning into Embodied AI & Robotics. MSc Candidate at University of York. Building systems that bridge enterprise engineering with machine intelligence.">
+    <meta name="description"
+        content="Yuxu Ge - Senior Software Architect (12y+) transitioning into Embodied AI & Robotics. MSc Candidate at University of York. Building systems that bridge enterprise engineering with machine intelligence.">
     <style>
         :root {
             --black: #111;
@@ -162,7 +164,7 @@
         .social-links a:hover {
             color: var(--vermilion);
             opacity: 1;
-            background: rgba(255,255,255,0.05);
+            background: rgba(255, 255, 255, 0.05);
         }
 
         .social-links svg {
@@ -288,7 +290,7 @@
 
         .work-item:hover {
             border-color: var(--vermilion);
-            box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
         }
 
         .work-meta {
@@ -441,8 +443,15 @@
         }
 
         @keyframes arrow-bounce {
-            0%, 100% { transform: translateX(0); }
-            50% { transform: translateX(4px); }
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            50% {
+                transform: translateX(4px);
+            }
         }
 
         .photo-strip-scroll {
@@ -598,6 +607,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="layout">
@@ -610,95 +620,10 @@
         <main class="content">
 
             <!-- Hero -->
-            <section class="hero">
-                <h2 class="hero-subtitle">Architecting Intelligence.</h2>
-                <p class="hero-bio">
-                    Senior Software Architect (12y+) transitioning into Embodied AI &amp; Robotics. MSc Candidate at University of York. Building systems that bridge enterprise engineering with the frontier of machine intelligence.
-                </p>
-                <div class="seasonal-greeting">
-                    <span class="greeting-horse">馬</span>
-                    Wishing you a prosperous Year of the Horse 2026
-                </div>
-            </section>
+            <div id="hero-section"></div>
 
-            <!-- Latest Blog -->
-            <section>
-                <h3 class="section-header">Latest Blog</h3>
-                <div class="blog-grid" id="latest-blog">
-                    <div class="blog-card"><div class="blog-card-title">Loading...</div></div>
-                </div>
-                <a href="/blog/" class="blog-more">
-                    View all posts
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M5 12h14M12 5l7 7-7 7"/>
-                    </svg>
-                </a>
-            </section>
-
-            <!-- The Stack -->
-            <section>
-                <h3 class="section-header">The Stack</h3>
-                <div class="stack-grid">
-                    <div class="stack-item">
-                        Distributed Systems
-                        <span>High-concurrency architecture for 30M+ users</span>
-                    </div>
-                    <div class="stack-item">
-                        ROS 2
-                        <span>Robot Operating System middleware</span>
-                    </div>
-                    <div class="stack-item">
-                        Reinforcement Learning
-                        <span>Policy optimization &amp; Sim2Real transfer</span>
-                    </div>
-                    <div class="stack-item">
-                        RAG Pipelines
-                        <span>Hybrid search &amp; hallucination mitigation</span>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Selected Work -->
-            <section>
-                <h3 class="section-header">Selected Work</h3>
-                <div class="work-list">
-
-                    <article class="work-item">
-                        <div class="work-meta">
-                            <span class="work-tag">Engineering</span>
-                            <span class="work-year">2025</span>
-                        </div>
-                        <h4 class="work-title">Spring-AI-RAG-System</h4>
-                        <p class="work-desc">
-                            Enterprise-grade Retrieval-Augmented Generation pipeline implementing hybrid search (Elasticsearch + PgVector). Solves context window limits and reduces hallucination through explainable retrieval chains.
-                        </p>
-                        <a href="https://github.com/geyuxu/Spring-AI-RAG-System" target="_blank" rel="noopener" class="work-link">
-                            View on GitHub
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 12h14M12 5l7 7-7 7"/>
-                            </svg>
-                        </a>
-                    </article>
-
-                    <!-- <article class="work-item">
-                        <div class="work-meta">
-                            <span class="work-tag">Research</span>
-                            <span class="work-year">2025</span>
-                        </div>
-                        <h4 class="work-title">Adaptive-NPC-Survey</h4>
-                        <p class="work-desc">
-                            Systematic critical review of adaptive AI behaviors in gaming. Investigates the trade-off between Deep RL agent performance and player immersion using the SPIDER evaluation framework.
-                        </p>
-                        <a href="https://github.com/geyuxu/Adaptive-NPC-Survey" target="_blank" rel="noopener" class="work-link">
-                            Read Summary
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                <path d="M5 12h14M12 5l7 7-7 7"/>
-                            </svg>
-                        </a>
-                    </article> -->
-
-                </div>
-            </section>
+            <!-- Dynamic Sections -->
+            <div id="dynamic-sections"></div>
 
             <!-- Photo Strip -->
             <section class="photo-strip">
@@ -707,7 +632,7 @@
                     <a href="/gallery/" class="photo-strip-link">
                         View Gallery
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M5 12h14M12 5l7 7-7 7"/>
+                            <path d="M5 12h14M12 5l7 7-7 7" />
                         </svg>
                     </a>
                 </div>
@@ -722,56 +647,148 @@
 
     </div>
 
-<script>
-fetch('/blog/posts.json')
-    .then(r => r.json())
-    .then(posts => {
-        const sorted = posts.sort((a, b) => b.date.localeCompare(a.date)).slice(0, 4);
-        const container = document.getElementById('latest-blog');
-        container.innerHTML = sorted.map(p => `
+    <script>
+        // Helper to render Blog section
+        function renderBlog(section, allPosts) {
+            const count = section.count || 4;
+            const sorted = allPosts.sort((a, b) => b.date.localeCompare(a.date)).slice(0, count);
+
+            const items = sorted.map(p => `
             <a href="/blog/post.html?p=${p.slug}" class="blog-card">
                 <div class="blog-card-title">${p.title}</div>
                 <div class="blog-card-meta">${p.date}</div>
             </a>
         `).join('');
-    })
-    .catch(() => {
-        document.getElementById('latest-blog').innerHTML = '<div class="blog-card"><div class="blog-card-title">No posts yet.</div></div>';
-    });
-</script>
 
-<script>
-// Load latest photos for photo strip - fill width dynamically
-fetch('/gallery/photos.json')
-    .then(r => r.json())
-    .then(photos => {
-        if (!photos.length) return;
-        const container = document.getElementById('photo-strip');
-        const allImages = photos.flatMap(p => p.images);
+            return `
+            <section>
+                <h3 class="section-header">${section.title}</h3>
+                <div class="blog-grid">${items}</div>
+                 <a href="/blog/" class="blog-more">
+                    View all posts
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </section>
+        `;
+        }
 
-        function renderPhotos() {
-            const containerWidth = container.offsetWidth;
-            const itemWidth = 120;
-            const gap = 8;
-            const itemsNeeded = Math.max(3, Math.floor((containerWidth + gap) / (itemWidth + gap)));
-            const images = allImages.slice(0, itemsNeeded);
+        // Helper to render Stack section
+        function renderStack(section) {
+            const items = section.items.map(item => `
+            <div class="stack-item">
+                ${item.label}
+                <span>${item.value}</span>
+            </div>
+        `).join('');
+            return `
+            <section>
+                <h3 class="section-header">${section.title}</h3>
+                <div class="stack-grid">${items}</div>
+            </section>
+        `;
+        }
 
-            container.innerHTML = images.map(img => `
+        // Helper to render Work section
+        function renderWork(section) {
+            const items = section.items.map(item => `
+            <article class="work-item">
+                <div class="work-meta">
+                    <span class="work-tag">${item.tag}</span>
+                    <span class="work-year">${item.year}</span>
+                </div>
+                <h4 class="work-title">${item.title}</h4>
+                <p class="work-desc">${item.description}</p>
+                <a href="${item.link}" target="_blank" rel="noopener" class="work-link">
+                    View on GitHub
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </article>
+        `).join('');
+            return `
+            <section>
+                <h3 class="section-header">${section.title}</h3>
+                <div class="work-list">${items}</div>
+            </section>
+        `;
+        }
+
+        // Helper to render Hero section
+        function renderHero(hero) {
+            return `
+            <section class="hero">
+                <h2 class="hero-subtitle">${hero.subtitle}</h2>
+                <p class="hero-bio">${hero.bio}</p>
+                <div class="seasonal-greeting">
+                    ${hero.greeting}
+                </div>
+            </section>
+        `;
+        }
+
+        // Main Content Loader
+        Promise.all([
+            fetch('/home-config.json').then(r => r.json()),
+            fetch('/blog/posts.json').then(r => r.json())
+        ]).then(([config, posts]) => {
+            // 0. Render Hero
+            if (config.hero) {
+                document.getElementById('hero-section').innerHTML = renderHero(config.hero);
+            }
+
+            // 1. Render Dynamic Sections including Blog
+            if (config.sections) {
+                const dynamicContainer = document.getElementById('dynamic-sections');
+                const sectionsHtml = config.sections.map(section => {
+                    if (section.type === 'blog') return renderBlog(section, posts);
+                    if (section.type === 'stack') return renderStack(section);
+                    if (section.type === 'work') return renderWork(section);
+                    return '';
+                }).join('');
+                dynamicContainer.innerHTML = sectionsHtml;
+            }
+        })
+            .catch(err => {
+                console.error('Error loading content:', err);
+            });
+    </script>
+
+    <script>
+        // Load latest photos for photo strip - fill width dynamically
+        fetch('/gallery/photos.json')
+            .then(r => r.json())
+            .then(photos => {
+                if (!photos.length) return;
+                const container = document.getElementById('photo-strip');
+                const allImages = photos.flatMap(p => p.images);
+
+                function renderPhotos() {
+                    const containerWidth = container.offsetWidth;
+                    const itemWidth = 120;
+                    const gap = 8;
+                    const itemsNeeded = Math.max(3, Math.floor((containerWidth + gap) / (itemWidth + gap)));
+                    const images = allImages.slice(0, itemsNeeded);
+
+                    container.innerHTML = images.map(img => `
                 <a href="/gallery/" class="photo-strip-item">
                     <img src="${encodeURI(img)}" alt="Photo" loading="lazy">
                 </a>
             `).join('');
-        }
+                }
 
-        renderPhotos();
-        let resizeTimer;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimer);
-            resizeTimer = setTimeout(renderPhotos, 150);
-        });
-    })
-    .catch(() => {});
-</script>
+                renderPhotos();
+                let resizeTimer;
+                window.addEventListener('resize', () => {
+                    clearTimeout(resizeTimer);
+                    resizeTimer = setTimeout(renderPhotos, 150);
+                });
+            })
+            .catch(() => { });
+    </script>
 
 </body>
+
 </html>

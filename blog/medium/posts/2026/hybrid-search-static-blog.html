@@ -70,6 +70,18 @@ description: Building a production-ready hybrid search for static blogs - combin
 <code>        body: JSON.stringify({</code><br>
 <code># ... (8 more lines)</code></blockquote>
 <p><em>View full code: <a href="https://gist.github.com/geyuxu/428d6fb3f8356571a768f33ee18264ea">GitHub Gist</a></em></p><p><strong>Why 512 dimensions?</strong> OpenAI&#39;s text-embedding-3-small supports dimension reduction. Using 512 instead of 1536 cuts index size by ~65% with minimal quality loss.</p>
+<h3>Embedding Cache for Incremental Updates</h3>
+<p>Calling OpenAI API on every rebuild is slow and expensive. Content hashing enables incremental updates:</p>
+<blockquote><code>import crypto from &#039;crypto&#039;;</code><br>
+<code></code><br>
+<code>// Compute content hash</code><br>
+<code>function contentHash(text) {</code><br>
+<code>    return crypto.createHash(&#039;md5&#039;).update(text).digest(&#039;hex&#039;);</code><br>
+<code>}</code><br>
+<code></code><br>
+<code>// Cache format: { [chunkId]: { hash, embedding } }</code><br>
+<code># ... (16 more lines)</code></blockquote>
+<p><em>View full code: <a href="https://gist.github.com/geyuxu/b7c278a4ddb19bee63f12a53d3c234bc">GitHub Gist</a></em></p><p><strong>Result</strong>: First build requires full embedding (~93 batches), but subsequent updates only process changed articles. Adding one new post needs just 1-2 API calls instead of re-processing all 135 articles.</p>
 <h2>Part 2: The Cloudflare Worker</h2>
 <p>The Worker acts as a secure proxy, keeping your API key hidden from the browser.</p>
 <blockquote><code>// workers/embed-worker.js</code><br>

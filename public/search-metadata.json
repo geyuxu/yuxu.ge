@@ -57,19 +57,25 @@
     "title": "静态博客的混合搜索方案：BM25 + 向量检索 + Cloudflare Workers",
     "url": "/blog/posts/2026/hybrid-search-static-blog-zh",
     "date": "2026-01-26",
-    "text": "过滤停用词\n- **中文**：字符单元 + 二元组（无需分词库）\n\n调用 OpenAI 获取向量\n\n**为什么选择 512 维？** OpenAI 的 text-embedding-3-small 支持降维。使用 512 而非 1536 维可以减少约 65% 的索引体积，质量损失极小。\n\n第二部分："
+    "text": "过滤停用词\n- **中文**：字符单元 + 二元组（无需分词库）\n\n调用 OpenAI 获取向量\n\n**为什么选择 512 维？** OpenAI 的 text-embedding-3-small 支持降维。使用 512 而非 1536 维可以减少约 65% 的索引体积，质量损失极小。\n\nEmbed"
   },
   "/blog/posts/2026/hybrid-search-static-blog-zh#2": {
     "title": "静态博客的混合搜索方案：BM25 + 向量检索 + Cloudflare Workers",
     "url": "/blog/posts/2026/hybrid-search-static-blog-zh",
     "date": "2026-01-26",
-    "text": "在浏览器端。我们并行运行两种搜索：\n\n为什么选择 Reciprocal Rank Fusion？\n\nRRF 简洁优雅：`score = Σ 1/(k + rank)`。它不需要分数归一化，能优雅地处理 BM25 分数和向量距离的不同量级。\n\n第四部分：渐进式用户体验\n\n关键洞察：**关键词搜索是即时"
+    "text": "ge/api/*` → 你的 Worker\n3. 设置环境变量：`OPENAI_API_KEY`\n\n现在前端调用 `/api/embedding` 接口，永远不会暴露 API 密钥。\n\n第三部分：混合搜索客户端\n\n魔法发生在浏览器端。我们并行运行两种搜索：\n\n为什么选择 Reciprocal Ran"
   },
   "/blog/posts/2026/hybrid-search-static-blog-zh#3": {
     "title": "静态博客的混合搜索方案：BM25 + 向量检索 + Cloudflare Workers",
     "url": "/blog/posts/2026/hybrid-search-static-blog-zh",
     "date": "2026-01-26",
-    "text": "_API_KEY=sk-xxx node scripts/index-builder.mjs`\n2. **部署 Worker**：配置 Cloudflare Worker 和路由映射\n3. **上传静态文件**：`search.dat`、`search-inverted.json`、`search-"
+    "text": "两者优势：\n- **精确匹配** via 关键词搜索（搜\"Docker\"立即找到\"Docker\"）\n- **语义匹配** via 向量搜索（搜\"容器安全\"也能找到 Docker 文章）\n\n部署清单\n\n1. **构建索引**：`OPENAI_API_KEY=sk-xxx node scripts/in"
+  },
+  "/blog/posts/2026/hybrid-search-static-blog-zh#4": {
+    "title": "静态博客的混合搜索方案：BM25 + 向量检索 + Cloudflare Workers",
+    "url": "/blog/posts/2026/hybrid-search-static-blog-zh",
+    "date": "2026-01-26",
+    "text": "**质量**：语义搜索理解用户意图\n- **成本**：只为实际搜索请求付费，无需服务器运行费用\n\n完整源代码：github.com/geyuxu/yuxu.ge\n\n*技术栈：OpenAI text-embedding-3-small、Voy WASM、Cloudflare Workers、原生 Ja"
   },
   "/blog/posts/2026/hybrid-search-static-blog#0": {
     "title": "Building Hybrid Search for Static Blogs: BM25 + Vector Search with Cloudflare Workers",
@@ -93,37 +99,43 @@
     "title": "Building Hybrid Search for Static Blogs: BM25 + Vector Search with Cloudflare Workers",
     "url": "/blog/posts/2026/hybrid-search-static-blog",
     "date": "2026-01-26",
-    "text": "mal quality loss.\n\nPart 2: The Cloudflare Worker\n\nThe Worker acts as a secure proxy, keeping your API key hidden from the browser.\n\n**Cloudflare setup"
+    "text": "OpenAI API on every rebuild is slow and expensive. Content hashing enables incremental updates:\n\n**Result**: First build requires full embedding (~93 "
   },
   "/blog/posts/2026/hybrid-search-static-blog#4": {
     "title": "Building Hybrid Search for Static Blogs: BM25 + Vector Search with Cloudflare Workers",
     "url": "/blog/posts/2026/hybrid-search-static-blog",
     "date": "2026-01-26",
-    "text": "in the browser. We run two searches in parallel:\n\nWhy Reciprocal Rank Fusion?\n\nRRF is elegantly simple: `score = Σ 1/(k + rank)` for each retriever. I"
+    "text": "Worker at `api-embedding.your-worker.workers.dev`\n2. Add route: `yuxu.ge/api/*` → your Worker\n3. Set environment variable: `OPENAI_API_KEY`\n\nNow your "
   },
   "/blog/posts/2026/hybrid-search-static-blog#5": {
     "title": "Building Hybrid Search for Static Blogs: BM25 + Vector Search with Cloudflare Workers",
     "url": "/blog/posts/2026/hybrid-search-static-blog",
     "date": "2026-01-26",
-    "text": "iately, then merge in AI results with animation:\n\nThe CSS animations make the experience feel polished:\n\nEach result shows badges indicating its sourc"
+    "text": "mple: `score = Σ 1/(k + rank)` for each retriever. It doesn't require score normalization and handles the different scales of BM25 scores vs vector di"
   },
   "/blog/posts/2026/hybrid-search-static-blog#6": {
     "title": "Building Hybrid Search for Static Blogs: BM25 + Vector Search with Cloudflare Workers",
     "url": "/blog/posts/2026/hybrid-search-static-blog",
     "date": "2026-01-26",
-    "text": "h (searching \"Docker\" finds \"Docker\" immediately)\n- **Semantic matches** via vectors (searching \"container security\" finds Docker articles)\n\nDeploymen"
+    "text": "Each result shows badges indicating its source:\n- **`keyword`** (blue) - matched via BM25\n- **`AI`** (pink) - matched via vector similarity\n- Both bad"
   },
   "/blog/posts/2026/hybrid-search-static-blog#7": {
     "title": "Building Hybrid Search for Static Blogs: BM25 + Vector Search with Cloudflare Workers",
     "url": "/blog/posts/2026/hybrid-search-static-blog",
     "date": "2026-01-26",
-    "text": "browser console, type in search box\n\nConclusion\n\nThis architecture proves you don't need a backend server for sophisticated search. By splitting the w"
+    "text": "\" finds Docker articles)\n\nDeployment Checklist\n\n1. **Build indexes**: `OPENAI_API_KEY=sk-xxx node scripts/index-builder.mjs`\n2. **Deploy Worker**: Set"
   },
   "/blog/posts/2026/hybrid-search-static-blog#8": {
     "title": "Building Hybrid Search for Static Blogs: BM25 + Vector Search with Cloudflare Workers",
     "url": "/blog/posts/2026/hybrid-search-static-blog",
     "date": "2026-01-26",
-    "text": "pay for actual search queries, not server uptime\n\nThe full source code is available at github.com/geyuxu/yuxu.ge.\n\n*Built with: OpenAI text-embedding-"
+    "text": "'t need a backend server for sophisticated search. By splitting the work between build-time indexing, edge compute (Cloudflare Worker), and browser-si"
+  },
+  "/blog/posts/2026/hybrid-search-static-blog#9": {
+    "title": "Building Hybrid Search for Static Blogs: BM25 + Vector Search with Cloudflare Workers",
+    "url": "/blog/posts/2026/hybrid-search-static-blog",
+    "date": "2026-01-26",
+    "text": "code is available at github.com/geyuxu/yuxu.ge.\n\n*Built with: OpenAI text-embedding-3-small, Voy WASM, Cloudflare Workers, vanilla JavaScript*"
   },
   "/blog/posts/legacy/#0": {
     "title": "GYX News - 2025/06/27",
@@ -524,151 +536,151 @@
   "/blog/posts/legacy/01-numpy-basics#0": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "NumPy 基础与实战入门\n\n上述代码中，我们分别从列表和元组创建了一维数组 a 和 b。NumPy 自动将元素转换为同一种类型（这里都是整数型 int64），并将它们存储为连续内存。a.dtype 表示数组的元素类型，b.shape 则是数组的形状。输出结果表明两个数组都是长度为5的一维数组，元素"
   },
   "/blog/posts/legacy/01-numpy-basics#1": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "np.zeros_like(e) 则是基于现有数组形状创建全1或全0的新数组。\n- 等差数列：np.linspace(start, end, num) 用于在指定范围生成指定个数的等间隔点，常用于生成连续函数的自变量数组。上例中 h 从1到10生成4个值，而 x 和 y 示范了利用 np.arang"
   },
   "/blog/posts/legacy/01-numpy-basics#2": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "用到每个元素上，充分利用底层的优化。\n\n例如，我们创建一个二维数组，然后对它进行加法和比较运算：\n\n可以看到，ary + 1 将数组中每个数都加上了1，得到的新数组仍是相同形状。同时，ary > 3 会对每个元素进行比较判断，返回一个同样形状的布尔数组，表示对应位置上元素是否大于3。这种逐元素的运算"
   },
   "/blog/posts/legacy/01-numpy-basics#3": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "要属性，例如形状、维度、数据类型等等。了解和使用这些属性可以帮助我们更好地掌握数组的结构和特性。\n\n以下代码创建了一个 2x4 的数组，演示了 ndarray 的常见属性：\n\n我们创建了 arr 包含0到7的 8个元素，并reshape成2x4形状。输出中：\n\n- shape：数组的形状，用一个元组"
   },
   "/blog/posts/legacy/01-numpy-basics#4": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "信息。例如，当检查数据读入是否正确，或调优存储和性能时，这些属性都非常有用。\n五、数组的索引和切片\nNumPy 数组的索引（indexing）和切片（slicing）操作与 Python 列表类似，但也有一些值得注意的区别和特性。\n1. 基本索引\n一维数组可以用与列表相同的语法通过索引访问元素，例如"
   },
   "/blog/posts/legacy/01-numpy-basics#5": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "可以对每一维分别进行切片，例如 arr2d[0:2, 1:3] 可以同时在行和列两个维度上切片。\n\n需要注意，数组切片返回的是原数组的视图（view），并不拷贝数据。也就是说，修改切片结果会影响到原数组对应的部分。这一点与 Python 列表的切片不同（列表切片会生成新的列表）。如果需要获得一份独立"
   },
   "/blog/posts/legacy/01-numpy-basics#6": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "的子数组进行操作但不影响原数据，可以在切片时加上 .copy() 来生成副本。\n六、数据类型与转换\nNumPy 支持多种数据类型（dtype），不仅有常见的数值类型（int、float），还有布尔型、字符串，甚至日期时间和复合类型。灵活地运用数据类型有时能提高效率或方便地处理特殊数据。下面我们分几类"
   },
   "/blog/posts/legacy/01-numpy-basics#7": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "lse 为0。布尔数组经常用于作为掩码筛选数据。布尔型的存储比较节省，每个元素通常占用1个字节。\n\nNumPy 的字符串类型（通常显示为 <U<n>）表示定长的 Unicode 字符串，其中 <U 表示Unicode字符串，n表示字符长度上限。NumPy 会根据数组中最长的字符串长度来确定 n 的大"
   },
   "/blog/posts/legacy/01-numpy-basics#8": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "umPy’ 长度5，‘数据分析’ 长度4（两个汉字长度为2，每个汉字算一个字符），‘Python3.9’ 长度8。但是 NumPy 为整个数组统一分配了长度6（能够容纳最长的8字符吗？这里汉字两个可能占2字符位置，各实现不同，但dtype给出<U6可能基于最长unicode code points数"
   },
   "/blog/posts/legacy/01-numpy-basics#9": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "来方便地进行时间相关的数据运算。例如，我们可以把字符串表示的日期转换为 datetime64：\n\n上例中，我们定义了三个日期字符串：'2023'（只有年份）、'2024-01-01'（年月日）、'2025-03-07 15:30:21'（完整日期时间）。转换为 datetime64[s] 后，Num"
   },
   "/blog/posts/legacy/01-numpy-basics#10": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "化dtype理解为“元素为元组的数组”，每个元素包含多个不同类型的值，类似于数据库或表格的一行。\n\n我们可以通过 dtype 参数来定义结构化类型。比如，定义一个 dtype 包含姓名(name)、三个科目成绩(scores)和年龄(age)三个字段：\n\n在这个例子中，我们构建了一个列表，每个元素是"
   },
   "/blog/posts/legacy/01-numpy-basics#11": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "的姓名字段组成新的数组，arr['age'] 则是所有年龄的数组。因此我们可以对年龄字段直接调用 .mean() 来计算平均年龄。结构化数组让我们可以在NumPy中方便地处理表格化的数据，但需要注意它的元素是复合类型，某些NumPy通用函数并不直接支持逐字段操作，在使用时要仔细选择和处理。\n七、读取"
   },
   "/blog/posts/legacy/01-numpy-basics#12": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "期保持字符串，价格用 float 转换，成交量用 int 转换。将所有元组收集到列表后，通过 np.array(..., dtype=自定义dtype) 一次性转换为结构化的 NumPy 数组。这里我们定义了 dtype 包含6个字段，对应日期（10位以内字符串），开盘、最高、最低、收盘价（32位浮"
   },
   "/blog/posts/legacy/01-numpy-basics#13": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "从而减少手动解析的代码。不过，上述例子有助于理解数据读入和dtype指定的过程。\n八、数组形状变换\n多维数组的形状（shape）可以通过多种方式改变，例如改变维度的排列组合，或增加/减少维度。NumPy 提供的操作主要有 reshape、flatten/ravel 以及 resize 等。需要注意的"
   },
   "/blog/posts/legacy/01-numpy-basics#14": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "原数组 a，第一个元素也变为了 99。说明 a 和 b 实际上共享底层的数据内存，只是视图不同。\n\n需要注意，如果 a 在内存中不是连续存储（比如对非连续切片调用reshape），那么可能会触发复制行为或报错。但对于像上例这样由连续数组得到的新形状，reshape 是高效且安全的。\n2. flatt"
   },
   "/blog/posts/legacy/01-numpy-basics#15": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "(-1) 达到展平效果，这种方式等价于 ravel。\n3. resize：就地变维\nndarray.resize(new_shape) 方法会直接在原数组上改变其形状。与 reshape 不同，resize 是就地操作，会修改原数组本身。如果新尺寸比原来的总元素数少，后面的元素会被截断；如果新尺寸更"
   },
   "/blog/posts/legacy/01-numpy-basics#16": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "视图，或者 np.copy 后再 reshape，以免无意中修改原始数据。\n九、布尔索引与位置索引\n在前面第三节我们已经看过布尔数组的用法，现在来详细介绍布尔索引和位置索引。这两者都是 NumPy 中强大的索引机制，可用于从数组中筛选出我们需要的元素或重排数组顺序。\n1. 布尔索引（Boolean "
   },
   "/blog/posts/legacy/01-numpy-basics#17": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "须和 ary 相同，其中 True 的位置有0,2,5,7（对应元素1,3,6,8）被筛选出来。\n\n布尔索引常用的一个场景是直接对数组施加条件筛选，如上例所示。而对于更复杂的条件，可以结合位运算符逐步构造。例如筛选同时是3和7的倍数的元素，可以这样：\n\n这里 & 表示逐位与运算，相当于逻辑上的“且”"
   },
   "/blog/posts/legacy/01-numpy-basics#18": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "3, 1, 2]。通过这种方法可以实现对数组的任意重排。\n\n位置索引也支持重复取相同位置。例如：\n\n结果 [1, 1, 2, 2] 中，原数组第0元素1和第1元素2各被取了两次。可见，索引得到的新数组和原数组的元素个数无关，而取决于索引列表的长度。\n3. 利用布尔索引修改值\n布尔索引不但可以用于筛选"
   },
   "/blog/posts/legacy/01-numpy-basics#19": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "务必要确定这样做是安全且符合预期的。如果只想得到一个标记矩阵而不修改原数据，可以先用 scores.copy() 复制一份再操作，或者直接使用 astype 生成，如 (scores >= 60).astype(int)，这会返回一个新的0/1数组，不影响原来的 scores。\n十、数组的组合与拆分"
   },
   "/blog/posts/legacy/01-numpy-basics#20": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "ate((a,b), axis=1)。\n- 深度组合：使用 np.dstack((a, b, ...)) 可以在第三维度上堆叠数组，要求待组合数组形状相同。结果数组维度会加一（例如两个2x2矩阵深度组合得到 shape=(2,2,2) 的三维数组）。\n- 不规则组合：如果组合的数组在目标轴长度不同，"
   },
   "/blog/posts/legacy/01-numpy-basics#21": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "d 本身，可以看到它其实相当于把 a 和 b 当作两层“叠”在一起。\n2. 数组的拆分 (分割)\n与组合相反，NumPy 提供了对应的拆分函数：\n\n- 垂直拆分：np.vsplit(array, sections) 将数组在行方向拆分为若干部分。通常 sections 是一个可以整除行数的整数，表示"
   },
   "/blog/posts/legacy/01-numpy-basics#22": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "x2 的小数组，以及将其垂直拆分为两块：\n\n我们创建了 c 为 2x6 矩阵，内容是1到12。np.hsplit(c, 3) 将其按列切成3份，每份2列，结果是包含三个 2x2 数组的列表（可以看到输出被分成了三部分）。np.vsplit(c, 2) 则将矩阵按行一分为二，得到两个 1x6 的行向量"
   },
   "/blog/posts/legacy/01-numpy-basics#23": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "高维数组的 .transpose() 方法也可以按指定轴顺序转置。\n- 平展迭代 (.flat)：.flat 属性提供了一个迭代器，可以用来逐元素遍历数组（依次按行展开）。\n- 转列表 (.tolist())：将数组转换为嵌套的 Python 列表，常用于将结果数据传递给不支持 ndarray 的接"
   },
   "/blog/posts/legacy/01-numpy-basics#24": {
     "title": "NumPy 基础与实战入门",
     "url": "/blog/posts/legacy/01-numpy-basics",
-    "date": "2025-11-30",
+    "date": "2024-01-30",
     "text": "ray 的操作更加便捷。例如，如果需要把 NumPy 数组传给纯 Python 代码处理，可以用 .tolist() 转换。如果需要逐元素地处理数组（尽管一般应避免 Python 层面的循环），.flat 提供了方便的遍历手段。而对复数数组进行运算时，.real 和 .imag 则可以轻松地分离出实"
   },
   "/blog/posts/legacy/01-overview#0": {

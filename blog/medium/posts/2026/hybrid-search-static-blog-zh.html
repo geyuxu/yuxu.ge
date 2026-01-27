@@ -70,6 +70,18 @@ description: 为静态博客构建生产级混合搜索 - 结合 BM25 关键词�
 <code>        body: JSON.stringify({</code><br>
 <code># ... (8 more lines)</code></blockquote>
 <p><em>View full code: <a href="https://gist.github.com/geyuxu/52a77727612be0a7c6cdd65fb5ebe616">GitHub Gist</a></em></p><p><strong>为什么选择 512 维？</strong> OpenAI 的 text-embedding-3-small 支持降维。使用 512 而非 1536 维可以减少约 65% 的索引体积，质量损失极小。</p>
+<h3>Embedding 缓存机制</h3>
+<p>每次重建索引都调用 OpenAI API 既慢又费钱。通过内容哈希实现增量更新：</p>
+<blockquote><code>import crypto from &#039;crypto&#039;;</code><br>
+<code></code><br>
+<code>// 计算内容哈希</code><br>
+<code>function contentHash(text) {</code><br>
+<code>    return crypto.createHash(&#039;md5&#039;).update(text).digest(&#039;hex&#039;);</code><br>
+<code>}</code><br>
+<code></code><br>
+<code>// 缓存格式: { [chunkId]: { hash, embedding } }</code><br>
+<code># ... (16 more lines)</code></blockquote>
+<p><em>View full code: <a href="https://gist.github.com/geyuxu/a29def49e3d5ff7e14af39543df652d5">GitHub Gist</a></em></p><p><strong>效果</strong>：首次构建需要完整 embedding（约 93 批次），后续增量更新只处理变化的文章。添加一篇新文章只需 1-2 次 API 调用，而非重新处理全部 135 篇。</p>
 <h2>第二部分：Cloudflare Worker</h2>
 <p>Worker 作为安全代理，将 API 密钥隐藏在浏览器之外。</p>
 <blockquote><code>// workers/embed-worker.js</code><br>

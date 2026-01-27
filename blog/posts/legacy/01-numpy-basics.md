@@ -1,5 +1,5 @@
 ---
-date: 2025-11-30
+date: 2024-01-30
 tags: [numpy, #numpy #python #data]
 legacy: true
 ---

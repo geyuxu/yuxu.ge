@@ -35,15 +35,6 @@
     "description": "Building a production-ready hybrid search for static blogs - combining BM25 keyword search with OpenAI embeddings, all without a backend server."
   },
   {
-    "slug": "posts/legacy/01-numpy-basics",
-    "title": "NumPy 基础与实战入门",
-    "date": "2025-11-30",
-    "tags": [
-      "numpy",
-      "#numpy #python #data"
-    ]
-  },
-  {
     "slug": "posts/legacy/01-overview",
     "title": "RAG — Overview",
     "date": "2025-11-30",
@@ -618,6 +609,15 @@
     "date": "2024-03-11",
     "tags": [
       "ai"
+    ]
+  },
+  {
+    "slug": "posts/legacy/01-numpy-basics",
+    "title": "NumPy 基础与实战入门",
+    "date": "2024-01-30",
+    "tags": [
+      "numpy",
+      "#numpy #python #data"
     ]
   },
   {

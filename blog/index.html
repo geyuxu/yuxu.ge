@@ -258,6 +258,108 @@
             color: white;
         }
 
+        /* Notebook Badge - Jupyter style */
+        .tag-notebook {
+            background: linear-gradient(135deg, #F37626 0%, #E66100 100%);
+            color: white;
+            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 1px 3px rgba(243, 118, 38, 0.3);
+        }
+
+        .tag-notebook:hover {
+            background: linear-gradient(135deg, #E66100 0%, #D45500 100%);
+            color: white;
+        }
+
+        /* PDF Badge - Red style */
+        .tag-pdf {
+            background: linear-gradient(135deg, #E53935 0%, #C62828 100%);
+            color: white;
+            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 1px 3px rgba(229, 57, 53, 0.3);
+        }
+        .tag-pdf:hover { background: linear-gradient(135deg, #C62828 0%, #B71C1C 100%); color: white; }
+
+        /* Word Badge - Blue style */
+        .tag-word {
+            background: linear-gradient(135deg, #2196F3 0%, #1976D2 100%);
+            color: white;
+            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 1px 3px rgba(33, 150, 243, 0.3);
+        }
+        .tag-word:hover { background: linear-gradient(135deg, #1976D2 0%, #1565C0 100%); color: white; }
+
+        /* Text Badge - Grey style */
+        .tag-text {
+            background: linear-gradient(135deg, #607D8B 0%, #455A64 100%);
+            color: white;
+            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 1px 3px rgba(96, 125, 139, 0.3);
+        }
+        .tag-text:hover { background: linear-gradient(135deg, #455A64 0%, #37474F 100%); color: white; }
+
+        /* Excel Badge - Green style */
+        .tag-excel {
+            background: linear-gradient(135deg, #4CAF50 0%, #388E3C 100%);
+            color: white;
+            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 1px 3px rgba(76, 175, 80, 0.3);
+        }
+        .tag-excel:hover { background: linear-gradient(135deg, #388E3C 0%, #2E7D32 100%); color: white; }
+
+        /* PowerPoint Badge - Orange/Red style */
+        .tag-powerpoint {
+            background: linear-gradient(135deg, #FF5722 0%, #E64A19 100%);
+            color: white;
+            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 1px 3px rgba(255, 87, 34, 0.3);
+        }
+        .tag-powerpoint:hover { background: linear-gradient(135deg, #E64A19 0%, #D84315 100%); color: white; }
+
+        /* CSV Badge - Teal style */
+        .tag-csv {
+            background: linear-gradient(135deg, #009688 0%, #00796B 100%);
+            color: white;
+            font-weight: 600;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: 0 1px 3px rgba(0, 150, 136, 0.3);
+        }
+        .tag-csv:hover { background: linear-gradient(135deg, #00796B 0%, #00695C 100%); color: white; }
+
         /* Tag Filter */
         .tag-filter {
             display: flex;
@@ -511,17 +613,30 @@ fetch('posts.json')
             const start = (currentPage - 1) * POSTS_PER_PAGE;
             const pagePosts = filtered.slice(start, start + POSTS_PER_PAGE);
 
-            list.innerHTML = pagePosts.length ? pagePosts.map(p => `
+            list.innerHTML = pagePosts.length ? pagePosts.map(p => {
+                // Type badge based on file type
+                const typeBadges = {
+                    'notebook': '<span class="tag tag-notebook">Jupyter</span>',
+                    'pdf': '<span class="tag tag-pdf">PDF</span>',
+                    'word': '<span class="tag tag-word">Word</span>',
+                    'text': '<span class="tag tag-text">TXT</span>',
+                    'excel': '<span class="tag tag-excel">Excel</span>',
+                    'powerpoint': '<span class="tag tag-powerpoint">PPT</span>',
+                    'csv': '<span class="tag tag-csv">CSV</span>'
+                };
+                const typeBadge = typeBadges[p.type] || '';
+                const tags = (p.tags || []).map(t => `<span class="tag" data-tag="${t}">${t}</span>`).join('');
+                return `
                 <li class="post-item" data-tags="${(p.tags || []).join(',')}">
                     <a href="post.html?p=${p.slug}" class="post-link">${p.title}</a>
                     <div class="post-meta">
                         <div class="post-tags">
-                            ${(p.tags || []).map(t => `<span class="tag" data-tag="${t}">${t}</span>`).join('')}
+                            ${typeBadge}${tags}
                         </div>
                         <span class="post-date">${p.date}</span>
                     </div>
-                </li>
-            `).join('') : '<li class="post-item"><span class="post-link">No posts found.</span></li>';
+                </li>`;
+            }).join('') : '<li class="post-item"><span class="post-link">No posts found.</span></li>';
 
             // Re-attach tag click handlers for post tags
             list.querySelectorAll('.tag').forEach(tag => {

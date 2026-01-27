@@ -330,6 +330,33 @@
             filter: url(#sketch-filter);
         }
 
+        /* Footprints along timeline - pencil sketch style */
+        .footprint {
+            position: absolute;
+            left: 50%;
+            width: 14px;
+            height: 22px;
+            z-index: 1;
+            pointer-events: none;
+            opacity: 0.4;
+        }
+        .footprint svg {
+            width: 100%;
+            height: 100%;
+            fill: none;
+            stroke: var(--sketch-color);
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            filter: url(#sketch-filter);
+        }
+        .footprint.left {
+            transform: translateX(-28px) rotate(-15deg);
+        }
+        .footprint.right {
+            transform: translateX(14px) rotate(15deg) scaleX(-1);
+        }
+
         /* Year marker */
         .year-marker {
             position: relative;
@@ -667,6 +694,11 @@
                 width: 15px;
             }
 
+            /* Hide footprints on mobile - timeline is on left side */
+            .footprint {
+                display: none;
+            }
+
             .gallery-nav {
                 margin-bottom: 1.5rem;
             }
@@ -959,6 +991,42 @@ function renderTimeline(photos) {
     });
 
     timeline.innerHTML = html;
+
+    // Add footprints along the timeline
+    addFootprints();
+}
+
+// Add footprints along the timeline - pencil sketch SVG style
+function addFootprints() {
+    const timeline = document.getElementById('timeline');
+    const timelineHeight = timeline.scrollHeight;
+    const stepSpacing = 60; // pixels between each step
+    const numSteps = Math.floor(timelineHeight / stepSpacing);
+
+    // SVG footprint path - simple pencil sketch style
+    const footprintSVG = `
+        <svg viewBox="0 0 14 22" xmlns="http://www.w3.org/2000/svg">
+            <!-- Heel (elongated oval) -->
+            <ellipse cx="7" cy="15" rx="5" ry="6"/>
+            <!-- Toes (5 small circles) -->
+            <circle cx="4" cy="4" r="1.8"/>
+            <circle cx="7" cy="2.5" r="1.8"/>
+            <circle cx="10" cy="4" r="1.8"/>
+            <circle cx="2.5" cy="6.5" r="1.5"/>
+            <circle cx="11.5" cy="6.5" r="1.5"/>
+        </svg>
+    `;
+
+    for (let i = 0; i < numSteps; i++) {
+        const topPosition = 80 + i * stepSpacing;
+        const isLeft = i % 2 === 0;
+
+        const foot = document.createElement('div');
+        foot.className = `footprint ${isLeft ? 'left' : 'right'}`;
+        foot.style.top = topPosition + 'px';
+        foot.innerHTML = footprintSVG;
+        timeline.appendChild(foot);
+    }
 }
 
 // Lightbox

@@ -93,6 +93,30 @@
         .katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.5rem 0; }
         .katex { font-size: 1.1em; }
 
+        /* Jupyter Notebook Styles */
+        .notebook-container { margin-top: 1rem; }
+        .notebook-download {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.5rem 1rem; margin-bottom: 1.5rem;
+            background: var(--black); color: var(--off-white);
+            border-radius: 4px; font-size: 0.85rem;
+            transition: opacity 0.2s;
+        }
+        .notebook-download:hover { opacity: 0.8; color: var(--off-white); }
+        .notebook-download svg { width: 16px; height: 16px; }
+        .nb-cell { margin-bottom: 1.5rem; }
+        .nb-cell-code .nb-source { background: #2d2d2d; border-radius: 6px; overflow-x: auto; }
+        .nb-cell-code .nb-source pre { margin: 0; padding: 1rem; color: #ccc; font-family: "SF Mono", Monaco, monospace; font-size: 0.85em; }
+        .nb-cell-code .nb-source code { background: none; padding: 0; }
+        .nb-output { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 0.75rem; margin-top: 0.5rem; }
+        .nb-output pre { margin: 0; padding: 0; background: transparent; white-space: pre-wrap; word-wrap: break-word; font-family: "SF Mono", Monaco, monospace; font-size: 0.85em; color: #222; }
+        .nb-output img { max-width: 100%; height: auto; display: block; margin: 0.5rem 0; }
+        .nb-output table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        .nb-output th, .nb-output td { border: 1px solid #ddd; padding: 0.5rem; text-align: left; }
+        .nb-output th { background: #e8e8e8; font-weight: 600; }
+        .nb-cell-markdown { padding: 0; }
+        .nb-cell-markdown h1:first-child { margin-top: 0; }
+
         /* Responsive */
         @media (max-width: 900px) {
             .sidebar { position: relative; width: 100%; height: auto; padding: 2rem 1.5rem 1rem; }

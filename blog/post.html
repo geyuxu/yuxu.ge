@@ -93,6 +93,102 @@
         .katex-display { overflow-x: auto; overflow-y: hidden; padding: 0.5rem 0; }
         .katex { font-size: 1.1em; }
 
+        /* Jupyter Notebook Styles */
+        .notebook-container { margin-top: 1rem; }
+        .notebook-download {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.5rem 1rem; margin-bottom: 1.5rem;
+            background: var(--black); color: var(--off-white);
+            border-radius: 4px; font-size: 0.85rem;
+            transition: opacity 0.2s;
+        }
+        .notebook-download:hover { opacity: 0.8; color: var(--off-white); }
+        .notebook-download svg { width: 16px; height: 16px; }
+        .nb-cell { margin-bottom: 1.5rem; }
+        .nb-cell-code .nb-source { background: #2d2d2d; border-radius: 6px; overflow-x: auto; }
+        .nb-cell-code .nb-source pre { margin: 0; padding: 1rem; color: #ccc; font-family: "SF Mono", Monaco, monospace; font-size: 0.85em; }
+        .nb-cell-code .nb-source code { background: none; padding: 0; }
+        .nb-output { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 0.75rem; margin-top: 0.5rem; }
+        .nb-output pre { margin: 0; padding: 0; background: transparent; white-space: pre-wrap; word-wrap: break-word; font-family: "SF Mono", Monaco, monospace; font-size: 0.85em; color: #222; }
+        .nb-output img { max-width: 100%; height: auto; display: block; margin: 0.5rem 0; }
+        .nb-output table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+        .nb-output th, .nb-output td { border: 1px solid #ddd; padding: 0.5rem; text-align: left; }
+        .nb-output th { background: #e8e8e8; font-weight: 600; }
+        .nb-cell-markdown { padding: 0; }
+        .nb-cell-markdown h1:first-child { margin-top: 0; }
+
+        /* Document Download Button */
+        .doc-download {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.5rem 1rem; margin-bottom: 1.5rem;
+            background: var(--black); color: var(--off-white);
+            border-radius: 4px; font-size: 0.85rem;
+            transition: opacity 0.2s;
+        }
+        .doc-download:hover { opacity: 0.8; color: var(--off-white); }
+        .doc-download svg { width: 16px; height: 16px; }
+
+        /* PDF Viewer */
+        .pdf-container { margin-top: 1rem; }
+        .pdf-viewer {
+            width: 100%; height: 80vh;
+            border: 1px solid #ddd; border-radius: 6px;
+            background: #f5f5f5;
+        }
+
+        /* Text File Display */
+        .text-container { margin-top: 1rem; }
+        .text-content {
+            background: #fff; border: 1px solid #ddd; border-radius: 6px;
+            padding: 1.5rem; font-family: "SF Mono", Monaco, monospace;
+            font-size: 0.9em; line-height: 1.6; white-space: pre-wrap;
+            word-wrap: break-word; color: var(--dark-grey);
+            max-height: 80vh; overflow-y: auto;
+        }
+
+        /* Word Document Display */
+        .word-container { margin-top: 1rem; }
+        .word-content {
+            background: #fff; border: 1px solid #ddd; border-radius: 6px;
+            padding: 2rem; line-height: 1.8; color: var(--dark-grey);
+        }
+        .word-content p { margin-bottom: 1rem; }
+        .word-content h1, .word-content h2, .word-content h3 { color: var(--black); margin: 1.5rem 0 1rem; }
+        .word-content table { width: 100%; border-collapse: collapse; margin: 1rem 0; }
+        .word-content th, .word-content td { border: 1px solid #ddd; padding: 0.5rem; }
+        .word-content img { max-width: 100%; height: auto; }
+
+        /* Excel Display */
+        .excel-container { margin-top: 1rem; }
+        .excel-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .excel-tab {
+            padding: 0.5rem 1rem; background: #e8e8e8; border: none;
+            border-radius: 4px 4px 0 0; cursor: pointer; font-size: 0.85rem;
+        }
+        .excel-tab.active { background: #4CAF50; color: white; }
+        .excel-content {
+            background: #fff; border: 1px solid #ddd; border-radius: 6px;
+            overflow-x: auto; max-height: 70vh; overflow-y: auto;
+        }
+        .excel-content table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+        .excel-content th, .excel-content td {
+            border: 1px solid #ddd; padding: 0.4rem 0.6rem; text-align: left;
+            white-space: nowrap;
+        }
+        .excel-content th { background: #f5f5f5; font-weight: 600; position: sticky; top: 0; }
+        .excel-content tr:nth-child(even) { background: #fafafa; }
+
+        /* PowerPoint Display */
+        .ppt-container { margin-top: 1rem; }
+        .ppt-viewer {
+            width: 100%; height: 80vh;
+            border: 1px solid #ddd; border-radius: 6px;
+            background: #f5f5f5;
+        }
+
+        /* CSV Display (uses excel styles) */
+        .csv-container { margin-top: 1rem; }
+
         /* Responsive */
         @media (max-width: 900px) {
             .sidebar { position: relative; width: 100%; height: auto; padding: 2rem 1.5rem 1rem; }
@@ -126,6 +222,8 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mammoth@1/mammoth.browser.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
@@ -135,61 +233,366 @@
     const params = new URLSearchParams(window.location.search);
     const postName = params.get('p');
 
+    // Render notebook JSON to HTML
+    function renderNotebook(notebook, notebookUrl) {
+        const cells = notebook.cells || [];
+        let html = '<div class="notebook-container">';
+
+        // Download button
+        html += `<a href="${notebookUrl}" download class="notebook-download">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            Download Notebook (.ipynb)
+        </a>`;
+
+        let skipFirstMarkdown = true; // Skip frontmatter cell
+
+        for (const cell of cells) {
+            const source = Array.isArray(cell.source) ? cell.source.join('') : cell.source;
+
+            if (cell.cell_type === 'markdown') {
+                // Skip frontmatter cell
+                if (skipFirstMarkdown && source.startsWith('---\n')) {
+                    const afterFm = source.replace(/^---\n[\s\S]*?\n---\n?/, '');
+                    if (afterFm.trim()) {
+                        html += `<div class="nb-cell nb-cell-markdown">${marked.parse(afterFm)}</div>`;
+                    }
+                    skipFirstMarkdown = false;
+                    continue;
+                }
+                skipFirstMarkdown = false;
+                html += `<div class="nb-cell nb-cell-markdown">${marked.parse(source)}</div>`;
+            } else if (cell.cell_type === 'code') {
+                skipFirstMarkdown = false;
+                html += '<div class="nb-cell nb-cell-code">';
+                html += `<div class="nb-source"><pre><code class="language-python">${escapeHtml(source)}</code></pre></div>`;
+
+                // Render outputs
+                const outputs = cell.outputs || [];
+                for (const output of outputs) {
+                    if (output.output_type === 'stream') {
+                        const text = Array.isArray(output.text) ? output.text.join('') : output.text;
+                        html += `<div class="nb-output"><pre>${escapeHtml(text)}</pre></div>`;
+                    } else if (output.output_type === 'execute_result' || output.output_type === 'display_data') {
+                        const data = output.data || {};
+                        if (data['text/html']) {
+                            const htmlContent = Array.isArray(data['text/html']) ? data['text/html'].join('') : data['text/html'];
+                            html += `<div class="nb-output">${htmlContent}</div>`;
+                        } else if (data['image/png']) {
+                            html += `<div class="nb-output"><img src="data:image/png;base64,${data['image/png']}" /></div>`;
+                        } else if (data['image/jpeg']) {
+                            html += `<div class="nb-output"><img src="data:image/jpeg;base64,${data['image/jpeg']}" /></div>`;
+                        } else if (data['text/plain']) {
+                            const text = Array.isArray(data['text/plain']) ? data['text/plain'].join('') : data['text/plain'];
+                            html += `<div class="nb-output"><pre>${escapeHtml(text)}</pre></div>`;
+                        }
+                    } else if (output.output_type === 'error') {
+                        const traceback = (output.traceback || []).join('\n');
+                        html += `<div class="nb-output" style="color: #c00;"><pre>${escapeHtml(traceback)}</pre></div>`;
+                    }
+                }
+                html += '</div>';
+            }
+        }
+
+        html += '</div>';
+        return html;
+    }
+
+    function escapeHtml(text) {
+        return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    function postProcessArticle() {
+        Prism.highlightAll();
+        // Add line numbers and copy button to code blocks
+        document.querySelectorAll('article pre').forEach(pre => {
+            const code = pre.querySelector('code');
+            if (code && !code.querySelector('.line')) {
+                const lines = code.innerHTML.split('\n');
+                if (lines[lines.length - 1] === '') lines.pop();
+                code.innerHTML = lines.map(line => `<span class="line">${line}</span>`).join('\n');
+                // Add copy button in toolbar
+                if (!pre.previousElementSibling?.classList?.contains('code-toolbar')) {
+                    const toolbar = document.createElement('div');
+                    toolbar.className = 'code-toolbar';
+                    const btn = document.createElement('button');
+                    btn.className = 'copy-btn';
+                    btn.textContent = 'Copy';
+                    btn.onclick = () => {
+                        navigator.clipboard.writeText(code.textContent).then(() => {
+                            btn.textContent = 'Copied!';
+                            btn.classList.add('copied');
+                            setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+                        });
+                    };
+                    toolbar.appendChild(btn);
+                    pre.parentNode.insertBefore(toolbar, pre);
+                }
+            }
+        });
+        // Render LaTeX math with KaTeX
+        if (typeof renderMathInElement !== 'undefined') {
+            renderMathInElement(document.getElementById('article'), {
+                delimiters: [
+                    {left: '$$', right: '$$', display: true},
+                    {left: '$', right: '$', display: false},
+                    {left: '\\[', right: '\\]', display: true},
+                    {left: '\\(', right: '\\)', display: false}
+                ],
+                throwOnError: false
+            });
+        }
+    }
+
+    // Render PDF with embedded viewer
+    function renderPdf(pdfUrl, title) {
+        const downloadSvg = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>`;
+        return `<div class="pdf-container">
+            <h1>${escapeHtml(title)}</h1>
+            <a href="${pdfUrl}" download class="doc-download">${downloadSvg} Download PDF</a>
+            <iframe class="pdf-viewer" src="${pdfUrl}" type="application/pdf"></iframe>
+        </div>`;
+    }
+
+    // Render TXT file
+    function renderText(content, textUrl, title) {
+        const downloadSvg = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>`;
+        return `<div class="text-container">
+            <h1>${escapeHtml(title)}</h1>
+            <a href="${textUrl}" download class="doc-download">${downloadSvg} Download Text File</a>
+            <div class="text-content">${escapeHtml(content)}</div>
+        </div>`;
+    }
+
+    // Render Word file using mammoth.js
+    async function renderWord(docxUrl, title, article) {
+        const downloadSvg = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>`;
+
+        try {
+            const response = await fetch(docxUrl);
+            const arrayBuffer = await response.arrayBuffer();
+            const result = await mammoth.convertToHtml({ arrayBuffer });
+
+            article.innerHTML = `<div class="word-container">
+                <h1>${escapeHtml(title)}</h1>
+                <a href="${docxUrl}" download class="doc-download">${downloadSvg} Download Word Document (.docx)</a>
+                <div class="word-content">${result.value}</div>
+            </div>`;
+        } catch (err) {
+            article.innerHTML = `<div class="text-container">
+                <h1>${escapeHtml(title)}</h1>
+                <a href="${docxUrl}" download class="doc-download">${downloadSvg} Download Word Document (.docx)</a>
+                <p style="color: #666; margin-top: 1rem;">Unable to preview this document. Please download to view.</p>
+            </div>`;
+        }
+    }
+
+    // Render Excel file using SheetJS
+    async function renderExcel(xlsxUrl, title, article) {
+        const downloadSvg = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>`;
+
+        try {
+            const response = await fetch(xlsxUrl);
+            const arrayBuffer = await response.arrayBuffer();
+            const workbook = XLSX.read(arrayBuffer, { type: 'array' });
+
+            // Generate tabs for each sheet
+            const sheetNames = workbook.SheetNames;
+            const tabsHtml = sheetNames.map((name, i) =>
+                `<button class="excel-tab${i === 0 ? ' active' : ''}" data-sheet="${i}">${escapeHtml(name)}</button>`
+            ).join('');
+
+            // Generate table for first sheet
+            const firstSheet = workbook.Sheets[sheetNames[0]];
+            const tableHtml = XLSX.utils.sheet_to_html(firstSheet);
+
+            article.innerHTML = `<div class="excel-container">
+                <h1>${escapeHtml(title)}</h1>
+                <a href="${xlsxUrl}" download class="doc-download">${downloadSvg} Download Excel (.xlsx)</a>
+                <div class="excel-tabs">${tabsHtml}</div>
+                <div class="excel-content">${tableHtml}</div>
+            </div>`;
+
+            // Add tab click handlers
+            article.querySelectorAll('.excel-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    article.querySelectorAll('.excel-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    const sheetIndex = parseInt(tab.dataset.sheet);
+                    const sheet = workbook.Sheets[sheetNames[sheetIndex]];
+                    article.querySelector('.excel-content').innerHTML = XLSX.utils.sheet_to_html(sheet);
+                });
+            });
+        } catch (err) {
+            article.innerHTML = `<div class="text-container">
+                <h1>${escapeHtml(title)}</h1>
+                <a href="${xlsxUrl}" download class="doc-download">${downloadSvg} Download Excel (.xlsx)</a>
+                <p style="color: #666; margin-top: 1rem;">Unable to preview this spreadsheet. Please download to view.</p>
+            </div>`;
+        }
+    }
+
+    // Render PowerPoint file (using Office Online viewer or download)
+    function renderPowerPoint(pptxUrl, title, baseUrl) {
+        const downloadSvg = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>`;
+
+        // Check if running locally - Office Online needs public URL
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+
+        if (isLocal) {
+            return `<div class="ppt-container">
+                <h1>${escapeHtml(title)}</h1>
+                <a href="${pptxUrl}" download class="doc-download">${downloadSvg} Download PowerPoint (.pptx)</a>
+                <div style="background: #f5f5f5; border: 1px solid #ddd; border-radius: 6px; padding: 3rem; text-align: center; color: #666;">
+                    <p style="margin-bottom: 1rem;">PowerPoint preview requires a public URL.</p>
+                    <p style="font-size: 0.85rem;">Preview will be available after deployment. Please download to view locally.</p>
+                </div>
+            </div>`;
+        }
+
+        // Try to use Office Online viewer (works for public URLs)
+        const fullUrl = new URL(pptxUrl, baseUrl).href;
+        const viewerUrl = `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(fullUrl)}`;
+
+        return `<div class="ppt-container">
+            <h1>${escapeHtml(title)}</h1>
+            <a href="${pptxUrl}" download class="doc-download">${downloadSvg} Download PowerPoint (.pptx)</a>
+            <iframe class="ppt-viewer" src="${viewerUrl}" frameborder="0"></iframe>
+            <p style="color: #888; font-size: 0.85rem; margin-top: 0.5rem;">If preview doesn't load, please download the file.</p>
+        </div>`;
+    }
+
+    // Render CSV file using SheetJS
+    async function renderCsv(csvUrl, title, article) {
+        const downloadSvg = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+        </svg>`;
+
+        try {
+            const response = await fetch(csvUrl);
+            const text = await response.text();
+            const workbook = XLSX.read(text, { type: 'string' });
+
+            // CSV has only one sheet
+            const sheet = workbook.Sheets[workbook.SheetNames[0]];
+            const tableHtml = XLSX.utils.sheet_to_html(sheet);
+
+            article.innerHTML = `<div class="csv-container">
+                <h1>${escapeHtml(title)}</h1>
+                <a href="${csvUrl}" download class="doc-download">${downloadSvg} Download CSV</a>
+                <div class="excel-content">${tableHtml}</div>
+            </div>`;
+        } catch (err) {
+            article.innerHTML = `<div class="text-container">
+                <h1>${escapeHtml(title)}</h1>
+                <a href="${csvUrl}" download class="doc-download">${downloadSvg} Download CSV</a>
+                <p style="color: #666; margin-top: 1rem;">Unable to preview this CSV. Please download to view.</p>
+            </div>`;
+        }
+    }
+
+    // Extract title from filename
+    function titleFromFilename(filename) {
+        // Remove date prefix if present (yyyyMMdd-)
+        let name = filename.replace(/^\d{8}-/, '');
+        // Replace dashes/underscores with spaces and capitalize
+        return name.replace(/[-_]/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+    }
+
     if (postName) {
+        // Try different file types in order: md -> ipynb -> pdf -> txt -> docx -> xlsx -> pptx
+        const article = document.getElementById('article');
+        const filename = postName.split('/').pop();
+        const title = titleFromFilename(filename);
+
+        // Try Markdown first
         fetch(`${postName}.md`)
-            .then(r => {
-                if (!r.ok) throw new Error('Post not found');
-                return r.text();
-            })
+            .then(r => { if (!r.ok) throw new Error('not found'); return r.text(); })
             .then(md => {
-                // Strip YAML frontmatter (between --- markers)
                 const frontmatterMatch = md.match(/^---\n[\s\S]*?\n---\n/);
                 const content = frontmatterMatch ? md.slice(frontmatterMatch[0].length) : md;
-                document.getElementById('article').innerHTML = marked.parse(content);
-                // Update page title from first h1
+                article.innerHTML = marked.parse(content);
                 const h1 = document.querySelector('article h1');
                 if (h1) document.title = h1.textContent + ' | Yuxu Ge';
-                Prism.highlightAll();
-                // Add line numbers and copy button to code blocks
-                document.querySelectorAll('article pre').forEach(pre => {
-                    const code = pre.querySelector('code');
-                    if (code) {
-                        // Add line numbers
-                        const lines = code.innerHTML.split('\n');
-                        if (lines[lines.length - 1] === '') lines.pop();
-                        code.innerHTML = lines.map(line => `<span class="line">${line}</span>`).join('\n');
-                        // Add copy button in toolbar
-                        const toolbar = document.createElement('div');
-                        toolbar.className = 'code-toolbar';
-                        const btn = document.createElement('button');
-                        btn.className = 'copy-btn';
-                        btn.textContent = 'Copy';
-                        btn.onclick = () => {
-                            navigator.clipboard.writeText(code.textContent).then(() => {
-                                btn.textContent = 'Copied!';
-                                btn.classList.add('copied');
-                                setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
-                            });
-                        };
-                        toolbar.appendChild(btn);
-                        pre.parentNode.insertBefore(toolbar, pre);
-                    }
-                });
-                // Render LaTeX math with KaTeX
-                if (typeof renderMathInElement !== 'undefined') {
-                    renderMathInElement(document.getElementById('article'), {
-                        delimiters: [
-                            {left: '$$', right: '$$', display: true},
-                            {left: '$', right: '$', display: false},
-                            {left: '\\[', right: '\\]', display: true},
-                            {left: '\\(', right: '\\)', display: false}
-                        ],
-                        throwOnError: false
-                    });
-                }
+                postProcessArticle();
             })
-            .catch(err => {
-                document.getElementById('article').innerHTML = '<p class="error">Post not found.</p>';
+            .catch(() => fetch(`${postName}.ipynb`))
+            .then(r => { if (r && !r.ok) throw new Error('not found'); return r?.json(); })
+            .then(notebook => {
+                if (!notebook) return;
+                article.innerHTML = renderNotebook(notebook, `${postName}.ipynb`);
+                const h1 = document.querySelector('article h1');
+                if (h1) document.title = h1.textContent + ' | Yuxu Ge';
+                postProcessArticle();
+            })
+            .catch(() => fetch(`${postName}.pdf`, { method: 'HEAD' }))
+            .then(r => {
+                if (r && r.ok) {
+                    article.innerHTML = renderPdf(`${postName}.pdf`, title);
+                    document.title = title + ' | Yuxu Ge';
+                    throw new Error('done'); // Stop chain
+                }
+                throw new Error('not found');
+            })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.txt`); })
+            .then(r => { if (r && !r.ok) throw new Error('not found'); return r?.text(); })
+            .then(text => {
+                if (!text) return;
+                article.innerHTML = renderText(text, `${postName}.txt`, title);
+                document.title = title + ' | Yuxu Ge';
+            })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.docx`, { method: 'HEAD' }); })
+            .then(async r => {
+                if (r && r.ok) {
+                    await renderWord(`${postName}.docx`, title, article);
+                    document.title = title + ' | Yuxu Ge';
+                    throw new Error('done');
+                }
+                throw new Error('not found');
+            })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.xlsx`, { method: 'HEAD' }); })
+            .then(async r => {
+                if (r && r.ok) {
+                    await renderExcel(`${postName}.xlsx`, title, article);
+                    document.title = title + ' | Yuxu Ge';
+                    throw new Error('done');
+                }
+                throw new Error('not found');
+            })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.pptx`, { method: 'HEAD' }); })
+            .then(r => {
+                if (r && r.ok) {
+                    article.innerHTML = renderPowerPoint(`${postName}.pptx`, title, window.location.origin);
+                    document.title = title + ' | Yuxu Ge';
+                    throw new Error('done');
+                }
+                throw new Error('not found');
+            })
+            .catch(e => { if (e.message === 'done') throw e; return fetch(`${postName}.csv`, { method: 'HEAD' }); })
+            .then(async r => {
+                if (r && r.ok) {
+                    await renderCsv(`${postName}.csv`, title, article);
+                    document.title = title + ' | Yuxu Ge';
+                    throw new Error('done');
+                }
+                throw new Error('not found');
+            })
+            .catch(e => {
+                if (e.message !== 'done' && article.innerHTML.includes('Loading')) {
+                    article.innerHTML = '<p class="error">Post not found.</p>';
+                }
             });
     } else {
         document.getElementById('article').innerHTML = '<p class="error">No post specified.</p>';

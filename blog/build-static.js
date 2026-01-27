@@ -66,30 +66,190 @@ function addLineNumbers(html) {
 // Read posts
 const posts = JSON.parse(fs.readFileSync(POSTS_JSON, 'utf-8'));
 
-// Clean and recreate output dir
-if (fs.existsSync(OUTPUT_DIR)) {
-    fs.rmSync(OUTPUT_DIR, { recursive: true });
-    console.log('✓ Cleaned static/');
+// HTML escape helper
+function escapeHtml(text) {
+    return text.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 }
+
+// Convert notebook JSON to HTML (pure Node.js implementation)
+function convertNotebook(notebookPath) {
+    try {
+        const content = fs.readFileSync(notebookPath, 'utf-8');
+        const notebook = JSON.parse(content);
+        const cells = notebook.cells || [];
+        let html = '';
+        let skipFirstMarkdown = true;
+
+        for (const cell of cells) {
+            const source = Array.isArray(cell.source) ? cell.source.join('') : cell.source;
+
+            if (cell.cell_type === 'markdown') {
+                // Skip frontmatter cell
+                if (skipFirstMarkdown && source.startsWith('---\n')) {
+                    const afterFm = source.replace(/^---\n[\s\S]*?\n---\n?/, '');
+                    if (afterFm.trim()) {
+                        html += `<div class="nb-cell nb-cell-markdown">${marked.parse(afterFm)}</div>`;
+                    }
+                    skipFirstMarkdown = false;
+                    continue;
+                }
+                skipFirstMarkdown = false;
+                html += `<div class="nb-cell nb-cell-markdown">${marked.parse(source)}</div>`;
+            } else if (cell.cell_type === 'code') {
+                skipFirstMarkdown = false;
+                html += '<div class="nb-cell nb-cell-code">';
+                html += `<div class="nb-source"><pre><code class="language-python">${escapeHtml(source)}</code></pre></div>`;
+
+                // Render outputs
+                const outputs = cell.outputs || [];
+                for (const output of outputs) {
+                    if (output.output_type === 'stream') {
+                        const text = Array.isArray(output.text) ? output.text.join('') : output.text;
+                        html += `<div class="nb-output"><pre>${escapeHtml(text)}</pre></div>`;
+                    } else if (output.output_type === 'execute_result' || output.output_type === 'display_data') {
+                        const data = output.data || {};
+                        if (data['text/html']) {
+                            const htmlContent = Array.isArray(data['text/html']) ? data['text/html'].join('') : data['text/html'];
+                            html += `<div class="nb-output">${htmlContent}</div>`;
+                        } else if (data['image/png']) {
+                            html += `<div class="nb-output"><img src="data:image/png;base64,${data['image/png']}" /></div>`;
+                        } else if (data['image/jpeg']) {
+                            html += `<div class="nb-output"><img src="data:image/jpeg;base64,${data['image/jpeg']}" /></div>`;
+                        } else if (data['text/plain']) {
+                            const text = Array.isArray(data['text/plain']) ? data['text/plain'].join('') : data['text/plain'];
+                            html += `<div class="nb-output"><pre>${escapeHtml(text)}</pre></div>`;
+                        }
+                    } else if (output.output_type === 'error') {
+                        const traceback = (output.traceback || []).join('\n')
+                            .replace(/\x1b\[[0-9;]*m/g, ''); // Strip ANSI codes
+                        html += `<div class="nb-output nb-error"><pre>${escapeHtml(traceback)}</pre></div>`;
+                    }
+                }
+                html += '</div>';
+            }
+        }
+
+        return html;
+    } catch (err) {
+        console.error(`Error converting notebook: ${err.message}`);
+        return null;
+    }
+}
+
+// Notebook CSS styles (uses nb- prefix to match Node.js converter)
+const notebookCss = `
+/* Jupyter Notebook Styles */
+.notebook-container { margin-top: 1rem; }
+.notebook-download {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.5rem 1rem; margin-bottom: 1.5rem;
+    background: var(--black); color: var(--off-white);
+    border-radius: 4px; font-size: 0.85rem;
+    transition: opacity 0.2s;
+}
+.notebook-download:hover { opacity: 0.8; color: var(--off-white); }
+.notebook-download svg { width: 16px; height: 16px; }
+
+/* Cells */
+.nb-cell { margin-bottom: 1.5rem; }
+.nb-cell-code .nb-source { background: #2d2d2d; border-radius: 6px; overflow-x: auto; }
+.nb-cell-code .nb-source pre { margin: 0; padding: 1rem; }
+.nb-cell-code .nb-source code { background: none; padding: 0; color: #ccc; font-family: "SF Mono", Monaco, monospace; font-size: 0.85em; }
+
+/* Output */
+.nb-output { background: #fff; border: 1px solid #ddd; border-radius: 6px; padding: 0.75rem; margin-top: 0.5rem; }
+.nb-output pre { margin: 0; padding: 0; background: transparent; white-space: pre-wrap; word-wrap: break-word; font-family: "SF Mono", Monaco, monospace; font-size: 0.85em; color: #222; }
+.nb-output img { max-width: 100%; height: auto; display: block; margin: 0.5rem 0; }
+.nb-output table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.nb-output th, .nb-output td { border: 1px solid #ddd; padding: 0.5rem; text-align: left; }
+.nb-output th { background: #e8e8e8; font-weight: 600; }
+.nb-error pre { color: #c00; }
+
+/* Markdown cells */
+.nb-cell-markdown { padding: 0; }
+.nb-cell-markdown h1:first-child { margin-top: 0; }
+`;
+
+// Parse command line arguments
+const args = process.argv.slice(2);
+const generateAll = args.includes('--all');
+const specificSlugs = args.filter(arg => !arg.startsWith('--'));
+
+// Show usage if no arguments
+if (args.length === 0) {
+    console.log('Usage:');
+    console.log('  node build-static.js <slug>          Generate specific article');
+    console.log('  node build-static.js <slug1> <slug2> Generate multiple articles');
+    console.log('  node build-static.js --all           Generate all articles');
+    console.log('\nAvailable slugs:');
+    posts.forEach(p => console.log(`  ${p.slug}${p.type === 'notebook' ? ' (notebook)' : ''}`));
+    process.exit(0);
+}
+
+// Ensure output dir exists (don't clean - only generate specified files)
 fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
 posts.forEach(post => {
-    const mdPath = path.join(__dirname, `${post.slug}.md`);
+    const isNotebook = post.type === 'notebook';
 
-    if (!fs.existsSync(mdPath)) {
-        console.log(`⚠ Skip: ${post.slug}.md not found`);
+    // Skip if not in specified list (unless --all)
+    if (!generateAll && specificSlugs.length > 0 && !specificSlugs.includes(post.slug)) {
         return;
     }
 
-    const markdown = fs.readFileSync(mdPath, 'utf-8');
-    let htmlContent = marked.parse(markdown);
+    const ext = isNotebook ? '.ipynb' : '.md';
+    const sourcePath = path.join(__dirname, `${post.slug}${ext}`);
 
-    // Add line numbers to code blocks at build time
-    htmlContent = addLineNumbers(htmlContent);
+    if (!fs.existsSync(sourcePath)) {
+        console.log(`⚠ Skip: ${post.slug}${ext} not found`);
+        return;
+    }
+
+    let htmlContent;
+
+    if (isNotebook) {
+        // Convert notebook to HTML using Node.js
+        const notebookHtml = convertNotebook(sourcePath);
+
+        if (!notebookHtml) {
+            console.log(`⚠ Skip: ${post.slug} (notebook conversion failed)`);
+            return;
+        }
+
+        // Add download button and wrap content
+        const downloadUrl = `/${post.slug}.ipynb`;
+        const downloadBtn = `
+<a href="${downloadUrl}" download class="notebook-download">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+    </svg>
+    Download Notebook (.ipynb)
+</a>`;
+
+        htmlContent = `<div class="notebook-container">
+${downloadBtn}
+${notebookHtml}
+</div>`;
+    } else {
+        // Markdown processing
+        const markdown = fs.readFileSync(sourcePath, 'utf-8');
+        htmlContent = marked.parse(markdown);
+        htmlContent = addLineNumbers(htmlContent);
+    }
 
     // Build static HTML
-    const staticHtml = beforeArticle
-        .replace(/<title>.*?<\/title>/, `<title>${post.title} | Yuxu Ge</title>`)
+    let beforeArticleModified = beforeArticle
+        .replace(/<title>.*?<\/title>/, `<title>${post.title} | Yuxu Ge</title>`);
+
+    // Add notebook CSS if needed
+    if (isNotebook) {
+        beforeArticleModified = beforeArticleModified.replace(
+            '</style>',
+            notebookCss + '\n</style>'
+        );
+    }
+
+    const staticHtml = beforeArticleModified
         + '\n' + htmlContent + '\n'
         + afterArticle;
 
@@ -98,7 +258,7 @@ posts.forEach(post => {
     fs.mkdirSync(path.dirname(htmlPath), { recursive: true });
     fs.writeFileSync(htmlPath, staticHtml);
 
-    console.log(`✓ ${post.slug}.html`);
+    console.log(`✓ ${post.slug}.html${isNotebook ? ' (notebook)' : ''}`);
 });
 
 console.log(`\nDone! Files in: ${OUTPUT_DIR}/`);

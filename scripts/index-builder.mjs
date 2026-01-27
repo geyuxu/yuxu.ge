@@ -319,8 +319,8 @@ async function batchGetEmbeddings(texts) {
     return results;
 }
 
-// Recursively find all Markdown files
-function findMarkdownFiles(dir) {
+// Recursively find all Markdown and Notebook files
+function findPostFiles(dir) {
     const files = [];
 
     if (!fs.existsSync(dir)) {
@@ -332,8 +332,8 @@ function findMarkdownFiles(dir) {
     for (const entry of entries) {
         const fullPath = path.join(dir, entry.name);
         if (entry.isDirectory()) {
-            files.push(...findMarkdownFiles(fullPath));
-        } else if (entry.name.endsWith('.md')) {
+            files.push(...findPostFiles(fullPath));
+        } else if (entry.name.endsWith('.md') || entry.name.endsWith('.ipynb')) {
             files.push(fullPath);
         }
     }
@@ -341,15 +341,107 @@ function findMarkdownFiles(dir) {
     return files;
 }
 
+// Parse Jupyter Notebook and extract content
+function parseNotebook(content, filePath) {
+    try {
+        const notebook = JSON.parse(content);
+        const cells = notebook.cells || [];
+
+        let frontmatter = {};
+        let title = '';
+        let textContent = [];
+
+        for (const cell of cells) {
+            const source = Array.isArray(cell.source) ? cell.source.join('') : cell.source;
+
+            if (cell.cell_type === 'markdown') {
+                // Check for YAML frontmatter in first markdown cell
+                if (Object.keys(frontmatter).length === 0 && source.startsWith('---\n')) {
+                    const fmMatch = source.match(/^---\n([\s\S]*?)\n---/);
+                    if (fmMatch) {
+                        const yamlLines = fmMatch[1].split('\n');
+                        for (const line of yamlLines) {
+                            const colonIndex = line.indexOf(':');
+                            if (colonIndex === -1) continue;
+                            const key = line.slice(0, colonIndex).trim();
+                            let value = line.slice(colonIndex + 1).trim();
+                            if (value.startsWith('[') && value.endsWith(']')) {
+                                value = value.slice(1, -1).split(',').map(s => s.trim().replace(/['"]/g, ''));
+                            }
+                            frontmatter[key] = value;
+                        }
+                        // Get content after frontmatter
+                        const afterFm = source.slice(fmMatch[0].length).trim();
+                        if (afterFm) textContent.push(afterFm);
+                        continue;
+                    }
+                }
+
+                // Extract title from first # heading
+                if (!title) {
+                    const titleMatch = source.match(/^#\s+(.+)$/m);
+                    if (titleMatch) title = titleMatch[1].trim();
+                }
+
+                textContent.push(source);
+            } else if (cell.cell_type === 'code') {
+                // Include code for search (but not outputs)
+                textContent.push(source);
+            }
+        }
+
+        if (!title) {
+            title = path.basename(filePath, '.ipynb');
+        }
+
+        // Generate URL from file path
+        const relativePath = path.relative(path.join(__dirname, '..'), filePath);
+        const url = '/' + relativePath.replace(/\.ipynb$/, '');
+
+        // Clean content: remove markdown formatting
+        const cleanContent = textContent.join('\n\n')
+            .replace(/```[\s\S]*?```/g, '')           // Remove code blocks in markdown
+            .replace(/!\[.*?\]\(.*?\)/g, '')          // Remove images
+            .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')  // Keep link text
+            .replace(/^#+\s+/gm, '')                  // Remove heading markers
+            .trim();
+
+        // Get date: frontmatter > file creation time
+        let postDate = frontmatter.date || '';
+        if (!postDate) {
+            const stats = fs.statSync(filePath);
+            const birthtime = stats.birthtime;
+            const year = birthtime.getFullYear();
+            const month = String(birthtime.getMonth() + 1).padStart(2, '0');
+            const day = String(birthtime.getDate()).padStart(2, '0');
+            postDate = `${year}-${month}-${day}`;
+        }
+
+        return {
+            title,
+            url,
+            date: postDate,
+            tags: frontmatter.tags || [],
+            description: frontmatter.description || '',
+            content: cleanContent,
+        };
+    } catch (err) {
+        console.log(`  Error parsing notebook ${filePath}: ${err.message}`);
+        return null;
+    }
+}
+
 // Main build process
 async function buildIndex() {
     console.log('=== Building Vector Search Index ===\n');
 
-    // 1. Find all posts
-    const mdFiles = findMarkdownFiles(CONFIG.postsDir);
-    console.log(`Found ${mdFiles.length} Markdown files\n`);
+    // 1. Find all posts (markdown and notebooks)
+    const postFiles = findPostFiles(CONFIG.postsDir);
+    const mdCount = postFiles.filter(f => f.endsWith('.md')).length;
+    const nbCount = postFiles.filter(f => f.endsWith('.ipynb')).length;
+    console.log(`Found ${mdCount} Markdown files, ${nbCount} Notebook files\n`);
 
-    if (mdFiles.length === 0) {
+    if (postFiles.length === 0) {
         console.log('No posts found. Skipping index generation.');
         return;
     }
@@ -357,9 +449,16 @@ async function buildIndex() {
     // 2. Parse and chunk all posts
     const documents = [];
 
-    for (const file of mdFiles) {
+    for (const file of postFiles) {
         const content = fs.readFileSync(file, 'utf-8');
-        const parsed = parseMarkdown(content, file);
+        const isNotebook = file.endsWith('.ipynb');
+
+        let parsed;
+        if (isNotebook) {
+            parsed = parseNotebook(content, file);
+        } else {
+            parsed = parseMarkdown(content, file);
+        }
 
         if (!parsed) {
             console.log(`  Skip: ${path.basename(file)} (no frontmatter)`);
@@ -383,7 +482,8 @@ async function buildIndex() {
             });
         });
 
-        console.log(`  ✓ ${parsed.title} (${chunks.length} chunks)`);
+        const suffix = isNotebook ? ' (notebook)' : '';
+        console.log(`  ✓ ${parsed.title} (${chunks.length} chunks)${suffix}`);
     }
 
     console.log(`\nTotal: ${documents.length} chunks\n`);

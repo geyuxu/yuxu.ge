@@ -407,7 +407,7 @@ function initGlobalSearch() {
     async function getSearchClient() {
         if (searchClient) return searchClient;
         try {
-            const { SearchClient } = await import('/components/search-client.js');
+            const { SearchClient } = await import('/components/search-client.js?v=20260128');
             searchClient = new SearchClient();
             await searchClient.init();
             return searchClient;
@@ -612,7 +612,7 @@ function initGlobalSearch() {
 // Initialize chat widget
 async function initChat() {
     try {
-        const { initChatWidget } = await import('/components/chat-widget.js');
+        const { initChatWidget } = await import('/components/chat-widget.js?v=20260128');
         await initChatWidget();
     } catch (e) {
         console.warn('Chat widget not available:', e);

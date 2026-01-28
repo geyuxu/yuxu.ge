@@ -1,5 +1,35 @@
 [
   {
+    "slug": "posts/2026/neuroevo-life-zh",
+    "title": "从康威生命游戏到数字达尔文主义：构建 GPU 加速的神经演化生态系统",
+    "date": "2026-01-28",
+    "type": "markdown",
+    "ext": "md",
+    "tags": [
+      "ai",
+      "evolutionary-computation",
+      "pytorch",
+      "artificial-life",
+      "gpu"
+    ],
+    "description": "将康威生命游戏推向新维度：构建基于 PyTorch 的 GPU 加速神经演化生态系统，观察数字生命的达尔文式竞争。"
+  },
+  {
+    "slug": "posts/2026/neuroevo-life",
+    "title": "From Conway's Game of Life to Digital Darwinism: Building a GPU-Accelerated Neuroevolutionary Ecosystem",
+    "date": "2026-01-28",
+    "type": "markdown",
+    "ext": "md",
+    "tags": [
+      "ai",
+      "evolutionary-computation",
+      "pytorch",
+      "artificial-life",
+      "gpu"
+    ],
+    "description": "Taking Conway's Game of Life to a new dimension: building a GPU-accelerated neuroevolutionary ecosystem with PyTorch to observe Darwinian competition among digital life forms."
+  },
+  {
     "slug": "posts/2026/geocoding-client",
     "title": "Building a Production-Ready Geocoding Client: Coordinate Hacks, Connection Pools, and Rate Limiting",
     "date": "2026-01-26",

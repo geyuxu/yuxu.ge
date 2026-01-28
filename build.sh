@@ -1,15 +1,66 @@
 #!/bin/bash
 # Build site
 # Usage:
-#   ./build.sh           # Build all
-#   ./build.sh --static  # Static only
-#   ./build.sh --medium  # Medium only
-#   ./build.sh --photos  # Process photos only (convert + compress)
+#   ./build.sh                     # Build all
+#   ./build.sh --static            # Static only
+#   ./build.sh --medium            # Medium only
+#   ./build.sh --photos            # Process photos only (convert + compress)
+#   ./build.sh --push              # Build all and push to git
+#   ./build.sh --push "message"    # Build all and push with custom commit message
 
+set -e
 cd "$(dirname "$0")"
 
+# Git push function
+git_push() {
+    echo ""
+    echo "=== Git Status ==="
+    git status --short
+
+    if git diff --quiet && git diff --cached --quiet; then
+        echo ""
+        echo "No changes to commit."
+        return 0
+    fi
+
+    MSG="${COMMIT_MSG:-build: update site $(date '+%Y-%m-%d %H:%M')}"
+    echo ""
+    echo "=== Committing ==="
+    git add -A
+    git commit -m "$MSG"
+    echo ""
+    echo "=== Pushing ==="
+    git push
+    echo ""
+    echo "Done!"
+}
+
+# Parse arguments
+DO_PUSH=false
+COMMIT_MSG=""
+BUILD_ARGS=()
+
+for arg in "$@"; do
+    case "$arg" in
+        --push)
+            DO_PUSH=true
+            ;;
+        --photos|--static|--medium)
+            BUILD_ARGS+=("$arg")
+            ;;
+        *)
+            # If push mode and no commit message yet, treat as commit message
+            if [ "$DO_PUSH" = true ] && [ -z "$COMMIT_MSG" ]; then
+                COMMIT_MSG="$arg"
+            else
+                BUILD_ARGS+=("$arg")
+            fi
+            ;;
+    esac
+done
+
 # Photos only mode
-if [ "$1" = "--photos" ]; then
+if [[ " ${BUILD_ARGS[*]} " =~ " --photos " ]]; then
     echo "=== Processing Photos ==="
     echo ""
     echo "--- Converting HEIC to JPG ---"
@@ -17,6 +68,8 @@ if [ "$1" = "--photos" ]; then
     echo ""
     echo "--- Compressing Photos ---"
     ./scripts/compress-photos.sh
+
+    [ "$DO_PUSH" = true ] && git_push
     exit 0
 fi
 
@@ -57,4 +110,8 @@ else
 fi
 
 # Build static/medium
-cd blog && node build.js "$@"
+cd blog && node build.js "${BUILD_ARGS[@]}"
+cd ..
+
+# Git push if requested
+[ "$DO_PUSH" = true ] && git_push

@@ -203,9 +203,8 @@
             padding: 1rem 0;
             border-bottom: 1px solid #e5e5e5;
             display: flex;
-            justify-content: space-between;
-            align-items: baseline;
-            gap: 1rem;
+            flex-direction: column;
+            gap: 0.5rem;
         }
 
         .post-item:last-child {
@@ -213,8 +212,7 @@
         }
 
         .post-content {
-            flex: 1;
-            min-width: 0;
+            width: 100%;
         }
 
         .post-link {
@@ -251,8 +249,9 @@
         .post-meta {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             gap: 0.75rem;
-            flex-shrink: 0;
+            width: 100%;
         }
 
         .post-tags {
@@ -547,13 +546,52 @@
         .tag-odp:hover { background: linear-gradient(135deg, #F57C00 0%, #EF6C00 100%); color: white; }
 
         /* Tag Filter */
+        .tag-filter-wrapper {
+            margin-bottom: 1.5rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e5e5e5;
+        }
+
+        .tag-filter-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .tag-filter-label {
+            font-size: 0.8rem;
+            color: var(--dark-grey);
+            font-weight: 500;
+        }
+
+        .tag-filter-toggle {
+            font-size: 0.75rem;
+            color: var(--dark-grey);
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            transition: all 0.2s;
+        }
+
+        .tag-filter-toggle:hover {
+            color: var(--vermilion);
+            background: rgba(196, 30, 58, 0.1);
+        }
+
         .tag-filter {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #e5e5e5;
+            max-height: 2.5rem;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+        }
+
+        .tag-filter.expanded {
+            max-height: 1000px;
         }
 
         .tag-filter .tag {
@@ -710,19 +748,8 @@
                 gap: 0.75rem;
             }
 
-            .post-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 0.5rem;
-            }
-
-            .post-content {
-                width: 100%;
-            }
-
-            .post-meta {
-                width: 100%;
-                justify-content: space-between;
+            .post-tags {
+                flex-wrap: wrap;
             }
         }
     </style>
@@ -744,7 +771,13 @@
                 <p class="page-desc">Technical writings on AI, Distributed Systems, and Engineering.</p>
             </header>
 
-            <div class="tag-filter" id="tag-filter"></div>
+            <div class="tag-filter-wrapper">
+                <div class="tag-filter-header">
+                    <span class="tag-filter-label">Filter by tag</span>
+                    <button class="tag-filter-toggle" id="tag-filter-toggle">Expand</button>
+                </div>
+                <div class="tag-filter" id="tag-filter"></div>
+            </div>
 
             <ul class="post-list" id="post-list">
                 <li class="post-item"><span class="post-link">Loading...</span></li>
@@ -911,6 +944,13 @@ fetch('posts.json')
         // Tag filter click handlers
         tagFilter.querySelectorAll('.tag').forEach(tag => {
             tag.addEventListener('click', () => setTag(tag.dataset.tag));
+        });
+
+        // Tag filter expand/collapse toggle
+        const toggleBtn = document.getElementById('tag-filter-toggle');
+        toggleBtn.addEventListener('click', () => {
+            const isExpanded = tagFilter.classList.toggle('expanded');
+            toggleBtn.textContent = isExpanded ? 'Collapse' : 'Expand';
         });
 
         // Load from URL params

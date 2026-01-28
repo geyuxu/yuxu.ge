@@ -1,7 +1,9 @@
 /**
- * Cloudflare Worker - Embedding API Proxy
+ * Cloudflare Worker - OpenAI API Proxy
  *
- * Proxies embedding requests to OpenAI, protecting the API key.
+ * Endpoints:
+ *   POST /embed  - Get text embeddings (for vector search)
+ *   POST /chat   - Chat completion with RAG context
  *
  * Environment Variables (set in Cloudflare Dashboard):
  *   - OPENAI_API_KEY: Your OpenAI API key
@@ -11,7 +13,6 @@
  *   2. Paste this code
  *   3. Add OPENAI_API_KEY to Environment Variables
  *   4. Deploy and note the Worker URL
- *   5. Update search-client.js with your Worker URL
  */
 
 // Allowed origins (update for your domain)
@@ -28,6 +29,21 @@ const EMBEDDING_CONFIG = {
     model: 'text-embedding-3-small',
     dimensions: 512,
 };
+
+// Chat config
+const CHAT_CONFIG = {
+    model: 'gpt-4o-mini',
+    maxTokens: 1024,
+    temperature: 0.7,
+};
+
+const SYSTEM_PROMPT = `你是 Yuxu 个人网站的 AI 助手。你的任务是：
+1. 回答关于博客内容、项目和作者的问题
+2. 提供友好、专业的技术交流
+
+如果提供了相关的博客内容作为上下文，请基于这些内容回答问题。
+如果问题超出上下文范围，你可以基于通用知识回答，但要说明这不是来自博客的内容。
+回答请简洁明了，使用中文或英文取决于用户的提问语言。`;
 
 /**
  * Handle CORS preflight
@@ -76,12 +92,44 @@ async function getEmbedding(text, apiKey) {
     });
 
     if (!response.ok) {
-        const error = await response.text();
         throw new Error(`OpenAI API error: ${response.status}`);
     }
 
     const data = await response.json();
     return data.data[0].embedding;
+}
+
+/**
+ * Chat completion with OpenAI
+ */
+async function chatCompletion(messages, context, apiKey) {
+    const systemMessage = context
+        ? `${SYSTEM_PROMPT}\n\n以下是相关的博客内容供参考：\n${context}`
+        : SYSTEM_PROMPT;
+
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+            'Authorization': `Bearer ${apiKey}`,
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            model: CHAT_CONFIG.model,
+            messages: [
+                { role: 'system', content: systemMessage },
+                ...messages,
+            ],
+            max_tokens: CHAT_CONFIG.maxTokens,
+            temperature: CHAT_CONFIG.temperature,
+        }),
+    });
+
+    if (!response.ok) {
+        throw new Error(`OpenAI API error: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data.choices[0].message.content;
 }
 
 /**

@@ -550,3 +550,20 @@ function initGlobalSearch() {
         }
     });
 }
+
+// Initialize chat widget
+async function initChat() {
+    try {
+        const { initChatWidget } = await import('/components/chat-widget.js');
+        await initChatWidget();
+    } catch (e) {
+        console.warn('Chat widget not available:', e);
+    }
+}
+
+// Load chat widget after page load
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initChat);
+} else {
+    initChat();
+}

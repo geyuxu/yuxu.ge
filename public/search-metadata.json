@@ -1,4 +1,82 @@
 {
+  "/blog/posts/2026/ai-assistant-rag-zh#0": {
+    "title": "为个人网站构建 RAG 驱动的 AI 助手",
+    "url": "/blog/posts/2026/ai-assistant-rag-zh",
+    "date": "2026-01-28",
+    "text": "为个人网站构建 RAG 驱动的 AI 助手\n\n最近我为个人网站添加了一个 AI 聊天助手，它可以回答关于博客文章、项目和个人背景的问题。本文记录了从架构设计到安全考虑的完整实现过程。\n\n目标\n\n创建一个浮动聊天组件：\n- 使用 RAG（检索增强生成）回答博客相关问题\n- 提供友好的技术交流\n- 优雅"
+  },
+  "/blog/posts/2026/ai-assistant-rag-zh#1": {
+    "title": "为个人网站构建 RAG 驱动的 AI 助手",
+    "url": "/blog/posts/2026/ai-assistant-rag-zh",
+    "date": "2026-01-28",
+    "text": "实现 RAG\n\n我已有一套搜索系统：\n- **BM25 关键词搜索**：本地倒排索引，精确词项匹配\n- **Voy WASM 语义搜索**：使用预计算 embeddings 的向量相似度\n- **RRF 融合**：使用 Reciprocal Rank Fusion 合并两路结果\n\n聊天组件复用这套现"
+  },
+  "/blog/posts/2026/ai-assistant-rag-zh#2": {
+    "title": "为个人网站构建 RAG 驱动的 AI 助手",
+    "url": "/blog/posts/2026/ai-assistant-rag-zh",
+    "date": "2026-01-28",
+    "text": "功能特性：\n- **自动保存**：每次助手响应后保存\n- **自动恢复**：页面加载时恢复对话\n- **24小时过期**：自动清除过期对话\n- **手动清除**：头部垃圾桶按钮可手动清空\n\n选择 localStorage 而非服务端存储（Cloudflare KV）的原因：\n- 大多数访客是一次性对"
+  },
+  "/blog/posts/2026/ai-assistant-rag-zh#3": {
+    "title": "为个人网站构建 RAG 驱动的 AI 助手",
+    "url": "/blog/posts/2026/ai-assistant-rag-zh",
+    "date": "2026-01-28",
+    "text": "down**：简单的正则表达式 Markdown 解析对于粗体和链接已经足够，不需要重型库。\n\n5. **状态管理从简单开始**：localStorage 对于对话历史已经足够。服务端存储（KV）增加复杂度，但对个人网站没有明显收益。\n\n成本分析\n\n使用 `gpt-4o-mini` 和 `text-"
+  },
+  "/blog/posts/2026/ai-assistant-rag#0": {
+    "title": "Building a RAG-Powered AI Assistant for My Personal Website",
+    "url": "/blog/posts/2026/ai-assistant-rag",
+    "date": "2026-01-28",
+    "text": "Building a RAG-Powered AI Assistant for My Personal Website\n\nI recently added an AI chat assistant to my personal website that can answer questions ab"
+  },
+  "/blog/posts/2026/ai-assistant-rag#1": {
+    "title": "Building a RAG-Powered AI Assistant for My Personal Website",
+    "url": "/blog/posts/2026/ai-assistant-rag",
+    "date": "2026-01-28",
+    "text": "ration)\n- Provides friendly technical discussions\n- Handles sensitive topics gracefully\n- Works entirely on static hosting (GitHub Pages) with Cloudfl"
+  },
+  "/blog/posts/2026/ai-assistant-rag#2": {
+    "title": "Building a RAG-Powered AI Assistant for My Personal Website",
+    "url": "/blog/posts/2026/ai-assistant-rag",
+    "date": "2026-01-28",
+    "text": "re injected dynamically, no external dependencies\n- **ESC to close**: Keyboard accessibility\n- **Mobile responsive**: Adapts to screen size\n\n2. Hybrid"
+  },
+  "/blog/posts/2026/ai-assistant-rag#3": {
+    "title": "Building a RAG-Powered AI Assistant for My Personal Website",
+    "url": "/blog/posts/2026/ai-assistant-rag",
+    "date": "2026-01-28",
+    "text": "at widget reuses this existing infrastructure:\n\n3. Cloudflare Worker (API Proxy)\n\nThe Worker handles two endpoints:\n\n**`/api/embedding`** - Converts q"
+  },
+  "/blog/posts/2026/ai-assistant-rag#4": {
+    "title": "Building a RAG-Powered AI Assistant for My Personal Website",
+    "url": "/blog/posts/2026/ai-assistant-rag",
+    "date": "2026-01-28",
+    "text": "ystem prompt (stored as environment variable):\n\n5. Conversation History with localStorage\n\nFor better UX, the chat widget persists conversation histor"
+  },
+  "/blog/posts/2026/ai-assistant-rag#5": {
+    "title": "Building a RAG-Powered AI Assistant for My Personal Website",
+    "url": "/blog/posts/2026/ai-assistant-rag",
+    "date": "2026-01-28",
+    "text": "button**: Manual clear via trash icon in header\n\nThis is a pragmatic choice over server-side storage (Cloudflare KV) because:\n- Most visitors have one"
+  },
+  "/blog/posts/2026/ai-assistant-rag#6": {
+    "title": "Building a RAG-Powered AI Assistant for My Personal Website",
+    "url": "/blog/posts/2026/ai-assistant-rag",
+    "date": "2026-01-28",
+    "text": "lows prompt iteration without code deployment.\n\n2. **Reuse existing search infrastructure**: Building RAG on top of an existing hybrid search system s"
+  },
+  "/blog/posts/2026/ai-assistant-rag#7": {
+    "title": "Building a RAG-Powered AI Assistant for My Personal Website",
+    "url": "/blog/posts/2026/ai-assistant-rag",
+    "date": "2026-01-28",
+    "text": "r bold and links. No need for heavy libraries.\n\n5. **Start simple with state management**: localStorage is sufficient for conversation history. Server"
+  },
+  "/blog/posts/2026/ai-assistant-rag#8": {
+    "title": "Building a RAG-Powered AI Assistant for My Personal Website",
+    "url": "/blog/posts/2026/ai-assistant-rag",
+    "date": "2026-01-28",
+    "text": "thly cost: < $5 for moderate traffic\n\nNext Steps\n\n- [ ] Add streaming responses for better UX\n- [x] ~~Implement conversation memory~~ (Done with local"
+  },
   "/blog/posts/2026/geocoding-client#0": {
     "title": "Building a Production-Ready Geocoding Client: Coordinate Hacks, Connection Pools, and Rate Limiting",
     "url": "/blog/posts/2026/geocoding-client",

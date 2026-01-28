@@ -1,5 +1,35 @@
 [
   {
+    "slug": "posts/2026/ai-assistant-rag-zh",
+    "title": "为个人网站构建 RAG 驱动的 AI 助手",
+    "date": "2026-01-28",
+    "type": "markdown",
+    "ext": "md",
+    "tags": [
+      "ai",
+      "rag",
+      "cloudflare-workers",
+      "javascript",
+      "llm"
+    ],
+    "description": "使用混合搜索、Cloudflare Workers 和 OpenAI API 为个人网站构建 RAG 驱动的 AI 助手。"
+  },
+  {
+    "slug": "posts/2026/ai-assistant-rag",
+    "title": "Building a RAG-Powered AI Assistant for My Personal Website",
+    "date": "2026-01-28",
+    "type": "markdown",
+    "ext": "md",
+    "tags": [
+      "ai",
+      "rag",
+      "cloudflare-workers",
+      "javascript",
+      "llm"
+    ],
+    "description": "Building a RAG-powered AI assistant for my personal website using hybrid search, Cloudflare Workers, and OpenAI API."
+  },
+  {
     "slug": "posts/2026/neuroevo-life-zh",
     "title": "从康威生命游戏到数字达尔文主义：构建 GPU 加速的神经演化生态系统",
     "date": "2026-01-28",

@@ -834,6 +834,76 @@
             overflow: hidden;
             text-overflow: ellipsis;
         }
+
+        /* Games Section */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .game-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 1.25rem 1rem;
+            background: white;
+            border: 1px solid #e5e5e5;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .game-card:hover {
+            border-color: var(--vermilion);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        .game-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: white;
+        }
+
+        .game-name {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--black);
+        }
+
+        .game-desc {
+            font-size: 0.75rem;
+            color: #888;
+            text-align: center;
+        }
+
+        .games-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.85rem;
+            color: var(--vermilion);
+        }
+
+        .games-more svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        @media (max-width: 900px) {
+            .games-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
     </style>
 </head>
 
@@ -1013,6 +1083,35 @@
         `;
         }
 
+        // Helper to render Games section
+        function renderGames(section) {
+            const icons = {
+                '2048': '2048',
+                'snake': '🐍',
+                'tetris': '🧱',
+                'memory': '🎴'
+            };
+            const items = section.items.map(item => `
+            <a href="/games/${item.id}.html" class="game-card">
+                <div class="game-icon" style="background: ${item.color}">${icons[item.icon] || '🎮'}</div>
+                <div class="game-name">${item.name}</div>
+                <div class="game-desc">${item.desc}</div>
+            </a>
+        `).join('');
+            return `
+            <section>
+                <h3 class="section-header">${section.title}</h3>
+                <div class="games-grid">${items}</div>
+                <a href="/games/" class="games-more">
+                    All games
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
+            </section>
+        `;
+        }
+
         // Main Content Loader
         Promise.all([
             fetch('/home-config.json').then(r => r.json()),
@@ -1030,6 +1129,7 @@
                     if (section.type === 'blog') return renderBlog(section, posts);
                     if (section.type === 'stack') return renderStack(section);
                     if (section.type === 'work') return renderWork(section);
+                    if (section.type === 'games') return renderGames(section);
                     return '';
                 }).join('');
                 dynamicContainer.innerHTML = sectionsHtml;

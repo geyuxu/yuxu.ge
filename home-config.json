@@ -40,6 +40,40 @@
             ]
         },
         {
+            "type": "games",
+            "title": "Play Games",
+            "items": [
+                {
+                    "id": "2048",
+                    "name": "2048",
+                    "icon": "2048",
+                    "color": "#edc53f",
+                    "desc": "Slide tiles to reach 2048"
+                },
+                {
+                    "id": "snake",
+                    "name": "Snake",
+                    "icon": "snake",
+                    "color": "#4CAF50",
+                    "desc": "Classic snake game"
+                },
+                {
+                    "id": "tetris",
+                    "name": "Tetris",
+                    "icon": "tetris",
+                    "color": "#9C27B0",
+                    "desc": "Stack falling blocks"
+                },
+                {
+                    "id": "memory",
+                    "name": "Memory",
+                    "icon": "memory",
+                    "color": "#2196F3",
+                    "desc": "Find matching pairs"
+                }
+            ]
+        },
+        {
             "type": "blog",
             "title": "Latest Blog",
             "count": 8

@@ -2,198 +2,224 @@
  * Cloudflare Worker - OpenAI API Proxy
  *
  * Endpoints:
- *   POST /embed  - Get text embeddings (for vector search)
- *   POST /chat   - Chat completion with RAG context
+ *   POST /api/embedding - Get text embeddings (for vector search)
+ *   POST /api/chat      - Chat completion with RAG context
+ *   POST /api/translate - Translate content to target language (with KV caching)
+ *   GET  /api/languages - Get supported languages
  *
  * Environment Variables (set in Cloudflare Dashboard):
  *   - OPENAI_API_KEY: Your OpenAI API key
+ *   - system_prompt: System prompt for chat
  *
- * Deploy:
- *   1. Create a new Worker in Cloudflare Dashboard
- *   2. Paste this code
- *   3. Add OPENAI_API_KEY to Environment Variables
- *   4. Deploy and note the Worker URL
+ * KV Namespaces (bind in Cloudflare Dashboard):
+ *   - TRANSLATIONS: For caching translated content (optional)
  */
 
-// Allowed origins (update for your domain)
-const ALLOWED_ORIGINS = [
-    'https://yuxu.ge',
-    'https://www.yuxu.ge',
-    // Add localhost for development if needed:
-    // 'http://localhost:3000',
-    // 'http://127.0.0.1:5500',
-];
-
-// OpenAI embedding config (must match index-builder.mjs)
-const EMBEDDING_CONFIG = {
-    model: 'text-embedding-3-small',
-    dimensions: 512,
+// Supported languages for translation
+const LANGUAGES = {
+    'en': 'English',
+    'zh': '中文 (Chinese)',
+    'ja': '日本語 (Japanese)',
+    'ko': '한국어 (Korean)',
+    'es': 'Español (Spanish)',
+    'fr': 'Français (French)',
+    'de': 'Deutsch (German)',
+    'pt': 'Português (Portuguese)',
+    'ru': 'Русский (Russian)',
+    'ar': 'العربية (Arabic)',
 };
 
-// Chat config
-const CHAT_CONFIG = {
-    model: 'gpt-4o-mini',
-    maxTokens: 1024,
-    temperature: 0.7,
-};
-
-const SYSTEM_PROMPT = `你是 Yuxu 个人网站的 AI 助手。你的任务是：
-1. 回答关于博客内容、项目和作者的问题
-2. 提供友好、专业的技术交流
-
-如果提供了相关的博客内容作为上下文，请基于这些内容回答问题。
-如果问题超出上下文范围，你可以基于通用知识回答，但要说明这不是来自博客的内容。
-回答请简洁明了，使用中文或英文取决于用户的提问语言。`;
-
-/**
- * Handle CORS preflight
- */
-function handleOptions(request) {
-    const origin = request.headers.get('Origin');
-    const isAllowed = ALLOWED_ORIGINS.includes(origin);
-
-    return new Response(null, {
-        status: 204,
-        headers: {
-            'Access-Control-Allow-Origin': isAllowed ? origin : '',
-            'Access-Control-Allow-Methods': 'POST, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type',
-            'Access-Control-Max-Age': '86400',
-        },
-    });
-}
-
-/**
- * Add CORS headers to response
- */
-function corsHeaders(origin) {
-    const isAllowed = ALLOWED_ORIGINS.includes(origin);
-    return {
-        'Access-Control-Allow-Origin': isAllowed ? origin : '',
-        'Content-Type': 'application/json',
-    };
-}
-
-/**
- * Get embedding from OpenAI
- */
-async function getEmbedding(text, apiKey) {
-    const response = await fetch('https://api.openai.com/v1/embeddings', {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${apiKey}`,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            model: EMBEDDING_CONFIG.model,
-            input: text,
-            dimensions: EMBEDDING_CONFIG.dimensions,
-        }),
-    });
-
-    if (!response.ok) {
-        throw new Error(`OpenAI API error: ${response.status}`);
+// Simple hash for cache keys
+function hashContent(content) {
+    let hash = 0;
+    for (let i = 0; i < content.length; i++) {
+        const char = content.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash;
     }
-
-    const data = await response.json();
-    return data.data[0].embedding;
+    return Math.abs(hash).toString(36);
 }
 
-/**
- * Chat completion with OpenAI
- */
-async function chatCompletion(messages, context, apiKey) {
-    const systemMessage = context
-        ? `${SYSTEM_PROMPT}\n\n以下是相关的博客内容供参考：\n${context}`
-        : SYSTEM_PROMPT;
-
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-        method: 'POST',
-        headers: {
-            'Authorization': `Bearer ${apiKey}`,
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-            model: CHAT_CONFIG.model,
-            messages: [
-                { role: 'system', content: systemMessage },
-                ...messages,
-            ],
-            max_tokens: CHAT_CONFIG.maxTokens,
-            temperature: CHAT_CONFIG.temperature,
-        }),
-    });
-
-    if (!response.ok) {
-        throw new Error(`OpenAI API error: ${response.status}`);
-    }
-
-    const data = await response.json();
-    return data.choices[0].message.content;
-}
-
-/**
- * Main request handler
- */
 export default {
     async fetch(request, env) {
-        const origin = request.headers.get('Origin') || '';
+        const origin = request.headers.get("Origin");
+        const allowedOrigins = ["https://yuxu.ge", "https://www.yuxu.ge", "http://localhost:8080", "http://127.0.0.1:8080"];
 
-        // Handle CORS preflight
-        if (request.method === 'OPTIONS') {
-            return handleOptions(request);
+        const corsHeaders = {
+            "Access-Control-Allow-Origin": allowedOrigins.includes(origin) ? origin : "https://yuxu.ge",
+            "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+            "Access-Control-Allow-Headers": "Content-Type",
+        };
+
+        if (request.method === "OPTIONS") {
+            return new Response(null, { headers: corsHeaders });
         }
 
-        // Only allow POST
-        if (request.method !== 'POST') {
-            return new Response(
-                JSON.stringify({ error: 'Method not allowed' }),
-                { status: 405, headers: corsHeaders(origin) }
-            );
+        const url = new URL(request.url);
+        const path = url.pathname;
+
+        // GET /api/languages - return supported languages
+        if (request.method === "GET" && (path === "/api/languages" || path === "/api/translate/languages")) {
+            return new Response(JSON.stringify({ languages: LANGUAGES }), {
+                headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
         }
 
-        // Check API key is configured
-        if (!env.OPENAI_API_KEY) {
-            return new Response(
-                JSON.stringify({ error: 'Server configuration error' }),
-                { status: 500, headers: corsHeaders(origin) }
-            );
+        if (request.method !== "POST") {
+            return new Response("Method Not Allowed", { status: 405, headers: corsHeaders });
         }
 
         try {
-            // Parse request body
-            const body = await request.json();
-            const text = body.text;
+            // Route: /api/chat
+            if (path === "/api/chat") {
+                const { messages, context } = await request.json();
 
-            if (!text || typeof text !== 'string') {
-                return new Response(
-                    JSON.stringify({ error: 'Missing or invalid "text" field' }),
-                    { status: 400, headers: corsHeaders(origin) }
-                );
+                const systemPrompt = env.system_prompt || "你是一个友好的 AI 助手。";
+                const fullPrompt = context
+                    ? `${systemPrompt}\n\n## 相关博客内容\n${context}`
+                    : systemPrompt;
+
+                const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${env.OPENAI_API_KEY}`,
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-4o-mini",
+                        messages: [{ role: "system", content: fullPrompt }, ...messages],
+                        max_tokens: 1024,
+                        temperature: 0.7,
+                    }),
+                });
+
+                const data = await response.json();
+                return new Response(JSON.stringify({ reply: data.choices[0].message.content }), {
+                    headers: { ...corsHeaders, "Content-Type": "application/json" },
+                });
             }
 
-            // Limit text length (prevent abuse)
-            if (text.length > 1000) {
-                return new Response(
-                    JSON.stringify({ error: 'Text too long (max 1000 chars)' }),
-                    { status: 400, headers: corsHeaders(origin) }
-                );
+            // Route: /api/translate
+            if (path === "/api/translate") {
+                const { content, targetLang, slug } = await request.json();
+
+                if (!content || typeof content !== 'string') {
+                    return new Response(JSON.stringify({ error: 'Missing or invalid "content" field' }), {
+                        status: 400,
+                        headers: { ...corsHeaders, "Content-Type": "application/json" },
+                    });
+                }
+
+                if (!targetLang || !LANGUAGES[targetLang]) {
+                    return new Response(JSON.stringify({ error: 'Invalid target language', supported: Object.keys(LANGUAGES) }), {
+                        status: 400,
+                        headers: { ...corsHeaders, "Content-Type": "application/json" },
+                    });
+                }
+
+                if (content.length > 40000) {
+                    return new Response(JSON.stringify({ error: 'Content too long (max 40000 chars)' }), {
+                        status: 400,
+                        headers: { ...corsHeaders, "Content-Type": "application/json" },
+                    });
+                }
+
+                // Check KV cache if available
+                const contentHash = hashContent(content);
+                const cacheKey = `${slug || 'post'}_${contentHash}_${targetLang}`;
+
+                if (env.TRANSLATIONS) {
+                    try {
+                        const cached = await env.TRANSLATIONS.get(cacheKey);
+                        if (cached) {
+                            return new Response(JSON.stringify({ translated: cached, cached: true }), {
+                                headers: { ...corsHeaders, "Content-Type": "application/json" },
+                            });
+                        }
+                    } catch (e) {
+                        console.warn('KV read error:', e);
+                    }
+                }
+
+                // Translate via OpenAI
+                const langName = LANGUAGES[targetLang];
+                const response = await fetch("https://api.openai.com/v1/chat/completions", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${env.OPENAI_API_KEY}`,
+                    },
+                    body: JSON.stringify({
+                        model: "gpt-4o-mini",
+                        messages: [
+                            {
+                                role: "system",
+                                content: `You are a professional translator. Translate the following content to ${langName}.
+
+Rules:
+- Preserve all Markdown formatting (headers, code blocks, links, lists, etc.)
+- Keep code blocks unchanged (do not translate code)
+- Keep technical terms in their original form when appropriate
+- Maintain the same tone and style
+- Do not add explanations or notes
+- Return only the translated content`
+                            },
+                            { role: "user", content }
+                        ],
+                        max_tokens: 4096,
+                        temperature: 0.3,
+                    }),
+                });
+
+                if (!response.ok) {
+                    const error = await response.text();
+                    throw new Error(`OpenAI API error: ${response.status} - ${error}`);
+                }
+
+                const data = await response.json();
+                const translated = data.choices[0].message.content;
+
+                // Cache result if KV available
+                if (env.TRANSLATIONS) {
+                    try {
+                        await env.TRANSLATIONS.put(cacheKey, translated, {
+                            expirationTtl: 30 * 24 * 60 * 60 // 30 days
+                        });
+                    } catch (e) {
+                        console.warn('KV write error:', e);
+                    }
+                }
+
+                return new Response(JSON.stringify({ translated, cached: false }), {
+                    headers: { ...corsHeaders, "Content-Type": "application/json" },
+                });
             }
 
-            // Get embedding
-            const embedding = await getEmbedding(text, env.OPENAI_API_KEY);
+            // Default route: /api/embedding
+            const { text } = await request.json();
+            const response = await fetch("https://api.openai.com/v1/embeddings", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${env.OPENAI_API_KEY}`,
+                },
+                body: JSON.stringify({
+                    input: text,
+                    model: "text-embedding-3-small",
+                    dimensions: 512,
+                }),
+            });
 
-            return new Response(
-                JSON.stringify({ embedding }),
-                { status: 200, headers: corsHeaders(origin) }
-            );
+            const data = await response.json();
+            return new Response(JSON.stringify({ embedding: data.data[0].embedding }), {
+                headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
 
         } catch (err) {
-            console.error('Worker error:', err);
-            return new Response(
-                JSON.stringify({ error: err.message }),
-                { status: 500, headers: corsHeaders(origin) }
-            );
+            return new Response(JSON.stringify({ error: err.message }), {
+                status: 500,
+                headers: { ...corsHeaders, "Content-Type": "application/json" },
+            });
         }
     },
 };

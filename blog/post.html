@@ -341,6 +341,104 @@
             color: var(--vermilion);
         }
 
+        /* Language Selector */
+        .lang-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            padding: 0.75rem 1rem;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .lang-selector-label {
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .lang-selector-label svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .lang-select {
+            padding: 0.4rem 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            font-size: 0.85rem;
+            cursor: pointer;
+            min-width: 140px;
+        }
+
+        .lang-select:focus {
+            outline: none;
+            border-color: var(--vermilion);
+        }
+
+        .lang-status {
+            font-size: 0.8rem;
+            color: #888;
+            margin-left: auto;
+        }
+
+        .lang-status.translating {
+            color: var(--vermilion);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .lang-status.translating::before {
+            content: '';
+            width: 14px;
+            height: 14px;
+            border: 2px solid #f0f0f0;
+            border-top-color: var(--vermilion);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .lang-status.cached {
+            color: #4CAF50;
+        }
+
+        .lang-original-btn {
+            padding: 0.35rem 0.6rem;
+            font-size: 0.75rem;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.2s;
+        }
+
+        .lang-original-btn:hover {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        @media (max-width: 600px) {
+            .lang-selector {
+                flex-wrap: wrap;
+            }
+            .lang-status {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 0.5rem;
+            }
+        }
+
         /* KaTeX math styles */
         .katex-display {
             overflow-x: auto;
@@ -703,6 +801,31 @@
 
         <main class="content">
             <a href="/blog/" class="back-link">← Back to Blog</a>
+
+            <!-- Language Selector -->
+            <div class="lang-selector" id="lang-selector" style="display: none;">
+                <span class="lang-selector-label">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                    </svg>
+                    Language
+                </span>
+                <select class="lang-select" id="lang-select">
+                    <option value="en">🇺🇸 English</option>
+                    <option value="zh">🇨🇳 中文</option>
+                    <option value="ja">🇯🇵 日本語</option>
+                    <option value="ko">🇰🇷 한국어</option>
+                    <option value="es">🇪🇸 Español</option>
+                    <option value="fr">🇫🇷 Français</option>
+                    <option value="de">🇩🇪 Deutsch</option>
+                    <option value="pt">🇵🇹 Português</option>
+                    <option value="ru">🇷🇺 Русский</option>
+                    <option value="ar">🇸🇦 العربية</option>
+                </select>
+                <button class="lang-original-btn" id="lang-original-btn" style="display: none;">Show Original</button>
+                <span class="lang-status" id="lang-status"></span>
+            </div>
+
             <article id="article">
                 <div class="loading">Loading...</div>
             </article>
@@ -720,6 +843,10 @@
         // Get post name from URL: /blog/post.html?p=ddd-geocoding-client
         const params = new URLSearchParams(window.location.search);
         const postName = params.get('p');
+
+        // Translation variables (declared early for use in content loading)
+        let originalMarkdown = null;
+        let savedArticleHtml = null;
 
         // Render notebook JSON to HTML
         function renderNotebook(notebook, notebookUrl) {
@@ -1394,6 +1521,8 @@
                         article.innerHTML = '<p class="error">Error: Markdown library not loaded. Please check your internet connection.</p>';
                         throw new Error('done');
                     }
+                    // Store original markdown for translation
+                    originalMarkdown = content;
                     article.innerHTML = marked.parse(content);
                     const h1 = document.querySelector('article h1');
                     if (h1) document.title = h1.textContent + ' | Yuxu Ge';
@@ -1550,6 +1679,191 @@
         } else {
             document.getElementById('article').innerHTML = '<p class="error">No post specified.</p>';
         }
+
+        // ============================================================
+        // TRANSLATION FEATURE
+        // ============================================================
+        const TRANSLATE_CONFIG = {
+            apiUrl: 'https://yuxu.ge/api/translate',
+            cacheKey: 'translation_cache',
+            cacheTTL: 7 * 24 * 60 * 60 * 1000, // 7 days
+        };
+
+        // Translation state variables (originalMarkdown, savedArticleHtml declared at script start)
+        let currentLang = 'en';
+        let isTranslating = false;
+
+        // Detect original language from content
+        function detectLanguage(text) {
+            // Simple heuristic: if > 30% Chinese characters, it's Chinese
+            const chineseChars = (text.match(/[\u4e00-\u9fff]/g) || []).length;
+            const totalChars = text.length;
+            if (chineseChars / totalChars > 0.3) return 'zh';
+            return 'en';
+        }
+
+        // Initialize language selector
+        function initLanguageSelector() {
+            const selector = document.getElementById('lang-selector');
+            const select = document.getElementById('lang-select');
+            const status = document.getElementById('lang-status');
+            const originalBtn = document.getElementById('lang-original-btn');
+            const article = document.getElementById('article');
+
+            // Store original content
+            savedArticleHtml = article.innerHTML;
+
+            // Detect original language
+            currentLang = detectLanguage(article.textContent);
+            select.value = currentLang;
+
+            // Show selector
+            selector.style.display = 'flex';
+
+            // Handle language change
+            select.addEventListener('change', async (e) => {
+                const targetLang = e.target.value;
+
+                if (targetLang === currentLang && !isTranslating) {
+                    // Show original
+                    article.innerHTML = savedArticleHtml;
+                    originalBtn.style.display = 'none';
+                    status.textContent = '';
+                    postProcessArticle();
+                    return;
+                }
+
+                await translateArticle(targetLang);
+            });
+
+            // Show original button
+            originalBtn.addEventListener('click', () => {
+                article.innerHTML = savedArticleHtml;
+                select.value = detectLanguage(article.textContent);
+                originalBtn.style.display = 'none';
+                status.textContent = '';
+                postProcessArticle();
+            });
+        }
+
+        // Translate article
+        async function translateArticle(targetLang) {
+            if (isTranslating) return;
+
+            const article = document.getElementById('article');
+            const status = document.getElementById('lang-status');
+            const originalBtn = document.getElementById('lang-original-btn');
+
+            // Check localStorage cache first
+            const cacheKey = `${TRANSLATE_CONFIG.cacheKey}_${postName}_${targetLang}`;
+            const cached = getTranslationCache(cacheKey);
+            if (cached) {
+                article.innerHTML = cached;
+                status.textContent = '(cached)';
+                status.className = 'lang-status cached';
+                originalBtn.style.display = 'inline-block';
+                postProcessArticle();
+                return;
+            }
+
+            // Get content to translate (prefer markdown if available)
+            let contentToTranslate = article.textContent;
+            if (originalMarkdown) {
+                contentToTranslate = originalMarkdown;
+            }
+
+            isTranslating = true;
+            status.textContent = 'Translating...';
+            status.className = 'lang-status translating';
+
+            try {
+                const response = await fetch(TRANSLATE_CONFIG.apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        content: contentToTranslate,
+                        targetLang,
+                        slug: postName,
+                    }),
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Translation failed: ${response.status}`);
+                }
+
+                const data = await response.json();
+                const translated = data.translated;
+
+                // Render translated content
+                if (originalMarkdown) {
+                    // If we translated markdown, render it
+                    article.innerHTML = marked.parse(translated);
+                } else {
+                    // Otherwise treat as HTML
+                    article.innerHTML = marked.parse(translated);
+                }
+
+                // Cache in localStorage
+                setTranslationCache(cacheKey, article.innerHTML);
+
+                status.textContent = data.cached ? '(server cached)' : '(translated)';
+                status.className = 'lang-status cached';
+                originalBtn.style.display = 'inline-block';
+
+                postProcessArticle();
+
+            } catch (err) {
+                console.error('Translation error:', err);
+                status.textContent = 'Translation failed';
+                status.className = 'lang-status';
+                // Revert to original
+                setTimeout(() => {
+                    status.textContent = '';
+                }, 3000);
+            } finally {
+                isTranslating = false;
+            }
+        }
+
+        // LocalStorage cache helpers
+        function getTranslationCache(key) {
+            try {
+                const raw = localStorage.getItem(key);
+                if (!raw) return null;
+                const data = JSON.parse(raw);
+                if (Date.now() - data.timestamp > TRANSLATE_CONFIG.cacheTTL) {
+                    localStorage.removeItem(key);
+                    return null;
+                }
+                return data.content;
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function setTranslationCache(key, content) {
+            try {
+                localStorage.setItem(key, JSON.stringify({
+                    content,
+                    timestamp: Date.now(),
+                }));
+            } catch (e) {
+                console.warn('Cache write failed:', e);
+            }
+        }
+
+        // Initialize after content loads
+        const checkContentLoaded = setInterval(() => {
+            const article = document.getElementById('article');
+            if (article && !article.innerHTML.includes('Loading')) {
+                clearInterval(checkContentLoaded);
+                // Wait a bit for post-processing
+                setTimeout(initLanguageSelector, 100);
+            }
+        }, 100);
+
+        // Clear check after 10 seconds
+        setTimeout(() => clearInterval(checkContentLoaded), 10000);
     </script>
 
 </body>

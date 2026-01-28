@@ -30,6 +30,36 @@
     "description": "Building a RAG-powered AI assistant for my personal website using hybrid search, Cloudflare Workers, and OpenAI API."
   },
   {
+    "slug": "posts/2026/multi-language-translation-zh",
+    "title": "为博客添加多语言 AI 翻译功能",
+    "date": "2026-01-28",
+    "type": "markdown",
+    "ext": "md",
+    "tags": [
+      "ai",
+      "translation",
+      "cloudflare-workers",
+      "javascript",
+      "llm"
+    ],
+    "description": "使用 GPT-4o-mini 和 Cloudflare Workers 为静态博客添加实时 AI 翻译功能，支持 10 种语言，采用双层缓存策略。"
+  },
+  {
+    "slug": "posts/2026/multi-language-translation",
+    "title": "Adding Multi-Language AI Translation to My Blog",
+    "date": "2026-01-28",
+    "type": "markdown",
+    "ext": "md",
+    "tags": [
+      "ai",
+      "translation",
+      "cloudflare-workers",
+      "javascript",
+      "llm"
+    ],
+    "description": "Adding real-time AI translation to a static blog with GPT-4o-mini and Cloudflare Workers, supporting 10 languages with dual-layer caching."
+  },
+  {
     "slug": "posts/2026/neuroevo-life-zh",
     "title": "从康威生命游戏到数字达尔文主义：构建 GPU 加速的神经演化生态系统",
     "date": "2026-01-28",

@@ -215,6 +215,60 @@
     "date": "2026-01-26",
     "text": "code is available at github.com/geyuxu/yuxu.ge.\n\n*Built with: OpenAI text-embedding-3-small, Voy WASM, Cloudflare Workers, vanilla JavaScript*"
   },
+  "/blog/posts/2026/multi-language-translation-zh#0": {
+    "title": "为博客添加多语言 AI 翻译功能",
+    "url": "/blog/posts/2026/multi-language-translation-zh",
+    "date": "2026-01-28",
+    "text": "为博客添加多语言 AI 翻译功能\n\n在实现了 RAG 驱动的 AI 助手之后，我希望让博客内容能被全球读者访问。与其手动翻译每篇文章，我构建了一个按需 AI 翻译系统，支持 10 种语言。\n\n目标\n\n创建无缝的翻译体验：\n- 按需将任何博客文章翻译成 10 种主要语言\n- 保留 Markdown 格"
+  },
+  "/blog/posts/2026/multi-language-translation-zh#1": {
+    "title": "为博客添加多语言 AI 翻译功能",
+    "url": "/blog/posts/2026/multi-language-translation-zh",
+    "date": "2026-01-28",
+    "text": "处理翻译请求：\n\n5. 智能语言检测\n\n前端自动检测原始语言以设置正确的默认值：\n\n关键设计决策\n\n1. **翻译 Markdown 而非 HTML**：在可用时，我翻译原始 Markdown 源码并重新渲染。这比翻译渲染后的 HTML 能更好地保留格式。\n\n2. **低温度值（0.3）**：翻译需"
+  },
+  "/blog/posts/2026/multi-language-translation-zh#2": {
+    "title": "为博客添加多语言 AI 翻译功能",
+    "url": "/blog/posts/2026/multi-language-translation-zh",
+    "date": "2026-01-28",
+    "text": "月不超过 $5。\n\n未来改进\n\n- [ ] 构建时预翻译热门文章\n- [ ] 为长文章添加流式传输\n- [ ] 支持 RTL 语言（阿拉伯语）的正确 CSS\n- [ ] 添加翻译质量反馈\n\n完整实现在我的网站仓库中。"
+  },
+  "/blog/posts/2026/multi-language-translation#0": {
+    "title": "Adding Multi-Language AI Translation to My Blog",
+    "url": "/blog/posts/2026/multi-language-translation",
+    "date": "2026-01-28",
+    "text": "Adding Multi-Language AI Translation to My Blog\n\nAfter implementing the RAG-powered AI assistant, I wanted to make my blog content accessible to a glo"
+  },
+  "/blog/posts/2026/multi-language-translation#1": {
+    "title": "Adding Multi-Language AI Translation to My Blog",
+    "url": "/blog/posts/2026/multi-language-translation",
+    "date": "2026-01-28",
+    "text": "links)\n- Cache translations to minimize API costs\n- Show loading feedback during translation\n\nArchitecture\n\nSupported Languages\n\nThe system supports 1"
+  },
+  "/blog/posts/2026/multi-language-translation#2": {
+    "title": "Adding Multi-Language AI Translation to My Blog",
+    "url": "/blog/posts/2026/multi-language-translation",
+    "date": "2026-01-28",
+    "text": "API costs, I implemented caching at two levels:\n\n**Frontend (localStorage)** - 7 day TTL:\n\n**Backend (Cloudflare KV)** - 30 day TTL:\n\n4. Translation A"
+  },
+  "/blog/posts/2026/multi-language-translation#3": {
+    "title": "Adding Multi-Language AI Translation to My Blog",
+    "url": "/blog/posts/2026/multi-language-translation",
+    "date": "2026-01-28",
+    "text": "ranslate the raw Markdown source and re-render it. This preserves formatting better than translating rendered HTML.\n\n2. **Low temperature (0.3)**: Tra"
+  },
+  "/blog/posts/2026/multi-language-translation#4": {
+    "title": "Adding Multi-Language AI Translation to My Blog",
+    "url": "/blog/posts/2026/multi-language-translation",
+    "date": "2026-01-28",
+    "text": "ranslation cache is automatically invalidated.\n\n4. **Optional KV binding**: The worker works without KV storage - it just won't have server-side cachi"
+  },
+  "/blog/posts/2026/multi-language-translation#5": {
+    "title": "Adding Multi-Language AI Translation to My Blog",
+    "url": "/blog/posts/2026/multi-language-translation",
+    "date": "2026-01-28",
+    "text": "month in translation costs.\n\nFuture Improvements\n\n- [ ] Pre-translate popular posts at build time\n- [ ] Add streaming for long articles\n- [ ] Support "
+  },
   "/blog/posts/2026/neuroevo-life-zh#0": {
     "title": "从康威生命游戏到数字达尔文主义：构建 GPU 加速的神经演化生态系统",
     "url": "/blog/posts/2026/neuroevo-life-zh",

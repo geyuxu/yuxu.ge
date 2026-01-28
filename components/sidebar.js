@@ -126,6 +126,20 @@ const sidebarSearchCSS = `
     color: #666;
 }
 
+/* Mobile sidebar search */
+@media (max-width: 900px) {
+    .sidebar-search {
+        margin-top: 1rem;
+        margin-bottom: 0.25rem;
+        max-width: 280px;
+    }
+
+    .sidebar-search-input {
+        font-size: 16px; /* Prevents iOS zoom on focus */
+        padding: 0.5rem 0.75rem 0.5rem 2rem;
+    }
+}
+
 /* Search Results Overlay (displayed in content area) */
 .search-results-overlay {
     position: fixed;
@@ -312,7 +326,51 @@ const sidebarSearchCSS = `
 @media (max-width: 900px) {
     .search-results-overlay {
         left: 0;
-        padding: 2rem 1rem;
+        padding: 1.5rem 1rem;
+        top: 0;
+        position: fixed;
+    }
+
+    .search-results-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-bottom: 1.5rem;
+        padding-bottom: 0.75rem;
+    }
+
+    .search-results-title {
+        font-size: 1.25rem;
+        word-break: break-word;
+    }
+
+    .search-results-close {
+        align-self: flex-end;
+        position: absolute;
+        top: 1.5rem;
+        right: 1rem;
+    }
+
+    .search-result-item {
+        padding: 1rem;
+    }
+
+    .search-result-item-title {
+        font-size: 1rem;
+        line-height: 1.4;
+        word-break: break-word;
+    }
+
+    .search-result-item-text {
+        font-size: 0.85rem;
+        -webkit-line-clamp: 3;
+        line-clamp: 3;
+    }
+
+    .search-result-item-meta {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
     }
 }
 `;

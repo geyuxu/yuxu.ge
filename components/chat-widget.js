@@ -327,10 +327,39 @@ export class ChatWidget {
                 }
 
                 .chat-window {
-                    width: calc(100vw - 20px);
-                    height: calc(100vh - 100px);
-                    bottom: 60px;
+                    position: fixed;
+                    top: 0;
+                    left: 0;
                     right: 0;
+                    bottom: 0;
+                    width: 100%;
+                    height: 100%;
+                    border-radius: 0;
+                    max-height: 100vh;
+                    max-height: 100dvh;
+                }
+
+                .chat-header {
+                    padding: 12px 16px;
+                    padding-top: max(12px, env(safe-area-inset-top));
+                }
+
+                .chat-messages {
+                    padding: 12px;
+                    flex: 1;
+                    min-height: 0;
+                }
+
+                .chat-input-form {
+                    padding: 10px 12px;
+                    padding-bottom: max(10px, env(safe-area-inset-bottom));
+                    gap: 8px;
+                    background: white;
+                }
+
+                .chat-input {
+                    padding: 10px 14px;
+                    font-size: 16px; /* Prevents iOS zoom on focus */
                 }
 
                 .chat-bubble {
@@ -341,6 +370,14 @@ export class ChatWidget {
                 .chat-bubble svg {
                     width: 20px;
                     height: 20px;
+                }
+            }
+
+            /* Handle keyboard visible on mobile */
+            @media (max-width: 480px) and (max-height: 500px) {
+                .chat-messages {
+                    flex: 1;
+                    min-height: 100px;
                 }
             }
         `;

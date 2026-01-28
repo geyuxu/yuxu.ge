@@ -86,7 +86,7 @@ function findPostFiles(dir, files = []) {
         const fullPath = path.join(dir, entry.name);
         if (entry.isDirectory()) {
             findPostFiles(fullPath, files);
-        } else if (SUPPORTED_EXTENSIONS.some(ext => entry.name.endsWith(ext))) {
+        } else if (SUPPORTED_EXTENSIONS.some(ext => entry.name.endsWith(ext)) && !entry.name.endsWith('.meta.json')) {
             const ext = path.extname(entry.name).toLowerCase();
             // Skip PDF if a source file exists (source file will be listed with pdfPreview flag)
             if (ext === '.pdf') {
@@ -222,6 +222,40 @@ function getFileCreationDate(filePath) {
     return `${year}-${month}-${day}`;
 }
 
+// Get or create meta.json for non-markdown files
+// Returns { title, date, description, tags? } or null
+function getOrCreateMeta(filePath, defaultTitle, defaultDate) {
+    const ext = path.extname(filePath);
+    const metaPath = filePath.replace(new RegExp(`\\${ext}$`), '.meta.json');
+
+    if (fs.existsSync(metaPath)) {
+        // Read existing meta.json
+        try {
+            const meta = JSON.parse(fs.readFileSync(metaPath, 'utf-8'));
+            console.log(`  (using ${path.basename(metaPath)})`);
+            return meta;
+        } catch (err) {
+            console.log(`  ⚠ Error reading ${metaPath}: ${err.message}`);
+            return null;
+        }
+    } else {
+        // Create new meta.json
+        const meta = {
+            title: defaultTitle,
+            date: defaultDate,
+            description: ""
+        };
+        try {
+            fs.writeFileSync(metaPath, JSON.stringify(meta, null, 2) + '\n');
+            console.log(`  (created ${path.basename(metaPath)})`);
+            return meta;
+        } catch (err) {
+            console.log(`  ⚠ Error creating ${metaPath}: ${err.message}`);
+            return null;
+        }
+    }
+}
+
 // Main
 function main() {
     if (!fs.existsSync(POSTS_DIR)) {
@@ -257,35 +291,57 @@ function main() {
                 continue;
             }
         } else if (fileType === 'notebook') {
-            // Parse Jupyter notebook
+            // Parse Jupyter notebook for internal frontmatter first
             const content = fs.readFileSync(filePath, 'utf-8');
             const parsed = parseNotebook(content, filePath);
             if (!parsed) continue;
-            frontmatter = parsed.frontmatter;
-            title = parsed.title;
 
-            // Date: frontmatter > filename > creation time
-            postDate = frontmatter.date;
-            if (!postDate && filenameParsed) {
-                postDate = filenameParsed.date;
-                console.log(`  (using filename date: ${postDate})`);
+            // Default values from notebook content
+            let defaultTitle = parsed.title;
+            let defaultDate = parsed.frontmatter.date;
+
+            if (!defaultDate && filenameParsed) {
+                defaultDate = filenameParsed.date;
             }
-            if (!postDate) {
-                postDate = getFileCreationDate(filePath);
-                console.log(`  (using creation date: ${postDate})`);
+            if (!defaultDate) {
+                defaultDate = getFileCreationDate(filePath);
+            }
+
+            // Check/create meta.json - it takes precedence over internal frontmatter
+            const meta = getOrCreateMeta(filePath, defaultTitle, defaultDate);
+            if (meta) {
+                title = meta.title || defaultTitle;
+                postDate = meta.date || defaultDate;
+                if (meta.description) frontmatter.description = meta.description;
+                if (meta.tags) frontmatter.tags = meta.tags;
+            } else {
+                title = defaultTitle;
+                postDate = defaultDate;
+                frontmatter = parsed.frontmatter;
             }
         } else {
-            // PDF, Word, TXT - use filename for metadata
-            // Date: filename > creation time
+            // PDF, Word, TXT, etc. - use meta.json for metadata
+            // Determine default values first
+            let defaultTitle, defaultDate;
+
             if (filenameParsed) {
-                postDate = filenameParsed.date;
-                // Use the name part after date as title
-                title = filenameParsed.name.replace(/-/g, ' ');
-                console.log(`  (using filename date: ${postDate})`);
+                defaultDate = filenameParsed.date;
+                defaultTitle = filenameParsed.name.replace(/-/g, ' ');
             } else {
-                postDate = getFileCreationDate(filePath);
-                title = basename.replace(/-/g, ' ');
-                console.log(`  (using creation date: ${postDate})`);
+                defaultDate = getFileCreationDate(filePath);
+                defaultTitle = basename.replace(/-/g, ' ');
+            }
+
+            // Check/create meta.json
+            const meta = getOrCreateMeta(filePath, defaultTitle, defaultDate);
+            if (meta) {
+                title = meta.title || defaultTitle;
+                postDate = meta.date || defaultDate;
+                if (meta.description) frontmatter.description = meta.description;
+                if (meta.tags) frontmatter.tags = meta.tags;
+            } else {
+                title = defaultTitle;
+                postDate = defaultDate;
             }
         }
 

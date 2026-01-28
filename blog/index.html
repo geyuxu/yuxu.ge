@@ -212,15 +212,33 @@
             border-bottom: none;
         }
 
+        .post-content {
+            flex: 1;
+            min-width: 0;
+        }
+
         .post-link {
             font-size: 1rem;
             font-weight: 500;
             color: var(--black);
+            display: block;
         }
 
         .post-link:hover {
             color: var(--vermilion);
             opacity: 1;
+        }
+
+        .post-desc {
+            font-size: 0.85rem;
+            color: #666;
+            margin-top: 0.25rem;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .post-date {
@@ -698,6 +716,10 @@
                 gap: 0.5rem;
             }
 
+            .post-content {
+                width: 100%;
+            }
+
             .post-meta {
                 width: 100%;
                 justify-content: space-between;
@@ -807,9 +829,13 @@ fetch('posts.json')
                 };
                 const typeBadge = typeBadges[p.type] || '';
                 const tags = (p.tags || []).map(t => `<span class="tag" data-tag="${t}">${t}</span>`).join('');
+                const descHtml = p.description ? `<div class="post-desc">${p.description}</div>` : '';
                 return `
                 <li class="post-item" data-tags="${(p.tags || []).join(',')}">
-                    <a href="post.html?p=${p.slug}" class="post-link">${p.title}</a>
+                    <div class="post-content">
+                        <a href="post.html?p=${p.slug}" class="post-link">${p.title}</a>
+                        ${descHtml}
+                    </div>
                     <div class="post-meta">
                         <div class="post-tags">
                             ${typeBadge}${tags}

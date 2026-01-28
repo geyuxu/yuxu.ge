@@ -8,6 +8,10 @@ description: 将康威生命游戏推向新维度：构建基于 PyTorch 的 GPU
 
 我即将迎来约克大学人工智能硕士第二学期的课程，其中一门选课 **Evolutionary Intelligence** 引起了我极大的兴趣。利用假期这段时间，我将经典的"康威生命游戏"推向了一个全新的维度：一个由神经网络驱动、GPU 加速的大规模人工生命（ALife）演化系统。
 
+![NeuroEvo-Life Demo](/blog/images/neuroevo-life/demo.gif)
+
+**视频演示**: [YouTube](https://www.youtube.com/watch?v=CeMnTrSrS8k)
+
 ## 核心架构：当神经网络拥有"基因"
 
 在我的模拟器 **NeuroEvo-Life** 中，数字生物不再是死板的像素，而是具有 **12 维遗传特征 (12D Genome)** 的智能代理：

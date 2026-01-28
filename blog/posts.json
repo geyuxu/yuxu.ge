@@ -72,21 +72,23 @@
   },
   {
     "slug": "posts/notebooks/R_001_sanity_check",
-    "title": "R_001 — Environment Sanity Check",
+    "title": "Environment Sanity Check",
     "date": "2025-11-30",
     "type": "notebook",
-    "ext": "ipynb"
+    "ext": "ipynb",
+    "description": "Environment Sanity Check"
   },
   {
     "slug": "posts/notebooks/R_002_minimal_retrieval",
-    "title": "R_002 - Minimal Retrieval (TF-IDF)",
+    "title": "Minimal Retrieval (TF-IDF)",
     "date": "2025-11-30",
     "type": "notebook",
-    "ext": "ipynb"
+    "ext": "ipynb",
+    "description": "Minimal Retrieval (TF-IDF)"
   },
   {
     "slug": "posts/notebooks/R_010_numpy_basics",
-    "title": "R_010 — NumPy Basics (Reproducible)",
+    "title": "NumPy Basics (Reproducible)",
     "date": "2025-11-30",
     "type": "notebook",
     "ext": "ipynb"

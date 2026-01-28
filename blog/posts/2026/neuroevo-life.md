@@ -8,6 +8,10 @@ description: Taking Conway's Game of Life to a new dimension: building a GPU-acc
 
 As I approach the second semester of my AI Master's program at the University of York, one elective, **Evolutionary Intelligence**, has particularly captured my interest. During this holiday period, I've taken the classic "Conway's Game of Life" to an entirely new dimension: a large-scale, neural network-driven, GPU-accelerated Artificial Life (ALife) evolutionary system.
 
+![NeuroEvo-Life Demo](/blog/images/neuroevo-life/demo.gif)
+
+**Video Demo**: [YouTube](https://www.youtube.com/watch?v=CeMnTrSrS8k)
+
 ## Core Architecture: When Neural Networks Have "Genes"
 
 In my simulator, **NeuroEvo-Life**, digital organisms are no longer rigid pixels, but intelligent agents endowed with **12-dimensional genetic traits (12D Genome)**:

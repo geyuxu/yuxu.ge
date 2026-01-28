@@ -611,6 +611,10 @@ function initGlobalSearch() {
 
 // Initialize chat widget
 async function initChat() {
+    // Don't show chat widget on gallery page
+    if (window.location.pathname.includes('/gallery')) {
+        return;
+    }
     try {
         const { initChatWidget } = await import('/components/chat-widget.js?v=20260128');
         await initChatWidget();

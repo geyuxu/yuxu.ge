@@ -230,7 +230,7 @@
 
             <div class="games-grid" id="games-grid"></div>
             <script>
-                fetch('/games-config.json')
+                fetch('/games/config.json')
                     .then(r => r.json())
                     .then(config => {
                         const grid = document.getElementById('games-grid');

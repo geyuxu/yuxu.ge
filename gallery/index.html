@@ -833,6 +833,20 @@
                 min-width: 150px;
             }
 
+            /* Mobile: show panel when open class is added */
+            .float-nav-panel.open {
+                max-height: 300px;
+                opacity: 1;
+                padding: 0.8rem;
+            }
+
+            /* Mobile: disable hover behavior */
+            .float-nav:hover .float-nav-panel:not(.open) {
+                max-height: 0;
+                opacity: 0;
+                padding: 0;
+            }
+
             .photo-grid {
                 grid-template-columns: repeat(2, 1fr);
             }
@@ -908,7 +922,7 @@
         <div class="float-nav-panel" id="float-nav-panel">
             <!-- Navigation buttons will be generated here -->
         </div>
-        <button class="float-nav-toggle" onclick="scrollToTop()" title="Back to top">↑</button>
+        <button class="float-nav-toggle" onclick="handleFloatNavClick()" title="Back to top">↑</button>
     </div>
 
     <!-- Lightbox -->
@@ -1179,6 +1193,40 @@
         function scrollToTop() {
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
+
+        // Check if device is mobile
+        function isMobile() {
+            return window.innerWidth <= 900;
+        }
+
+        // Handle float nav button click - mobile shows menu first, then scrolls
+        function handleFloatNavClick() {
+            const panel = document.getElementById('float-nav-panel');
+            if (isMobile()) {
+                if (panel.classList.contains('open')) {
+                    // Panel is open, scroll to top and close panel
+                    panel.classList.remove('open');
+                    scrollToTop();
+                } else {
+                    // Panel is closed, open it
+                    panel.classList.add('open');
+                }
+            } else {
+                // Desktop: just scroll to top
+                scrollToTop();
+            }
+        }
+
+        // Close panel when clicking outside on mobile
+        document.addEventListener('click', function(e) {
+            if (isMobile()) {
+                const floatNav = document.getElementById('float-nav');
+                const panel = document.getElementById('float-nav-panel');
+                if (!floatNav.contains(e.target) && panel.classList.contains('open')) {
+                    panel.classList.remove('open');
+                }
+            }
+        });
 
         // Render floating nav panel (years only)
         function renderFloatNav(photos) {

@@ -1062,7 +1062,10 @@
         function renderWork(section, workConfig) {
             const count = section.count || 4;
             const workItems = workConfig.items.slice(0, count);
-            const items = workItems.map(item => `
+            const items = workItems.map(item => {
+                const isGitHub = item.link.includes('github.com');
+                const linkText = isGitHub ? 'View on GitHub' : 'View Project';
+                return `
             <article class="work-item">
                 <div class="work-meta">
                     <span class="work-tag">${item.tag}</span>
@@ -1071,13 +1074,13 @@
                 <h4 class="work-title">${item.title}</h4>
                 <p class="work-desc">${item.description}</p>
                 <a href="${item.link}" target="_blank" rel="noopener" class="work-link">
-                    View on GitHub
+                    ${linkText}
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                 </a>
             </article>
-        `).join('');
+        `}).join('');
             return `
             <section>
                 <h3 class="section-header">${section.title}</h3>

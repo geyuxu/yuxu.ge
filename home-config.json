@@ -46,8 +46,8 @@
                     "value": "Hybrid search & hallucination mitigation"
                 },
                 {
-                    "label": "Computer Vision",
-                    "value": "Object detection & visual SLAM"
+                    "label": "AI / ML / DL",
+                    "value": "PyTorch, model training & deployment"
                 },
                 {
                     "label": "Cloud Native",

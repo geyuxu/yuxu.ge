@@ -748,7 +748,7 @@
             .album-content,
             .album-desc {
                 width: 100%;
-                padding-left: 50px;
+                padding-left: 0;
             }
 
             .album-desc {
@@ -772,17 +772,13 @@
                 height: 100%;
             }
 
-            .timeline-dot {
-                left: 12px;
-            }
-
+            /* Hide timeline dots and lines on mobile */
+            .timeline-dot,
             .timeline-line {
-                left: 28px !important;
-                right: auto !important;
-                width: 15px;
+                display: none;
             }
 
-            /* Hide footprints on mobile - timeline is on left side */
+            /* Hide footprints on mobile */
             .footprint {
                 display: none;
             }

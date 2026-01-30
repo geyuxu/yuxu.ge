@@ -967,7 +967,9 @@
     <script>
         // Helper to render Blog section
         function renderBlog(section, allPosts) {
-            const count = section.count || 4;
+            const cols = section.cols || 2;
+            const rows = section.rows || 4;
+            const count = cols * rows;
             const sorted = allPosts.sort((a, b) => b.date.localeCompare(a.date)).slice(0, count);
 
             // Type Badge Definitions
@@ -1031,7 +1033,7 @@
             return `
             <section>
                 <h3 class="section-header">${section.title}</h3>
-                <div class="blog-grid">${items}</div>
+                <div class="blog-grid" style="grid-template-columns: repeat(${cols}, 1fr)">${items}</div>
                  <a href="/blog/" class="blog-more">
                     View all posts
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1060,7 +1062,9 @@
 
         // Helper to render Work section
         function renderWork(section, workConfig) {
-            const count = section.count || 4;
+            const cols = section.cols || 2;
+            const rows = section.rows || 2;
+            const count = cols * rows;
             const workItems = workConfig.items.slice(0, count);
             const items = workItems.map(item => {
                 const isGitHub = item.link.includes('github.com');
@@ -1084,7 +1088,7 @@
             return `
             <section>
                 <h3 class="section-header">${section.title}</h3>
-                <div class="work-list">${items}</div>
+                <div class="work-list" style="grid-template-columns: repeat(${cols}, 1fr)">${items}</div>
                 <a href="/work/" class="work-more">
                     View all work
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -1110,7 +1114,9 @@
 
         // Helper to render Games section
         function renderGames(section, gamesConfig) {
-            const count = section.count || 4;
+            const cols = section.cols || 4;
+            const rows = section.rows || 1;
+            const count = cols * rows;
             const gameItems = gamesConfig.items.slice(0, count);
             // Color palette for game icons
             const colors = ['#edc53f', '#4CAF50', '#9C27B0', '#2196F3', '#FF5722', '#009688', '#E91E63', '#673AB7'];
@@ -1124,7 +1130,7 @@
             return `
             <section>
                 <h3 class="section-header">${section.title}</h3>
-                <div class="games-grid">${items}</div>
+                <div class="games-grid" style="grid-template-columns: repeat(${cols}, 1fr)">${items}</div>
                 <a href="/games/" class="games-more">
                     All games
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

@@ -8,17 +8,20 @@
         {
             "type": "work",
             "title": "Selected Work",
-            "count": 4
+            "cols": 2,
+            "rows": 2
         },
         {
             "type": "games",
             "title": "Play Games",
-            "count": 4
+            "cols": 4,
+            "rows": 1
         },
         {
             "type": "blog",
             "title": "Latest Blog",
-            "count": 8
+            "cols": 2,
+            "rows": 4
         },
         {
             "type": "stack",

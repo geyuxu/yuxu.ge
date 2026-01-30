@@ -26,7 +26,7 @@
         {
             "title": "Yuxu's Game of Life",
             "description": "A GPU-accelerated genome-based evolution simulation where neural network organisms compete, reproduce, and evolve through natural selection and reinforcement learning.",
-            "link": "https://github.com/geyuxu/yuxus-life-of-game",
+            "link": "https://gol.yuxu.ge",
             "tag": "Engineering & Research",
             "year": "Jan 2026"
         }

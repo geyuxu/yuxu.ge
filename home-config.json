@@ -26,7 +26,7 @@
         {
             "type": "stack",
             "title": "The Stack",
-            "cols": 2,
+            "cols": 3,
             "rows": 2,
             "items": [
                 {
@@ -44,6 +44,14 @@
                 {
                     "label": "RAG Pipelines",
                     "value": "Hybrid search & hallucination mitigation"
+                },
+                {
+                    "label": "Computer Vision",
+                    "value": "Object detection & visual SLAM"
+                },
+                {
+                    "label": "Cloud Native",
+                    "value": "Kubernetes, Docker & microservices"
                 }
             ]
         }

@@ -8,70 +8,12 @@
         {
             "type": "work",
             "title": "Selected Work",
-            "items": [
-                {
-                    "title": "Neural Networks from Scratch",
-                    "description": "Implement classic neural networks from scratch without using nn.Module, to deeply understand PyTorch and model principles.",
-                    "link": "https://github.com/geyuxu/nn-from-scratch",
-                    "tag": "Engineering",
-                    "year": "Jan 2026"
-                },
-                {
-                    "title": "Search Data Sync Platform",
-                    "description": "A high-performance, Event-Driven search platform featuring Change Data Capture (CDC), Zero-Code Coupling, and Distributed Tracing.",
-                    "link": "https://github.com/geyuxu/search-data-sync-platform",
-                    "tag": "Engineering",
-                    "year": "Dec 2025"
-                },
-                {
-                    "title": "Spring-AI-RAG-System",
-                    "description": "Enterprise-grade Retrieval-Augmented Generation pipeline implementing hybrid search (Elasticsearch + PgVector). Solves context window limits and reduces hallucination through explainable retrieval chains.",
-                    "link": "https://github.com/geyuxu/Spring-AI-RAG-System",
-                    "tag": "Engineering",
-                    "year": "Dec 2025"
-                },
-                {
-                    "title": "Yuxu's Game of Life",
-                    "description": "A GPU-accelerated genome-based evolution simulation where neural network organisms compete, reproduce, and evolve through natural selection and reinforcement learning.",
-                    "link": "https://github.com/geyuxu/yuxus-life-of-game",
-                    "tag": "Engineering & Research",
-                    "year": "Jan 2026"
-                }
-            ]
+            "count": 4
         },
         {
             "type": "games",
             "title": "Play Games",
-            "items": [
-                {
-                    "id": "2048",
-                    "name": "2048",
-                    "icon": "2048",
-                    "color": "#edc53f",
-                    "desc": "Slide tiles to reach 2048"
-                },
-                {
-                    "id": "snake",
-                    "name": "Snake",
-                    "icon": "snake",
-                    "color": "#4CAF50",
-                    "desc": "Classic snake game"
-                },
-                {
-                    "id": "tetris",
-                    "name": "Tetris",
-                    "icon": "tetris",
-                    "color": "#9C27B0",
-                    "desc": "Stack falling blocks"
-                },
-                {
-                    "id": "memory",
-                    "name": "Memory",
-                    "icon": "memory",
-                    "color": "#2196F3",
-                    "desc": "Find matching pairs"
-                }
-            ]
+            "count": 4
         },
         {
             "type": "blog",

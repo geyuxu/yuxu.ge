@@ -899,6 +899,20 @@
             height: 14px;
         }
 
+        .work-more {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.25rem;
+            font-size: 0.85rem;
+            color: var(--vermilion);
+            margin-top: 1rem;
+        }
+
+        .work-more svg {
+            width: 14px;
+            height: 14px;
+        }
+
         @media (max-width: 900px) {
             .games-grid {
                 grid-template-columns: repeat(2, 1fr);
@@ -1066,6 +1080,12 @@
             <section>
                 <h3 class="section-header">${section.title}</h3>
                 <div class="work-list">${items}</div>
+                <a href="/work/" class="work-more">
+                    View all work
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                </a>
             </section>
         `;
         }

@@ -1059,8 +1059,10 @@
         }
 
         // Helper to render Work section
-        function renderWork(section) {
-            const items = section.items.map(item => `
+        function renderWork(section, workConfig) {
+            const count = section.count || 4;
+            const workItems = workConfig.items.slice(0, count);
+            const items = workItems.map(item => `
             <article class="work-item">
                 <div class="work-meta">
                     <span class="work-tag">${item.tag}</span>
@@ -1104,17 +1106,15 @@
         }
 
         // Helper to render Games section
-        function renderGames(section) {
-            const icons = {
-                '2048': '2048',
-                'snake': '🐍',
-                'tetris': '🧱',
-                'memory': '🎴'
-            };
-            const items = section.items.map(item => `
-            <a href="/games/${item.id}.html" class="game-card">
-                <div class="game-icon" style="background: ${item.color}">${icons[item.icon] || '🎮'}</div>
-                <div class="game-name">${item.name}</div>
+        function renderGames(section, gamesConfig) {
+            const count = section.count || 4;
+            const gameItems = gamesConfig.items.slice(0, count);
+            // Color palette for game icons
+            const colors = ['#edc53f', '#4CAF50', '#9C27B0', '#2196F3', '#FF5722', '#009688', '#E91E63', '#673AB7'];
+            const items = gameItems.map((item, index) => `
+            <a href="${item.href}" class="game-card">
+                <div class="game-icon" style="background: ${colors[index % colors.length]}">${item.icon}</div>
+                <div class="game-name">${item.title}</div>
                 <div class="game-desc">${item.desc}</div>
             </a>
         `).join('');
@@ -1135,8 +1135,10 @@
         // Main Content Loader
         Promise.all([
             fetch('/home-config.json').then(r => r.json()),
-            fetch('/blog/posts.json').then(r => r.json())
-        ]).then(([config, posts]) => {
+            fetch('/blog/posts.json').then(r => r.json()),
+            fetch('/work/config.json').then(r => r.json()),
+            fetch('/games/config.json').then(r => r.json())
+        ]).then(([config, posts, workConfig, gamesConfig]) => {
             // 0. Render Hero
             if (config.hero) {
                 document.getElementById('hero-section').innerHTML = renderHero(config.hero);
@@ -1148,8 +1150,8 @@
                 const sectionsHtml = config.sections.map(section => {
                     if (section.type === 'blog') return renderBlog(section, posts);
                     if (section.type === 'stack') return renderStack(section);
-                    if (section.type === 'work') return renderWork(section);
-                    if (section.type === 'games') return renderGames(section);
+                    if (section.type === 'work') return renderWork(section, workConfig);
+                    if (section.type === 'games') return renderGames(section, gamesConfig);
                     return '';
                 }).join('');
                 dynamicContainer.innerHTML = sectionsHtml;

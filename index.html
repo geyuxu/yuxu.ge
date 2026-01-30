@@ -1046,7 +1046,11 @@
 
         // Helper to render Stack section
         function renderStack(section) {
-            const items = section.items.map(item => `
+            const cols = section.cols || 2;
+            const rows = section.rows || 2;
+            const count = cols * rows;
+            const stackItems = section.items.slice(0, count);
+            const items = stackItems.map(item => `
             <div class="stack-item">
                 ${item.label}
                 <span>${item.value}</span>
@@ -1055,7 +1059,7 @@
             return `
             <section>
                 <h3 class="section-header">${section.title}</h3>
-                <div class="stack-grid">${items}</div>
+                <div class="stack-grid" style="grid-template-columns: repeat(${cols}, 1fr)">${items}</div>
             </section>
         `;
         }

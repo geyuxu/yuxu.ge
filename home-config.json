@@ -26,6 +26,8 @@
         {
             "type": "stack",
             "title": "The Stack",
+            "cols": 2,
+            "rows": 2,
             "items": [
                 {
                     "label": "Distributed Systems",

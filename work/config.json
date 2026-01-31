@@ -3,10 +3,24 @@
     "description": "Projects I'm currently building and researching",
     "items": [
         {
+            "title": "L-Zero",
+            "description": "L-Zero is a low-level, structural instruction set designed specifically for AI generation. Features ASM source format, strict type safety, agentic extensibility, and AOT compilation to native C.",
+            "link": "https://l-zero.yuxu.ge/",
+            "tag": "Engineering",
+            "year": "Jan 2026"
+        },
+        {
             "title": "Neural Networks from Scratch",
             "description": "Implement classic neural networks from scratch without using nn.Module, to deeply understand PyTorch and model principles.",
             "link": "https://github.com/geyuxu/nn-from-scratch",
             "tag": "Engineering",
+            "year": "Jan 2026"
+        },
+        {
+            "title": "Yuxu's Game of Life",
+            "description": "A GPU-accelerated genome-based evolution simulation where neural network organisms compete, reproduce, and evolve through natural selection and reinforcement learning.",
+            "link": "https://gol.yuxu.ge",
+            "tag": "Engineering & Research",
             "year": "Jan 2026"
         },
         {
@@ -22,13 +36,6 @@
             "link": "https://github.com/geyuxu/Spring-AI-RAG-System",
             "tag": "Engineering",
             "year": "Dec 2025"
-        },
-        {
-            "title": "Yuxu's Game of Life",
-            "description": "A GPU-accelerated genome-based evolution simulation where neural network organisms compete, reproduce, and evolve through natural selection and reinforcement learning.",
-            "link": "https://gol.yuxu.ge",
-            "tag": "Engineering & Research",
-            "year": "Jan 2026"
         }
     ]
 }

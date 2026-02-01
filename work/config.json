@@ -4,9 +4,9 @@
     "items": [
         {
             "title": "L-Zero",
-            "description": "L-Zero is a low-level, structural instruction set designed specifically for AI generation. Features ASM source format, strict type safety, agentic extensibility, and AOT compilation to native C.",
+            "description": "L-Zero is an instruction set designed for AI agents to generate executable programs. Just download the runtime, feed your AI the documentation, describe what you want, and watch it build.",
             "link": "https://l-zero.yuxu.ge/",
-            "tag": "Engineering",
+            "tag": "Engineering & Research",
             "year": "Jan 2026"
         },
         {

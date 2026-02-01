@@ -1,6 +1,98 @@
 [
   {
     "year": 2026,
+    "date": "2026-01-30",
+    "location": "Liverpool Metropolitan Cathedral",
+    "folder": "20260130-Liverpool Metropolitan Cathedral",
+    "images": [
+      "/photos/2026/20260130-Liverpool Metropolitan Cathedral/A7C00509.JPG",
+      "/photos/2026/20260130-Liverpool Metropolitan Cathedral/A7C00511.JPG",
+      "/photos/2026/20260130-Liverpool Metropolitan Cathedral/A7C00513.JPG",
+      "/photos/2026/20260130-Liverpool Metropolitan Cathedral/A7C00518.JPG",
+      "/photos/2026/20260130-Liverpool Metropolitan Cathedral/A7C00519.JPG",
+      "/photos/2026/20260130-Liverpool Metropolitan Cathedral/A7C00521.JPG",
+      "/photos/2026/20260130-Liverpool Metropolitan Cathedral/A7C00524.JPG",
+      "/photos/2026/20260130-Liverpool Metropolitan Cathedral/A7C00526.JPG",
+      "/photos/2026/20260130-Liverpool Metropolitan Cathedral/A7C00530.JPG",
+      "/photos/2026/20260130-Liverpool Metropolitan Cathedral/A7C00538.JPG"
+    ],
+    "description": "Liverpool Metropolitan Cathedral, a striking modernist masterpiece completed in 1967. Its circular design and crown of spires create a unique silhouette on the city skyline, affectionately nicknamed 'Paddy's Wigwam.'"
+  },
+  {
+    "year": 2026,
+    "date": "2026-01-29",
+    "location": "Liverpool",
+    "folder": "20260129-Liverpool Part 3",
+    "images": [
+      "/photos/2026/20260129-Liverpool Part 3/IMG_20260130111100221.jpg",
+      "/photos/2026/20260129-Liverpool Part 3/IMG_20260130111724846.jpg",
+      "/photos/2026/20260129-Liverpool Part 3/IMG_20260130115514576.jpg",
+      "/photos/2026/20260129-Liverpool Part 3/IMG_20260130115715197.jpg",
+      "/photos/2026/20260129-Liverpool Part 3/IMG_20260130132016530.jpg",
+      "/photos/2026/20260129-Liverpool Part 3/IMG_20260130132729937.jpg",
+      "/photos/2026/20260129-Liverpool Part 3/img-20260129-132036-a6-P0-0.jpg"
+    ],
+    "description": "Exploring Liverpool's streets and landmarks. From the Royal Liver Building to hidden gems, every corner reveals the city's vibrant character and maritime heritage."
+  },
+  {
+    "year": 2026,
+    "date": "2026-01-29",
+    "location": "Liverpool",
+    "folder": "20260129-Liverpool Part 2",
+    "images": [
+      "/photos/2026/20260129-Liverpool Part 2/A7C00450.JPG",
+      "/photos/2026/20260129-Liverpool Part 2/A7C00460.JPG",
+      "/photos/2026/20260129-Liverpool Part 2/A7C00463.JPG",
+      "/photos/2026/20260129-Liverpool Part 2/A7C00470.JPG",
+      "/photos/2026/20260129-Liverpool Part 2/A7C00477.JPG",
+      "/photos/2026/20260129-Liverpool Part 2/A7C00484.JPG",
+      "/photos/2026/20260129-Liverpool Part 2/A7C00487.JPG",
+      "/photos/2026/20260129-Liverpool Part 2/A7C00490.JPG",
+      "/photos/2026/20260129-Liverpool Part 2/A7C00493.JPG"
+    ],
+    "description": "More scenes from Liverpool — a city of music, football, and friendly Scousers. The iconic waterfront and historic architecture tell stories of its rich trading past."
+  },
+  {
+    "year": 2026,
+    "date": "2026-01-29",
+    "location": "Liverpool",
+    "folder": "20260129-Liverpool",
+    "images": [
+      "/photos/2026/20260129-Liverpool/A7C00414.JPG",
+      "/photos/2026/20260129-Liverpool/A7C00417.JPG",
+      "/photos/2026/20260129-Liverpool/A7C00420.JPG",
+      "/photos/2026/20260129-Liverpool/A7C00421.JPG",
+      "/photos/2026/20260129-Liverpool/A7C00424.JPG",
+      "/photos/2026/20260129-Liverpool/A7C00430.JPG",
+      "/photos/2026/20260129-Liverpool/A7C00443.JPG",
+      "/photos/2026/20260129-Liverpool/A7C00445.JPG",
+      "/photos/2026/20260129-Liverpool/A7C00448.JPG"
+    ],
+    "description": "Walking through Liverpool, birthplace of The Beatles and a UNESCO World Heritage Site. The city's rich maritime heritage blends with modern culture and vibrant street life."
+  },
+  {
+    "year": 2026,
+    "date": "2026-01-29",
+    "location": "Cathedral Church of Christ in Liverpool",
+    "folder": "20260129-Cathedral Church of Christ in Liverpool",
+    "images": [
+      "/photos/2026/20260129-Cathedral Church of Christ in Liverpool/A7C00373.JPG",
+      "/photos/2026/20260129-Cathedral Church of Christ in Liverpool/A7C00375.JPG",
+      "/photos/2026/20260129-Cathedral Church of Christ in Liverpool/A7C00377.JPG",
+      "/photos/2026/20260129-Cathedral Church of Christ in Liverpool/A7C00382.JPG",
+      "/photos/2026/20260129-Cathedral Church of Christ in Liverpool/A7C00383.JPG",
+      "/photos/2026/20260129-Cathedral Church of Christ in Liverpool/A7C00387.JPG",
+      "/photos/2026/20260129-Cathedral Church of Christ in Liverpool/A7C00394.JPG",
+      "/photos/2026/20260129-Cathedral Church of Christ in Liverpool/A7C00397.JPG",
+      "/photos/2026/20260129-Cathedral Church of Christ in Liverpool/A7C00404.JPG",
+      "/photos/2026/20260129-Cathedral Church of Christ in Liverpool/A7C00441.JPG",
+      "/photos/2026/20260129-Cathedral Church of Christ in Liverpool/A7C00512.JPG",
+      "/photos/2026/20260129-Cathedral Church of Christ in Liverpool/A7C00546.JPG"
+    ],
+    "description": "Liverpool Cathedral, the largest cathedral in Britain and one of the largest in the world. Its Gothic grandeur took 74 years to complete, with stunning views from its tower across the city."
+  },
+  {
+    "year": 2026,
     "date": "2026-01-20",
     "location": "Leeds Royal Armouries Museum",
     "folder": "20260120-Leeds Royal Armouries Museum",

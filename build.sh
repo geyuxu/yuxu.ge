@@ -68,6 +68,9 @@ if [[ " ${BUILD_ARGS[*]} " =~ " --photos " ]]; then
     echo ""
     echo "--- Compressing Photos ---"
     ./scripts/compress-photos.sh
+    echo ""
+    echo "--- Generating Descriptions ---"
+    ./scripts/generate-descriptions.sh
 
     [ "$DO_PUSH" = true ] && git_push
     exit 0
@@ -79,6 +82,11 @@ echo "=== Converting HEIC to JPG ==="
 echo ""
 echo "=== Compressing Photos ==="
 ./scripts/compress-photos.sh
+echo ""
+
+# Generate missing descriptions for photo albums
+echo "=== Generating Photo Descriptions ==="
+./scripts/generate-descriptions.sh
 echo ""
 
 # Convert Office documents to PDF (PPTX, RTF, ODT, ODS, ODP - if LibreOffice available)

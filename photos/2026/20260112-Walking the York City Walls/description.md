@@ -1,0 +1,1 @@
+A journey atop ancient battlements, these photographs capture the timeless charm and storied history of York's city walls under the winter sky of January 12, 2026. Each frame invites viewers to stroll through centuries, revealing panoramic vistas and hidden architectural details of a city steeped in heritage.

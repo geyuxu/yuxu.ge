@@ -1129,57 +1129,342 @@ chmod +x /usr/local/bin/staticflow
 
 ---
 
-## 6. 实施计划
+## 6. 迁移策略：完整迁移 + 逐步替换
 
-### Phase 1: Tier 1 基础（2周）
+### 6.1 阶段演进
 
-| 任务 | 时间 | 产出 |
-|------|------|------|
-| 图片处理 WASM | 2天 | image-core.wasm |
-| DOCX 解析器 | 1天 | docx/mod.ts |
-| XLSX 解析器 | 1天 | xlsx/mod.ts |
-| KaTeX 集成 | 0.5天 | katex/mod.ts |
-| CLI 框架 | 2天 | cli.ts + config.ts |
-| Deno 编译测试 | 1天 | 单文件可执行 |
-| **Phase 1 总计** | **~8天** | Tier 1 可用 |
+```
+Week 1-2: 脚手架 + 外壳迁移
+┌─────────────────────────────────────────────────┐
+│  staticflow (Deno)                              │
+│  ├── CLI 框架                                   │
+│  ├── 配置系统                                   │
+│  └── 调用外部命令 (node, imagemagick)  ← 保持现状 │
+└─────────────────────────────────────────────────┘
+验收：功能等价，可构建现有博客
 
-### Phase 2: Tier 2 进阶（3周）
+Week 3-4: 替换 Node.js 依赖
+┌─────────────────────────────────────────────────┐
+│  staticflow (Deno)                              │
+│  ├── 内置 Markdown 渲染                         │
+│  ├── 内置搜索索引构建                            │
+│  ├── 内置 DOCX/XLSX 解析                        │
+│  └── 仍调用 imagemagick                         │
+└─────────────────────────────────────────────────┘
+验收：不再依赖 Node.js
 
-| 任务 | 时间 | 产出 |
-|------|------|------|
-| libde265 裁剪 | 3天 | HEVC 解码器 |
-| HEIF 容器解析 | 1天 | container.ts |
-| HEIC 集成测试 | 1天 | heic/mod.ts |
-| PPTX 解析器 | 2天 | pptx 解析 |
-| PPTX Canvas 渲染 | 2天 | PNG 输出 |
-| LaTeX 基础解析 | 2天 | latex/mod.ts |
-| **Phase 2 总计** | **~12天** | Tier 2 可用 |
+Week 5-6: 替换 ImageMagick (HEIC 攻坚)
+┌─────────────────────────────────────────────────┐
+│  staticflow (Deno)                              │
+│  ├── 内置 image-core.wasm (JPG/PNG)             │
+│  ├── 内置 heic-decoder.wasm (HEIC)              │
+│  └── 零外部依赖 ✓                               │
+└─────────────────────────────────────────────────┘
+验收：单文件可执行，处理 HEIC
+```
 
-### Phase 3: Tier 3 完整（按需）
+### 6.2 关键里程碑
 
-| 任务 | 时间 | 产出 |
-|------|------|------|
-| LibRaw 裁剪 | 5天 | RAW 解码器 |
-| Tectonic WASM 集成 | 5天 | 完整 LaTeX |
-| **Phase 3 总计** | **~10天** | Tier 3 可用 |
+| 里程碑 | 验收标准 | 外部依赖 |
+|--------|---------|---------|
+| M1: 脚手架 | CLI 可运行，配置可解析 | Node + ImageMagick |
+| M2: Node 替换 | 构建博客完整功能 | ImageMagick only |
+| M3: HEIC 攻克 | 处理 iPhone 照片 | **零依赖** |
+| M4: 单文件发布 | `deno compile` 成功 | **零依赖** |
 
 ---
 
-## 7. 风险与缓解
+## 7. HEIC 攻坚：libde265 裁剪方案
+
+### 7.1 源码结构分析
+
+```
+libde265 目录结构 (~50K 行)
+├── libde265/
+│   ├── de265.h              公共 API ✅ 保留
+│   ├── de265.cc             API 实现 ✅ 保留
+│   │
+│   ├── decctx.cc            解码上下文 ✅ 保留
+│   ├── slice.cc             切片解码 ✅ 保留
+│   ├── image.cc             图像缓冲 ✅ 保留
+│   │
+│   ├── cabac.cc             CABAC 熵解码 ✅ 核心
+│   ├── transform.cc         变换 (DCT/DST) ✅ 核心
+│   ├── intrapred.cc         帧内预测 ✅ 核心
+│   ├── motion.cc            运动补偿 ⚠️ I帧可裁剪
+│   ├── deblock.cc           去块滤波 ⚠️ 可选
+│   ├── sao.cc               SAO 滤波 ⚠️ 可选
+│   │
+│   ├── threads.cc           多线程 ✗ 移除
+│   ├── visualize.cc         可视化调试 ✗ 移除
+│   ├── fallback-*.cc        SIMD 回退 ⚠️ 保留一份
+│   ├── x86/                  x86 SIMD ✗ WASM 不需要
+│   ├── arm/                  ARM SIMD ✗ WASM 不需要
+│   └── encoder/              编码器 ✗ 完全移除
+```
+
+### 7.2 裁剪决策矩阵
+
+| 模块 | 原始行数 | 决策 | 理由 |
+|------|---------|------|------|
+| 熵解码 (CABAC) | ~3K | ✅ 保留 | 核心，必须 |
+| 变换 (DCT) | ~2K | ✅ 保留 | 核心，必须 |
+| 帧内预测 | ~3K | ✅ 保留 | I帧解码必须 |
+| 运动补偿 | ~4K | ⚠️ **可裁剪** | 照片是纯 I帧 |
+| 去块滤波 | ~2K | ✅ 保留 | 影响画质 |
+| SAO 滤波 | ~1K | ⚠️ 可选 | 裁剪后画质略降 |
+| 多线程 | ~2K | ✗ 移除 | WASM 单线程 |
+| SIMD (x86/arm) | ~10K | ✗ 移除 | WASM 有自己的 SIMD |
+| 编码器 | ~15K | ✗ 移除 | 不需要 |
+
+### 7.3 裁剪后预估
+
+```
+原始：~50K 行 → 编译后 ~1.5MB WASM
+裁剪：~15K 行 → 编译后 ~300KB WASM (目标)
+```
+
+### 7.4 编译流程
+
+```bash
+# 1. 克隆源码
+git clone https://github.com/strukturag/libde265
+cd libde265
+
+# 2. 创建裁剪配置
+cat > wasm-config.h << 'EOF'
+#define DE265_DISABLE_SSE 1
+#define DE265_DISABLE_ARM 1
+#define DE265_SINGLE_THREADED 1
+#define DE265_DISABLE_ENCODER 1
+// #define DE265_DISABLE_SAO 1      // 可选：进一步减小体积
+// #define DE265_DISABLE_DEBLOCK 1  // 可选：进一步减小体积
+EOF
+
+# 3. 收集需要的源文件
+SOURCES="
+  libde265/de265.cc
+  libde265/decctx.cc
+  libde265/image.cc
+  libde265/slice.cc
+  libde265/cabac.cc
+  libde265/transform.cc
+  libde265/intrapred.cc
+  libde265/deblock.cc
+  libde265/sao.cc
+  libde265/fallback.cc
+  libde265/fallback-dct.cc
+"
+
+# 4. Emscripten 编译
+emcc $SOURCES \
+  -I. \
+  -include wasm-config.h \
+  -O3 -flto \
+  -s WASM=1 \
+  -s MODULARIZE=1 \
+  -s EXPORT_NAME="createHevcDecoder" \
+  -s EXPORTED_FUNCTIONS='[
+    "_de265_new_decoder",
+    "_de265_free_decoder",
+    "_de265_push_data",
+    "_de265_flush_data",
+    "_de265_decode",
+    "_de265_get_next_picture",
+    "_de265_get_image_width",
+    "_de265_get_image_height",
+    "_de265_get_image_plane",
+    "_de265_get_image_stride",
+    "_malloc",
+    "_free"
+  ]' \
+  -s EXPORTED_RUNTIME_METHODS='["ccall","cwrap","HEAPU8"]' \
+  -s ALLOW_MEMORY_GROWTH=1 \
+  -s INITIAL_MEMORY=33554432 \
+  -o hevc-decoder.js
+
+# 5. 优化 WASM 体积
+wasm-opt -O3 --strip-debug hevc-decoder.wasm -o hevc-decoder.opt.wasm
+
+# 6. 验证体积
+ls -lh hevc-decoder.opt.wasm  # 目标: < 500KB
+```
+
+### 7.5 HEIF 容器结构
+
+```
+HEIC 文件结构 (ISOBMFF 格式)：
+┌─────────────────────────────────────────────────┐
+│ ftyp (12 bytes)                                 │
+│ └── brand: "heic" / "mif1"                      │
+├─────────────────────────────────────────────────┤
+│ meta (容器)                                      │
+│ ├── hdlr - 处理器声明 ("pict")                   │
+│ ├── pitm - 主图像 ID                            │
+│ ├── iloc - 图像数据位置表 ← 关键                 │
+│ │   └── item_id → offset, length               │
+│ ├── iinf - 图像信息 ← 关键                       │
+│ │   └── item_id → type ("hvc1" / "av01")       │
+│ ├── iprp - 图像属性                             │
+│ │   ├── hvcC - HEVC 配置（SPS/PPS）             │
+│ │   ├── ispe - 图像尺寸                         │
+│ │   └── colr - 色彩信息                         │
+│ └── iref - 图像引用关系（缩略图等）              │
+├─────────────────────────────────────────────────┤
+│ mdat (媒体数据)                                  │
+│ └── [HEVC NAL units...]  ← 实际图像数据         │
+└─────────────────────────────────────────────────┘
+```
+
+### 7.6 HEIC 处理流程
+
+```
+┌──────────────┐     ┌──────────────┐     ┌──────────────┐
+│  HEIC 文件   │ ──→ │ HEIF 容器解析 │ ──→ │  HEVC 数据   │
+│  (二进制)    │     │  (TypeScript) │     │  (NAL units) │
+└──────────────┘     └──────────────┘     └──────────────┘
+                            │
+                            ▼
+                     ┌──────────────┐
+                     │ 提取 hvcC    │
+                     │ (SPS/PPS)    │
+                     └──────────────┘
+                            │
+                            ▼
+┌──────────────┐     ┌──────────────┐     ┌──────────────┐
+│   JPG 文件   │ ←── │  RGB → JPG   │ ←── │ HEVC 解码    │
+│   (输出)     │     │ (stb_image)  │     │ (WASM)       │
+└──────────────┘     └──────────────┘     └──────────────┘
+                            │
+                            ▼
+                     ┌──────────────┐
+                     │ YUV → RGB    │
+                     │ (BT.601/709) │
+                     └──────────────┘
+```
+
+### 7.7 HEIC 验收标准
+
+```
+HEIC 模块完成定义：
+
+功能验收：
+✓ 解码 iPhone 拍摄的 HEIC (12MP, 4032×3024)
+✓ 解码 iPhone 拍摄的 HEIC (48MP ProRAW, 8064×6048)
+✓ 正确处理 EXIF 方向信息
+✓ 输出质量与 ImageMagick 无明显差异 (SSIM > 0.98)
+
+性能验收：
+✓ 单张 12MP 解码时间 < 3秒
+✓ 单张 48MP 解码时间 < 10秒
+✓ 内存峰值 < 200MB (12MP) / < 500MB (48MP)
+
+体积验收：
+✓ hevc-decoder.wasm < 500KB
+✓ HEIF 解析 TS 代码 < 50KB (压缩前)
+```
+
+### 7.8 风险与缓解
+
+| 风险 | 概率 | 影响 | 缓解措施 |
+|------|------|------|---------|
+| libde265 裁剪后无法编译 | 中 | 高 | 先编译完整版验证，再逐步裁剪 |
+| HEIF 解析遗漏边界情况 | 高 | 中 | 收集多种 HEIC 样本测试 (iPhone/Android/相机) |
+| 某些 HEIC 用 AV1 而非 HEVC | 低 | 中 | 检测 codec 类型并报错，暂不支持 AVIF |
+| 内存不足（超大图） | 中 | 中 | 限制最大尺寸或分块处理 |
+| 色彩空间转换不准确 | 中 | 低 | 正确读取 colr box，支持 BT.601/709/2020 |
+
+---
+
+## 8. 实施计划（HEIC 优先）
+
+### Phase 0: Deno 脚手架 (3-4天)
+
+| 任务 | 时间 | 产出 | 验收 |
+|------|------|------|------|
+| 项目初始化 | 0.5天 | deno.json, 目录结构 | `deno check` 通过 |
+| CLI 框架 | 1天 | cli.ts (command parser) | `staticflow --help` |
+| 配置系统 | 1天 | config.ts + YAML 解析 | 读取 staticflow.yaml |
+| 外部命令调用 | 1天 | 调用 node/imagemagick | 构建现有博客成功 |
+
+### Phase 1: Node.js 替换 (5-6天)
+
+| 任务 | 时间 | 产出 | 验收 |
+|------|------|------|------|
+| Markdown 渲染 | 1天 | markdown/mod.ts | 渲染博客文章 |
+| 搜索索引构建 | 2天 | search/mod.ts | 生成 posts.json + 向量索引 |
+| 静态 HTML 生成 | 1天 | static/mod.ts | SEO 页面生成 |
+| DOCX/XLSX 解析 | 1天 | docx/ + xlsx/ | 解析 Office 文档 |
+
+**里程碑 M2**: 不再依赖 Node.js，仍依赖 ImageMagick
+
+### Phase 2: HEIC 攻坚 (7-10天)
+
+| 任务 | 时间 | 产出 | 验收 |
+|------|------|------|------|
+| HEIF 容器解析 | 2天 | heic/container.ts | 解析 iloc/iinf |
+| libde265 完整编译 | 1天 | hevc-decoder-full.wasm | 解码成功 |
+| libde265 裁剪 | 3天 | hevc-decoder.wasm < 500KB | 体积达标 |
+| YUV→RGB + JPEG 编码 | 1天 | heic/mod.ts | 输出 JPG |
+| 集成测试 | 2天 | 多样本验证 | 验收标准全部通过 |
+
+**里程碑 M3**: HEIC 处理零依赖
+
+### Phase 3: 图片处理完善 (3-4天)
+
+| 任务 | 时间 | 产出 | 验收 |
+|------|------|------|------|
+| stb_image WASM | 1天 | image-core.wasm | JPG/PNG 处理 |
+| 图片缩放/压缩 | 1天 | image/resize.ts | 批量压缩 |
+| 相册构建管道 | 1天 | gallery/mod.ts | 生成相册页面 |
+
+**里程碑 M4**: 完整构建管道，零外部依赖
+
+### Phase 4: 单文件发布 (2-3天)
+
+| 任务 | 时间 | 产出 | 验收 |
+|------|------|------|------|
+| WASM 内嵌 | 1天 | wasm-embed.ts | Base64 嵌入 |
+| Deno compile | 1天 | staticflow 可执行文件 | 跨平台编译 |
+| 安装脚本 | 0.5天 | install.sh | curl 安装 |
+
+**最终交付**: 单文件可执行，~15MB
+
+---
+
+## 9. 后续扩展（按需）
+
+### Tier 2 其他功能
+
+| 功能 | 时间 | 优先级 |
+|------|------|--------|
+| PPTX 渲染 | 4天 | 中 |
+| LaTeX 基础 | 2天 | 低 |
+
+### Tier 3 完整功能
+
+| 功能 | 时间 | 优先级 |
+|------|------|--------|
+| RAW (LibRaw) | 5天 | 低 |
+| 完整 LaTeX (Tectonic) | 5天 | 低 |
+
+---
+
+## 10. 风险总览
 
 | 风险 | 概率 | 影响 | 缓解措施 |
 |------|------|------|---------|
 | libde265 裁剪困难 | 中 | 高 | 先用完整版验证，再逐步裁剪 |
-| PPTX 渲染不完整 | 高 | 中 | 明确支持范围，复杂幻灯片降级 |
+| HEIF 解析边界情况 | 高 | 中 | 收集多种设备样本测试 |
 | WASM 体积超预算 | 中 | 中 | wasm-opt 优化 + 按需加载 |
 | Deno compile 问题 | 低 | 高 | 备选：esbuild + pkg |
-| LaTeX 宏包缺失 | 高 | 中 | 内嵌常用宏包，提供下载机制 |
+| 大图内存不足 | 中 | 中 | 限制尺寸或分块处理 |
 
 ---
 
-## 8. 成功标准
+## 11. 成功标准
 
-### 8.1 功能验证
+### 11.1 功能验证
 
 ```bash
 # Tier 1 验证
@@ -1198,7 +1483,7 @@ staticflow build --input test.arw    # Sony RAW
 staticflow build --input paper.tex   # 完整 LaTeX
 ```
 
-### 8.2 体积验证
+### 11.2 体积验证
 
 | 版本 | 目标体积 | 包含功能 |
 |------|---------|---------|
@@ -1206,7 +1491,7 @@ staticflow build --input paper.tex   # 完整 LaTeX
 | Standard | ~15MB | Tier 1 + 2 |
 | Full | ~20MB | Tier 1 + 2 + 3 |
 
-### 8.3 性能验证
+### 11.3 性能验证
 
 | 操作 | 目标时间 |
 |------|---------|
@@ -1217,5 +1502,15 @@ staticflow build --input paper.tex   # 完整 LaTeX
 
 ---
 
-*文档版本: v1.0*
+*文档版本: v1.1*
 *创建日期: 2026-02-02*
+*更新日期: 2026-02-02*
+
+---
+
+## 变更记录
+
+| 版本 | 日期 | 变更内容 |
+|------|------|---------|
+| v1.0 | 2026-02-02 | 初版，完整技术方案 |
+| v1.1 | 2026-02-02 | 新增迁移策略、libde265 裁剪详细方案、HEIC 优先实施计划 |

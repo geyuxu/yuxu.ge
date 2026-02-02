@@ -13,58 +13,618 @@
 │  staticflow build                                           │
 │  # 完成。无需安装 Node、ImageMagick、LibreOffice 等         │
 └─────────────────────────────────────────────────────────────┘
+
+插件按需加载：
+┌─────────────────────────────────────────────────────────────┐
+│  staticflow plugin install latex-full                       │
+│  staticflow build --input paper.tex  # 完整 LaTeX 编译     │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-### 1.2 技术架构
+### 1.2 技术架构：Core + Plugin
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
-│                    staticflow (单文件可执行)                  │
-│                         ~15-25MB                            │
+│                 staticflow Core (单文件可执行)               │
+│                         ~15MB                               │
 ├─────────────────────────────────────────────────────────────┤
 │  Deno Runtime (嵌入)                                        │
 │  ├── V8 JavaScript Engine                                  │
 │  ├── WASM Runtime                                          │
 │  └── 文件系统/网络 API                                      │
 ├─────────────────────────────────────────────────────────────┤
-│  核心转换引擎 (WASM 模块，内嵌)                              │
-│  ├── image-core.wasm      (~800KB)  图片处理               │
-│  ├── heic-decoder.wasm    (~300KB)  HEIC 解码              │
-│  ├── tex-core.wasm        (~1.5MB)  LaTeX 基础             │
-│  └── raw-decoder.wasm     (~500KB)  RAW 解码 (Tier3)       │
+│  核心转换引擎 (内嵌 WASM + TypeScript)                       │
+│  ├── image-core.wasm      (~800KB)  JPG/PNG 处理           │
+│  ├── heic-decoder.wasm    (~1.5MB)  HEIC 解码 (libheif-js) │
+│  └── katex-core           (~300KB)  LaTeX 公式渲染          │
 ├─────────────────────────────────────────────────────────────┤
 │  文档处理层 (TypeScript，内嵌)                               │
-│  ├── docx/      DOCX → HTML                                │
-│  ├── xlsx/      XLSX → HTML/JSON                           │
-│  ├── pptx/      PPTX → PNG 序列                            │
-│  └── katex/     LaTeX 公式渲染                             │
+│  ├── docx/      DOCX → HTML (mammoth 精简)                 │
+│  ├── xlsx/      XLSX → HTML/JSON (SheetJS 精简)            │
+│  ├── pptx/      PPTX → 文本+图片提取 (基础支持)             │
+│  ├── jupyter/   Jupyter → HTML (静态渲染)                  │
+│  └── markdown/  Markdown → HTML                            │
 ├─────────────────────────────────────────────────────────────┤
 │  构建管道 (TypeScript)                                      │
 │  ├── content-discovery    内容发现与元数据                  │
 │  ├── search-indexer       混合搜索索引构建                  │
 │  ├── static-generator     静态 HTML 生成                   │
 │  └── asset-pipeline       资源处理管道                     │
+├─────────────────────────────────────────────────────────────┤
+│  插件加载器                                                 │
+│  └── plugin-loader.ts     按需加载可选 WASM 模块            │
+└─────────────────────────────────────────────────────────────┘
+
+        ↓ 可选插件 (按需下载) ↓
+
+┌─────────────────────────────────────────────────────────────┐
+│  pptx-full.wasm   (~100MB)  LibreOffice WASM - 完整渲染    │
+├─────────────────────────────────────────────────────────────┤
+│  latex-full.wasm  (~30MB)   Tectonic WASM + TeX 宏包       │
+├─────────────────────────────────────────────────────────────┤
+│  raw-full.wasm    (~5MB)    LibRaw WASM - 完整 RAW 支持    │
 └─────────────────────────────────────────────────────────────┘
 ```
 
 ### 1.3 模块体积预算
 
+#### Core 核心 (~15MB)
+
 | 模块 | 预算 | 说明 |
 |------|------|------|
-| Deno 运行时 | ~12MB | 基础开销 |
-| image-core.wasm | ~800KB | stb + resize |
-| heic-decoder.wasm | ~300KB | libde265 裁剪 |
-| tex-core.wasm | ~1.5MB | TeX 基础引擎 |
-| raw-decoder.wasm | ~500KB | LibRaw 裁剪 (Tier3) |
-| JS 文档处理 | ~500KB | 压缩后 |
-| **总计** | **~15-17MB** | Tier 1+2 |
-| **含 Tier 3** | **~18-20MB** | 全功能 |
+| Deno 运行时 | ~12MB | V8 + 标准库 |
+| image-core.wasm | ~800KB | stb_image + resize |
+| heic-decoder.wasm | ~1.5MB | libheif-js (验证优先) |
+| katex-core | ~300KB | LaTeX 公式渲染 |
+| JS 文档处理 | ~400KB | DOCX/XLSX/PPTX/Jupyter 解析 |
+| **Core 总计** | **~15MB** | 覆盖 90% 场景 |
+
+#### Plugins 可选插件 (~135MB)
+
+| 插件 | 体积 | 功能 | 成熟度 |
+|------|------|------|--------|
+| pptx-full.wasm | ~100MB | LibreOffice WASM 完整 PPTX 渲染 | 实验性 |
+| latex-full.wasm | ~30MB | Tectonic WASM + 核心宏包 | 成熟 |
+| raw-full.wasm | ~5MB | LibRaw WASM 完整 RAW 格式 | 成熟 |
+| **Plugins 总计** | **~135MB** | 专业级功能 |
+
+#### 组合选项
+
+| 版本 | 体积 | 适用场景 |
+|------|------|---------|
+| Core Only | ~15MB | 博客、文档站点 |
+| Core + LaTeX | ~45MB | 学术写作 |
+| Core + RAW | ~20MB | 摄影博客 |
+| Full Bundle | ~150MB | 全功能（仍远小于 LibreOffice 500MB）|
 
 ---
 
-## 2. Tier 1 实现：核心功能
+## 2. 插件架构
 
-### 2.1 图片处理 (JPEG/PNG)
+### 2.1 Core vs Plugin 边界
+
+```
+功能分层原则：
+┌─────────────────────────────────────────────────────────────┐
+│  Core 核心标准：                                             │
+│  ├── 体积 < 2MB (WASM 模块)                                 │
+│  ├── 纯 JS/TS 可实现，或有成熟轻量 WASM                      │
+│  ├── 覆盖 90% 常见使用场景                                   │
+│  └── 功能完整度可接受（基础解析/提取）                        │
+├─────────────────────────────────────────────────────────────┤
+│  Plugin 插件标准：                                           │
+│  ├── 体积 > 5MB (需要大型库)                                 │
+│  ├── 依赖复杂 C/C++ 项目编译                                 │
+│  ├── 满足 10% 专业场景需求                                   │
+│  └── 完整功能支持（完整渲染/编译）                            │
+└─────────────────────────────────────────────────────────────┘
+```
+
+### 2.2 格式支持矩阵
+
+| 格式 | Core 支持 | Plugin 扩展 | 说明 |
+|------|-----------|-------------|------|
+| **Markdown** | ✅ 完整 | - | marked.js/unified |
+| **Jupyter** | ✅ 完整 | - | JSON 解析 + 静态渲染 |
+| **JPG/PNG** | ✅ 完整 | - | stb_image WASM |
+| **HEIC** | ✅ 完整 | - | libheif-js (~1.5MB) |
+| **DOCX** | ✅ 完整 | - | mammoth.js 精简版 |
+| **XLSX** | ✅ 完整 | - | SheetJS 精简版 |
+| **LaTeX 公式** | ✅ 完整 | - | KaTeX (~300KB) |
+| **PPTX** | ⚠️ 基础 | ✅ 完整 | Core: 文本+图片提取; Plugin: 完整布局渲染 |
+| **LaTeX 文档** | ⚠️ 基础 | ✅ 完整 | Core: 简单结构; Plugin: Tectonic 完整编译 |
+| **RAW** | ⚠️ 基础 | ✅ 完整 | Core: 嵌入 JPEG 预览; Plugin: 完整解码 |
+
+### 2.3 插件可行性分析
+
+#### 2.3.1 PPTX 完整渲染 (pptx-full.wasm)
+
+```
+技术路线：LibreOffice WASM
+├── 项目：LibreOffice Online (Collabora)
+├── 状态：实验性，但可用
+├── 体积：~100MB (压缩后 ~40MB gzip)
+├── 能力：
+│   ├── 完整 PPTX 解析（母版、动画、SmartArt）
+│   ├── 精确布局渲染
+│   ├── 输出 PNG/PDF
+│   └── 支持 PPTX/ODP/PPT 格式
+├── 限制：
+│   ├── 加载时间较长 (~5s)
+│   ├── 内存占用 ~500MB
+│   └── 某些高级效果可能不完美
+└── 替代方案：无轻量替代，这是唯一可行路线
+
+Core 基础功能 (无 Plugin)：
+├── 提取所有文本内容
+├── 提取内嵌图片
+├── 基础幻灯片结构
+└── 输出：文本列表 + 图片目录（非视觉渲染）
+```
+
+#### 2.3.2 LaTeX 完整编译 (latex-full.wasm)
+
+```
+技术路线：Tectonic WASM
+├── 项目：https://tectonic-typesetting.github.io
+├── 状态：成熟，生产可用
+├── 体积：
+│   ├── 引擎：~8MB
+│   └── 核心宏包：~20MB (article, report, beamer 等)
+│   └── 总计：~30MB
+├── 能力：
+│   ├── 完整 LaTeX 编译
+│   ├── 支持大多数常用宏包
+│   ├── 输出 PDF
+│   └── 支持 BibTeX 引用
+├── 限制：
+│   ├── 不支持某些冷门宏包
+│   └── 首次编译需下载宏包
+└── 成熟度：高（已在多个项目中使用）
+
+Core 基础功能 (无 Plugin)：
+├── KaTeX 渲染所有数学公式
+├── 解析基础文档结构 (\section, \subsection 等)
+├── 处理简单环境 (itemize, enumerate, figure)
+└── 输出：HTML 文章（非 PDF）
+```
+
+#### 2.3.3 RAW 完整解码 (raw-full.wasm)
+
+```
+技术路线：LibRaw WASM
+├── 项目：https://www.libraw.org/
+├── 状态：成熟，有现成 WASM 构建
+├── 体积：~5MB
+├── 能力：
+│   ├── 支持 600+ 相机 RAW 格式
+│   ├── Sony ARW, Canon CR2/CR3, Nikon NEF, Fuji RAF...
+│   ├── 完整色彩处理
+│   └── 输出高质量 JPEG/PNG
+├── 限制：
+│   ├── 超大文件内存占用高
+│   └── 处理速度较慢 (~5s/张)
+└── 成熟度：高
+
+Core 基础功能 (无 Plugin)：
+├── 提取 RAW 文件内嵌的 JPEG 预览
+├── 无需解码 RAW 数据
+└── 质量：预览级（通常 1-2MP，足够缩略图）
+```
+
+### 2.4 插件生命周期
+
+```typescript
+// src/plugin/loader.ts
+
+interface Plugin {
+  name: string;
+  version: string;
+  wasmUrl: string;
+  size: number;
+  checksum: string;
+}
+
+const PLUGIN_REGISTRY: Record<string, Plugin> = {
+  "pptx-full": {
+    name: "pptx-full",
+    version: "1.0.0",
+    wasmUrl: "https://plugins.staticflow.dev/pptx-full-1.0.0.wasm",
+    size: 100_000_000,
+    checksum: "sha256:..."
+  },
+  "latex-full": {
+    name: "latex-full",
+    version: "1.0.0",
+    wasmUrl: "https://plugins.staticflow.dev/latex-full-1.0.0.wasm",
+    size: 30_000_000,
+    checksum: "sha256:..."
+  },
+  "raw-full": {
+    name: "raw-full",
+    version: "1.0.0",
+    wasmUrl: "https://plugins.staticflow.dev/raw-full-1.0.0.wasm",
+    size: 5_000_000,
+    checksum: "sha256:..."
+  }
+};
+
+class PluginManager {
+  private pluginDir: string;
+  private loadedPlugins: Map<string, WebAssembly.Module> = new Map();
+
+  constructor() {
+    this.pluginDir = Deno.env.get("STATICFLOW_PLUGIN_DIR")
+      || `${Deno.env.get("HOME")}/.staticflow/plugins`;
+  }
+
+  // 检查插件是否已安装
+  async isInstalled(name: string): Promise<boolean> {
+    try {
+      await Deno.stat(`${this.pluginDir}/${name}.wasm`);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  // 安装插件
+  async install(name: string, options: { progress?: boolean } = {}): Promise<void> {
+    const plugin = PLUGIN_REGISTRY[name];
+    if (!plugin) throw new Error(`Unknown plugin: ${name}`);
+
+    console.log(`📦 Installing ${name} (${this.formatSize(plugin.size)})...`);
+
+    // 下载
+    const response = await fetch(plugin.wasmUrl);
+    const data = new Uint8Array(await response.arrayBuffer());
+
+    // 校验
+    const hash = await this.sha256(data);
+    if (hash !== plugin.checksum) {
+      throw new Error(`Checksum mismatch for ${name}`);
+    }
+
+    // 保存
+    await Deno.mkdir(this.pluginDir, { recursive: true });
+    await Deno.writeFile(`${this.pluginDir}/${name}.wasm`, data);
+
+    console.log(`✅ ${name} installed successfully`);
+  }
+
+  // 加载插件
+  async load(name: string): Promise<WebAssembly.Module> {
+    if (this.loadedPlugins.has(name)) {
+      return this.loadedPlugins.get(name)!;
+    }
+
+    if (!await this.isInstalled(name)) {
+      throw new Error(
+        `Plugin ${name} not installed. Run: staticflow plugin install ${name}`
+      );
+    }
+
+    const wasmBytes = await Deno.readFile(`${this.pluginDir}/${name}.wasm`);
+    const module = await WebAssembly.compile(wasmBytes);
+    this.loadedPlugins.set(name, module);
+
+    return module;
+  }
+
+  // 按需加载（自动安装）
+  async loadOrInstall(name: string): Promise<WebAssembly.Module> {
+    if (!await this.isInstalled(name)) {
+      const consent = confirm(
+        `Plugin ${name} is required. Install now? (${this.formatSize(PLUGIN_REGISTRY[name].size)})`
+      );
+      if (!consent) throw new Error(`Plugin ${name} is required`);
+      await this.install(name);
+    }
+    return this.load(name);
+  }
+
+  private formatSize(bytes: number): string {
+    if (bytes > 1_000_000) return `${(bytes / 1_000_000).toFixed(0)}MB`;
+    if (bytes > 1_000) return `${(bytes / 1_000).toFixed(0)}KB`;
+    return `${bytes}B`;
+  }
+
+  private async sha256(data: Uint8Array): Promise<string> {
+    const hash = await crypto.subtle.digest("SHA-256", data);
+    return `sha256:${Array.from(new Uint8Array(hash))
+      .map(b => b.toString(16).padStart(2, "0")).join("")}`;
+  }
+}
+
+export const pluginManager = new PluginManager();
+```
+
+### 2.5 CLI 插件命令
+
+```bash
+# 列出可用插件
+staticflow plugin list
+# 输出:
+# NAME         SIZE    STATUS      DESCRIPTION
+# pptx-full    100MB   not installed   Complete PPTX rendering (LibreOffice)
+# latex-full   30MB    installed       Full LaTeX compilation (Tectonic)
+# raw-full     5MB     not installed   RAW camera format support (LibRaw)
+
+# 安装插件
+staticflow plugin install latex-full
+# 📦 Installing latex-full (30MB)...
+# ████████████████████ 100%
+# ✅ latex-full installed successfully
+
+# 卸载插件
+staticflow plugin remove pptx-full
+
+# 更新所有插件
+staticflow plugin update
+```
+
+### 2.6 分发策略
+
+#### 策略 A: 按需下载（推荐）
+
+```
+Core 安装 (~15MB) → 首次使用插件功能时提示下载
+
+优点：
+├── 初始下载最小
+├── 用户只下载需要的功能
+└── 磁盘占用最优
+
+缺点：
+├── 首次使用某功能时有延迟
+└── 需要网络连接
+```
+
+#### 策略 B: 完整安装
+
+```
+install.sh --full → 下载 Core + 全部插件 (~150MB)
+
+优点：
+├── 离线可用所有功能
+└── 无首次使用延迟
+
+缺点：
+├── 初始下载较大
+└── 可能下载不需要的功能
+```
+
+#### 策略 C: 选择性安装
+
+```
+install.sh --with latex-full,raw-full → 自选插件组合
+
+优点：
+├── 用户完全控制
+└── 适合离线部署场景
+
+缺点：
+├── 安装步骤略复杂
+```
+
+### 2.7 插件开发者接口
+
+```typescript
+// 第三方插件开发接口（未来扩展）
+
+interface StaticFlowPlugin {
+  name: string;
+  version: string;
+
+  // 声明处理的文件类型
+  fileTypes: string[];  // [".xyz", ".abc"]
+
+  // 初始化
+  init(context: PluginContext): Promise<void>;
+
+  // 处理文件
+  process(file: FileInput): Promise<ProcessResult>;
+
+  // 清理资源
+  destroy(): Promise<void>;
+}
+
+// 示例：假设的 CAD 文件插件
+const cadPlugin: StaticFlowPlugin = {
+  name: "cad-viewer",
+  version: "1.0.0",
+  fileTypes: [".dwg", ".dxf"],
+
+  async init(ctx) {
+    this.wasm = await ctx.loadWasm("./cad-core.wasm");
+  },
+
+  async process(file) {
+    const svg = await this.wasm.convertToSvg(file.data);
+    return { html: svg, assets: [] };
+  },
+
+  async destroy() {
+    this.wasm.cleanup();
+  }
+};
+```
+
+---
+
+## 3. Tier 1 实现：核心功能
+
+### 3.1 Jupyter Notebook 渲染
+
+**纯 TypeScript 实现（零 WASM 依赖）：**
+
+```typescript
+// src/jupyter/mod.ts
+
+interface JupyterCell {
+  cell_type: "code" | "markdown" | "raw";
+  source: string[];
+  outputs?: JupyterOutput[];
+  execution_count?: number;
+}
+
+interface JupyterOutput {
+  output_type: "execute_result" | "stream" | "display_data" | "error";
+  data?: Record<string, string | string[]>;  // mime-type → content
+  text?: string[];
+  name?: string;  // stdout/stderr
+}
+
+interface JupyterNotebook {
+  cells: JupyterCell[];
+  metadata: {
+    kernelspec?: { language: string; display_name: string };
+  };
+}
+
+export class JupyterRenderer {
+  private highlighter: CodeHighlighter;
+
+  constructor() {
+    this.highlighter = new CodeHighlighter();
+  }
+
+  async render(data: Uint8Array): Promise<string> {
+    const notebook: JupyterNotebook = JSON.parse(
+      new TextDecoder().decode(data)
+    );
+
+    const language = notebook.metadata.kernelspec?.language || "python";
+    let html = '<article class="jupyter-notebook">';
+
+    for (const cell of notebook.cells) {
+      html += this.renderCell(cell, language);
+    }
+
+    html += '</article>';
+    return html;
+  }
+
+  private renderCell(cell: JupyterCell, language: string): string {
+    switch (cell.cell_type) {
+      case "markdown":
+        return this.renderMarkdown(cell);
+      case "code":
+        return this.renderCode(cell, language);
+      case "raw":
+        return `<pre class="raw-cell">${this.escape(cell.source.join(""))}</pre>`;
+    }
+  }
+
+  private renderMarkdown(cell: JupyterCell): string {
+    const source = cell.source.join("");
+    // 使用内置 Markdown 渲染器
+    return `<div class="markdown-cell">${marked(source)}</div>`;
+  }
+
+  private renderCode(cell: JupyterCell, language: string): string {
+    const source = cell.source.join("");
+    const execCount = cell.execution_count ?? " ";
+
+    let html = `
+      <div class="code-cell">
+        <div class="input">
+          <span class="prompt">In [${execCount}]:</span>
+          <pre><code class="language-${language}">${
+            this.highlighter.highlight(source, language)
+          }</code></pre>
+        </div>`;
+
+    if (cell.outputs?.length) {
+      html += '<div class="output">';
+      for (const output of cell.outputs) {
+        html += this.renderOutput(output);
+      }
+      html += '</div>';
+    }
+
+    html += '</div>';
+    return html;
+  }
+
+  private renderOutput(output: JupyterOutput): string {
+    switch (output.output_type) {
+      case "execute_result":
+      case "display_data":
+        return this.renderDisplayData(output);
+      case "stream":
+        const cls = output.name === "stderr" ? "stderr" : "stdout";
+        return `<pre class="${cls}">${this.escape(output.text?.join("") || "")}</pre>`;
+      case "error":
+        return `<pre class="error">${this.escape(output.text?.join("\n") || "")}</pre>`;
+    }
+    return "";
+  }
+
+  private renderDisplayData(output: JupyterOutput): string {
+    if (!output.data) return "";
+
+    // 优先级：HTML > Image > SVG > LaTeX > Text
+    if (output.data["text/html"]) {
+      const html = Array.isArray(output.data["text/html"])
+        ? output.data["text/html"].join("")
+        : output.data["text/html"];
+      return `<div class="html-output">${html}</div>`;
+    }
+
+    if (output.data["image/png"]) {
+      const data = output.data["image/png"];
+      const base64 = Array.isArray(data) ? data.join("") : data;
+      return `<img src="data:image/png;base64,${base64}" class="output-image">`;
+    }
+
+    if (output.data["image/svg+xml"]) {
+      const svg = Array.isArray(output.data["image/svg+xml"])
+        ? output.data["image/svg+xml"].join("")
+        : output.data["image/svg+xml"];
+      return `<div class="svg-output">${svg}</div>`;
+    }
+
+    if (output.data["text/latex"]) {
+      const latex = Array.isArray(output.data["text/latex"])
+        ? output.data["text/latex"].join("")
+        : output.data["text/latex"];
+      return `<div class="latex-output">${renderMath(latex, true)}</div>`;
+    }
+
+    if (output.data["text/plain"]) {
+      const text = Array.isArray(output.data["text/plain"])
+        ? output.data["text/plain"].join("")
+        : output.data["text/plain"];
+      return `<pre class="text-output">${this.escape(text)}</pre>`;
+    }
+
+    return "";
+  }
+
+  private escape(text: string): string {
+    return text
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+  }
+}
+```
+
+**Jupyter 支持完整度：**
+
+| 功能 | 状态 | 说明 |
+|------|------|------|
+| Markdown 单元格 | ✅ | 完整支持 |
+| 代码单元格 | ✅ | 语法高亮 |
+| 文本输出 | ✅ | stdout/stderr |
+| 图片输出 | ✅ | PNG/JPEG inline |
+| SVG 输出 | ✅ | 矢量图 |
+| HTML 输出 | ✅ | 表格、富文本 |
+| LaTeX 输出 | ✅ | KaTeX 渲染 |
+| 交互式 Widget | ❌ | 静态渲染不支持 |
+
+### 3.2 图片处理 (JPEG/PNG)
 
 **源码：C → WASM**
 
@@ -194,7 +754,7 @@ export class ImageProcessor {
 }
 ```
 
-### 2.2 DOCX 解析
+### 3.3 DOCX 解析
 
 **精简版 mammoth 移植：**
 ```typescript
@@ -288,7 +848,7 @@ export class DocxParser {
 }
 ```
 
-### 2.3 XLSX 解析
+### 3.4 XLSX 解析
 
 **精简版 SheetJS 核心：**
 ```typescript
@@ -392,7 +952,7 @@ export class XlsxParser {
 }
 ```
 
-### 2.4 KaTeX 公式渲染
+### 3.5 KaTeX 公式渲染
 
 ```typescript
 // src/katex/mod.ts
@@ -430,9 +990,9 @@ export function processLatexInMarkdown(markdown: string): string {
 
 ---
 
-## 3. Tier 2 实现：进阶功能
+## 4. Tier 2 实现：进阶功能
 
-### 3.1 HEIC 解码
+### 4.1 HEIC 解码
 
 **libde265 裁剪策略：**
 ```
@@ -592,7 +1152,7 @@ export class HevcDecoder {
 }
 ```
 
-### 3.2 PPTX 渲染
+### 4.2 PPTX 渲染
 
 **最小渲染器架构：**
 ```typescript
@@ -747,7 +1307,7 @@ export class PptxRenderer {
 }
 ```
 
-### 3.3 LaTeX 基础文档
+### 4.3 LaTeX 基础文档
 
 **方案：移植 TeX 核心或使用 Tectonic**
 
@@ -883,9 +1443,9 @@ export class LatexParser {
 
 ---
 
-## 4. Tier 3 实现：完整功能
+## 5. Tier 3 实现：完整功能
 
-### 4.1 RAW (ARW/CR2/NEF) 解码
+### 5.1 RAW (ARW/CR2/NEF) 解码
 
 **LibRaw 裁剪方案：**
 ```
@@ -944,7 +1504,7 @@ export class RawDecoder {
 }
 ```
 
-### 4.2 完整 LaTeX（Tectonic WASM）
+### 5.2 完整 LaTeX（Tectonic WASM）
 
 ```typescript
 // src/latex-full/mod.ts
@@ -995,9 +1555,9 @@ export class TectonicEngine {
 
 ---
 
-## 5. 构建与分发
+## 6. 构建与分发
 
-### 5.1 项目结构
+### 6.1 项目结构
 
 ```
 staticflow/
@@ -1057,7 +1617,7 @@ staticflow/
 └── README.md
 ```
 
-### 5.2 构建流程
+### 6.2 构建流程
 
 ```typescript
 // build.ts
@@ -1106,7 +1666,7 @@ async function build() {
 }
 ```
 
-### 5.3 分发
+### 6.3 分发
 
 ```bash
 # 安装脚本
@@ -1129,9 +1689,9 @@ chmod +x /usr/local/bin/staticflow
 
 ---
 
-## 6. 迁移策略：完整迁移 + 逐步替换
+## 7. 迁移策略：完整迁移 + 逐步替换
 
-### 6.1 阶段演进
+### 7.1 阶段演进
 
 ```
 Week 1-2: 脚手架 + 外壳迁移
@@ -1163,7 +1723,7 @@ Week 5-6: 替换 ImageMagick (HEIC 攻坚)
 验收：单文件可执行，处理 HEIC
 ```
 
-### 6.2 关键里程碑
+### 7.2 关键里程碑
 
 | 里程碑 | 验收标准 | 外部依赖 |
 |--------|---------|---------|
@@ -1174,9 +1734,9 @@ Week 5-6: 替换 ImageMagick (HEIC 攻坚)
 
 ---
 
-## 7. HEIC 攻坚：libde265 裁剪方案
+## 8. HEIC 攻坚：libde265 裁剪方案
 
-### 7.1 源码结构分析
+### 8.1 源码结构分析
 
 ```
 libde265 目录结构 (~50K 行)
@@ -1203,7 +1763,7 @@ libde265 目录结构 (~50K 行)
 │   └── encoder/              编码器 ✗ 完全移除
 ```
 
-### 7.2 裁剪决策矩阵
+### 8.2 裁剪决策矩阵
 
 | 模块 | 原始行数 | 决策 | 理由 |
 |------|---------|------|------|
@@ -1217,14 +1777,14 @@ libde265 目录结构 (~50K 行)
 | SIMD (x86/arm) | ~10K | ✗ 移除 | WASM 有自己的 SIMD |
 | 编码器 | ~15K | ✗ 移除 | 不需要 |
 
-### 7.3 裁剪后预估
+### 8.3 裁剪后预估
 
 ```
 原始：~50K 行 → 编译后 ~1.5MB WASM
 裁剪：~15K 行 → 编译后 ~300KB WASM (目标)
 ```
 
-### 7.4 编译流程
+### 8.4 编译流程
 
 ```bash
 # 1. 克隆源码
@@ -1290,7 +1850,7 @@ wasm-opt -O3 --strip-debug hevc-decoder.wasm -o hevc-decoder.opt.wasm
 ls -lh hevc-decoder.opt.wasm  # 目标: < 500KB
 ```
 
-### 7.5 HEIF 容器结构
+### 8.5 HEIF 容器结构
 
 ```
 HEIC 文件结构 (ISOBMFF 格式)：
@@ -1316,7 +1876,7 @@ HEIC 文件结构 (ISOBMFF 格式)：
 └─────────────────────────────────────────────────┘
 ```
 
-### 7.6 HEIC 处理流程
+### 8.6 HEIC 处理流程
 
 ```
 ┌──────────────┐     ┌──────────────┐     ┌──────────────┐
@@ -1343,7 +1903,7 @@ HEIC 文件结构 (ISOBMFF 格式)：
                      └──────────────┘
 ```
 
-### 7.7 HEIC 验收标准
+### 8.7 HEIC 验收标准
 
 ```
 HEIC 模块完成定义：
@@ -1364,7 +1924,7 @@ HEIC 模块完成定义：
 ✓ HEIF 解析 TS 代码 < 50KB (压缩前)
 ```
 
-### 7.8 风险与缓解
+### 8.8 风险与缓解
 
 | 风险 | 概率 | 影响 | 缓解措施 |
 |------|------|------|---------|
@@ -1376,7 +1936,7 @@ HEIC 模块完成定义：
 
 ---
 
-## 8. 实施计划（HEIC 优先）
+## 9. 实施计划（HEIC 优先）
 
 ### Phase 0: Deno 脚手架 (3-4天)
 
@@ -1432,7 +1992,7 @@ HEIC 模块完成定义：
 
 ---
 
-## 9. 后续扩展（按需）
+## 10. 后续扩展（按需）
 
 ### Tier 2 其他功能
 
@@ -1450,7 +2010,7 @@ HEIC 模块完成定义：
 
 ---
 
-## 10. 风险总览
+## 11. 风险总览
 
 | 风险 | 概率 | 影响 | 缓解措施 |
 |------|------|------|---------|
@@ -1462,9 +2022,9 @@ HEIC 模块完成定义：
 
 ---
 
-## 11. 成功标准
+## 12. 成功标准
 
-### 11.1 功能验证
+### 12.1 功能验证
 
 ```bash
 # Tier 1 验证
@@ -1483,26 +2043,55 @@ staticflow build --input test.arw    # Sony RAW
 staticflow build --input paper.tex   # 完整 LaTeX
 ```
 
-### 11.2 体积验证
+### 12.2 体积验证
 
-| 版本 | 目标体积 | 包含功能 |
+| 组件 | 目标体积 | 说明 |
 |------|---------|---------|
-| Lite | ~13MB | Tier 1 |
-| Standard | ~15MB | Tier 1 + 2 |
-| Full | ~20MB | Tier 1 + 2 + 3 |
+| **Core** | ~15MB | 单文件可执行，零依赖 |
+| pptx-full 插件 | ~100MB | LibreOffice WASM |
+| latex-full 插件 | ~30MB | Tectonic + 宏包 |
+| raw-full 插件 | ~5MB | LibRaw WASM |
+| **全部安装** | ~150MB | Core + 全部插件 |
 
-### 11.3 性能验证
+### 12.3 性能验证
 
-| 操作 | 目标时间 |
-|------|---------|
-| JPEG 压缩 (5MB) | < 2s |
-| HEIC 解码 (10MB) | < 5s |
-| PPTX 渲染 (20页) | < 10s |
-| LaTeX 编译 (10页) | < 30s |
+| 操作 | Core | 使用插件 |
+|------|------|---------|
+| JPEG 压缩 (5MB) | < 2s | - |
+| HEIC 解码 (10MB) | < 5s | - |
+| PPTX 提取文本/图片 | < 2s | - |
+| PPTX 完整渲染 (20页) | - | < 30s (pptx-full) |
+| LaTeX 公式渲染 | < 1s | - |
+| LaTeX 完整编译 (10页) | - | < 30s (latex-full) |
+| RAW 预览提取 | < 1s | - |
+| RAW 完整解码 | - | < 5s (raw-full) |
+
+### 12.4 插件验证
+
+```bash
+# 核心功能验证（无插件）
+staticflow build --input test.md      # Markdown ✓
+staticflow build --input test.ipynb   # Jupyter ✓
+staticflow build --input test.heic    # HEIC ✓
+staticflow build --input test.docx    # Word ✓
+staticflow build --input test.xlsx    # Excel ✓
+staticflow build --input formula.tex  # LaTeX 公式 ✓
+staticflow build --input slides.pptx  # PPTX 基础 ✓ (文本+图片)
+
+# 插件功能验证
+staticflow plugin install latex-full
+staticflow build --input paper.tex    # 完整 LaTeX → PDF ✓
+
+staticflow plugin install pptx-full
+staticflow build --input slides.pptx --full-render  # 完整渲染 ✓
+
+staticflow plugin install raw-full
+staticflow build --input photo.arw    # RAW 完整解码 ✓
+```
 
 ---
 
-*文档版本: v1.1*
+*文档版本: v1.2*
 *创建日期: 2026-02-02*
 *更新日期: 2026-02-02*
 
@@ -1514,3 +2103,4 @@ staticflow build --input paper.tex   # 完整 LaTeX
 |------|------|---------|
 | v1.0 | 2026-02-02 | 初版，完整技术方案 |
 | v1.1 | 2026-02-02 | 新增迁移策略、libde265 裁剪详细方案、HEIC 优先实施计划 |
+| v1.2 | 2026-02-02 | **插件架构**: Core (~15MB) + 可选插件 (PPTX/LaTeX/RAW ~135MB); 新增 Jupyter 支持; 重新定义格式支持矩阵; 插件生命周期管理; 分发策略选项 |

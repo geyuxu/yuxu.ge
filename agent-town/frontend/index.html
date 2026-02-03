@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Town - AI虚拟小镇</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header class="header">
+      <h1>🏘️ Agent Town</h1>
+      <div class="controls">
+        <button id="btn-pause" title="暂停/继续">⏸️</button>
+        <button id="btn-speed" title="加速">⏩ 1x</button>
+        <button id="btn-comments" title="查看所有评论">📋</button>
+      </div>
+    </header>
+
+    <!-- Game Canvas -->
+    <main class="game-wrapper">
+      <canvas id="game-canvas" width="640" height="480"></canvas>
+
+      <!-- Agent Info Tooltip -->
+      <div id="agent-tooltip" class="tooltip hidden">
+        <div class="tooltip-header">
+          <span class="tooltip-avatar"></span>
+          <span class="tooltip-name"></span>
+        </div>
+        <div class="tooltip-desc"></div>
+        <div class="tooltip-stats"></div>
+      </div>
+    </main>
+
+    <!-- Activity Log -->
+    <section class="activity-panel">
+      <h2>📜 最新动态</h2>
+      <div id="activity-log" class="activity-log">
+        <div class="activity-item">
+          <span class="activity-time">--:--</span>
+          <span class="activity-text">小镇正在苏醒...</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Agent List -->
+    <section class="agents-panel">
+      <h2>👥 居民</h2>
+      <div id="agent-list" class="agent-list">
+        <!-- Populated by JS -->
+      </div>
+    </section>
+
+    <!-- Comments Modal -->
+    <div id="comments-modal" class="modal hidden">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2>💬 全部评论</h2>
+          <button class="modal-close">&times;</button>
+        </div>
+        <div id="comments-list" class="comments-list">
+          <!-- Populated by JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

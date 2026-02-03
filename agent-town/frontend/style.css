@@ -1,0 +1,336 @@
+/* Agent Town Styles */
+:root {
+  --bg-color: #1a1a2e;
+  --panel-bg: #16213e;
+  --text-color: #eee;
+  --text-muted: #888;
+  --accent: #e94560;
+  --border-color: #0f3460;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* Header */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.header h1 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+}
+
+.controls button {
+  background: var(--panel-bg);
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.controls button:hover {
+  background: var(--border-color);
+}
+
+/* Game Canvas */
+.game-wrapper {
+  position: relative;
+  background: #000;
+  border-radius: 8px;
+  overflow: hidden;
+  margin-bottom: 16px;
+}
+
+#game-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Tooltip */
+.tooltip {
+  position: absolute;
+  background: var(--panel-bg);
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  padding: 12px;
+  min-width: 200px;
+  pointer-events: none;
+  z-index: 100;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+.tooltip.hidden {
+  display: none;
+}
+
+.tooltip-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.tooltip-avatar {
+  font-size: 1.5rem;
+}
+
+.tooltip-name {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.tooltip-desc {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+}
+
+.tooltip-stats {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+}
+
+/* Activity Panel */
+.activity-panel {
+  background: var(--panel-bg);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.activity-panel h2 {
+  font-size: 1rem;
+  margin-bottom: 8px;
+  color: var(--text-muted);
+}
+
+.activity-log {
+  max-height: 120px;
+  overflow-y: auto;
+}
+
+.activity-item {
+  padding: 6px 0;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 0.9rem;
+}
+
+.activity-item:last-child {
+  border-bottom: none;
+}
+
+.activity-time {
+  color: var(--text-muted);
+  margin-right: 8px;
+  font-family: monospace;
+}
+
+/* Agents Panel */
+.agents-panel {
+  background: var(--panel-bg);
+  border-radius: 8px;
+  padding: 12px;
+}
+
+.agents-panel h2 {
+  font-size: 1rem;
+  margin-bottom: 8px;
+  color: var(--text-muted);
+}
+
+.agent-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.agent-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--bg-color);
+  border: 2px solid var(--border-color);
+  border-radius: 20px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.agent-chip:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+}
+
+.agent-chip .avatar {
+  font-size: 1.2rem;
+}
+
+.agent-chip .name {
+  font-size: 0.85rem;
+  max-width: 80px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.agent-chip .status {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #4ade80;
+}
+
+.agent-chip .status.reading {
+  background: #fbbf24;
+}
+
+.agent-chip .status.thinking {
+  background: #818cf8;
+}
+
+/* Modal */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+.modal-content {
+  background: var(--panel-bg);
+  border-radius: 12px;
+  width: 90%;
+  max-width: 600px;
+  max-height: 80vh;
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.modal-header h2 {
+  font-size: 1.2rem;
+}
+
+.modal-close {
+  background: none;
+  border: none;
+  color: var(--text-color);
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.comments-list {
+  padding: 16px;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.comment-item {
+  background: var(--bg-color);
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.comment-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.comment-avatar {
+  font-size: 1.3rem;
+}
+
+.comment-meta {
+  flex: 1;
+}
+
+.comment-author {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.comment-post {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+}
+
+.comment-text {
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.comment-time {
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: 8px;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-color);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent);
+}

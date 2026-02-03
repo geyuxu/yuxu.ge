@@ -1,0 +1,55 @@
+{
+  "name": "Yuxu Ge",
+  "title": "Senior AI Architect",
+  "avatar": "/assets/photo.jpg",
+  "email": "me@yuxu.ge",
+  "copyright": "2026 Yuxu Ge",
+  "search": true,
+  "semanticSearch": true,
+  "chat": true,
+  "embeddingApi": "https://yuxu.ge/api/embedding",
+  "translateApi": "https://yuxu.ge/api/translate",
+  "chatApi": "https://yuxu.ge/api/chat",
+  "links": [
+    {
+      "type": "linkedin",
+      "url": "https://www.linkedin.com/in/geyuxu/",
+      "label": "Linkedin"
+    },
+    {
+      "type": "github",
+      "url": "https://github.com/geyuxu",
+      "label": "Github"
+    },
+    {
+      "type": "twitter",
+      "url": "https://x.com/YuxuGe_AI",
+      "label": "@YuxuGe_AI"
+    },
+    {
+      "type": "youtube",
+      "url": "https://youtube.com/@yuxuge",
+      "label": "YouTube"
+    },
+    {
+      "type": "orcid",
+      "url": "https://orcid.org/0009-0006-2990-4886",
+      "label": "0009-0006-2990-4886"
+    },
+    {
+      "type": "medium",
+      "url": "https://medium.com/@yuxuge",
+      "label": "Medium"
+    },
+    {
+      "type": "blog",
+      "url": "/blog/",
+      "label": "Blog"
+    },
+    {
+      "type": "gallery",
+      "url": "/gallery/",
+      "label": "Gallery"
+    }
+  ]
+}

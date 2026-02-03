@@ -1,0 +1,1 @@
+Nanjing Normal University, one of China's oldest teacher training institutions. The campus blends Republican-era architecture with modern academic buildings.

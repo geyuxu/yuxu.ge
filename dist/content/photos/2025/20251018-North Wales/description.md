@@ -1,0 +1,1 @@
+North Wales, a land of dramatic mountains, ancient castles, and the lyrical Welsh language. Snowdonia's peaks rise above valleys steeped in Celtic legend.

@@ -1,0 +1,1 @@
+Royal artifacts and funerary objects. The Egyptian obsession with eternal life preserved in gold and stone.

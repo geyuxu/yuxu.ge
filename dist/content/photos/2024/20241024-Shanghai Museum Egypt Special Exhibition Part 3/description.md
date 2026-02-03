@@ -1,0 +1,1 @@
+Gods and pharaohs. Statues and reliefs that once adorned temples along the Nile.

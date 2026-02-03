@@ -1,0 +1,1 @@
+Final moments in Lijiang. Where Yunnan's ethnic diversity creates a cultural tapestry unlike anywhere else.

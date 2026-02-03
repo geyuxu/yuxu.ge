@@ -1,0 +1,1 @@
+Shanghai's café culture. The city's vibrant coffee scene blends international sophistication with local charm in hidden lane houses and sleek storefronts.

@@ -1,0 +1,1 @@
+Songzanlin Monastery, the Little Potala of Yunnan. Tibetan Buddhist traditions flourish at 3,300 meters elevation.

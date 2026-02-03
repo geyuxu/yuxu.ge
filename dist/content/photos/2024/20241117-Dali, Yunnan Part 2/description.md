@@ -1,0 +1,1 @@
+The ancient city walls and gates of Dali. Bai minority architecture blends with centuries of trade route history.

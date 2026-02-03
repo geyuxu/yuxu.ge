@@ -1,0 +1,1 @@
+Farewell to Guangzhou. The subtropical energy of South China lingers in memory.

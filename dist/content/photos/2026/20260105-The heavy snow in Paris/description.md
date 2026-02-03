@@ -1,0 +1,1 @@
+A rare heavy snowfall transformed Paris into a winter wonderland. The city's iconic streets and rooftops blanketed in white, creating scenes of quiet beauty amid the usual bustle.

@@ -1,0 +1,1 @@
+A final look at Chatsworth. The estate's timeless beauty captured in autumn's golden light.

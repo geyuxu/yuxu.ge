@@ -1,0 +1,1 @@
+The Pudong Art Museum in Shanghai showcases masterpieces from Van Gogh, Cézanne, Gauguin and other Post-Impressionist giants. A rare encounter with European art treasures in the heart of China.

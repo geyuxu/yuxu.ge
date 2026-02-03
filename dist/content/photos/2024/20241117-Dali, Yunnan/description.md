@@ -1,0 +1,1 @@
+Dali, the ancient Bai kingdom on Erhai Lake. Three Pagodas stand against the Cangshan Mountains in this laid-back traveler's haven.

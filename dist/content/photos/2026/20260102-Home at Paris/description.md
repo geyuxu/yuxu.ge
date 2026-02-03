@@ -1,0 +1,1 @@
+Quiet moments at home in Paris. The warmth of indoor life contrasts with the winter city outside, capturing the simple pleasures of daily living in the City of Light.

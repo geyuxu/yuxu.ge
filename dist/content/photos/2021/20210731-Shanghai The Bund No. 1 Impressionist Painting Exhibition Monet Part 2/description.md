@@ -1,0 +1,1 @@
+Water lilies and garden scenes. Monet's revolutionary vision of light and color fills the gallery.

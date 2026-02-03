@@ -1,0 +1,1 @@
+The Republic of China history gallery. Nanjing's role as the nationalist capital comes alive through photographs and artifacts.

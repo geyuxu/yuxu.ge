@@ -1,0 +1,1 @@
+Inside Chatsworth House. Painted ceilings, old master paintings, and rooms that have hosted royalty for centuries.

@@ -1,0 +1,1 @@
+Final moments at the museum. Where Shanghai's artistic ambitions reach toward the future.

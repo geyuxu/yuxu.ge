@@ -1,0 +1,1 @@
+Views of Jade Dragon Snow Mountain. The sacred peak of the Naxi people watches over the ancient town.

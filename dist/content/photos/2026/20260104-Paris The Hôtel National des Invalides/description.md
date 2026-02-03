@@ -1,0 +1,1 @@
+The Hôtel National des Invalides, originally built as a hospital for wounded soldiers, now houses Napoleon's tomb and the Army Museum. Its golden dome stands as one of Paris's most recognizable landmarks.

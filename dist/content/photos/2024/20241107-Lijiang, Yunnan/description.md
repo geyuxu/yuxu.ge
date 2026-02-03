@@ -1,0 +1,1 @@
+Lijiang, the ancient Naxi town at the foot of Jade Dragon Snow Mountain. UNESCO-listed streets where water channels flow past wooden houses.

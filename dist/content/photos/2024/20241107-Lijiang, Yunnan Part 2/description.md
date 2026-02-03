@@ -1,0 +1,1 @@
+The old town's maze of lanes. Red lanterns, stone bridges, and the Naxi culture that has thrived here for centuries.

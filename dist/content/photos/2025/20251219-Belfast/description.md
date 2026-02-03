@@ -1,0 +1,1 @@
+Belfast, the capital of Northern Ireland, where Victorian architecture meets modern regeneration. The city's rich maritime heritage and complex history create a compelling urban landscape.

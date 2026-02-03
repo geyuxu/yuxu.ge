@@ -1,0 +1,1 @@
+Meiling Palace and Linggu Temple. The Republican-era villa of Chiang Kai-shek and Soong Mei-ling sits near the ancient Buddhist temple with its beamless hall.

@@ -1,0 +1,1 @@
+Exploring Snowdonia National Park. Rugged terrain where slate quarries and sheep farms dot the mountainsides.

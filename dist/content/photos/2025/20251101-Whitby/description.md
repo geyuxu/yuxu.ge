@@ -1,0 +1,1 @@
+Whitby, the atmospheric harbor town that inspired Bram Stoker's Dracula. The ruined abbey watches over fishing boats and winding streets of this North Yorkshire gem.

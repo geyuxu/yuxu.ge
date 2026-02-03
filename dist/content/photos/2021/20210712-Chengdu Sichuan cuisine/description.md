@@ -1,0 +1,1 @@
+The flavors of Sichuan. Numbing peppercorns, fiery chilies, and the bold cuisine that defines Chengdu's culinary identity.

@@ -1,0 +1,1 @@
+Shanghai Museum of Art Pudong, the city's newest art landmark. Contemporary galleries in a striking waterfront building.

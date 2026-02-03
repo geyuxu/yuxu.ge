@@ -1,0 +1,1 @@
+The Jokhang Temple and Barkhor Street. Pilgrims prostrate themselves on the circuit around Tibet's holiest shrine.

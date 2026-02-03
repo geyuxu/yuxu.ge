@@ -1,0 +1,1 @@
+Lijiang at dusk. The old town comes alive with lantern light and traditional music.

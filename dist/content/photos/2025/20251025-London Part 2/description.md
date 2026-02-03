@@ -1,0 +1,1 @@
+The South Bank and beyond. Modern architecture along the Thames, with St Paul's dome watching from across the river.

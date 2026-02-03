@@ -1,0 +1,1 @@
+Inside the examination halls. Rows of tiny cells where candidates spent days writing essays that would determine their fate.

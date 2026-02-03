@@ -1,0 +1,37 @@
+# Static Flow Configuration for yuxu.ge
+
+site:
+  name: "Yuxu Ge"
+  url: "https://yuxu.ge"
+  description: "Senior Software Architect transitioning into Embodied AI & Robotics"
+  author: "Yuxu Ge"
+  language: ["en", "zh"]
+
+paths:
+  posts: "content/posts"
+  photos: "content/photos"
+  output: "dist"
+  theme: "themes/default"
+  cache: ".cache"
+
+features:
+  search: true
+  vectorSearch: true
+  gallery: true
+  mediumExport: true
+  translation: false
+  chat: true
+
+build:
+  imageCompression: true
+  maxImageWidth: 2000
+  imageQuality: 85
+  staticHtml: true
+  search:
+    chunkSize: 500
+    chunkOverlap: 50
+    dimensions: 512
+    model: "text-embedding-3-small"
+    batchSize: 20
+  medium:
+    maxCodeLines: 15

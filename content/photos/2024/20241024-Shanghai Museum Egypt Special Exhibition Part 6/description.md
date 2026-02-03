@@ -1,0 +1,1 @@
+Final treasures from the Egypt exhibition. Two civilizations meet as Chinese visitors encounter the wonders of the pharaohs.

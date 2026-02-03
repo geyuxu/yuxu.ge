@@ -1,0 +1,1 @@
+Lhasa at altitude. Prayer flags flutter, yak butter lamps glow, and the thin air carries ancient mantras.

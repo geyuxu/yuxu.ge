@@ -1,0 +1,1 @@
+Edinburgh, Scotland's historic capital, where medieval Old Town and Georgian New Town create a dramatic cityscape. The castle perched on volcanic rock watches over centuries of architectural splendor.

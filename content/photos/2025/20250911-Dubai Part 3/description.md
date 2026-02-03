@@ -1,0 +1,1 @@
+Dubai after dark. The city transforms into a glittering spectacle of lights reflected in glass and water.

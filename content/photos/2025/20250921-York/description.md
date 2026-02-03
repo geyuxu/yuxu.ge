@@ -1,0 +1,1 @@
+York, England's best-preserved medieval city. Ancient walls encircle a labyrinth of cobbled streets where history breathes in every stone.

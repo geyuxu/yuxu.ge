@@ -1,0 +1,1 @@
+Welsh castles and coastal villages. Edward I's iron ring of fortresses still guards the landscape after seven centuries.

@@ -1,0 +1,1 @@
+The British Museum, housing treasures from every corner of human civilization. From the Rosetta Stone to the Parthenon Marbles, history unfolds across continents and millennia.

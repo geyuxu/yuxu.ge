@@ -1,0 +1,1 @@
+Mount Emei, one of China's four sacred Buddhist mountains. Misty peaks, ancient temples, and mischievous monkeys along the pilgrimage path.

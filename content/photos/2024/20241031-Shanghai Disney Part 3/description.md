@@ -1,0 +1,1 @@
+Fireworks over Enchanted Storybook Castle. Shanghai Disney's spectacular finale lights up the night sky.

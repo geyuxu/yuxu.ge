@@ -1,0 +1,1 @@
+Sera and Drepung monasteries. The great seats of learning where Buddhist philosophy has been debated for centuries.

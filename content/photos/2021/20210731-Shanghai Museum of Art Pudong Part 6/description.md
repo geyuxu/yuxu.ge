@@ -1,0 +1,1 @@
+Sculpture gardens and outdoor installations. Art extends beyond gallery walls to embrace the city skyline.

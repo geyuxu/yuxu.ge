@@ -1,0 +1,1 @@
+Manchester, the heart of England's industrial revolution, now reinvented as a vibrant cultural hub. Red brick warehouses stand alongside modern architecture in this ever-evolving northern city.

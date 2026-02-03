@@ -1,0 +1,1 @@
+London at twilight. The city lights up as day turns to night along the Thames.

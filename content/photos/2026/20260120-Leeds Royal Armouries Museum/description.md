@@ -1,0 +1,1 @@
+The Royal Armouries Museum in Leeds houses one of the world's most impressive collections of arms and armor. From medieval knights to samurai warriors, the exhibits span centuries of military history across cultures.

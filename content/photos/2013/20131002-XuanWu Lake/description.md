@@ -1,0 +1,1 @@
+Xuanwu Lake, Nanjing's urban oasis. The ancient lake surrounded by the Ming city wall offers peaceful respite in the heart of the city.

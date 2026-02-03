@@ -1,0 +1,1 @@
+Final moments in York. The city walls at sunset, offering panoramic views of this timeless English gem.

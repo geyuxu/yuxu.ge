@@ -1,0 +1,1 @@
+Chatsworth House, the magnificent Derbyshire estate of the Duke of Devonshire. Baroque grandeur set against the rolling hills of the Peak District.

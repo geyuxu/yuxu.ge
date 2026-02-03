@@ -1,0 +1,1 @@
+Paintings, calligraphy, and textile arts. The artistic heritage of imperial China preserved for generations.

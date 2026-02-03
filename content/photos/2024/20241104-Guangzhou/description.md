@@ -1,0 +1,1 @@
+Guangzhou, the southern gateway to China. Canton's trading heritage blends with modern skyscrapers and legendary Cantonese cuisine.

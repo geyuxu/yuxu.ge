@@ -1,0 +1,8 @@
+{
+  "search": true,
+  "vectorSearch": true,
+  "gallery": true,
+  "mediumExport": true,
+  "translation": false,
+  "chat": true
+}

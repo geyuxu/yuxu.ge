@@ -1,0 +1,1 @@
+The museum architecture itself as art. Light, space, and the Huangpu River views create their own exhibition.

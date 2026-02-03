@@ -1,0 +1,1 @@
+Whitby's 199 steps and beyond. From the abbey ruins to the fish and chips, this town captures the essence of the Yorkshire coast.

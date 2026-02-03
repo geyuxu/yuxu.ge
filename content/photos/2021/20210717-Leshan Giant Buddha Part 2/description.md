@@ -1,0 +1,1 @@
+Views of the Giant Buddha from the river and surrounding hillsides. The sheer scale defies comprehension even in person.

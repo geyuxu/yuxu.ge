@@ -1,0 +1,1 @@
+Liverpool Metropolitan Cathedral, a striking modernist masterpiece completed in 1967. Its circular design and crown of spires create a unique silhouette on the city skyline, affectionately nicknamed 'Paddy's Wigwam.'

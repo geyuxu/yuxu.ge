@@ -1,0 +1,1 @@
+Higher on Mount Emei. Through bamboo forests and past Buddhist shrines toward the golden summit.

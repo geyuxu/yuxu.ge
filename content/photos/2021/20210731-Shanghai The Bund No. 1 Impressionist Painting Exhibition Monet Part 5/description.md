@@ -1,0 +1,1 @@
+A farewell to Giverny. The painter's garden immortalized in brushstrokes, now viewed along Shanghai's historic waterfront.

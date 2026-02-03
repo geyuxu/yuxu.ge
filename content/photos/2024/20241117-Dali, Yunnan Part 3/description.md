@@ -1,0 +1,1 @@
+Erhai Lake, the jewel of Dali. Villages dot the shoreline where fishermen still use traditional cormorants.

@@ -1,0 +1,1 @@
+The evolution of Monet's style. From early realism to the abstract hazes of his final water lily series.

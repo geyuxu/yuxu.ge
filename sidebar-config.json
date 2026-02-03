@@ -29,12 +29,14 @@
     {
       "type": "youtube",
       "url": "https://www.youtube.com/ngzerone",
-      "label": "YouTube"
+      "label": "YouTube",
+      "hideOnMobile": true
     },
     {
       "type": "orcid",
       "url": "https://orcid.org/0009-0006-2990-4886",
-      "label": "0009-0006-2990-4886"
+      "label": "0009-0006-2990-4886",
+      "hideOnMobile": true
     },
     {
       "type": "blog",

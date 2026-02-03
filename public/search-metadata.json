@@ -11027,6 +11027,72 @@
     "date": "2026-01-28",
     "text": "thly cost: < $5 for moderate traffic\n\nNext Steps\n\n- [ ] Add streaming responses for better UX\n- [x] ~~Implement conversation memory~~ (Done with local"
   },
+  "/content/posts/2026/staticflow-engineering-en#0": {
+    "title": "One Night of Vibe Coding: Migrating Static Site Generator to Deno",
+    "url": "/content/posts/2026/staticflow-engineering-en",
+    "date": "2026-02-03",
+    "text": "One Night of Vibe Coding: Migrating Static Site Generator to Deno\n\nStarted last night, finished today. One night of vibe coding, and I've successfully"
+  },
+  "/content/posts/2026/staticflow-engineering-en#1": {
+    "title": "One Night of Vibe Coding: Migrating Static Site Generator to Deno",
+    "url": "/content/posts/2026/staticflow-engineering-en",
+    "date": "2026-02-03",
+    "text": "some external program dependencies\n\nWhy Migrate?\n\nI've been using my own shell script-based static blog generator (powering yuxu.ge) for a while, and "
+  },
+  "/content/posts/2026/staticflow-engineering-en#2": {
+    "title": "One Night of Vibe Coding: Migrating Static Site Generator to Deno",
+    "url": "/content/posts/2026/staticflow-engineering-en",
+    "date": "2026-02-03",
+    "text": "ll all these? Unacceptable.\n\nDeno Migration Plan\n\nThe goal is clear:\n\nFeature parity with Astro/Gatsby. UX parity with Hugo.\n\nWhy Deno\n\nGenerates a si"
+  },
+  "/content/posts/2026/staticflow-engineering-en#3": {
+    "title": "One Night of Vibe Coding: Migrating Static Site Generator to Deno",
+    "url": "/content/posts/2026/staticflow-engineering-en",
+    "date": "2026-02-03",
+    "text": "ntrols everything.\n\nUnified Configuration Design\n\nFrontend reads config via `features.json` to dynamically enable/disable feature modules:\n\nDeployment"
+  },
+  "/content/posts/2026/staticflow-engineering-en#4": {
+    "title": "One Night of Vibe Coding: Migrating Static Site Generator to Deno",
+    "url": "/content/posts/2026/staticflow-engineering-en",
+    "date": "2026-02-03",
+    "text": "n cloning and copying files.\n\nSolution: Worktree\n\nGit Worktree allows checking out multiple branches to different directories in the same repo:\n\nNow `"
+  },
+  "/content/posts/2026/staticflow-engineering-en#5": {
+    "title": "One Night of Vibe Coding: Migrating Static Site Generator to Deno",
+    "url": "/content/posts/2026/staticflow-engineering-en",
+    "date": "2026-02-03",
+    "text": "omatically detect and setup on first deploy:\n\n**3. setupDeploy implementation**\n\n**4. Skip .git during build**\n\nCritical: Must skip `.git` when copyin"
+  },
+  "/content/posts/2026/staticflow-engineering-en#6": {
+    "title": "One Night of Vibe Coding: Migrating Static Site Generator to Deno",
+    "url": "/content/posts/2026/staticflow-engineering-en",
+    "date": "2026-02-03",
+    "text": "rkdown, Jupyter Notebook, LaTeX, Office documents\n- **Hybrid search** - BM25 keyword + Voy vector semantic search (WASM)\n- **AI chat assistant** - RAG"
+  },
+  "/content/posts/2026/staticflow-engineering-en#7": {
+    "title": "One Night of Vibe Coding: Migrating Static Site Generator to Deno",
+    "url": "/content/posts/2026/staticflow-engineering-en",
+    "date": "2026-02-03",
+    "text": "e to WASM, embedding into a single ~15MB binary.\n\nFor example, HEIC decoding: plan to trim libde265 (HEVC decoder) from 50K lines of C code to 15K lin"
+  },
+  "/content/posts/2026/staticflow-engineering-en#8": {
+    "title": "One Night of Vibe Coding: Migrating Static Site Generator to Deno",
+    "url": "/content/posts/2026/staticflow-engineering-en",
+    "date": "2026-02-03",
+    "text": "of file copying\", AI suggests worktree approach\n2. **Incremental iteration** - Implement basic functionality first, optimize after tests pass\n3. **Imm"
+  },
+  "/content/posts/2026/staticflow-engineering-en#9": {
+    "title": "One Night of Vibe Coding: Migrating Static Site Generator to Deno",
+    "url": "/content/posts/2026/staticflow-engineering-en",
+    "date": "2026-02-03",
+    "text": "s Learned\n\n1. Compiled binary needs regeneration\n\nAfter code changes, `staticflow` command still runs old version:\n\nI configured auto-deletion of old "
+  },
+  "/content/posts/2026/staticflow-engineering-en#10": {
+    "title": "One Night of Vibe Coding: Migrating Static Site Generator to Deno",
+    "url": "/content/posts/2026/staticflow-engineering-en",
+    "date": "2026-02-03",
+    "text": "Open source release coming soon! Stay tuned 🔜\n\n*#Deno #TypeScript #StaticSiteGenerator #VibeCoding #OpenSource*"
+  },
   "/content/posts/2026/geocoding-client#0": {
     "title": "Building a Production-Ready Geocoding Client: Coordinate Hacks, Connection Pools, and Rate Limiting",
     "url": "/content/posts/2026/geocoding-client",
@@ -11182,6 +11248,36 @@
     "url": "/content/posts/2026/hybrid-search-static-blog",
     "date": "2026-01-26",
     "text": "code is available at github.com/geyuxu/yuxu.ge.\n\n*Built with: OpenAI text-embedding-3-small, Voy WASM, Cloudflare Workers, vanilla JavaScript*"
+  },
+  "/content/posts/2026/staticflow-engineering#0": {
+    "title": "一夜 Vibe Coding：将静态站点生成器迁移到 Deno",
+    "url": "/content/posts/2026/staticflow-engineering",
+    "date": "2026-02-03",
+    "text": "一夜 Vibe Coding：将静态站点生成器迁移到 Deno\n\n昨天晚上开始，今天完成。一夜的 vibe coding，我成功将自己的静态站点生成器从 Shell 脚本迁移到了 Deno 平台。\n\n迁移成果\n\n- ✅ 完全移除所有 Shell 脚本依赖\n- ✅ 彻底消除 Node.js 代码\n- "
+  },
+  "/content/posts/2026/staticflow-engineering#1": {
+    "title": "一夜 Vibe Coding：将静态站点生成器迁移到 Deno",
+    "url": "/content/posts/2026/staticflow-engineering",
+    "date": "2026-02-03",
+    "text": "，无需安装任何运行时。这正是我需要的。\n\n代码重构\n\n重构前的混乱状态\n\nShell 和 Node.js 混用，依赖管理混乱，跨平台兼容性差。\n\n重构后的清晰结构\n\n所有代码统一用 TypeScript，一个配置文件控制所有行为。\n\n统一配置设计\n\n前端通过 `features.json` 读取配置"
+  },
+  "/content/posts/2026/staticflow-engineering#2": {
+    "title": "一夜 Vibe Coding：将静态站点生成器迁移到 Deno",
+    "url": "/content/posts/2026/staticflow-engineering",
+    "date": "2026-02-03",
+    "text": "内容类似：\n\n**2. 自动设置 worktree**\n\n首次 deploy 时自动检测并设置：\n\n**3. setupDeploy 实现**\n\n**4. build 时跳过 .git**\n\n关键：复制主题文件时必须跳过 `.git`，否则会破坏 worktree：\n\n**5. deploy 流程（"
+  },
+  "/content/posts/2026/staticflow-engineering#3": {
+    "title": "一夜 Vibe Coding：将静态站点生成器迁移到 Deno",
+    "url": "/content/posts/2026/staticflow-engineering",
+    "date": "2026-02-03",
+    "text": "下一步计划：将核心格式转换代码精简并编译为 WASM，嵌入到单个约 15MB 的二进制文件中。\n\n比如 HEIC 解码，计划将 libde265（HEVC 解码器）从 5 万行 C 代码精简到 1.5 万行，移除多线程、SIMD、编码器模块，编译成约 300KB 的 WASM。\n\nAI 辅助开发\n\n"
+  },
+  "/content/posts/2026/staticflow-engineering#4": {
+    "title": "一夜 Vibe Coding：将静态站点生成器迁移到 Deno",
+    "url": "/content/posts/2026/staticflow-engineering",
+    "date": "2026-02-03",
+    "text": "在 `deno.json` 中配置了自动删除旧文件：\n\n2. Worktree 残留导致创建失败\n\n如果上次 worktree 没清理干净，新建会失败：\n\n3. WASM MIME 类型\n\n开发服务器必须正确配置 MIME 类型，否则浏览器拒绝加载：\n\n开源计划\n\n项目即将开源，敬请期待！🔜\n\n*"
   },
   "/content/posts/2026/ai-assistant-rag-zh#0": {
     "title": "为个人网站构建 RAG 驱动的 AI 助手",

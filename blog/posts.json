@@ -1,5 +1,35 @@
 [
   {
+    "slug": "posts/2026/staticflow-engineering-en",
+    "title": "One Night of Vibe Coding: Migrating Static Site Generator to Deno",
+    "date": "2026-02-03",
+    "type": "markdown",
+    "ext": "md",
+    "tags": [
+      "staticflow",
+      "deno",
+      "typescript",
+      "vibe-coding",
+      "open-source"
+    ],
+    "description": "Documenting the overnight journey of migrating a shell script-based static site generator to Deno"
+  },
+  {
+    "slug": "posts/2026/staticflow-engineering",
+    "title": "一夜 Vibe Coding：将静态站点生成器迁移到 Deno",
+    "date": "2026-02-03",
+    "type": "markdown",
+    "ext": "md",
+    "tags": [
+      "staticflow",
+      "deno",
+      "typescript",
+      "vibe-coding",
+      "open-source"
+    ],
+    "description": "记录将 Shell 脚本静态站点生成器迁移到 Deno 平台的一夜经历"
+  },
+  {
     "slug": "posts/2026/ai-assistant-rag",
     "title": "Building a RAG-Powered AI Assistant for My Personal Website",
     "date": "2026-01-28",

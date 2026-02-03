@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>One Night of Vibe Coding: Migrating Static Site Generator to Deno | Yuxu Ge</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1/themes/prism-tomorrow.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+    <style>
+        :root {
+            --black: #111;
+            --dark-grey: #444;
+            --off-white: #f4f4f4;
+            --vermilion: #C41E3A;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--black);
+            background-color: var(--off-white);
+        }
+
+        a {
+            color: var(--vermilion);
+            text-decoration: none;
+        }
+
+        a:hover {
+            opacity: 0.75;
+        }
+
+        .layout {
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 320px;
+            height: 100vh;
+            background: var(--black);
+            color: var(--off-white);
+            padding: 3rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .sidebar-top {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .avatar {
+            display: block;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 3px solid var(--vermilion);
+            margin-bottom: 1.5rem;
+            overflow: hidden;
+            transition: transform 0.2s ease;
+        }
+
+        .avatar:hover {
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        .avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .name-block {
+            margin-bottom: 0.5rem;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--off-white);
+        }
+
+        .title-role {
+            font-size: 0.9rem;
+            color: #888;
+            margin-top: 0.25rem;
+            font-weight: 400;
+        }
+
+        .contact-block {
+            margin-top: 2.5rem;
+            width: 100%;
+        }
+
+        .social-links {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            width: 160px;
+            color: var(--off-white);
+            opacity: 0.7;
+            padding: 0.5rem 0.75rem;
+            border-radius: 4px;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+
+        .social-links a:hover {
+            color: var(--vermilion);
+            opacity: 1;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .social-links svg {
+            width: 20px;
+            height: 20px;
+            flex-shrink: 0;
+        }
+
+        .social-links .orcid-link {
+            font-size: 0.68rem;
+            gap: 0.5rem;
+            white-space: nowrap;
+        }
+
+        .sidebar-footer {
+            text-align: center;
+            font-size: 0.75rem;
+            color: #555;
+        }
+
+        /* Content */
+        .content {
+            margin-left: 320px;
+            padding: 3rem 4rem;
+            max-width: calc(100vw - 320px - 8rem);
+        }
+
+        .back-link {
+            display: inline-block;
+            font-size: 0.85rem;
+            margin-bottom: 2rem;
+            color: var(--dark-grey);
+        }
+
+        .back-link:hover {
+            color: var(--vermilion);
+        }
+
+        /* Article */
+        article h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.3;
+            color: var(--black);
+        }
+
+        article h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin: 2rem 0 1rem;
+            color: var(--black);
+        }
+
+        article h3 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 1.5rem 0 0.75rem;
+            color: var(--black);
+        }
+
+        article p {
+            margin-bottom: 1rem;
+            color: var(--dark-grey);
+        }
+
+        article ul,
+        article ol {
+            margin: 1rem 0 1rem 1.5rem;
+            color: var(--dark-grey);
+        }
+
+        article li {
+            margin-bottom: 0.5rem;
+        }
+
+        article strong {
+            color: var(--black);
+        }
+
+        article code {
+            font-family: "SF Mono", Monaco, monospace;
+            font-size: 0.9em;
+            background: #e8e8e8;
+            padding: 0.15em 0.4em;
+            border-radius: 3px;
+        }
+
+        article pre {
+            margin: 1rem 0;
+            border-radius: 6px;
+            overflow-x: auto;
+            background: #2d2d2d;
+            padding: 1rem;
+        }
+
+        article pre code {
+            background: none;
+            padding: 0;
+            font-size: 0.75em;
+            white-space: pre !important;
+            counter-reset: line;
+            display: block;
+            color: #ccc;
+        }
+
+        article pre code .line {
+            counter-increment: line;
+        }
+
+        article pre code .line::before {
+            content: counter(line);
+            display: inline-block;
+            width: 2.5em;
+            margin-right: 1em;
+            text-align: right;
+            color: #666;
+            user-select: none;
+        }
+
+        .code-toolbar {
+            display: flex;
+            justify-content: flex-start;
+            padding: 0.35rem 0.5rem;
+            background: #3a3a3a;
+            border-radius: 6px 6px 0 0;
+        }
+
+        .code-toolbar+pre {
+            margin-top: 0;
+            border-radius: 0 0 6px 6px;
+        }
+
+        .copy-btn {
+            padding: 0.2rem 0.5rem;
+            font-size: 0.7rem;
+            background: #555;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .copy-btn:hover,
+        .copy-btn:active {
+            background: #777;
+        }
+
+        .copy-btn.copied {
+            background: #2a2;
+        }
+
+        article blockquote {
+            border-left: 3px solid var(--vermilion);
+            padding-left: 1rem;
+            margin: 1rem 0;
+            color: #666;
+            font-style: italic;
+        }
+
+        article hr {
+            border: none;
+            border-top: 1px solid #ddd;
+            margin: 2rem 0;
+        }
+
+        article table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        article th,
+        article td {
+            border: 1px solid #ddd;
+            padding: 0.5rem 0.75rem;
+            text-align: left;
+        }
+
+        article th {
+            background: #e8e8e8;
+            font-weight: 600;
+        }
+
+        article img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 1.5rem 0;
+            border-radius: 6px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: #888;
+        }
+
+        .error {
+            color: var(--vermilion);
+        }
+
+        /* Language Selector */
+        .lang-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            padding: 0.75rem 1rem;
+            background: #fff;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+
+        .lang-selector-label {
+            color: #666;
+            display: flex;
+            align-items: center;
+            gap: 0.35rem;
+        }
+
+        .lang-selector-label svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .lang-select {
+            padding: 0.4rem 0.75rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background: white;
+            font-size: 0.85rem;
+            cursor: pointer;
+            min-width: 140px;
+        }
+
+        .lang-select:focus {
+            outline: none;
+            border-color: var(--vermilion);
+        }
+
+        .lang-status {
+            font-size: 0.8rem;
+            color: #888;
+            margin-left: auto;
+        }
+
+        .lang-status.translating {
+            color: var(--vermilion);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .lang-status.translating::before {
+            content: '';
+            width: 14px;
+            height: 14px;
+            border: 2px solid #f0f0f0;
+            border-top-color: var(--vermilion);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .lang-status.cached {
+            color: #4CAF50;
+        }
+
+        .lang-original-btn {
+            padding: 0.35rem 0.6rem;
+            font-size: 0.75rem;
+            background: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #666;
+            transition: all 0.2s;
+        }
+
+        .lang-original-btn:hover {
+            background: #e0e0e0;
+            color: #333;
+        }
+
+        @media (max-width: 600px) {
+            .lang-selector {
+                flex-wrap: wrap;
+            }
+            .lang-status {
+                width: 100%;
+                margin-left: 0;
+                margin-top: 0.5rem;
+            }
+        }
+
+        /* KaTeX math styles */
+        .katex-display {
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding: 0.5rem 0;
+        }
+
+        .katex {
+            font-size: 1.1em;
+        }
+
+        /* Jupyter Notebook Styles */
+        .notebook-container {
+            margin-top: 1rem;
+        }
+
+        .notebook-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            margin-bottom: 1.5rem;
+            background: var(--black);
+            color: var(--off-white);
+            border-radius: 4px;
+            font-size: 0.85rem;
+            transition: opacity 0.2s;
+        }
+
+        .notebook-download:hover {
+            opacity: 0.8;
+            color: var(--off-white);
+        }
+
+        .notebook-download svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .nb-cell {
+            margin-bottom: 1.5rem;
+        }
+
+        .nb-cell-code .nb-source {
+            background: #2d2d2d;
+            border-radius: 6px;
+            overflow-x: auto;
+        }
+
+        .nb-cell-code .nb-source pre {
+            margin: 0;
+            padding: 1rem;
+            color: #ccc;
+            font-family: "SF Mono", Monaco, monospace;
+            font-size: 0.85em;
+        }
+
+        .nb-cell-code .nb-source code {
+            background: none;
+            padding: 0;
+        }
+
+        .nb-output {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .nb-output pre {
+            margin: 0;
+            padding: 0;
+            background: transparent;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            font-family: "SF Mono", Monaco, monospace;
+            font-size: 0.85em;
+            color: #222;
+        }
+
+        .nb-output img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 0.5rem 0;
+        }
+
+        .nb-output table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .nb-output th,
+        .nb-output td {
+            border: 1px solid #ddd;
+            padding: 0.5rem;
+            text-align: left;
+        }
+
+        .nb-output th {
+            background: #e8e8e8;
+            font-weight: 600;
+        }
+
+        .nb-cell-markdown {
+            padding: 0;
+        }
+
+        .nb-cell-markdown h1:first-child {
+            margin-top: 0;
+        }
+
+        /* Document Download Button */
+        .doc-download {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            margin-bottom: 1.5rem;
+            background: var(--black);
+            color: var(--off-white);
+            border-radius: 4px;
+            font-size: 0.85rem;
+            transition: opacity 0.2s;
+        }
+
+        .doc-download:hover {
+            opacity: 0.8;
+            color: var(--off-white);
+        }
+
+        .doc-download svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* PDF Viewer */
+        .pdf-container {
+            margin-top: 1rem;
+        }
+
+        .pdf-viewer {
+            width: 100%;
+            height: 80vh;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: #f5f5f5;
+        }
+
+        /* Text File Display */
+        .text-container {
+            margin-top: 1rem;
+        }
+
+        .text-content {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 1.5rem;
+            font-family: "SF Mono", Monaco, monospace;
+            font-size: 0.9em;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            color: var(--dark-grey);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        /* Word Document Display */
+        .word-container {
+            margin-top: 1rem;
+        }
+
+        .word-content {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            padding: 2rem;
+            line-height: 1.8;
+            color: var(--dark-grey);
+        }
+
+        .word-content p {
+            margin-bottom: 1rem;
+        }
+
+        .word-content h1,
+        .word-content h2,
+        .word-content h3 {
+            color: var(--black);
+            margin: 1.5rem 0 1rem;
+        }
+
+        .word-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+
+        .word-content th,
+        .word-content td {
+            border: 1px solid #ddd;
+            padding: 0.5rem;
+        }
+
+        .word-content img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Excel Display */
+        .excel-container {
+            margin-top: 1rem;
+        }
+
+        .excel-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .excel-tab {
+            padding: 0.5rem 1rem;
+            background: #e8e8e8;
+            border: none;
+            border-radius: 4px 4px 0 0;
+            cursor: pointer;
+            font-size: 0.85rem;
+        }
+
+        .excel-tab.active {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .excel-content {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            overflow-x: auto;
+            max-height: 70vh;
+            overflow-y: auto;
+        }
+
+        .excel-content table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+        .excel-content th,
+        .excel-content td {
+            border: 1px solid #ddd;
+            padding: 0.4rem 0.6rem;
+            text-align: left;
+            white-space: nowrap;
+        }
+
+        .excel-content th {
+            background: #f5f5f5;
+            font-weight: 600;
+            position: sticky;
+            top: 0;
+        }
+
+        .excel-content tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        /* PowerPoint Display */
+        .ppt-container {
+            margin-top: 1rem;
+        }
+
+        .ppt-viewer {
+            width: 100%;
+            height: 80vh;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            background: #f5f5f5;
+        }
+
+        /* CSV Display (uses excel styles) */
+        .csv-container {
+            margin-top: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+                padding: 2rem 1.5rem 1rem;
+            }
+
+            .social-links {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .social-links a,
+            .social-links .orcid-link {
+                width: auto;
+                padding: 0.5rem;
+                font-size: 0;
+                gap: 0;
+            }
+
+            .social-links svg {
+                width: 24px;
+                height: 24px;
+            }
+
+            .social-links .hide-mobile {
+                display: none;
+            }
+
+            .sidebar-footer {
+                margin-top: 1rem;
+            }
+
+            .content {
+                margin-left: 0;
+                padding: 2rem 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .sidebar {
+                padding: 1.5rem 1rem 1rem;
+            }
+
+            .avatar {
+                width: 80px;
+                height: 80px;
+            }
+
+            h1 {
+                font-size: 1.4rem;
+            }
+
+            article h1 {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="layout">
+        <aside class="sidebar" id="sidebar-content"></aside>
+        <script src="/components/sidebar.js?v=20260128"></script>
+
+        <main class="content">
+            <a href="/blog/" class="back-link">← Back to Blog</a>
+
+            <!-- Language Selector -->
+            <div class="lang-selector" id="lang-selector" style="display: none;">
+                <span class="lang-selector-label">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                    </svg>
+                    Language
+                </span>
+                <select class="lang-select" id="lang-select">
+                    <option value="en">🇺🇸 English</option>
+                    <option value="zh">🇨🇳 中文</option>
+                    <option value="ja">🇯🇵 日本語</option>
+                    <option value="ko">🇰🇷 한국어</option>
+                    <option value="es">🇪🇸 Español</option>
+                    <option value="fr">🇫🇷 Français</option>
+                    <option value="de">🇩🇪 Deutsch</option>
+                    <option value="pt">🇵🇹 Português</option>
+                    <option value="ru">🇷🇺 Русский</option>
+                    <option value="ar">🇸🇦 العربية</option>
+                </select>
+                <button class="lang-original-btn" id="lang-original-btn" style="display: none;">Show Original</button>
+                <span class="lang-status" id="lang-status"></span>
+            </div>
+
+            <article>
+<hr>
+<h2>title: &quot;One Night of Vibe Coding: Migrating Static Site Generator to Deno&quot;
+date: 2026-02-03
+tags: [staticflow, deno, typescript, vibe-coding, open-source]
+description: &quot;Documenting the overnight journey of migrating a shell script-based static site generator to Deno&quot;</h2>
+<h1>One Night of Vibe Coding: Migrating Static Site Generator to Deno</h1>
+<p>Started last night, finished today. One night of vibe coding, and I&#39;ve successfully migrated my static site generator from shell scripts to the Deno platform.</p>
+<h2>Migration Results</h2>
+<ul>
+<li>✅ Completely removed all shell script dependencies</li>
+<li>✅ Eliminated Node.js code entirely</li>
+<li>✅ Clean, modern TypeScript codebase</li>
+<li>⏳ Still working on removing some external program dependencies</li>
+</ul>
+<h2>Why Migrate?</h2>
+<p>I&#39;ve been using my own shell script-based static blog generator (powering <a href="https://yuxu.ge">yuxu.ge</a>) for a while, and it works pretty well. But after comparing with mainstream solutions, I found a critical problem:</p>
+<p><img src="__TABLE_74d99e4e__" alt="Table"></p><p>Feature-wise, it already surpasses mainstream solutions. But there&#39;s a fatal flaw: <strong>too many dependencies</strong>.</p>
+<p>Currently requires Node.js + ImageMagick + LibreOffice. Asking users to install all these? Unacceptable.</p>
+<h2>Deno Migration Plan</h2>
+<p>The goal is clear:</p>
+<blockquote><code>curl -fsSL https://xxx/install.sh | sh</code><br>
+<code>staticflow build</code><br>
+<code># Done. Zero dependencies.</code></blockquote><p>Feature parity with Astro/Gatsby. UX parity with Hugo.</p>
+<h3>Why Deno</h3>
+<blockquote><code># One command to compile to single binary</code><br>
+<code>deno compile -A -o staticflow scripts/cli.ts</code></blockquote><p>Generates a single binary file, no runtime installation needed. Exactly what I need.</p>
+<h2>Code Refactoring</h2>
+<h3>Before: Chaotic State</h3>
+<blockquote><code>Old architecture:</code><br>
+<code>├── build.sh          # Main build script</code><br>
+<code>├── compress.sh       # Image compression</code><br>
+<code>├── convert-heic.sh   # HEIC conversion</code><br>
+<code>├── blog/build.ts     # Node.js script</code><br>
+<code>└── Various scattered scripts...</code></blockquote><p>Shell and Node.js mixed together, messy dependency management, poor cross-platform compatibility.</p>
+<h3>After: Clean Structure</h3>
+<blockquote><code>New architecture:</code><br>
+<code>├── scripts/</code><br>
+<code>│   ├── cli.ts              # Unified CLI entry</code><br>
+<code>│   ├── config.ts           # Config loading</code><br>
+<code>│   ├── build.ts            # Build logic</code><br>
+<code>│   ├── build-static.ts     # Static HTML generation</code><br>
+<code>│   ├── build-posts-json.ts # Blog index</code><br>
+<code>│   ├── build-photos-json.ts# Gallery index</code><br>
+<code>│   ├── compress-photos.ts  # Image compression</code><br>
+<code>│   ├── convert-heic.ts     # HEIC conversion</code><br>
+<code>│   └── index-builder.ts    # Search index builder</code><br>
+<code>├── staticflow.config.yaml  # Unified config</code><br>
+<code>└── deno.json               # Deno task config</code></blockquote><p>All code unified in TypeScript, one config file controls everything.</p>
+<h3>Unified Configuration Design</h3>
+<blockquote><code># staticflow.config.yaml</code><br>
+<code>site:</code><br>
+<code>  name: &quot;My Blog&quot;</code><br>
+<code>  url: &quot;https://yuxu.ge&quot;</code><br>
+<code></code><br>
+<code>paths:</code><br>
+<code>  posts: &quot;content/posts&quot;</code><br>
+<code>  photos: &quot;content/photos&quot;</code><br>
+<code># ... (15 more lines)</code></blockquote>
+<p><em>Full code available in the <a href="https://github.com/geyuxu">GitHub repository</a>.</em></p><p>Frontend reads config via <code>features.json</code> to dynamically enable/disable feature modules:</p>
+<blockquote><code>// Generate features.json at build time</code><br>
+<code>const featuresJson = JSON.stringify(config.features, null, 2);</code><br>
+<code>await Deno.writeTextFile(join(distDir, &quot;features.json&quot;), featuresJson);</code></blockquote><h2>Deployment Optimization: Git Worktree Approach</h2>
+<p>This is the biggest optimization in this migration.</p>
+<h3>Problem: File Copying Too Slow</h3>
+<p>The original deployment flow:</p>
+<blockquote><code>1. Create temp directory</code><br>
+<code>2. Clone gh-pages branch to temp (slow!)</code><br>
+<code>3. Clear temp directory</code><br>
+<code>4. Copy dist/* to temp (slow!)</code><br>
+<code>5. Commit &amp; push</code><br>
+<code>6. Cleanup temp directory</code></blockquote><p>Each deployment took <strong>12 seconds</strong>, most time spent on cloning and copying files.</p>
+<h3>Solution: Worktree</h3>
+<p>Git Worktree allows checking out multiple branches to different directories in the same repo:</p>
+<blockquote><code># Checkout gh-pages branch to dist directory</code><br>
+<code>git worktree add dist gh-pages</code></blockquote><p>Now <code>dist</code> directory IS the gh-pages branch working directory. Build outputs directly here, no copying needed for deploy!</p>
+<h3>Implementation Details</h3>
+<p><strong>1. Detect if dist is a worktree</strong></p>
+<blockquote><code>const distGitFile = join(distDir, &quot;.git&quot;);</code><br>
+<code>if (existsSync(distGitFile)) {</code><br>
+<code>  const content = await Deno.readTextFile(distGitFile);</code><br>
+<code>  if (content.includes(&quot;gitdir:&quot;)) {</code><br>
+<code>    // It&#039;s a worktree, check the branch</code><br>
+<code>    const branch = await getBranch(distDir);</code><br>
+<code>    if (branch === &quot;gh-pages&quot;) {</code><br>
+<code>      distIsWorktree = true;</code><br>
+<code>    }</code><br>
+<code>  }</code><br>
+<code>}</code></blockquote><p>A worktree&#39;s <code>.git</code> is a file (not a directory), containing something like:</p>
+<p><code>gitdir: /path/to/repo/.git/worktrees/dist</code></p><p><strong>2. Auto-setup worktree</strong></p>
+<p>Automatically detect and setup on first deploy:</p>
+<blockquote><code>if (!existsSync(distDir) || !isWorktree(distDir)) {</code><br>
+<code>  console.log(&quot;Setting up dist/ as gh-pages worktree...&quot;);</code><br>
+<code>  await setupDeploy();</code><br>
+<code>}</code></blockquote><p><strong>3. setupDeploy implementation</strong></p>
+<blockquote><code>async function setupDeploy() {</code><br>
+<code>  // Check if local gh-pages branch exists</code><br>
+<code>  const localExists = await branchExists(&quot;gh-pages&quot;);</code><br>
+<code></code><br>
+<code>  if (!localExists) {</code><br>
+<code>    // Check remote</code><br>
+<code>    const remoteExists = await remoteBranchExists(&quot;gh-pages&quot;);</code><br>
+<code>    if (remoteExists) {</code><br>
+<code># ... (11 more lines)</code></blockquote>
+<p><em>Full code available in the <a href="https://github.com/geyuxu">GitHub repository</a>.</em></p><p><strong>4. Skip .git during build</strong></p>
+<p>Critical: Must skip <code>.git</code> when copying theme files, otherwise worktree breaks:</p>
+<blockquote><code>async function copyDir(src: string, dest: string) {</code><br>
+<code>  for await (const entry of Deno.readDir(src)) {</code><br>
+<code>    if (entry.name === &quot;.git&quot;) continue;  // Skip!</code><br>
+<code>    // ... copy files</code><br>
+<code>  }</code><br>
+<code>}</code></blockquote><p><strong>5. Optimized deploy flow</strong></p>
+<blockquote><code>if (distIsWorktree) {</code><br>
+<code>  // Operate directly in dist, no copying needed</code><br>
+<code>  console.log(&quot;dist/ is gh-pages worktree, deploying directly...&quot;);</code><br>
+<code></code><br>
+<code>  // Sync with remote</code><br>
+<code>  await run(&quot;git&quot;, [&quot;pull&quot;, &quot;--rebase&quot;, &quot;origin&quot;, &quot;gh-pages&quot;], distDir);</code><br>
+<code></code><br>
+<code>  // Commit</code><br>
+<code># ... (14 more lines)</code></blockquote>
+<p><em>Full code available in the <a href="https://github.com/geyuxu">GitHub repository</a>.</em></p><h3>Performance Comparison</h3>
+<p><img src="__TABLE_-64df26f__" alt="Table"></p><h2>CLI Design</h2>
+<p>Following Unix philosophy, commands are concise:</p>
+<blockquote><code># Build</code><br>
+<code>staticflow build              # Full build</code><br>
+<code>staticflow build --static     # Static HTML only</code><br>
+<code>staticflow build --photos     # Process images only</code><br>
+<code></code><br>
+<code># Development</code><br>
+<code>staticflow serve              # Dev server :8080</code><br>
+<code>staticflow serve --port=3000  # Custom port</code><br>
+<code># ... (11 more lines)</code></blockquote>
+<p><em>Full code available in the <a href="https://github.com/geyuxu">GitHub repository</a>.</em></p><p>One command does it all:</p>
+<blockquote><code>staticflow deploy --build</code><br>
+<code># Auto: setup worktree → build → commit → push</code></blockquote><h2>Current Features</h2>
+<p>The project is already quite functional:</p>
+<ul>
+<li><strong>Multi-format content</strong> - Markdown, Jupyter Notebook, LaTeX, Office documents</li>
+<li><strong>Hybrid search</strong> - BM25 keyword + Voy vector semantic search (WASM)</li>
+<li><strong>AI chat assistant</strong> - RAG-based Q&amp;A</li>
+<li><strong>Photo gallery</strong> - Auto-compression, HEIC conversion, AI-generated descriptions</li>
+<li><strong>Multi-language translation</strong> - AI-powered content translation</li>
+</ul>
+<h2>Remaining External Dependencies</h2>
+<p>Some features still depend on external programs:</p>
+<p><img src="__TABLE_-7f66dc4__" alt="Table"></p><p>Next step: Trim core format conversion code and compile to WASM, embedding into a single ~15MB binary.</p>
+<p>For example, HEIC decoding: plan to trim libde265 (HEVC decoder) from 50K lines of C code to 15K lines, removing multi-threading, SIMD, encoder modules, compiling to ~300KB WASM.</p>
+<h2>AI-Assisted Development</h2>
+<p>This migration heavily used Claude Code as an AI pair programming partner. Key takeaways:</p>
+<ol>
+<li><strong>Describe intent, not implementation</strong> - Say &quot;deployment is slow because of file copying&quot;, AI suggests worktree approach</li>
+<li><strong>Incremental iteration</strong> - Implement basic functionality first, optimize after tests pass</li>
+<li><strong>Immediate testing</strong> - Run <code>staticflow deploy --build</code> after every change</li>
+<li><strong>Maintain context</strong> - AI remembers previous discussions, can say &quot;continue with the previous approach&quot;</li>
+</ol>
+<p>Completing this migration overnight wouldn&#39;t be possible without AI.</p>
+<h2>Lessons Learned</h2>
+<h3>1. Compiled binary needs regeneration</h3>
+<p>After code changes, <code>staticflow</code> command still runs old version:</p>
+<blockquote><code># Must recompile</code><br>
+<code>deno task compile</code></blockquote><p>I configured auto-deletion of old files in <code>deno.json</code>:</p>
+<blockquote><code>{</code><br>
+<code>  &quot;tasks&quot;: {</code><br>
+<code>    &quot;compile&quot;: &quot;rm -f /opt/staticflow/bin/staticflow &amp;&amp; deno compile -A -o /opt/staticflow/bin/staticflow scripts/cli.ts&quot;</code><br>
+<code>  }</code><br>
+<code>}</code></blockquote><h3>2. Stale worktree causes creation failure</h3>
+<p>If previous worktree wasn&#39;t cleaned up, creating new one fails:</p>
+<blockquote><code>// Prune stale worktrees first</code><br>
+<code>await run(&quot;git&quot;, [&quot;worktree&quot;, &quot;prune&quot;]);</code><br>
+<code>await run(&quot;git&quot;, [&quot;worktree&quot;, &quot;add&quot;, distDir, &quot;gh-pages&quot;]);</code></blockquote><h3>3. WASM MIME type</h3>
+<p>Dev server must correctly configure MIME types, otherwise browser refuses to load:</p>
+<blockquote><code>const mimeTypes = {</code><br>
+<code>  &quot;.wasm&quot;: &quot;application/wasm&quot;,  // Not octet-stream!</code><br>
+<code>};</code></blockquote><h2>Open Source Plan</h2>
+<p>Open source release coming soon! Stay tuned 🔜</p>
+<hr>
+<p><em>#Deno #TypeScript #StaticSiteGenerator #VibeCoding #OpenSource</em></p>
+
+    </article>
+    </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1/prism.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/prismjs@1/components/prism-python.min.js"></script>
+<script>
+Prism.highlightAll();
+document.querySelectorAll('article pre').forEach(pre => {
+    const code = pre.querySelector('code');
+    if (!code) return;
+    const toolbar = document.createElement('div');
+    toolbar.className = 'code-toolbar';
+    const btn = document.createElement('button');
+    btn.className = 'copy-btn';
+    btn.textContent = 'Copy';
+    btn.onclick = () => {
+        navigator.clipboard.writeText(code.textContent).then(() => {
+            btn.textContent = 'Copied!';
+            btn.classList.add('copied');
+            setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+        });
+    };
+    toolbar.appendChild(btn);
+    pre.parentNode.insertBefore(toolbar, pre);
+});
+</script>
+</body>
+</html>

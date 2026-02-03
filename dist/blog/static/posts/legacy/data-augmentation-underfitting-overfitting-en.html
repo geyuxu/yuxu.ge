@@ -769,6 +769,7 @@
             .content {
                 margin-left: 0;
                 padding: 2rem 1rem;
+                max-width: 100%;
             }
         }
 
@@ -832,7 +833,7 @@
 tags: [ai, image classification, data augmentation, overfitting, underfitting, pytorch]
 legacy: true</h2>
 <h1>Image Classification: Data Scarcity, Augmentation, and Underfitting/Overfitting</h1>
-<p><img src="/blog/images/tables/table-39221808.png" alt="Table"></p><h3>3. Data Augmentation under Data Scarcity</h3>
+<p><img src="__TABLE_39221808__" alt="Table"></p><h3>3. Data Augmentation under Data Scarcity</h3>
 <p>Among all strategies for mitigating over-fitting, data augmentation is one of the most direct and effective methods. It expands the information content of the dataset without additional labeling costs by applying a series of random transformations to the existing training data, creating more diverse samples that the model has &quot;never seen&quot; before.</p>
 <h4>3.1 Geometric Transformations</h4>
 <p>These transformations simulate variations in an object&#39;s pose, scale, and position that might occur in the real world. Common operations include: random rotation (±15° to ±30°), random scaling (0.8× to 1.2×), and random translation (≤10% of image dimensions). More complex transformations like Elastic Distortion and Perspective Transformation can provide even stronger generalization capabilities.</p>
@@ -842,7 +843,7 @@ legacy: true</h2>
 <p>Transformations in the color space enhance the model&#39;s adaptability to variations in lighting, contrast, and color. <code>ColorJitter</code> is a common tool that randomly adjusts an image&#39;s brightness, contrast, and saturation (e.g., between 0.8 and 1.2 times the original). Converting an image to grayscale and then duplicating it across three channels is another effective technique to force the model to focus on shape rather than color.</p>
 <h4>3.4 Synthetic/Mixing Methods</h4>
 <p>In recent years, augmentation methods that mix information from multiple images have become very popular. They create samples that do not exist in the real world but are highly beneficial for model regularization.</p>
-<p><img src="/blog/images/tables/table--3a6ea8c.png" alt="Table"></p><h4>3.5 Auto-Augmentation</h4>
+<p><img src="__TABLE_-3a6ea8c__" alt="Table"></p><h4>3.5 Auto-Augmentation</h4>
 <p>Manually designing augmentation policy combinations is time-consuming. Thus, auto-augmentation methods were developed. <strong>RandAugment</strong> is a simple yet effective method that randomly selects N transformations from a predefined pool and applies them with a uniform magnitude M. It often yields significant gains on small datasets (e.g., with N=2, M=9). The more complex <strong>AutoAugment</strong> uses reinforcement learning to search for the optimal policy combination but is computationally expensive.</p>
 <h3>4. Implementation in PyTorch</h3>
 <p>Here, we demonstrate how to build a <code>transform</code> pipeline in PyTorch that includes various augmentation strategies and implement a plug-and-play Mixup function.</p>

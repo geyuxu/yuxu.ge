@@ -230,7 +230,7 @@ https://<你的 GitHub 用户名>.github.io/<你的仓库名>/
 
 
 - sharp 模块缺失：首次运行项目如果出现类似 *“Error: Cannot find module ‘sharp’”* 的错误，这是因为 Astro 的图像优化功能默认使用了 sharp 库，但某些模板可能未自动安装它。解决办法很简单：执行 npm install sharp 安装该依赖。或者你也可以安装 Astro 提供的 Squoosh 图像处理集成来替代本地 sharp（Squoosh 基于 WebAssembly，无需本地依赖）。
-- 文章中的图片在编辑器预览可见但部署后浏览器 404：这通常是因为图片文件放错了位置。请确保将图片存放在 /public/ 目录，并使用以 / 开头的绝对路径引用（详见前文第4节）。只有放在 public 下的资源才会被正确打包到网站中，否则构建后找不到文件，浏览器自然报 404。
+- 文章中的图片在编辑器预览可见但部署后浏览器 404：这通常是因为图片文件放错了位置。请确保将图片存放在 / 目录，并使用以 / 开头的绝对路径引用（详见前文第4节）。只有放在 public 下的资源才会被正确打包到网站中，否则构建后找不到文件，浏览器自然报 404。
 - 构建输出路径为 /about/index.html 而不是 /about.html：这是 Astro 的默认行为。如果你希望直接生成根目录下的 about.html 文件，可以将页面文件命名为 about.html.astro（参考前文 3.2 节），这样构建结果就是单个 HTML 文件而非子目录。
 - 使用 gh-pages 部署时报错“remote branch already exists”：这表示目标分支上已经有内容，gh-pages 默认不覆盖已有分支。解决方法是在部署命令后加上 --force 参数强制推送覆盖。例如：gh-pages -d dist --branch gh-pages --force。但请注意，强制推送可能覆盖之前在该分支上的改动，谨慎使用。
 - 推送代码到 GitHub 遇到 SSH 连接错误 (端口 22 被阻挡)：有些网络环境（例如公司内网、校园网）会阻断 SSH 所使用的 22 端口。如果你的本地仓库使用 SSH 链接远程仓库，部署时可能连不上 GitHub。解决方案是改用 HTTPS 协议的远程地址：运行 git remote set-url origin https://github.com/yourname/yourrepo.git 将远程地址切换为 HTTPS。HTTPS 通常走443端口，普遍不会被封锁。

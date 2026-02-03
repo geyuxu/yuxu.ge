@@ -769,6 +769,7 @@
             .content {
                 margin-left: 0;
                 padding: 2rem 1rem;
+                max-width: 100%;
             }
         }
 
@@ -832,7 +833,7 @@
 tags: [ai, 图像分类, 数据增强, 过拟合, 欠拟合, pytorch]
 legacy: true</h2>
 <h1>图像分类：数据稀缺、样本增强与欠拟合/过拟合</h1>
-<p><img src="/blog/images/tables/table--27c7804.png" alt="Table"></p><h3>3. 数据稀缺下的样本增强</h3>
+<p><img src="__TABLE_-27c7804__" alt="Table"></p><h3>3. 数据稀缺下的样本增强</h3>
 <p>在所有解决过拟合的策略中，数据增强是最直接、最有效的方法之一。它通过对现有训练数据进行一系列随机变换，创造出更多样的、模型“未曾见过”的样本，从而在不增加标注成本的情况下，扩充了数据的信息量。</p>
 <h4>3.1 几何变换</h4>
 <p>这类变换模拟了物体在真实世界中可能出现的姿态、大小和位置变化。常用操作包括：随机旋转 (±15° to ±30°)、随机缩放 (0.8× to 1.2×) 和随机平移 (≤10% of image dimensions)。更复杂的变换如弹性扭曲 (Elastic Distortion) 和透视变换 (Perspective Transformation) 也能提供更强的泛化能力。</p>
@@ -842,7 +843,7 @@ legacy: true</h2>
 <p>颜色空间的变换可以增强模型对光照、对比度和色彩变化的适应性。<code>ColorJitter</code> 是一个常用工具，它可以随机调整图像的亮度 (brightness)、对比度 (contrast) 和饱和度 (saturation)（例如，在 0.8-1.2 倍之间）。将图像转为灰度图再复制回三个通道，也是一种强制模型关注形状而非颜色的有效技巧。</p>
 <h4>3.4 合成/混合方法</h4>
 <p>近年来，将多张图片信息混合的增强方法变得非常流行，它们能创造出在真实世界中不存在但对模型正则化非常有益的样本。</p>
-<p><img src="/blog/images/tables/table-2d9f9c2.png" alt="Table"></p><h4>3.5 自动增强</h4>
+<p><img src="__TABLE_2d9f9c2__" alt="Table"></p><h4>3.5 自动增强</h4>
 <p>手动设计增强策略组合费时费力，因此自动增强应运而生。<strong>RandAugment</strong> 是一种简单高效的方法，它从一个预设的变换池中随机挑选 N 种变换，并以一个统一的强度 M 应用。对于小数据集，它通常能带来显著收益（如 N=2, M=9）。更复杂的 <strong>AutoAugment</strong> 使用强化学习来搜索最佳策略组合，但计算成本高昂。</p>
 <h3>4. 实践落地步骤 (PyTorch 示例)</h3>
 <p>下面我们展示如何在 PyTorch 中构建一个包含多种增强策略的 <code>transform</code> 流水线，并实现一个可插拔的 Mixup 功能。</p>

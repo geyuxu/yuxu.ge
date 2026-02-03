@@ -1,7 +1,7 @@
 {
   "name": "Yuxu Ge",
   "title": "Senior AI Architect",
-  "avatar": "/assets/photo.jpg",
+  "avatar": "/photo.jpg",
   "email": "me@yuxu.ge",
   "copyright": "2026 Yuxu Ge",
   "search": true,
@@ -28,18 +28,15 @@
     },
     {
       "type": "youtube",
-      "url": "https://youtube.com/@yuxuge",
-      "label": "YouTube"
+      "url": "https://www.youtube.com/ngzerone",
+      "label": "YouTube",
+      "hideOnMobile": true
     },
     {
       "type": "orcid",
       "url": "https://orcid.org/0009-0006-2990-4886",
-      "label": "0009-0006-2990-4886"
-    },
-    {
-      "type": "medium",
-      "url": "https://medium.com/@yuxuge",
-      "label": "Medium"
+      "label": "0009-0006-2990-4886",
+      "hideOnMobile": true
     },
     {
       "type": "blog",

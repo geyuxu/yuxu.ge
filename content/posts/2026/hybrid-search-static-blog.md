@@ -241,10 +241,10 @@ export class SearchClient {
     async init() {
         // Load all indexes in parallel
         const [voyModule, indexRes, metaRes, invertedRes] = await Promise.all([
-            import('/public/lib/voy-loader.js').then(m => m.getVoy()),
-            fetch('/public/search.dat'),
-            fetch('/public/search-metadata.json'),
-            fetch('/public/search-inverted.json'),
+            import('/lib/voy-loader.js').then(m => m.getVoy()),
+            fetch('/search.dat'),
+            fetch('/search-metadata.json'),
+            fetch('/search-inverted.json'),
         ]);
 
         this.voy = voyModule.deserialize(await indexRes.text());

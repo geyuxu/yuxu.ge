@@ -45,8 +45,11 @@ function generateSidebarHTML(config) {
         const icon = ICONS[link.type] || ICONS.default;
         const isExternal = link.url.startsWith('http');
         const target = isExternal ? ' target="_blank" rel="noopener"' : '';
-        // Add special class for orcid (long ID needs smaller font)
-        const linkClass = link.type === 'orcid' ? ' class="orcid-link"' : (link.hideOnMobile ? ' class="hide-mobile"' : '');
+        // Build classes: orcid-link for ORCID, hide-mobile for mobile hidden links
+        const classes = [];
+        if (link.type === 'orcid') classes.push('orcid-link');
+        if (link.hideOnMobile) classes.push('hide-mobile');
+        const linkClass = classes.length > 0 ? ` class="${classes.join(' ')}"` : '';
         return `<a href="${link.url}"${target}${linkClass}>${icon}${link.label}</a>`;
     }).join('\n            ');
 

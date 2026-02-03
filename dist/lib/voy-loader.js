@@ -9,10 +9,10 @@ export async function initVoy() {
     if (Voy) return Voy;
 
     // Import the JS bindings first
-    const bg = await import('/public/lib/voy_search_bg.js');
+    const bg = await import('/lib/voy_search_bg.js');
 
     // Load and instantiate WASM with streaming
-    const wasmResponse = await fetch('/public/lib/voy_search_bg.wasm');
+    const wasmResponse = await fetch('/lib/voy_search_bg.wasm');
     const wasmModule = await WebAssembly.instantiateStreaming(wasmResponse, {
         './voy_search_bg.js': bg
     });

@@ -13,12 +13,13 @@ paths:
   output: "dist"
   theme: "themes/default"
   cache: ".cache"
+  static: "static"
 
 features:
   search: true
   vectorSearch: true
   gallery: true
-  mediumExport: true
+  mediumExport: false
   translation: false
   chat: true
 

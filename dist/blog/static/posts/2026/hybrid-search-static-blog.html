@@ -769,6 +769,7 @@
             .content {
                 margin-left: 0;
                 padding: 2rem 1rem;
+                max-width: 100%;
             }
         }
 
@@ -915,9 +916,9 @@ description: Building a production-ready hybrid search for static blogs - combin
 <code>    async init() {</code><br>
 <code>        // Load all indexes in parallel</code><br>
 <code>        const [voyModule, indexRes, metaRes, invertedRes] = await Promise.all([</code><br>
-<code>            import(&#039;/public/lib/voy-loader.js&#039;).then(m =&gt; m.getVoy()),</code><br>
-<code>            fetch(&#039;/public/search.dat&#039;),</code><br>
-<code>            fetch(&#039;/public/search-metadata.json&#039;),</code><br>
+<code>            import(&#039;/lib/voy-loader.js&#039;).then(m =&gt; m.getVoy()),</code><br>
+<code>            fetch(&#039;/search.dat&#039;),</code><br>
+<code>            fetch(&#039;/search-metadata.json&#039;),</code><br>
 <code># ... (68 more lines)</code></blockquote>
 <p><em>Full code available in the <a href="https://github.com/geyuxu">GitHub repository</a>.</em></p><h3>Why Reciprocal Rank Fusion?</h3>
 <p>RRF is elegantly simple: <code>score = Σ 1/(k + rank)</code> for each retriever. It doesn&#39;t require score normalization and handles the different scales of BM25 scores vs vector distances gracefully.</p>

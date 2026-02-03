@@ -769,6 +769,7 @@
             .content {
                 margin-left: 0;
                 padding: 2rem 1rem;
+                max-width: 100%;
             }
         }
 
@@ -915,9 +916,9 @@ description: 为静态博客构建生产级混合搜索 - 结合 BM25 关键词�
 <code>    async init() {</code><br>
 <code>        // 并行加载所有索引</code><br>
 <code>        const [voyModule, indexRes, metaRes, invertedRes] = await Promise.all([</code><br>
-<code>            import(&#039;/public/lib/voy-loader.js&#039;).then(m =&gt; m.getVoy()),</code><br>
-<code>            fetch(&#039;/public/search.dat&#039;),</code><br>
-<code>            fetch(&#039;/public/search-metadata.json&#039;),</code><br>
+<code>            import(&#039;/lib/voy-loader.js&#039;).then(m =&gt; m.getVoy()),</code><br>
+<code>            fetch(&#039;/search.dat&#039;),</code><br>
+<code>            fetch(&#039;/search-metadata.json&#039;),</code><br>
 <code># ... (68 more lines)</code></blockquote>
 <p><em>Full code available in the <a href="https://github.com/geyuxu">GitHub repository</a>.</em></p><h3>为什么选择 Reciprocal Rank Fusion？</h3>
 <p>RRF 简洁优雅：<code>score = Σ 1/(k + rank)</code>。它不需要分数归一化，能优雅地处理 BM25 分数和向量距离的不同量级。</p>

@@ -2,7 +2,7 @@
   "search": true,
   "vectorSearch": true,
   "gallery": true,
-  "mediumExport": true,
+  "mediumExport": false,
   "translation": false,
   "chat": true
 }

@@ -769,6 +769,7 @@
             .content {
                 margin-left: 0;
                 padding: 2rem 1rem;
+                max-width: 100%;
             }
         }
 
@@ -848,7 +849,7 @@ legacy: true</h2>
 <p>量纲最初是物理学概念，指物理量的单位组合。在数据科学领域，我们借用这个词来描述一个特征的<strong>单位与数量级</strong>。如上文所述，<code>height_m</code>（单位：米，数量级：<del>1）和 <code>income_cny</code>（单位：人民币，数量级：</del>10,000）就是两个不同量纲的特征。</p>
 <h3>1.2 Normalization vs. Standardization</h3>
 <p>虽然“归一化”常被用作一个总称，但在严格意义上，它主要分为两种类型：<strong>归一化 (Normalization)</strong> 和 <strong>标准化 (Standardization)</strong>。它们的目标和实现方式有所不同。</p>
-<p><img src="/blog/images/tables/table--5c9042e.png" alt="Table"></p><p>简单来说，Normalization 关注的是“范围”，而 Standardization 关注的是“分布”。</p>
+<p><img src="__TABLE_-5c9042e__" alt="Table"></p><p>简单来说，Normalization 关注的是“范围”，而 Standardization 关注的是“分布”。</p>
 <hr>
 <h2>2. 归一化的动机</h2>
 <p>为什么我们需要不厌其烦地对数据进行缩放？主要有以下四大动机：</p>
@@ -865,7 +866,7 @@ legacy: true</h2>
 <hr>
 <h2>3. 常用归一化方法</h2>
 <p>下面我们介绍几种最主流的归一化方法，并提供相应的数学公式和 scikit-learn 实现代码。</p>
-<p><img src="/blog/images/tables/table-290fb6d7.png" alt="Table"></p><ul>
+<p><img src="__TABLE_290fb6d7__" alt="Table"></p><ul>
 <li><strong>Min-Max Scaler</strong>: 最经典的“归一化”，将数据线性地缩放到 [0, 1] 区间。缺点是对异常值（outliers）非常敏感。</li>
 <li><strong>Standard Scaler (Z-Score)</strong>: 最常用的“标准化”，将数据转换为均值为 0，标准差为 1 的分布。它假设数据近似高斯分布。</li>
 <li><strong>Max-Abs Scaler</strong>: 类似于 Min-Max，但它将数据缩放到 [-1, 1] 区间，保留了数据的稀疏性（0 还是 0）。</li>
@@ -915,7 +916,7 @@ legacy: true</h2>
 <hr>
 <h2>5. 归一化与模型适配</h2>
 <p>并非所有模型都需要归一化。了解哪些模型对此敏感至关重要。</p>
-<p><img src="/blog/images/tables/table--18e159b.png" alt="Table"></p><p><strong>核心原因</strong>：树模型（如决策树、随机森林）的决策边界是基于特征的分割点，它们关心的是特征的序关系而非数值大小，因此对单调的缩放变换不敏感。</p>
+<p><img src="__TABLE_-18e159b__" alt="Table"></p><p><strong>核心原因</strong>：树模型（如决策树、随机森林）的决策边界是基于特征的分割点，它们关心的是特征的序关系而非数值大小，因此对单调的缩放变换不敏感。</p>
 <p><strong>特别提示</strong>：在回归任务中，如果你的目标变量 <code>y</code> 本身的数值跨度非常大（例如房价预测），对 <code>y</code> 进行对数变换 (<code>np.log1p</code>) 或标准化也是一种常见的优化技巧。预测后，记得使用逆变换 (<code>np.expm1</code>) 将结果还原回原始尺度。</p>
 <hr>
 <h2>6. 实践流程 &amp; 最佳实践</h2>
